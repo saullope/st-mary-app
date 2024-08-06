@@ -1,5 +1,11 @@
+import { useTranslations } from "next-intl";
+import LanguageSelector from "./LanguageSelector";
+import { BsGlobe } from 'react-icons/bs';
 
 export default function Sidebar() {
+
+    const t = useTranslations("HomePage");
+
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm"> {/* Add the "shadow-sm" class */}
@@ -11,25 +17,22 @@ export default function Sidebar() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="#">Inicio</a>
+                                <a className="nav-link active" aria-current="page" href="#">{t('howItWorks')}</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Componentes</a>
-                            </li>
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Varios
-                                </a>
-                                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a className="dropdown-item" href="#">Action</a></li>
-                                </ul>
-                            </li>
-                            <li className="nav-item">
+                                <a className="nav-link" href="#">{t('institution')}</a>
                             </li>
                         </ul>
-                        <form className="d-flex">
-                            <button className="btn btn-outline-primary" type="submit">Login</button>
-                        </form>
+                        <div className="flex me-2">
+                        <BsGlobe />
+                        </div>
+                        <div className="d-flex">
+                            <LanguageSelector />
+                        </div>
+                        <div className="d-flex">
+                            <button type="button" className="btn btn-outline-primary btn-sm me-2">{t('signIn')}</button>
+                            <button type="button" className="btn btn-success btn-sm">{t('signUp')}</button>
+                        </div>
                     </div>
                 </div>
             </nav>

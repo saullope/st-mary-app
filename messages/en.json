@@ -1,0 +1,14 @@
+{
+    "HomePage": {
+        "message": "Welcome to next app.",
+        "howItWorks": "How it works",
+        "institution": "Educational institution",
+        "signIn": "Sign In",
+        "signUp": "Sign Up"
+    },
+    "LocaleSwitcher": {
+    "es": "Spanish",
+    "en": "English",
+    "label": "Language"
+  }
+}

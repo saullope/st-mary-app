@@ -1,0 +1,7 @@
+.no-arrow {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
+  padding-right: 1.5rem; /* Ajusta el padding para que el contenido no se superponga */
+}

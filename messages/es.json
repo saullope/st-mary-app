@@ -1,0 +1,14 @@
+{
+    "HomePage": {
+        "message": "Bienvenido a la aplicacion next.",
+        "howItWorks": "Cómo funciona",
+        "institution": "Institución educativa",
+        "signIn": "Iniciar sesión",
+        "signUp": "Regístrarse"
+    },
+    "LocaleSwitcher": {
+        "es": "Español",
+        "en": "Inglés",
+        "label": "Idioma"
+      }
+}
