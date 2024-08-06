@@ -53,12 +53,7 @@ return (
                         className="d-flex cursor-default align-items-center px-3 py-2 text-base data-[highlighted]:bg-slate-100"
                         value={item.value}
                     >
-                        {item.value === defaultValue && (
-                            <BsCheck className="h-5 w-5 text-slate-600" />
-                        )}
-                        <div>
                             {item.label}
-                        </div>
                     </option>
                 ))}
             </select>
