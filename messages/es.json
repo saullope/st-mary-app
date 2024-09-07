@@ -1,14 +1,48 @@
 {
-    "HomePage": {
-        "message": "Bienvenido a la aplicacion next.",
-        "howItWorks": "Cómo funciona",
-        "institution": "Institución educativa",
-        "signIn": "Iniciar sesión",
-        "signUp": "Regístrarse"
-    },
-    "LocaleSwitcher": {
-        "es": "Español",
-        "en": "Inglés",
-        "label": "Idioma"
-      }
+  "HomePage": {
+    "message": "Bienvenido a la aplicacion next.",
+    "howItWorks": "Cómo funciona",
+    "institution": "Institución educativa",
+    "signIn": "Iniciar sesión",
+    "signUp": "Regístrarse"
+  },
+  "LocaleSwitcher": {
+    "es": "Español",
+    "en": "English",
+    "label": "Idioma"
+  },
+  "AuthenticationMeta": {
+    "metaTitleSignIn": "Iniciar sesión",
+    "metaSignInDescription": "Iniciar sesión en su cuenta",
+    "metaTitleSignUp": "Regístrarse",
+    "metaSignUpDescription": "Regístrarse para obtener una cuenta"
+  },
+  "SignInForm": {
+    "titleForm": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "emailTip": "Nunca compartiremos su correo electrónico con nadie más.",
+    "password": "Contraseña",
+    "signInButton": "Acceder",
+    "SignInWithGoogle": "Acceder con Google",
+    "orSignIn": "O Iniciar sesión con",
+    "noAccount": "¿No tienes una cuenta? ",
+    "signUp": "Regístrarse",
+    "forgotPassword": "¿Olvido su contraseña?",
+    "emailInvalid": "El correo electrónico es inválido",
+    "passwordInvalid": "La contraseña es inválida",
+    "emailRequired": "Correo electrónico es requerido",
+    "passwordRequired": "Contraseña es requerida"
+  },
+  "SignUpForm": {
+    "titleForm": "Registrate",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "displayName": "Nombre de Usuario",
+    "confirmPassword": "Confirmar contraseña",
+    "signUpButton": "Regístrarse",
+    "SignUpWithGoogle": "Regístrarse con Google",
+    "orSignUp": "O Registrarse con",
+    "haveAccount": "¿Ya tienes una cuenta? ",
+    "signIn": "Iniciar sesión"
+  }
 }

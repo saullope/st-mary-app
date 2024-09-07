@@ -1,6 +1,5 @@
 'use client';
 
-import { BsCheck } from 'react-icons/bs';
 import clsx from 'clsx';
 import {useTransition} from 'react';
 import {Locale} from '@/config';
@@ -12,11 +11,11 @@ type Props = {
   label: string;
 };
 
-export default function LocaleSwitcherSelect({
+export const LocaleSwitcherSelect = ({
   defaultValue,
   items,
   label
-}: Props) {
+}: Props) => {
   const [isPending, startTransition] = useTransition();
 
   function onChange(value: string) {

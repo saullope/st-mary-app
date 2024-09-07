@@ -1,14 +1,48 @@
 {
-    "HomePage": {
-        "message": "Welcome to next app.",
-        "howItWorks": "How it works",
-        "institution": "Educational institution",
-        "signIn": "Sign In",
-        "signUp": "Sign Up"
-    },
-    "LocaleSwitcher": {
-    "es": "Spanish",
+  "HomePage": {
+    "message": "Welcome to next app.",
+    "howItWorks": "How it works",
+    "institution": "Educational institution",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "LocaleSwitcher": {
+    "es": "Español",
     "en": "English",
     "label": "Language"
+  },
+  "AuthenticationMeta": {
+    "metaTitleSignIn": "Sign In",
+    "metaSignInDescription": "Sign In to your account",
+    "metaTitleSignUp": "Sign Up",
+    "metaSignUpDescription": "Sign up for an account"
+  },
+  "SignInForm": {
+    "titleForm": "Sign In",
+    "email": "Email address",
+    "emailTip": "We'll never share your email with anyone else.",
+    "password": "Password",
+    "signInButton": "Sign In",
+    "SignInWithGoogle": "Sign In with Google",
+    "orSignIn": "Or Sign In with",
+    "noAccount": "Don't have an account? ",
+    "signUp": "Sign Up",
+    "forgotPassword": "Forgot password?",
+    "emailInvalid": "Email is invalid",
+    "passwordInvalid": "Password is invalid",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required"
+  },
+  "SignUpForm": {
+    "titleForm": "Sign Up",
+    "email": "Email address",
+    "password": "Password",
+    "displayName": "Username",
+    "confirmPassword": "Confirm Password",
+    "signUpButton": "Sign Up",
+    "SignUpWithGoogle": "Sign Up with Google",
+    "orSignUp": "Or Sign Up with",
+    "haveAccount": "Already have an account? ",
+    "signIn": "Sign In"
   }
 }

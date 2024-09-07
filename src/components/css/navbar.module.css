@@ -1,0 +1,18 @@
+  /*-------Menu-------*/
+  
+  .navbar{
+    position: fixed;
+    width: 100%;
+    background: #fffff
+  }
+
+  .logo {
+    width: 150px;
+    height: 55.2px;
+    margin: 0px 30px;
+  }
+  
+  .nav-link:hover{
+    background-color: rgba(255, 255, 0, 0.699);
+    transition: .5s;
+  }
