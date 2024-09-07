@@ -2,31 +2,20 @@
 import { useTranslations } from "next-intl";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { startGoogleSignIn, startLoginWithEmailPassword } from "@/store/auth";
-import { useEffect } from "react";
-import { LOGIN_STATUS } from "@/types";
-import { redirect } from "next/navigation";
+import { auth } from "@/firebase/firebase";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Button } from 'react-bootstrap';
 import * as Yup from 'yup';
-import { useCheckAuth } from "@/hooks";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
+import  {useRouter}  from "next/navigation";
 
 export const SignInForm = () => {
 
     // se obtiene la traduccion del componente
     const t = useTranslations("SignInForm");
-
-    const { status } = useCheckAuth();
-    // se utiliza el hook de formulario para manejar los inputs y validaciones
-    const {  errorLogin } = useSelector((state: any) => state.auth);
-
-    // se utiliza el hook de formulario para manejar los inputs y validaciones
-    const dispatch = useDispatch();
-
-    if (status == LOGIN_STATUS.AUTHENTICATED){
-        redirect('/dashboard');
-    }
+    const [ errorLogin, setErrorLogin ] = useState("");
+    const router = useRouter();
 
     // Esquema de validación con Yup
     const validationSchema = Yup.object({
@@ -35,12 +24,48 @@ export const SignInForm = () => {
     });
 
     // Función para manejar el submit del formulario
-    const onSubmit = (values: { emailUser: string, password: string }) => {
-        dispatch(startLoginWithEmailPassword(values.emailUser, values.password) as any);
+    const onSubmit = async (values: { emailUser: string, password: string }) => {
+        
+        console.log("Cargando...");
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, values.emailUser, values.password);
+
+
+            if (userCredential.user){
+                const idToken = await userCredential.user.getIdToken(true);
+
+                await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                }).then((response) => {
+                    if(response.status === 200){
+                        console.log("setUpdate(true)");
+                        router.push('/dashboard');
+                        router.refresh();
+                    }
+                });
+            };
+        }catch(error: any) {
+            console.log("Termino de cargar");
+            if(error.code == "auth/invalid-login-credentials"){
+                setErrorLogin(error)
+            }
+            else if (error.code == "auth/too-many-requests"){
+                setErrorLogin(error);
+            }
+            else {
+                setErrorLogin(`Error signin in, ${error}`)
+            }
+        }
+        
+       // dispatch(startLoginWithEmailPassword(values.emailUser, values.password) as any);
     }
 
     const onGoogleSignin = () => {
-        dispatch(startGoogleSignIn() as any)
+//        dispatch(startGoogleSignIn() as any)
     }
 
     return (

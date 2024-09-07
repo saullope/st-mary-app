@@ -1,39 +1,22 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Dispatch } from '@reduxjs/toolkit';
-import {
-    startLoginWithEmailPassword,
-    startGoogleSignIn
-} from "@/store/auth";
-import { NextResponse } from "next/server";
+// api/auth/route.ts
+import { adminAuth } from "@/firebase/firebase-admin";
+import { cookies, headers } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function GET(request: NextRequest) {
 
-    try {
-        const { emailAddress, password, userName, action } = await request.json();
+    const session = cookies().get("session")?.value || ""
+    //Validate if the cookie exist in the request
+    if (!session) {
+        return NextResponse.json({ isLogged: false, uid: "", email: ""  }, { status: 401 })
+    }
 
-        // if request is empty, return an error
-        if (!emailAddress ||!password ||!action) {
-            return NextResponse.json({ error: 'missing required fields saul lopez' }, { status: 400 });
-        }
+    //Use Firebase Admin to validate the session cookie
+    const decodedClaims = await adminAuth.verifySessionCookie(session, true)
 
-         console.log('email:', emailAddress, 'password:', password, 'action:', action);
+    if (!decodedClaims) {
+        return NextResponse.json({ isLogged: false, uid: "", email: "" }, { status: 401 })
+    }
 
-
-        const dispatch = useDispatch();
-
-        if (action === 'LOGIN_WITH_EMAIL_PASSWORD') {
-            dispatch(startLoginWithEmailPassword(emailAddress, password) as any);
-        } else if (action === 'LOGIN_WITH_GOOGLE_SIGN_IN') {
-            dispatch(startGoogleSignIn() as any);
-        }
-
-        const { email, uid, displayName, status } = useSelector((state: any) => state.auth);
-
-        // print in console for debugging purposes
-        console.log(`User logged in: ${email}, ${uid}, ${displayName}, ${status}`);
-
-        return NextResponse.json( { email, uid, displayName, status }, { status: 200 });
-}catch (error) {
-    return NextResponse.json({ error: error }, { status: 400 });
-}
+    return NextResponse.json({ isLogged: true, uid: decodedClaims.uid, email: decodedClaims.email }, { status: 200 })
 }
