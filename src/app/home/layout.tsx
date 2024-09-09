@@ -1,8 +1,6 @@
-import { Inter } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from '../../components/Sidebar';
+import {Sidebar} from '../../components';
 
-const inter = Inter({ subsets: ["latin"] });
   
   export default function LandingLayout({
     children,
@@ -11,11 +9,19 @@ const inter = Inter({ subsets: ["latin"] });
   }>) {
     return (
       <html>
-        <body className={inter.className}>
-            <div>
+        <head>
+            <meta charSet="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" />
+        </head>
+        <body>
+            <header>
                 <Sidebar/>
-            </div>
+            </header>
+            <main>
             {children}
+            </main>
         </body>
       </html>
     );

@@ -1,7 +1,9 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import {NextIntlClientProvider} from 'next-intl';
 import {getMessages} from 'next-intl/server';
- 
+//import {AuthProvider} from '@/components';
+import SessionProvider from '../contexts/SessionContext';
+import getSession from '@/lib/auth/getSession';
+
 export default async function LocaleLayout({
   children,
   params: {locale}
@@ -14,6 +16,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
  
   return (
+    <SessionProvider >
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
@@ -21,5 +24,6 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
       </body>
     </html>
+    </SessionProvider>
   );
 }

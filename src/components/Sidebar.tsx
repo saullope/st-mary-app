@@ -1,41 +1,71 @@
-import { useTranslations } from "next-intl";
-import LanguageSelector from "./LanguageSelector";
-import { BsGlobe } from 'react-icons/bs';
+'use client'
 
-export default function Sidebar() {
+import { useTranslations } from "next-intl";
+import { LanguageSelector } from "./LanguageSelector";
+import { BsGlobe } from 'react-icons/bs';
+import Link from 'next/link';
+import Image from 'next/image';
+import logo from '../../public/images/Logo.png';
+import bannerStMary from '../../public/images/BannerStmary.png';
+import styles from './css/navbar.module.css';
+import { Button, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+
+
+
+export const Sidebar = () => {
 
     const t = useTranslations("HomePage");
 
     return (
-        <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm"> {/* Add the "shadow-sm" class */}
-                <div className="container-fluid">
-                    <a className="navbar-brand" href="#">St Mary App</a>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="#">{t('howItWorks')}</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">{t('institution')}</a>
-                            </li>
-                        </ul>
-                        <div className="flex me-2">
-                        <BsGlobe />
-                        </div>
-                        <div className="d-flex">
-                            <LanguageSelector />
-                        </div>
-                        <div className="d-flex">
-                            <button type="button" className="btn btn-outline-primary btn-sm me-2">{t('signIn')}</button>
-                            <button type="button" className="btn btn-success btn-sm">{t('signUp')}</button>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </>
+        <Navbar className="fixed navbar navbar-expand-lg bg-body-tertiary">
+      <Container fluid >
+          <Link href={'/home'} >
+            <Image
+              src={logo}
+              alt="LudiGame logo"
+              style={{ width: '150px', height: '55.19px', margin: '0px 30px' }}
+              className="-inline-block align-top"
+            />
+          </Link>
+        <Navbar.Collapse id="navbarScroll">
+          <Nav className="me-auto my-2 my-lg-0" navbarScroll>
+            <Link href="/home/howitworks" className={`${styles['nav-link']} nav-link text-primary fw-bold`}>
+              {t('howItWorks')}
+            </Link>
+            <NavDropdown title={t('institution')} id="navbarScrollingDropdown" className={`${styles['nav-link']} text-primary fw-bold`}>
+              <NavDropdown.Item as="div">
+              <Link href={'/home/institution'} className="dropdown-item ">
+                    Conoce sobre St. Mary School
+                  </Link>
+                  <Image
+                    className="bannerstm"
+                    src={bannerStMary}
+                    alt="bannerstmary"
+                    width={100}
+                    height={100}
+                  />
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+          <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+            <div className="d-grid gap-2 d-md-flex justify-content-center align-items-center">
+              <BsGlobe />
+              <LanguageSelector />
+            </div>
+            <Link href={'/auth/login'} >
+              <Button variant="primary" className="me-md-2">
+                {t('signIn')}
+              </Button>
+            </Link>
+            <Link href={'/auth/signup'} >
+              <Button variant="info">
+                {t('signUp')}
+              </Button>
+            </Link>
+          </div>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+        
     );
 }
