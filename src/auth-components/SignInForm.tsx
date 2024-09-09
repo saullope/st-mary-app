@@ -6,7 +6,7 @@ import { auth } from "@/firebase/firebase";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Button } from 'react-bootstrap';
 import * as Yup from 'yup';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useState } from "react";
 import  {useRouter}  from "next/navigation";
 
@@ -14,6 +14,7 @@ export const SignInForm = () => {
 
     // se obtiene la traduccion del componente
     const t = useTranslations("SignInForm");
+    const googleProvider = new GoogleAuthProvider();
     const [ errorLogin, setErrorLogin ] = useState("");
     const router = useRouter();
 
@@ -61,11 +62,32 @@ export const SignInForm = () => {
             }
         }
         
-       // dispatch(startLoginWithEmailPassword(values.emailUser, values.password) as any);
     }
 
-    const onGoogleSignin = () => {
-//        dispatch(startGoogleSignIn() as any)
+    const onGoogleSignin = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+
+            if (result.user) {
+                const idToken = await result.user.getIdToken(true);
+
+                await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                }).then((response) => {
+                    if (response.status === 200) {
+                        console.log("setUpdate(true)");
+                        router.push('/dashboard');
+                        router.refresh();
+                    }
+                });
+            }
+        } catch (error: any) {
+            console.log("Error en el inicio de sesión con Google");
+            setErrorLogin(`Error signin in with Google, ${error.message}`);
+        }
     }
 
     return (
