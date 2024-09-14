@@ -3,8 +3,13 @@
     "message": "Bienvenido a la aplicacion next.",
     "howItWorks": "Cómo funciona",
     "institution": "Institución educativa",
-    "signIn": "Iniciar sesión",
-    "signUp": "Regístrarse"
+    "signIn": "Iniciar Sesión",
+    "signUp": "Regístrarse",
+    "landingTextLevel1":"Crea Actividades Educativas",
+    "landingTextLevel2":"Con enfoque lúdico para dinamizar el aula",
+    "landingTextLevel3":"¡Los niños aprenden jugando!",
+    "landingTextLevel4":"Juegos adaptados al nivel de cada grado",
+    "rigths": "Todos Los Derechos Reservados 2024"
   },
   "LocaleSwitcher": {
     "es": "Español",
@@ -23,7 +28,7 @@
     "emailTip": "Nunca compartiremos su correo electrónico con nadie más.",
     "password": "Contraseña",
     "signInButton": "Acceder",
-    "SignInWithGoogle": "Acceder con Google",
+    "SignInWithGoogle": "Google",
     "orSignIn": "O Iniciar sesión con",
     "noAccount": "¿No tienes una cuenta? ",
     "signUp": "Regístrarse",
@@ -31,7 +36,8 @@
     "emailInvalid": "El correo electrónico es inválido",
     "passwordInvalid": "La contraseña es inválida",
     "emailRequired": "Correo electrónico es requerido",
-    "passwordRequired": "Contraseña es requerida"
+    "passwordRequired": "Contraseña es requerida",
+    "clickHere": "Haz click aquí"
   },
   "SignUpForm": {
     "titleForm": "Registrate",
