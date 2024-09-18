@@ -1,0 +1,11 @@
+name: test de despliegue
+
+on: [push]
+
+jobs:
+    hola:
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: test
+              run: echo Hola, mundo!
