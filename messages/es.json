@@ -41,14 +41,27 @@
   },
   "SignUpForm": {
     "titleForm": "Registrate",
-    "email": "Correo electrónico",
-    "password": "Contraseña",
+    "email": "Correo electrónico *",
+    "password": "Contraseña *",
     "displayName": "Nombre de Usuario",
-    "confirmPassword": "Confirmar contraseña",
+    "confirmPassword": "Confirmar contraseña *",
     "signUpButton": "Regístrarse",
     "SignUpWithGoogle": "Regístrarse con Google",
     "orSignUp": "O Registrarse con",
     "haveAccount": "¿Ya tienes una cuenta? ",
-    "signIn": "Iniciar sesión"
+    "signIn": "Iniciar sesión",
+    "name": "Nombre *",
+    "lastName": "Apellido",
+    "nameRequired": "Nombre es requerido",
+    "emailInvalid": "El correo electrónico es inválido",
+    "passwordInvalid": "La contraseña es inválida",
+    "emailRequired": "Correo electrónico es requerido",
+    "passwordRequired": "Contraseña es requerida",
+    "confirmPasswordRequired": "Confirmar contraseña es requerida",
+    "passwordsDontMatch": "Las contraseñas no coinciden",
+    "passwordMin":"La contraseña debe tener al menos 8 caracteres",
+    "passwordNumber":"La contraseña debe tener al menos un número",
+    "passwordLowercase":"La contraseña debe tener al menos una letra minúscula",
+    "passwordUppercase":"La contraseña debe tener al menos una letra mayúscula"
   }
 }

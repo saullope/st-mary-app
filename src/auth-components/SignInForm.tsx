@@ -5,7 +5,7 @@ import Link from "next/link";
 import { auth } from "@/firebase/firebase";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from '../../public/css/landing.module.css';

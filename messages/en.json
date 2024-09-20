@@ -41,14 +41,28 @@
   },
   "SignUpForm": {
     "titleForm": "Sign Up",
-    "email": "Email address",
-    "password": "Password",
+    "email": "Email address *",
+    "password": "Password *",
     "displayName": "Username",
     "confirmPassword": "Confirm Password",
     "signUpButton": "Sign Up",
     "SignUpWithGoogle": "Sign Up with Google",
     "orSignUp": "Or Sign Up with",
     "haveAccount": "Already have an account? ",
-    "signIn": "Sign In"
+    "signIn": "Sign In",
+    "name": "Name *",
+    "lastName": "Last Name *",
+    "nameRequired": "Name is required",
+    "emailInvalid": "Email is invalid",
+    "passwordInvalid": "Password is invalid",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "confirmPasswordRequired": "Confirm Password is required",
+    "passwordsDontMatch": "Passwords don't match",
+    "passwordMin":"Password must be at least 8 characters long",
+    "passwordNumber":"Password must have at least one number",
+    "passwordLowercase":"Password must have at least one lowercase letter",
+    "passwordUppercase":"Password must have at least one uppercase letter"
+
   }
 }
