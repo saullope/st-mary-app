@@ -1,0 +1,322 @@
+.body-login{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.root-login{
+    --login-bg: #f8f3ff;
+    --title-bg: #9089cc;
+    --button-bg: #674baf;
+    --light-pink: #e882e8;
+    --image-bg: #eadbff;
+}
+
+/*-------Landing page-------*/
+
+/*-------Menu-------*/
+
+.navbar{
+    position: fixed;
+    width: 100%;
+}
+
+.logo{
+    width: 150px;
+    margin: 0px 30px;
+}
+
+.nav-link:hover{
+    background-color: rgba(255, 255, 0, 0.699);
+    transition: .5s;
+}
+
+/*-------Fondo1 Principal-------*/
+
+.fondo1{
+    width: 100%;
+    height: 55vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../../public/images/Fondo1.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.fondo1-texto{
+    color: #fff;
+    font-family: italic;
+    height: 33vw;
+    text-align: center;
+    width: 50%;
+}
+
+/*-------Fondo2-------*/
+
+.fondo2{
+    width: 100%;
+    height: 55vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../../public/images/Fondo2.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.fondo2-texto{
+    color: #fff;
+    font-family: italic;
+    height: 35vw;
+    text-align: center;
+    width: 50%;
+}
+
+
+/*-------Pie de página-------*/
+
+.pie-pagina{
+    background-color: #fff;
+    padding: 20px;
+    width: 100%;
+    position: absolute;
+    
+}
+
+.text-derechos{
+    font-size: 18px;
+    color: black;
+    font-weight: 500;
+    text-align: center;
+}
+
+/*-------Formulario de Iniciar sesión-------*/
+
+.body-iniciosesion{
+    background-image: linear-gradient(to top, #a6a6a6 0%, #456ee3 100%);
+}
+
+.login-container{
+    height: 33.75em;
+    width: 50em;
+    margin: 3em auto;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.login-info-container{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 0.5rem;
+    background-color: var(--login-bg);
+}
+
+.image-login{
+    width: 50%;
+    padding: 0;
+    background-color: var(--image-bg);
+    box-sizing: border-box;
+}
+
+.title-login{
+    text-transform: capitalize;
+    font-size: 2rem;
+    font-weight: 600;
+    padding: 8px;
+    letter-spacing: 1px;
+    color: #456ee3;
+}
+
+.social-login{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.social-login-element{
+    width: 12.5rem;
+    height: 3.75rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid #759df5;
+}
+
+.social-login-element img{
+    width: 2.875rem;
+    height: 1.875rem;
+    position: relative;
+    top: 0;
+    left: -0.625rem;
+}
+
+.social-login-element:hover{
+ background-color: #fff;
+ cursor: pointer;
+}
+
+.login-info-container > p{
+    font-size: 1.40em;
+    font-weight: 500;
+    margin-top: 1em;
+}
+
+.inputs-container{
+    height: 55%;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.input, .btn-acceso{
+    width: 90%;
+    height: 3.125rem;
+    font-size: 1em;
+}
+
+.input{
+    padding-left: 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-sizing: border-box;
+}
+
+.input:hover{
+    border: 2px solid #456ee3;
+}
+
+.btn-acceso{
+    width: 60%;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fff;
+    border-radius: 20px;
+    background-color: #456ee3;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+}
+
+.btn-acceso:hover{
+    background-color: #674baf;
+    cursor: pointer;
+}
+
+.inputs-container p{
+     margin: 0;
+}
+
+.inputs-container a{
+    color: #456ee3;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 1000px){
+    .image-login{
+        display: none;
+    }
+
+    .login-container{
+        border: 2px solid red;
+        width: 70%;
+        margin-top: 3rem;
+    }
+
+    .login-info-container{
+        width: 100%;
+    }
+
+}
+
+@media screen and (max-width: 650px){
+    .image-login{
+        width: 90%;
+    }
+    }
+
+@media screen and (max-width: 500px){
+    .social-login{
+    flex-direction: column;
+    align-items: center;
+    height: 30%;
+    }
+
+    .login-info-container > p{
+        margin: 0;
+    }
+   }
+
+/*-------Formulario de Registro-------*/
+
+.body-registro{
+    background-image: linear-gradient(to top, #a6a6a6 0%, #456ee3 100%);
+}
+
+.form-register{
+    width: 360px;
+    background: #f8f3ff;
+    padding: 30px;
+    margin: auto;
+    margin-top: 20px;
+    border-radius: 4px;
+    box-shadow: 7px 13px 37px #674baf;
+}
+
+.form-register h4{
+    text-align: center;
+    color: #456ee3;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.input-register{
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    border: 1px solid #1f53c5;
+    font-size: 18px;
+}
+
+.form-register p{
+    height: 40px;
+    text-align: center;
+    font-size: 17px;
+    line-height: 60px;
+}
+
+.form-register a{
+    color: #456ee3;
+    font-size: 17px;
+    text-decoration: none;
+}
+
+.form-register .btn-register{
+    width: 100%;
+    background: #1f53c5;
+    border: none;
+    padding: 12px;
+    color: white;
+    margin: 16px 0;
+    font-size: 16px;
+}
+
+.btn-register:hover{
+    background-color: #674baf;
+    cursor: pointer;
+}
+

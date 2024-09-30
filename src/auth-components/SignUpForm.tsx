@@ -2,135 +2,128 @@
 
 import Link from 'next/link';
 import { useTranslations } from "next-intl";
-import { useState, useMemo, FormEvent } from 'react';
-import { startCreatingUserWithEmailAndPassword } from '@/store/auth/thunks';
-import { LOGIN_STATUS } from '@/types';
-import { useDispatch, useSelector } from 'react-redux';
-import { redirect } from 'next/navigation';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
+import { auth } from "@/firebase/firebase";
+import * as Yup from 'yup';
+import styles from '../../public/css/landing.module.css';
 
 export const SignUpForm = () => {
 
     const t = useTranslations("SignUpForm");
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [ error, setError] = useState('');
-    const [ message, setMessage] = useState('');
+    const validationSchema = Yup.object({
+        email: Yup.string().email(t("emailInvalid")).required(t("emailRequired")),
+        password: Yup.string()
+        .min(8, t("passwordMin"))
+            .matches(/[0-9]/, t("passwordNumber"))
+            .matches(/[a-z]/, t("passwordLowercase"))
+            .matches(/[A-Z]/, t("passwordUppercase"))
+            .required(t("passwordRequired")),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password'), ""], t("passwordsDontMatch"))
+            .required(t("confirmPasswordRequired")),
+        name: Yup.string().required(t("nameRequired")),
+        lastName: Yup.string().default("")
+    });
 
-    const dispatch = useDispatch();
-    const { status, errorMessage } = useSelector((state: any) => state.auth);
-    const isAuthenticated = useMemo(() => status === LOGIN_STATUS.CHECKING, [status]);
-
-    const onSubmit = async (event: FormEvent) => {
-        event.preventDefault();
-
+    const onSubmit = async (values: { email: string, password: string, name: string, lastName: string }, { setSubmitting, setErrors, resetForm }: any) => {
+        
         try {
+            
+            const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+            const user = userCredential.user;
 
-        dispatch(startCreatingUserWithEmailAndPassword(email, password, `${name} ${lastName}`) as any);
+            await sendEmailVerification(user);
+       
+            if (auth.currentUser) {
+                await updateProfile(auth.currentUser, { displayName: `${values.name} ${values.lastName}` });
+                alert("Usuario creado correctamente")
+            }
 
-        //cuando el usuario se crea correctamente
-        if (status === LOGIN_STATUS.AUTHENTICATED) {
-            redirect('/dashboard');
+            // clear los inputs
+            resetForm();
+        } catch (error: any) {
+            if (error.code === 'auth/email-already-in-use') {
+                //setErrors({ email: t("emailInUse") });
+                alert("El correo ya se encuentra en uso")
+            } else {
+                setErrors({ submit: "No hay error" });
+            }
+        } finally {
+            setSubmitting(false);
         }
-
-        // clear los inputs
-        setEmail('');
-        setPassword('');
-        setName('');
-        setLastName('');
-        setError('');
-        setMessage('');
-    } catch(error) {
-        if (error instanceof Error){
-            setError(error.message);
-        } else {
-            setError("No hay error");
-        }
-    }
     };
-
 
     return (
         <>
-            <div className="card mt-5" style={{ width: "35rem" }}>
-                <div className="d-flex justify-content-center card-title pt-5 pb-4">
-                    <h1>{t("titleForm")}</h1>
-                </div>
-                <div className="card-body ps4">
+            <div className={styles['body-registro']}>
                     <div className="">
-                        <form onSubmit={onSubmit} className='row g-3'>
-                            <div className="col-md-4">
-                                <input 
-                                type="text" 
-                                className="form-control" 
-                                placeholder='First Name' 
-                                onChange={(e) => setName(e.target.value)}
-                                required />
-                            </div>
-                            <div className="col-md-4">
-                                <input type="text" className="form-control" placeholder='Last Name' onChange={(e) => setLastName(e.target.value)} />
-                            </div>
-                            <div className="mb-2">
-                                <input
-                                    type="email"
-                                    className="form-control"
-                                    placeholder='yourEmail@example.com'
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-2">
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    placeholder='Password'
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-2">
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    placeholder='Confirm Password'
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="d-flex form-text">
-                                <div>{t('haveAccount')}</div>
-                                <div><Link href={'/auth/login'}>{t('signIn')}</Link></div>
-                            </div>
-                            <div className="mb-3">
-                                {!!errorMessage && (
-                                    <p className="text-danger">
-                                        {errorMessage}
-                                    </p>
-                                )}
-                            </div>
-                            <div className="mb-3">
-                                {!!error && (
-                                    <p className="text-danger">
-                                        {error}
-                                    </p>
-                                )}
-                            </div>
-                            <div className="d-grid gap-2 mt-2" >
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                    disabled={!email || !password}
-                                >
-                                    {t("signUpButton")}
-                                </button>
-                            </div>
-                        </form>
-                        <div className="d-grid gap-2 mt-3">
-                        </div>
+                        <Formik
+                            initialValues={{ email: '', password: '', confirmPassword: '', name: '', lastName: '' }}
+                            validationSchema={validationSchema}
+                            onSubmit={onSubmit}
+                        >
+                            {({ isSubmitting, errors }) => (
+                                <Form className={styles['form-register']}>
+                                    <h4>{t("titleForm")}</h4>
+                                        <Field
+                                            type="text"
+                                            name="name"
+                                            className={styles['input-register']}
+                                            placeholder={t('name')}
+                                        />
+                                        <ErrorMessage name="name" component="div" className="text-danger" />
+                                    
+                                        <Field
+                                            type="text"
+                                            name="lastName"
+                                            className={styles['input-register']}
+                                            placeholder={t('lastName')}
+                                        />
+                                        <ErrorMessage name="lastName" component="div" className="text-danger" />
+                                
+                                        <Field
+                                            type="email"
+                                            name="email"
+                                            className={styles['input-register']}
+                                            placeholder={t('email')}
+                                        />
+                                        <ErrorMessage name="email" component="div" className="text-danger" />
+                                    
+                                    
+                                        <Field
+                                            type="password"
+                                            name="password"
+                                            className={styles['input-register']}
+                                            placeholder={t('password')}
+                                        />
+                                        <ErrorMessage name="password" component="div" className="text-danger" />
+                                    
+                                    
+                                        <Field
+                                            type="password"
+                                            name="confirmPassword"
+                                            className={styles['input-register']}
+                                            placeholder={t('confirmPassword')}
+                                        />
+                                        <ErrorMessage name="confirmPassword" component="div" className="text-danger" />
+                                    
+                                        <p>{t('haveAccount')}
+                                        <Link href={'/auth/login'}>{t('signIn')}</Link>
+                                        </p>
+        
+                                        <button
+                                            type="submit"
+                                            className={styles['btn-register']}
+                                            disabled={isSubmitting}
+                                        >
+                                            {t("signUpButton")}
+                                        </button>
+                                </Form>
+                            )}
+                        </Formik>
                     </div>
-                </div>
             </div>
         </>
     )
