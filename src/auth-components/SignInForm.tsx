@@ -1,6 +1,5 @@
 'use client'
 import { useTranslations } from "next-intl";
-import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { auth } from "@/firebase/firebase";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -50,7 +49,8 @@ export const SignInForm = () => {
                 }).then((response) => {
                     if (response.status === 200) {
                         console.log("setUpdate(true)");
-                        router.push('/dashboard');
+                        //router.push('/dashboard');
+                        router.push('/welcome-educator');
                         router.refresh();
                     }
                 });
@@ -86,7 +86,8 @@ export const SignInForm = () => {
                 }).then((response) => {
                     if (response.status === 200) {
                         console.log("setUpdate(true)");
-                        router.push('/dashboard');
+                        //router.push('/dashboard');
+                        router.push('/welcome-educator');
                         router.refresh();
                     }
                 });
@@ -116,7 +117,7 @@ export const SignInForm = () => {
                         {t("SignInWithGoogle")}
                     </div>
                 </div>
-                <p>or</p>
+                <p>o</p>
                 <Formik
                     initialValues={{ emailUser: '', password: '' }}
                     validationSchema={validationSchema}

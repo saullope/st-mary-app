@@ -1,5 +1,5 @@
 import createNextIntlPlugin from 'next-intl/plugin';
- 
+
 const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
@@ -7,13 +7,15 @@ const nextConfig = {
     reactStrictMode: true,
     output: 'standalone',
     images: {
-      remotePatterns: [
-          {
-              protocol: 'https',
-              hostname: 'lh3.googleusercontent.com'
-          },
-      ]
-  }
-  };
-  
-  export default withNextIntl(nextConfig);
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'lh3.googleusercontent.com'
+            },
+        ],
+        deviceSizes: [640, 768, 1024, 1280, 1600],
+        imageSizes: [16, 32, 48, 64, 96],
+    }
+};
+
+export default withNextIntl(nextConfig);

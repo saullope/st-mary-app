@@ -13,15 +13,13 @@ export const useCheckAuth = () => {
 
             if (!user) return dispatch(logout(status));
 
-            //print in console the user
-            console.log(`user: ${JSON.stringify(user)}`);
             const { uid, email, displayName, photoURL } = user;
             dispatch(login({ uid, email, displayName, photoURL }));
         });
 
         // Cleanup subscription on unmount
         return () => unsubscribe();
-    }, [dispatch]);
+    }, [dispatch, status]);
 
     return {
         status

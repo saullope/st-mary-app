@@ -63,5 +63,40 @@
     "passwordNumber":"La contraseña debe tener al menos un número",
     "passwordLowercase":"La contraseña debe tener al menos una letra minúscula",
     "passwordUppercase":"La contraseña debe tener al menos una letra mayúscula"
+  },
+  "WelcomeTeacherView": {
+    "metaTitle":"Bienvenido Educador",
+    "metaDescription":"Bienvenida Educador",
+    "welcomeText": "¡Bienvenido Educador!",
+    "grade1": "Primer Grado",
+    "grade2": "Segundo Grado",
+    "grade3": "Tercer Grado",
+    "text1":"Selecciona el grado correspondiente",
+    "text2":"para acceder a tu espacio de trabajo"
+  },
+  "SidebarTranslation": {
+    "home": "Inicio",
+    "createActivity": "Crear Actividad",
+    "myActivities": "Mis Actividades",
+    "reports": "Reportes"
+  },
+  "firstGradeItemDashboard": {
+    "gradeName": "Primer Grado",
+    "createActivity":"Crear Actividad",
+    "myActivities":"Mis Actividades"  
+  },
+  "secondGradeItemDashboard": {
+    "gradeName": "Segundo Grado",
+    "createActivity":"Crear Actividad",
+    "myActivities":"Mis Actividades"  
+  },
+  "thirdGradeItemDashboard": {
+    "gradeName": "Tercer Grado",
+    "createActivity":"Crear Actividad",
+    "myActivities":"Mis Actividades"  
+  },
+  "textDashboard": {
+    "ludiTemplates": "Plantillas Ludi",
+    "ludiTemplatesText": "Juegos lúdicos divididos por asignaturas"
   }
 }
