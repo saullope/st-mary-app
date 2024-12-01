@@ -1,8 +1,5 @@
 import { Metadata } from "next";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
-import landing from '../../../public/images/FondoLandingpage.png';
-import banner from '../../../public/images/Banner1.png';
 import styles from '../../../public/css/landing.module.css';
 
 export const metadata: Metadata = {

@@ -1,7 +1,5 @@
 'use client'
 
-import Link from "next/link";
-import logo from '../../public/images/Logo.png';
 import Image from "next/image";
 import { Dropdown } from 'react-bootstrap';
 import defaultProfilePic from '../../public/images/profile.png';
@@ -24,7 +22,7 @@ interface FirebaseSession {
     firebase: {
         identities: {
             email: string[];
-            "google.com"?: string[]; // Opcional para usuarios de Google
+            "google.com"?: string[];
         };
         sign_in_provider: string;
     };
@@ -37,29 +35,26 @@ interface NavbarDashboardProps {
 
 export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData }) => {
 
-    const handleLogout = async () => {
-        const router = useRouter();
+    const handleLogout =  () => {
+        /*const router = useRouter();
         try {
             await signOut(auth);
             router.push('/auth/login'); // Redirigir a la página de login después de cerrar sesión
         } catch (error) {
             console.error("Error al cerrar sesión: ", error);
-        }
+        }*/
+       alert('Se cerrara Session.')
     };
 
     return (
         <>
             <nav className={`fixed navbar navbar-expand-lg bg-body-tertiary`}>
                 <div className="container-fluid">
-                    <Link href={'/dashboard'}>
-                        <Image
-                            src={logo}
-                            alt="LudiGame logo"
-                            style={{ width: '150px', height: '55.19px', margin: '0px 30px' }}
-                            className="-inline-block align-top"
-                        />
-                    </Link>
                     <div className="collapse navbar-collapse" id="navbarNav">
+                    <div
+                        style={{ width: '150px', height: '55.19px', margin: '0px 30px' }}
+                        className="-inline-block align-top"
+                    ></div>
                     </div>
                     <div className="d-grid gap-2 d-md-flex justify-content-center justify-content-md-end align-items-center">
                         <div className="dropdown">
@@ -76,6 +71,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                                 style={{ borderRadius: '50%', marginRight: '10px' }}
                                             />
                                         )}
+                                        
                                         {sessionData.name || sessionData.email}
                                     </span>
                                 </Dropdown.Toggle>
@@ -83,6 +79,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                 <Dropdown.Menu>
                                     <Dropdown.Header>{sessionData.name || sessionData.email}</Dropdown.Header>
                                     <Dropdown.Divider />
+                                    <Dropdown.Item href="#/action-1">Cuenta</Dropdown.Item>
                                     <Dropdown.Item href="#/action-1">Configuración</Dropdown.Item>
                                     <Dropdown.Item onClick={handleLogout} className="text-danger">Cerrar sesión</Dropdown.Item>
                                 </Dropdown.Menu>

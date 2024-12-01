@@ -5,7 +5,6 @@ import logo from '../../public/images/Logo.png';
 import Image from "next/image";
 import Link from 'next/link';
 
-
 export const NavbarAuth = () => {
 
     const t = useTranslations("HomePage");

@@ -19,10 +19,14 @@ export const SessionContext = createContext<{
     session: UserSession | null;
     setSession: React.Dispatch<React.SetStateAction<UserSession | null>>;
     setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedGrade: string | null;
+    setSelectedGrade: React.Dispatch<React.SetStateAction<string | null>>; 
 }>({
     session: null,
     setSession: () => null,
     setUpdate: () => null,
+    selectedGrade: null,
+    setSelectedGrade: () => null,
 });
 
 export default function SessionProvider({
@@ -32,6 +36,7 @@ export default function SessionProvider({
 }) {
     const [session, setSession] = useState<UserSession | null>(null);
     const [update, setUpdate] = useState(false);
+    const [ selectedGrade, setSelectedGrade ] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchUserData() {
@@ -64,7 +69,7 @@ export default function SessionProvider({
         setUpdate(false);
     }, [update]);
 
-    const value = { session, setSession, setUpdate };
+    const value = { session, setSession, setUpdate, selectedGrade, setSelectedGrade };
 
     return (
         <SessionContext.Provider value={value}>

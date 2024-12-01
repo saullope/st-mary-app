@@ -22,3 +22,32 @@
     transition: .5s;
 }
 
+.sidebar-item {
+    transition: background-color 0.3s, padding-left 0.3s;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    }
+            
+.sidebar-item:hover {
+    background-color: #0091DF;
+    padding-left: 20px;
+}
+
+.collapsed {
+    width: 80px;
+  }
+.button-toggler {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .mt-auto {
+    margin-top: auto; /* Asegura que el botón esté al final */
+  }
+  .d-block {
+    display: block !important; /* Fuerza que la imagen siempre esté visible en pantallas pequeñas */
+  }
+  .d-md-block {
+    display: block !important; /* Asegura que la imagen completa solo aparezca en pantallas medianas y grandes */
+  }

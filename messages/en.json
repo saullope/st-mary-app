@@ -63,6 +63,40 @@
     "passwordNumber":"Password must have at least one number",
     "passwordLowercase":"Password must have at least one lowercase letter",
     "passwordUppercase":"Password must have at least one uppercase letter"
-
+  },
+  "WelcomeTeacherView": {
+    "metaTitle":"Welcome Teacher",
+    "metaDescription":"Welcome Teacher",
+    "welcomeText": "Welcome Teacher!",
+    "grade1": "First Grade",
+    "grade2": "Second Grade",
+    "grade3": "Third Grade",
+    "text1":"Select the corresponding grade",
+    "text2":"to access your workspace"
+  },
+  "SidebarTranslation": {
+    "home": "Home",
+    "createActivity": "Create Activity",
+    "myActivities": "My Activities",
+    "reports": "Reports"
+  },
+  "firstGradeItemDashboard": {
+    "gradeName": "First Grade",
+    "createActivity":"Create Activity",
+    "myActivities":"My Activities"  
+  },
+  "secondGradeItemDashboard": {
+    "gradeName": "Second Grade",
+    "createActivity":"Create Activity",
+    "myActivities":"My Activities"  
+  },
+  "thirdGradeItemDashboard": {
+    "gradeName": "Third Grade",
+    "createActivity":"Create Activity",
+    "myActivities":"My Activities"  
+  },
+  "textDashboard": {
+    "ludiTemplates": "Ludi Templates",
+    "ludiTemplatesText": "Playful games divided by subjects"
   }
 }

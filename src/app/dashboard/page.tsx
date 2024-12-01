@@ -1,16 +1,22 @@
 import { Metadata } from "next";
+import { GetServerSideProps } from 'next';
+import { ActivityDasboard } from "@/dashboard-components";
 
-
-export const metadata: Metadata = {
-  title: "LudiGame",
-  description: ""
+export async function generateMetadata({ searchParams }: { searchParams: { grade?: string } }): Promise<Metadata> {
+  const grade = searchParams.grade || 'default';
+  return {
+    title: `LudiGame - ${grade}`,
+    description: 'LudiGame for teachers'
+  };
 }
 
-export default function Dashboard() {
+
+export default async function Dashboard({ searchParams }: { searchParams: { grade?: string } }) {
+  const grade = searchParams.grade || 'default';
 
   return (
-    <div>
-      Aqui va el contenido del Dashboard y todas las paginas que se seleccionen o contenido que se quiera mostrar.
-    </div>
+    <>
+      <ActivityDasboard grade={grade} />
+    </>
   );
 }
