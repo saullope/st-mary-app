@@ -4,8 +4,10 @@ import Image from "next/image";
 import { Dropdown } from 'react-bootstrap';
 import defaultProfilePic from '../../public/images/profile.png';
 import { signOut } from "firebase/auth";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { auth } from "@/firebase/firebase";
+import { BsGlobe } from 'react-icons/bs';
+import { LanguageSelector } from "@/components";
 
 interface FirebaseSession {
     s: string;
@@ -34,16 +36,15 @@ interface NavbarDashboardProps {
 }
 
 export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData }) => {
+    const router = useRouter();
 
-    const handleLogout =  () => {
-        /*const router = useRouter();
+    const handleLogout = async () => {
         try {
-            await signOut(auth);
+            await auth.signOut();// signOut();
             router.push('/auth/login'); // Redirigir a la página de login después de cerrar sesión
         } catch (error) {
-            console.error("Error al cerrar sesión: ", error);
-        }*/
-       alert('Se cerrara Session.')
+            alert(`Error al cerrar sesión: ${error}`);
+        }
     };
 
     return (
@@ -57,21 +58,22 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                     ></div>
                     </div>
                     <div className="d-grid gap-2 d-md-flex justify-content-center justify-content-md-end align-items-center">
+                        <div className="d-flex align-items-center gap-2">
+                        <BsGlobe />
+                        <LanguageSelector />
+                        </div>
                         <div className="dropdown">
                             <Dropdown>
                                 <Dropdown.Toggle as="div" id="dropdown-custom-components" style={{ cursor: 'pointer' }}>
                                     <span>
-                                        {sessionData.picture && (
                                             <Image
-                                                src={ sessionData.picture || defaultProfilePic}
+                                                src={ sessionData.picture ||  defaultProfilePic.src}
                                                 alt="User Profile"
                                                 width={40}
                                                 height={40}
                                                 priority={false}
                                                 style={{ borderRadius: '50%', marginRight: '10px' }}
-                                            />
-                                        )}
-                                        
+                                            />                                        
                                         {sessionData.name || sessionData.email}
                                     </span>
                                 </Dropdown.Toggle>

@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model LUDI_COMMON_GRADE {
+  id                Int       @id @default(autoincrement())
+  grade_type_name   String
+  grade_type_desc   String?
+  created_date      DateTime
+  modified_date     DateTime
+  image_url        String?
+  key_string       String?
+  images            LUDI_COMMON_GRADE_IMAGES[]
+}
+
+model LUDI_COMMON_GRADE_IMAGES {
+  id                Int       @id @default(autoincrement())
+  grade_id          Int
+  image_url         String
+  description       String?
+  grade             LUDI_COMMON_GRADE @relation(fields: [grade_id], references: [id])
+}
+
+model ACTIVITY {
+  id                Int       @id @default(autoincrement())
+  activity_name     String  @db.VarChar(100)
+  activity_desc     String? @db.VarChar(100)
+  created_date      DateTime @default(now())
+  modified_date     DateTime
+  image_url         String? @db.VarChar(100)
+}

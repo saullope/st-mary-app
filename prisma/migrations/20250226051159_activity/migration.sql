@@ -1,0 +1,31 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- AlterTable
+ALTER TABLE [dbo].[LUDI_COMMON_GRADE] ADD [image_url] NVARCHAR(1000),
+[key_string] NVARCHAR(1000);
+
+-- CreateTable
+CREATE TABLE [dbo].[ACTIVITY] (
+    [id] INT NOT NULL IDENTITY(1,1),
+    [activity_name] VARCHAR(100) NOT NULL,
+    [activity_desc] VARCHAR(100),
+    [created_date] DATETIME2 NOT NULL CONSTRAINT [ACTIVITY_created_date_df] DEFAULT CURRENT_TIMESTAMP,
+    [modified_date] DATETIME2 NOT NULL,
+    [image_url] VARCHAR(100),
+    CONSTRAINT [ACTIVITY_pkey] PRIMARY KEY CLUSTERED ([id])
+);
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

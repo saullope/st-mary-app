@@ -98,5 +98,20 @@
   "textDashboard": {
     "ludiTemplates": "Plantillas Ludi",
     "ludiTemplatesText": "Juegos lúdicos divididos por asignaturas"
+  },
+  "createActivityDashboard": {
+    "metaTitle": "Crear actividad",
+    "metaDescription": "Crear juegos lúdicos divididos por asignaturas",
+    "titlePage": "Crear Actividad",
+    "ludiquizTitle": "Ludi Quiz",
+    "ludiquizSubTitle": "Aventura de Preguntas",
+  "ludiquiz_desc": "¡Diseña cuestionarios divertidos y desafiantes para tus estudiantes!",
+  "ludimemoryTitle": "Ludi Memory",
+  "ludimemorySubTitle": "Memoriza y Gana",
+  "ludimemory_desc": "¡Crea emocionantes juegos de memoria que pondrán a prueba las habilidades de tus estudiantes!",
+  "trueorfalseTitle": "True or False",
+  "trueorfalseSubTitle": "Verdadero o Falso: El Desafío",
+  "trueorfalse_desc": "¡Prepara juegos de verdadero o falso llenos de sorpresas y aprendizaje!",
+  "createText": "Empezar a Crear"
   }
 }

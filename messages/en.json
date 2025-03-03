@@ -98,5 +98,20 @@
   "textDashboard": {
     "ludiTemplates": "Ludi Templates",
     "ludiTemplatesText": "Playful games divided by subjects"
+  },
+  "createActivityDashboard": {
+    "metaTitle": "Create activity",
+    "metaDescription": "Create playful games divided by subjects",
+    "titlePage": "Create Activity",
+      "ludiquizTitle": "Ludi Quiz",
+      "ludiquizSubTitle": "Question Adventure",
+      "ludiquiz_desc": "Design fun and challenging quizzes for your students!",
+      "ludimemoryTitle": "Ludi Memory",
+      "ludimemorySubTitle": "Memorize and Win",
+      "ludimemory_desc": "Create exciting memory games that will test your students' skills!",
+      "trueorfalseTitle": "True or False",
+      "trueorfalseSubTitle": "True or False: The Challenge",
+      "trueorfalse_desc": "Prepare true or false games full of surprises and learning!",
+      "createText": "Start Creating"
   }
 }
