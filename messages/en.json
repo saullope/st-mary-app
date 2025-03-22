@@ -113,5 +113,26 @@
       "trueorfalseSubTitle": "True or False: The Challenge",
       "trueorfalse_desc": "Prepare true or false games full of surprises and learning!",
       "createText": "Start Creating"
+  },
+  "ludiMemoryComponent": {
+    "uploadSpace": "Click to Upload or Search Multimedia Files",
+    "imageArea": "Image Area",
+    "uploadFile": "Upload File",
+    "searchUnsplash": "Search in Unsplash",
+    "searchYoutube": "Search in Youtube"
+  },
+  "configurations": {
+    "titleActivity": "Write a title..."
+  },
+  "modalMultimedia": {
+    "searchUnsplash": "Search Image in Unsplash",
+    "searchYoutube": "Search Video in Youtube",
+    "searchFreesound": "Search Sound in Freesound",
+    "searchImage": "Search Image...",
+    "searchVideo": "Search Video...",
+    "searchAudio": "Search Audio...",
+    "search": "Search",
+    "loading": "Loading...",
+    "notFound": "Not found"
   }
 }

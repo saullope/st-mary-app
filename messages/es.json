@@ -113,5 +113,26 @@
   "trueorfalseSubTitle": "Verdadero o Falso: El Desafío",
   "trueorfalse_desc": "¡Prepara juegos de verdadero o falso llenos de sorpresas y aprendizaje!",
   "createText": "Empezar a Crear"
+  },
+  "ludiMemoryComponent": {
+    "uploadSpace": "Clic para Cargar o Buscar Archivos Multimedia",
+    "imageArea": "Área de Imágenes",
+    "uploadFile": "Subir Archivo",
+    "searchUnsplash": "Buscar en Unsplash",
+    "searchYoutube": "Buscar en Youtube"
+  },
+  "configurations": {
+    "titleActivity": "Escribe un titulo..."
+  },
+  "modalMultimedia" : {
+    "searchUnsplash": "Buscar Imagen en Unsplash",
+    "searchYoutube": "Buscar Video en Youtube",
+    "searchFreesound": "Buscar Audio en Freesound",
+    "searchImage": "Buscar Imagen...",
+    "searchVideo": "Buscar Video...",
+    "searchAudio": "Buscar Audio...",
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "notFound": "No se encontraron resultados"
   }
 }
