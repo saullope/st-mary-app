@@ -2,7 +2,8 @@
 "use client"
 
 import { useState } from 'react';
-import { TitleActivity, LoadImagesComponent, Imagepreview, ModalMultimedia } from "@/editor-components";
+import { TitleActivity, LoadImagesComponent, Imagepreview, ModalMultimedia, ThemeButton, ThemeContainer }
+    from "@/editor-components";
 import Image from 'next/image';
 import styles from '../../../../public/css/editor.module.css';
 import uploadImageStyle from '../../../../public/css/true-or-false.module.css';
@@ -10,6 +11,8 @@ import partialLogo from '../../../../public/images/PartialLogo.png';
 import { useTranslations } from 'next-intl';
 import { LanguageSelector } from "../../../components/LanguageSelector";
 import { BsGlobe } from 'react-icons/bs';
+import { TbArrowsMinimize } from "react-icons/tb";
+import { FaExpand } from "react-icons/fa6";
 
 export default function LudiMemory() {
 
@@ -21,10 +24,21 @@ export default function LudiMemory() {
     const [title, setTitle] = useState(t3("titleActivity"));
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
     const [show, setShow] = useState(false);
+    const [showTheme, setShowTheme] = useState(false);
+    const [backgroundImage, setBackgroundImage] = useState<string>("/images/theme/tema4.jpg");
+    const [isFullWidth, setIsFullWidth] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const handleShowTheme = () => setShowTheme(!showTheme);
+
+    const handleThemeChange = (imagePath: string) => {
+        setBackgroundImage(imagePath);
+        setShowTheme(false);
+    };
+
+    const toggleFullWidth = () => setIsFullWidth(!isFullWidth);
 
     const handleSelectImageUnsplash = (url: string) => {
         setSelectedImages((prevImages) => [...prevImages, url]); // Agrega la URL de la imagen al estado
@@ -68,16 +82,38 @@ export default function LudiMemory() {
                             <BsGlobe />
                             <LanguageSelector />
                         </div>
+                        <ThemeButton
+                            onClick={handleShowTheme}
+                        />
+                        <button
+                            className="btn btn-primary" // Botón para alternar
+                            onClick={toggleFullWidth}
+                        >
+                            {isFullWidth ? <TbArrowsMinimize /> : <FaExpand />}
+                        </button>
                     </div>
                 </div>
             </nav>
-            <div className="row" style={{ height: '100vh' }}> {/* Hace que las columnas ocupen toda la altura de la pantalla */}
-                <div className="col card shadow-sm rounded p-3 h-100 me-3 d-flex"> {/* Clase d-flex para alinear horizontalmente */}
+            <div className="row" style={{ height: "100vh" }}> {/* Hace que las columnas ocupen toda la altura de la pantalla */}
+                <div className={`col card shadow-sm rounded p-3 h-100 me-3 d-flex ${isFullWidth ? "col-12" : "col"}`}
+                    style={{
+                        backgroundImage: `url(${backgroundImage})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        backgroundAttachment: "fixed",
+                        width: "100%",
+                        height: "100vh",
+                        transition: "background 0.3s ease-in-out",
+                    }}> {/* Clase d-flex para alinear horizontalmente */}
                     <div className='col'>
+                        {/** 
                         <h5 className="card-title">LudiMemory</h5>
                         <p className="card-text">{t("ludimemorySubTitle")}</p>
+                        */}
+                        <br /><br />
                         {/** INICIO AREA DE CARGA DE IMAGEN */}
-                        <div className={`${uploadImageStyle.card}`} data-index="0">
+                        <div className={`${uploadImageStyle['card-inv']}`} data-index="0">
                             <LoadImagesComponent
                                 space="memory"
                                 handleOpenModal={handleShow}
@@ -101,18 +137,39 @@ export default function LudiMemory() {
                             show={show}
                             handleClose={handleClose}
                             origin="unsplash"
-                            onSelectImage={handleSelectImageUnsplash}
+                            onSelectMedia={handleSelectImageUnsplash}
                         />
                         {/** FIN AREA DE CARGA DE IMAGEN */}
                     </div>
+                    <ThemeContainer
+                        show={showTheme}
+                        onThemeChange={handleThemeChange}
+                    />
                 </div>
-                <div className="col-3 card shadow-sm rounded p-3 h-100"> {/* Columna 2 ocupa un cuarto del tamaño total */}
-                    <h5 className="card-title">Configuracion de la Actividad</h5>
-                    <p className="card-text">Contenido de la columna 2</p>
-                </div>
+                {
+                    !isFullWidth && (
+                        <div className="col-3 card shadow-sm rounded p-3 h-100"> {/* Columna 2 ocupa un cuarto del tamaño total */}
+                            <h5 className="card-title placeholder-glow">
+                                <span className="placeholder col-6"></span>
+                            </h5>
+                            <p className="card-text placeholder-glow">
+                                <span className="placeholder col-7"></span>
+                                <span className="placeholder col-4"></span>
+                                <span className="placeholder col-4"></span>
+                                <span className="placeholder col-6"></span>
+                                <span className="placeholder col-8"></span>
+                            </p>
+                            <p className="card-text placeholder-glow">
+                                <span className="placeholder col-7"></span>
+                                <span className="placeholder col-4"></span>
+                                <span className="placeholder col-4"></span>
+                                <span className="placeholder col-6"></span>
+                                <span className="placeholder col-8"></span>
+                            </p>
+                        </div>
+                    )
+                }
             </div>
         </>
-
-
     );
 }

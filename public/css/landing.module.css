@@ -94,6 +94,7 @@
 /*-------Formulario de Iniciar sesión-------*/
 
 .body-iniciosesion{
+    min-height: 110vh;
     background-image: linear-gradient(to top, #a6a6a6 0%, #456ee3 100%);
 }
 

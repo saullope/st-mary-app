@@ -133,6 +133,16 @@
     "searchAudio": "Search Audio...",
     "search": "Search",
     "loading": "Loading...",
-    "notFound": "Not found"
+    "notFound": "Not found",
+    "selectVideo": "Select Video"
+  },
+  "themeBackground": {
+    "tema1": "Fruits",
+    "tema2": "Sun",
+    "tema3": "Animals",
+    "tema4": "Classroom",
+    "tema5": "Space",
+    "tema6": "Ocean",
+    "tema7": "Animated Brains"
   }
 }
