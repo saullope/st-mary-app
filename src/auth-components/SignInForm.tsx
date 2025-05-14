@@ -33,7 +33,6 @@ export const SignInForm = () => {
     const onSubmit = async (values: { emailUser: string, password: string }) => {
 
         setLoading(true);
-        console.log("cargando")
 
         try {
             const userCredential = await signInWithEmailAndPassword(auth, values.emailUser, values.password);
@@ -48,7 +47,6 @@ export const SignInForm = () => {
                     },
                 }).then((response) => {
                     if (response.status === 200) {
-                        console.log("setUpdate(true)");
                         //router.push('/dashboard');
                         router.push('/welcome-educator');
                         router.refresh();

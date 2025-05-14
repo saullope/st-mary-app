@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap');
+
+.btn-primary-activity-ludi{
+    border-radius: 100px;
+    width: fit-content;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .btn-primary-activity-ludi:hover {
+      color: #fff;
+      background-color: #0056b3;
+      border-color: #004085;
+    }
+    
+    .btn-primary-activity-ludi:focus, .btn-primary-activity-ludi:active {
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+    }
+    
+    .btn-primary-activity-ludi:disabled {
+      color: #fff;
+      background-color: #007bff;
+      border-color: #007bff;
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+.title-activity {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-family: 'Rowdies', sans-serif;
+}
+
+.description-activity {
+  color: #7f8c8d;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.card-style {
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.card-body-ludi {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}

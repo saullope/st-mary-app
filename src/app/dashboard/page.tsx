@@ -1,22 +1,30 @@
 import { Metadata } from "next";
-import { GetServerSideProps } from 'next';
 import { ActivityDasboard } from "@/dashboard-components";
+import getSession from '@/lib/auth/getSession'; 
+import { DecodedIdToken } from 'firebase-admin/auth';
+import { redirect } from 'next/navigation';
 
-export async function generateMetadata({ searchParams }: { searchParams: { grade?: string } }): Promise<Metadata> {
-  const grade = searchParams.grade || 'default';
+type GradeKey = 'firstGrade' | 'secondGrade' | 'thirdGrade';
+
+export async function generateMetadata(): Promise<Metadata> {
+  
   return {
-    title: `LudiGame - ${grade}`,
+    title: `LudiGame`,
     description: 'LudiGame for teachers'
   };
 }
 
 
-export default async function Dashboard({ searchParams }: { searchParams: { grade?: string } }) {
-  const grade = searchParams.grade || 'default';
+export default async function Dashboard() {
+  const token: DecodedIdToken | null = await getSession();
+  
+  if (!token) {
+        redirect('/auth/login');
+      }
 
   return (
     <>
-      <ActivityDasboard grade={grade} />
+      <ActivityDasboard />
     </>
   );
 }

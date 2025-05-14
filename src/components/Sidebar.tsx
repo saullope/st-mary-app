@@ -34,16 +34,9 @@ export const Sidebar = () => {
             </Link>
             <NavDropdown title={t('institution')} id="navbarScrollingDropdown" className={`${styles['nav-link']} text-primary fw-bold`}>
               <NavDropdown.Item as="div">
-              <Link href={'/home/institution'} className="dropdown-item ">
+              <Link href='https://stmary.edu.ni/' className="dropdown-item " target="_blank">
                     Conoce sobre St. Mary School
                   </Link>
-                  <Image
-                    className="bannerstm"
-                    src={bannerStMary}
-                    alt="bannerstmary"
-                    width={100}
-                    height={100}
-                  />
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
