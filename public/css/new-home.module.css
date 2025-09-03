@@ -1,0 +1,533 @@
+/* ========== General ========== */
+
+.bodydiv {
+  background-color: #e0f0ff;
+  color: #222;
+  line-height: 1.6;
+}
+/* 
+========== Animación  ==========
+..navludi , .headerludi_next, .section_next, ..footer_next {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      ..navludi .animate-in, .headerludi.animate-in, .section.animate-in, ..footer.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+      } */
+
+/* ========== .navludi BAR ========== */
+.navludi {
+  background-color: #7bcfff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  gap: 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+  flex-wrap: wrap;
+}
+
+.navludi .imgludi {
+  height: 70px;
+  transition: transform 0.3s ease;
+}
+
+.navludi .imgludi:hover {
+  transform: scale(1.1);
+}
+
+.navludi .buttonludi {
+  background-color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.3rem;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #222;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+.navludi .buttonludi:hover {
+  background-color: #ffd400;
+  color: #222;
+  box-shadow: 0 4px 12px rgba(255, 212, 0, 0.5);
+}
+
+.navludi .institucion {
+  background-color: #8860FF;
+  color: white;
+}
+/* ========== Header - Fondo principal ========== */
+.headerludi {
+  background: linear-gradient(135deg, #649eff, #c17bff);
+  color: white;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+.headerludi .h1ludi {
+  font-size: 3.2rem;
+  animation: floatText 3s ease-in-out infinite alternate;
+  text-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+.headerludi .pludi {
+  font-size: 1.4rem;
+  margin: 1rem 0 2rem;
+  animation: fadeInUp 2s ease forwards;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.25);
+}
+
+.hero-buttons .buttonludi {
+  margin: 0 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  border: none;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 12px rgba(255, 219, 0, 0.6);
+}
+
+.hero-buttons .buttonludi:nth-child(2) {
+  background-color: #ffffffcc;
+  color: #444;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.8);
+}
+
+.hero-buttons .buttonludi:hover {
+  transform: scale(1.12);
+  box-shadow: 0 8px 18px rgba(255, 219, 0, 0.8);
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ========== ANIMACIONES ========== */
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes floatText {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.section .h2ludi {
+  animation: fadeInTitle 1.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInTitle {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Animaciones Cards - tipos de juegos  */
+.cards .card {
+  animation: cardFadeIn 1s ease forwards;
+  opacity: 0;
+}
+
+.cards .card:hover,
+.cards .card .imgcard:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
+@keyframes cardFadeIn {
+  to { opacity: 1; }
+}
+
+/* Animaciones - iconos del fondo principal*/
+.bg-icon {
+  position: absolute;
+  width: 120px !important;
+  height: 140px !important;
+  opacity: 0.45 !important;
+  animation: floatIcon 5s infinite ease-in-out;
+  filter: drop-shadow(0 0 3px rgba(0,0,0,0.2));
+  z-index: 0;
+}
+
+.bg-icon:nth-child(1) { top: 15%; left: 3%;  animation-delay: 0s; }
+.bg-icon:nth-child(2) { top: 25%; right: 7%; animation-delay: 1.5s; }
+.bg-icon:nth-child(3) { bottom: 15%; left: 15%; animation-delay: 3s; }
+
+/* ========== STARS BACKGROUND ========== */
+.stars-background-hero,
+.stars-background-rocket {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: #0a0a2a;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.7) 0.5px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.5) 0.3px, transparent 0.8px);
+  background-size: 120px 120px, 60px 60px;
+  background-repeat: repeat;
+  /* Movimiento lento del fondo */
+  animation: starMove 30s linear infinite;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* brillo suave */
+.stars-background-hero::after,
+.stars-background-rocket::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: white;
+  opacity: 0;
+  pointer-events: none;
+  animation: starTwinkle 5s ease-in-out infinite;
+}
+
+@keyframes starMove {
+  0%   { background-position:   0   0,   0   0; }
+  50%  { background-position:  30px  30px, -30px -30px; }
+  100% { background-position:   0   0,   0   0; }
+}
+
+/* Brillo intermitente */
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 0.1; }
+}
+
+/* ========== ROCKET SECTION ========== */
+.rocket-section {
+  position: relative;
+  background: linear-gradient(to top, #78D0E4, #2C4B6E);
+  overflow: hidden;
+  padding: 1rem;
+  color: white;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.rocket-content {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rocket-text {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  opacity: 0;
+  animation: slideZoomIn 1.6s ease-out 0.5s forwards;
+}
+
+.highlight {
+  color: #ffdd57;
+  text-shadow: 0 0 10px rgba(255, 221, 87, 0.6);
+}
+
+@keyframes slideZoomIn {
+  0%   { transform: translateY(30px) scale(0.9); opacity: 0; }
+  100% { transform: translateY(0) scale(1);   opacity: 1; }
+}
+
+/* ========== SECTIONS GENERALES ========== */
+.section {
+  max-width: 960px;
+  margin: 0 auto 5rem;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.section .h2ludi {
+  color: #7b3cff;
+  font-size: 2rem;
+  margin: 40px 0 2rem;
+  text-shadow: 0 1px 4px rgba(123, 60, 255, 0.5);
+}
+
+/* ========== CARDS ========== */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.cards .card {
+  background-color: #ff8a8a;
+  border-radius: 20px;
+  width: 180px;
+  height: 180px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  cursor: default;
+  transition: all 0.3s ease;
+  padding: 1rem;
+  opacity: 0;
+}
+
+.cards .card:nth-child(2) { background-color: #90c4ff; color: #004080; }
+.cards .card:nth-child(3) { background-color: #ffdd9a; color: #7a5700; }
+.cards .card:nth-child(4) { background-color: #a1ff93; color: #2d6500; }
+
+.cards .card .imgcard {
+  width: 100px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+/* ========== Section Grados ========== */
+.ludi-section {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #cce4f6, #f2d1f8, #ffd6e0);
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  animation: pulseColor 5s ease-in-out infinite alternate;
+}
+
+/* Contenedor para organizar ícono + texto */
+.ludi-contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+.ludi-experiencias-title {
+  color: #6b21a8;
+  font-size: 13px;
+  margin-top: 20px;
+  max-width: 600px;
+  line-height: 1.5;
+  animation: fadePulse 3s ease-in-out infinite alternate;
+}
+
+/* Animaciones */
+@keyframes fadePulse {
+  0%   { opacity: 0.85; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.85; }
+}
+
+@keyframes pulseColor {
+  0% {
+    background: linear-gradient(135deg, #cce4f6, #f2d1f8, #ffd6e0);
+  }
+  50% {
+    background: linear-gradient(135deg, #d1e8fc, #e5ccf3, #ffe0e6);
+  }
+  100% {
+    background: linear-gradient(135deg, #cce4f6, #f2d1f8, #ffd6e0);
+  }
+}
+
+/* Ajustes para pantallas grandes */
+@media (min-width: 768px) {
+  .ludi-section {
+    gap: 40px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ludi-experiencias-title {
+    font-size: 2.2rem;
+  }
+}
+
+/* ========== Ludi importance section ========== */
+.ludi-importance-section {
+  padding: 4rem 1rem;
+  background: linear-gradient(to bottom right, #f3e8ff, #dbeafe);
+  text-align: center;
+  border-radius: 2rem;
+  max-width: 1200px;
+  margin: 3rem auto;
+  box-shadow: 0 8px 25px rgba(107, 33, 168, 0.15);
+}
+
+.ludi-importance-title {
+  font-size: 2.50rem;
+  font-weight: 800;
+  color: #6b21a8;
+  margin-bottom: 3rem;
+  text-shadow: 0 2px 5px rgba(107, 33, 168, 0.2);
+  animation: pulseText 3s ease-in-out infinite;
+}
+
+.ludi-importance-grid {
+  display: grid;
+  gap: 2rem;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .ludi-importance-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ludi-importance-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.ludi-importance-card {
+  background-color: white;
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem 3rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.ludi-importance-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  pointer-events: none;
+  animation: ludiImportanceShine 4s linear infinite;
+  opacity: 0.6;
+  border-radius: 1.5rem;
+}
+
+.ludi-importance-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 0 30px rgba(107, 33, 168, 0.25), 0 15px 35px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.ludi-importance-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+  transition: transform 0.3s ease;
+}
+
+.ludi-importance-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.ludi-importance-card:hover .ludi-importance-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.ludi-importance-card h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #4b2788;
+}
+
+.ludi-importance-card p {
+  color: #4b4b4b;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-weight: 500;
+  user-select: none;
+}
+
+/* Animación de pulso suave para el título */
+@keyframes pulseText {
+  0%,
+  100% {
+    text-shadow: 0 2px 5px rgba(107, 33, 168, 0.2);
+  }
+  50% {
+    text-shadow: 0 4px 15px rgba(107, 33, 168, 0.5);
+  }
+}
+
+/* ========== .footer ========== */
+.footer {
+  background-color: #305971;
+  color: white;
+  text-align: center;
+  padding: 1rem 2rem;
+  font-weight: 500;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+  margin-top: 3rem;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .headerludi h1 { font-size: 2.4rem; }
+
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navludi  {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .navludi  img { height: 50px; }
+}
+
+@media (max-width: 480px) {
+  .headerludi {
+    padding: 4rem 1rem 3rem;
+  }
+
+  .headerludi h1 { font-size: 1.8rem; }
+
+  .cards .card {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+

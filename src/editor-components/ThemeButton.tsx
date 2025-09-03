@@ -14,7 +14,7 @@ export const ThemeButton = ({onClick}: ThemeButtonProps) => {
             onClick={onClick}
             >
             <IoIosColorPalette />
-             Theme
+             Tema
         </button>
     )
 }

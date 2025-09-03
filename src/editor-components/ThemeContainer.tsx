@@ -2,6 +2,7 @@
 
 import style from "../../public/css/editor-activity.module.css";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 interface ThemeContainerProps {
     show: boolean;

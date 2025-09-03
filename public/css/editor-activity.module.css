@@ -612,7 +612,7 @@
     position: fixed;
     top: 80px;
     left: 1500px;
-    width: 326px;
+    width: 220px;
     height: 90vh;
     z-index: 3333;
     background: white;
@@ -627,7 +627,7 @@
 }
 
 .theme-container.open {
-    left: 1004px;
+    left: 1110px;
 }
 
 .theme-container .acth1 {

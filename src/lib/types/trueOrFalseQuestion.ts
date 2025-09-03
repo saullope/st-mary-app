@@ -14,7 +14,7 @@ export type TrueOrFalseActivity = {
 export type TrueOrFalseQuestion = {
     id: number; // Identificador único de la pregunta
     text: string; // Texto de la pregunta
-    correctAnswer: "true" | "false"; // Respuesta correcta
+    correctAnswer: "true" | "false" | null; // Respuesta correcta
     mediaType: "image" | "video" | "audio" | "youtube" | null; // Tipo de archivo multimedia
     mediaUrl: string | null; // URL del archivo multimedia
 };

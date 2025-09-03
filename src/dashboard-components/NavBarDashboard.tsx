@@ -39,13 +39,29 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
     const router = useRouter();
 
     const handleLogout = async () => {
-        try {
-            await auth.signOut();// signOut();
-            router.push('/auth/login'); // Redirigir a la página de login después de cerrar sesión
-        } catch (error) {
-            alert(`Error al cerrar sesión: ${error}`);
+    try {
+        // Cerrar sesión en Firebase PRIMERO
+        await signOut(auth);
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // Llamar al endpoint para eliminar la cookie de sesión
+        const response = await fetch("/api/auth/signout", {
+            method: "POST",
+        });
+
+        if (response.ok) {
+            router.push('/auth/login');
+        } else {
+            const errorData = await response.json();
+            alert(`Error al cerrar sesión: ${errorData.error || "Error desconocido."}`);
         }
-    };
+    } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+        alert(`Error al cerrar sesión: ${error}`);
+    }
+};
+
 
     return (
         <>

@@ -36,17 +36,19 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BienvenidaEducador() {
 
     const token: DecodedIdToken | null = await getSession();
+    if (!token) {
+        redirect('/auth/login');
+      }
+    
     const t = await getTranslations("WelcomeTeacherView");
 
     const grades = await prisma.lUDI_COMMON_GRADE.findMany();
 
     // Si no hay un usuario autenticado, redirigir a la página de login
-    if (!token) {
-      redirect('/auth/login');
-    }
+    
 
     return (
-        <body className={styles[`body-vistaeducador`]}>
+        <div style={{ minHeight: '100vh' }} className={styles[`body-vistaeducador`]}>
             <main>
                 <div className={styles[`texto-bienvenida`]}>
                     <br />
@@ -64,6 +66,6 @@ export default async function BienvenidaEducador() {
                     </div>
                 </div>
             </main>
-        </body>
+        </div>
     )
 }

@@ -29,7 +29,7 @@
     "password": "Password",
     "signInButton": "Sign In",
     "SignInWithGoogle": "Google",
-    "orSignIn": "Or Sign In with",
+    "orSignIn": "Or",
     "noAccount": "Don't have an account? ",
     "signUp": "Sign Up",
     "forgotPassword": "Forgot password?",
@@ -37,7 +37,20 @@
     "passwordInvalid": "Password is invalid",
     "emailRequired": "Email is required",
     "passwordRequired": "Password is required",
-    "clickHere": "Click here"
+    "clickHere": "Click here",
+    "welcome": "Welcome",
+    "errorLogionWithGoogle": "Error logging in with Google",
+    "errorLogionWithEmail": "Error logging in with email",
+    "errorNotFindUser": "User not found",
+    "genericError": "An error occurred, please try again later",
+    "errorInvalidCredentials": "Invalid email or password",
+    "errorUserNotFound": "User not found",
+    "errorWrongPassword": "Incorrect password",
+    "errorInvalidEmail": "Invalid email format",
+    "errorUserDisabled": "This account has been disabled",
+    "errorTooManyRequests": "Too many attempts. Please try again later",
+    "errorNetwork": "Network error. Check your internet connection",
+    "errorInternal": "Internal error. Please try again"
   },
   "SignUpForm": {
     "titleForm": "Sign Up",
@@ -62,7 +75,12 @@
     "passwordMin":"Password must be at least 8 characters long",
     "passwordNumber":"Password must have at least one number",
     "passwordLowercase":"Password must have at least one lowercase letter",
-    "passwordUppercase":"Password must have at least one uppercase letter"
+    "passwordUppercase":"Password must have at least one uppercase letter",
+    "errorEmailAlreadyInUse": "Email already in use",
+    "usercreate": "User created successfully",
+    "verifyEmailTitle": "Verify your email",
+    "verifyEmailDescription": "A verification email has been sent to your email address. Please check your inbox and click the link to verify your account."
+
   },
   "WelcomeTeacherView": {
     "metaTitle":"Welcome Teacher",

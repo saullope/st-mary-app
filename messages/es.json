@@ -29,7 +29,7 @@
     "password": "Contraseña",
     "signInButton": "Acceder",
     "SignInWithGoogle": "Google",
-    "orSignIn": "O Iniciar sesión con",
+    "orSignIn": "O",
     "noAccount": "¿No tienes una cuenta? ",
     "signUp": "Regístrarse",
     "forgotPassword": "¿Olvido su contraseña?",
@@ -37,7 +37,20 @@
     "passwordInvalid": "La contraseña es inválida",
     "emailRequired": "Correo electrónico es requerido",
     "passwordRequired": "Contraseña es requerida",
-    "clickHere": "Haz click aquí"
+    "clickHere": "Haz click aquí",
+    "welcome": "Bienvenido",
+    "errorLogionWithGoogle": "Error al iniciar sesión con Google",
+    "errorLogionWithEmail": "Error al iniciar sesión con correo electrónico",
+    "errorNotFindUser": "Usuario no encontrado",
+    "genericError": "Ocurrió un error, por favor intente nuevamente más tarde",
+    "errorInvalidCredentials": "Correo electrónico o contraseña inválidos",
+    "errorUserNotFound": "Usuario no encontrado",
+    "errorWrongPassword": "Contraseña incorrecta",
+    "errorInvalidEmail": "Formato de correo inválido",
+    "errorUserDisabled": "Esta cuenta ha sido deshabilitada",
+    "errorTooManyRequests": "Demasiados intentos. Por favor, inténtalo más tarde",
+    "errorNetwork": "Error de red. Verifica tu conexión a internet",
+   "errorInternal": "Error interno. Por favor, intenta de nuevo"
   },
   "SignUpForm": {
     "titleForm": "Registrate",
@@ -62,7 +75,12 @@
     "passwordMin":"La contraseña debe tener al menos 8 caracteres",
     "passwordNumber":"La contraseña debe tener al menos un número",
     "passwordLowercase":"La contraseña debe tener al menos una letra minúscula",
-    "passwordUppercase":"La contraseña debe tener al menos una letra mayúscula"
+    "passwordUppercase":"La contraseña debe tener al menos una letra mayúscula",
+    "errorEmailAlreadyInUse": "El correo electrónico ya está en uso",
+    "usercreate": "Usuario creado con éxito",
+    "verifyEmailTitle": "Confirma tu correo electrónico",
+    "verifyEmailDescription": "Por favor revisa tu bandeja de entrada y sigue el enlace para verificar tu cuenta."
+
   },
   "WelcomeTeacherView": {
     "metaTitle":"Bienvenido Educador",

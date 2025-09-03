@@ -3,7 +3,7 @@
 "use client"
 
 import { useState } from 'react';
-import { TitleActivity, ModalMultimedia, ThemeButton, ThemeContainer, LoadMultimediaFile }
+import { TitleActivity, ModalMultimedia, ThemeButton, ThemeContainer, LoadMultimediaFile, QuestionListItem }
     from "@/editor-components";
 import Image from 'next/image';
 import styles from '../../../../public/css/editor.module.css';
@@ -14,7 +14,7 @@ import { LanguageSelector } from "../../../components/LanguageSelector";
 import { BsGlobe } from 'react-icons/bs';
 import { TbArrowsMinimize } from "react-icons/tb";
 import { FaExpand } from "react-icons/fa6";
-
+import { TrueOrFalseQuestion } from '@/lib/types/';
 
 export default function TrueOrFalse() {
     /** Traducciones */
@@ -33,6 +33,18 @@ export default function TrueOrFalse() {
     const [mediUrl, setMediaUrl] = useState<string | null>(null);
     const [selectedAnswer, setSelectedAnswer] = useState<"true" | "false" | null>(null);
     const [questionText, setQuestionText] = useState("");
+
+    const [questions, setQuestions] = useState<TrueOrFalseQuestion[]>([]);
+    const [questionId, setQuestionId] = useState(1);
+    const [editingId, setEditingId] = useState<number | null>(null);
+
+    const [newQuestion, setNewQuestion] = useState<TrueOrFalseQuestion>({
+        id: questionId,
+        text: "",
+        correctAnswer: null,
+        mediaType: null,
+        mediaUrl: null,
+    });
 
     const handleAnswerSelection = (answer: "true" | "false") => {
         setSelectedAnswer(answer);
@@ -67,27 +79,81 @@ export default function TrueOrFalse() {
     const handleSelectFile = () => {
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = 'image/*,video/*,audio/*'; // Acepta imágenes, videos y audios
+        input.accept = 'image/*,video/*,audio/*';
         input.onchange = (event) => {
             const file = (event.target as HTMLInputElement).files?.[0];
             if (file) {
                 const fileType = file.type.startsWith('image/')
                     ? 'image'
                     : file.type.startsWith('video/')
-                    ? 'video'
-                    : file.type.startsWith('audio/')
-                    ? 'audio'
-                    : null;
-    
+                        ? 'video'
+                        : file.type.startsWith('audio/')
+                            ? 'audio'
+                            : null;
+
                 if (fileType) {
-                    const fileURL = URL.createObjectURL(file); // Genera una URL temporal
-                    handleSelectMedia(fileType, fileURL); // Establece el tipo y la URL en el estado
+                    const fileURL = URL.createObjectURL(file);
+                    handleSelectMedia(fileType, fileURL);
                 }
             }
         };
-        input.click(); // Simula un clic para abrir el explorador de archivos
+        input.click();
     };
 
+    const handleInputNewQuestion = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewQuestion({ ...newQuestion, text: event.target.value });
+    };
+
+    const handleAnswerSelectionNewQuestion = (answer: "true" | "false") => {
+        setNewQuestion({ ...newQuestion, correctAnswer: answer });
+    };
+
+    const handleSelectMediaNewQuestion = (type: string, url: string) => {
+        setNewQuestion({ ...newQuestion, mediaType: type as "image" | "youtube" | "audio" | "video", mediaUrl: url });
+    };
+
+    const handleAddQuestion = () => {
+        if (!newQuestion.text.trim() || newQuestion.correctAnswer === null) {
+            alert("Por favor completa la pregunta y selecciona una respuesta.");
+            return;
+        }
+
+        if (editingId !== null) {
+            setQuestions(prev =>
+                prev.map(q =>
+                    q.id === editingId
+                        ? { ...q, ...newQuestion }
+                        : q
+                )
+            );
+            setEditingId(null);
+        } else {
+            setQuestions([...questions, { ...newQuestion, id: questionId }]);
+            setQuestionId(prev => prev + 1);
+        }
+
+        setNewQuestion({
+            id: questionId + 1,
+            text: "",
+            correctAnswer: null,
+            mediaType: null,
+            mediaUrl: null,
+        });
+    };
+
+    const handleEditQuestion = (id: number) => {
+        const q = questions.find(q => q.id === id);
+        if (!q) return;
+
+        setEditingId(q.id);
+        setNewQuestion({
+            id: q.id,
+            text: q.text,
+            correctAnswer: q.correctAnswer,
+            mediaType: q.mediaType,
+            mediaUrl: q.mediaUrl,
+        });
+    };
 
     return (
         <>
@@ -108,28 +174,52 @@ export default function TrueOrFalse() {
                             <BsGlobe />
                             <LanguageSelector />
                         </div>
-                        <ThemeButton
-                            onClick={handleShowTheme}
-                        />
-                        <button
-                            className="btn btn-primary" // Botón para alternar
-                            onClick={toggleFullWidth}
-                        >
+                        <ThemeButton onClick={handleShowTheme} />
+                        <button className="btn btn-primary" onClick={toggleFullWidth}>
                             {isFullWidth ? <TbArrowsMinimize /> : <FaExpand />}
                         </button>
                     </div>
                 </div>
             </nav>
-            <div className="row" style={{ height: "100vh" }}> {/* Hace que las columnas ocupen toda la altura de la pantalla */}
+            <div className="row" style={{ height: "100vh" }}>
                 {!isFullWidth && (
-                    <div className='col-1 card shadow-sm rounded p-3 me-3'>
-                        {questionText}
-                        <button className='btn btn-primary btn-sm'>
-                            Nueva
+                    <div className="col-2 card shadow-sm rounded p-3 me-3">
+                        <ul className="mt-3 p-0">
+                            {questions.map((q) => (
+                                <QuestionListItem
+                                    key={q.id}
+                                    id={q.id}
+                                    text={q.text}
+                                    mediaType={q.mediaType}
+                                    mediaUrl={q.mediaUrl}
+                                    correctAnswer={q.correctAnswer}
+                                    isSelected={editingId === q.id}
+                                    onClick={() => handleEditQuestion(q.id)}
+                                />
+                            ))}
+                            {!editingId && (
+                                <QuestionListItem
+                                    id={newQuestion.id}
+                                    text={newQuestion.text}
+                                    mediaType={newQuestion.mediaType}
+                                    mediaUrl={newQuestion.mediaUrl}
+                                    correctAnswer={newQuestion.correctAnswer ?? "false"}
+                                    isSelected={true}
+                                    onClick={() => {}}
+                                />
+                            )}
+                        </ul>
+
+                        <button
+                            className="btn btn-primary btn-sm"
+                            onClick={handleAddQuestion}
+                        >
+                            {editingId !== null ? "Guardar" : "Agregar"}
                         </button>
                     </div>
                 )}
-                <div className={`col card shadow-sm rounded p-3 me-3 d-flex ${isFullWidth ? "col-12" : "col"}`}
+                <div
+                    className={`col card shadow-sm rounded p-3 me-3 d-flex ${isFullWidth ? "col-12" : "col"}`}
                     style={{
                         backgroundImage: `url(${backgroundImage})`,
                         backgroundSize: "cover",
@@ -139,23 +229,28 @@ export default function TrueOrFalse() {
                         width: "100%",
                         minHeight: "100vh",
                         transition: "background 0.3s ease-in-out",
-                    }}> {/* Clase d-flex para alinear horizontalmente */}
-                    <div className='col d-flex justify-content-center align-items-center'>
-                        {/** INICIO CONTENIDO DEL EDITOR */}
+                    }}
+                >
+                    <div className="col d-flex justify-content-center align-items-center">
                         <div className={style2.container}>
                             <h1 className={style2.acth1}>Verdadero o Falso</h1>
-
-                            {/* <!-- Tarjeta de Pregunta --> */}
                             <div className={style2.card}>
-                                {/* <!-- Campo de Pregunta --> */}
-                                <input type="text" className={style2['question-input']}
-                                    placeholder="Escribe tu pregunta" 
-                                    onChange={handleInputQuestion}/>
+                                <input
+                                    type="text"
+                                    className={style2["question-input"]}
+                                    placeholder="Escribe tu pregunta"
+                                    value={newQuestion.text}
+                                    onChange={(e) =>
+                                        setNewQuestion({ ...newQuestion, text: e.target.value })
+                                    }
+                                />
 
                                 <LoadMultimediaFile
-                                    type={mediaType}
-                                    url={mediUrl}
-                                    onRemove={handleRemoveMedia}
+                                    type={newQuestion.mediaType}
+                                    url={newQuestion.mediaUrl}
+                                    onRemove={() =>
+                                        setNewQuestion({ ...newQuestion, mediaType: null, mediaUrl: null })
+                                    }
                                     onUpload={handleSelectFile}
                                     onUnsplash={handleShowUnsplash}
                                     onYoutube={handleShowYoutube}
@@ -163,85 +258,82 @@ export default function TrueOrFalse() {
                                     styleComponent={"trueorfalse"}
                                 />
 
-                                {/*<!-- Input oculto para subir archivos -->*/}
-                                <input type="file" id="file-input"
-                                    accept="image/*,video/*,audio/*" hidden />
+                                <input
+                                    type="file"
+                                    id="file-input"
+                                    accept="image/*,video/*,audio/*"
+                                    hidden
+                                />
 
-                                {/*<!-- Botones de respuesta Verdadero o Falso -->*/}
-                                <div className={style2['answer-options']}>
-                                    <button 
-                                    className={`${style2['answer-btn']} ${style2['btn-verdadero']} ${selectedAnswer === 'true' ? style2.selected : ''}`}
-                                    onClick={() => handleAnswerSelection("true")}
-                                    >🔷
-                                        Verdadero</button>
-                                    <button 
-                                    className={`${style2['answer-btn']} ${style2['btn-falso']} ${selectedAnswer === 'false' ? style2.selected : ''}`}
-                                    onClick={() => handleAnswerSelection("false")}
-                                    >⚠️ Falso</button>
+                                <div className={style2["answer-options"]}>
+                                    <button
+                                        className={`${style2["answer-btn"]} ${style2["btn-verdadero"]} ${
+                                            newQuestion.correctAnswer === "true" ? style2.selected : ""
+                                        }`}
+                                        onClick={() =>
+                                            setNewQuestion({ ...newQuestion, correctAnswer: "true" })
+                                        }
+                                    >
+                                        🔷 Verdadero
+                                    </button>
+                                    <button
+                                        className={`${style2["answer-btn"]} ${style2["btn-falso"]} ${
+                                            newQuestion.correctAnswer === "false" ? style2.selected : ""
+                                        }`}
+                                        onClick={() =>
+                                            setNewQuestion({ ...newQuestion, correctAnswer: "false" })
+                                        }
+                                    >
+                                        ⚠️ Falso
+                                    </button>
                                 </div>
                             </div>
-
-                            {/* <!-- Template para elementos multimedia con botón de eliminar --> */}
-                            { mediUrl && (
-                                <template id="media-item-template">
-                                <div className={style2['media-item']}>
-                                    <button className={style2['remove-media-btn']}
-                                    >×</button>
-                                    <div className={style2['media-content']}></div>
-                                </div>
-                            </template>
-                            ) }
                         </div>
-                        {/** FIN CONTENIDO DEL EDITOR */}
                     </div>
                     <ThemeContainer
                         show={showTheme}
                         onThemeChange={handleThemeChange}
                     />
                 </div>
-                {/** Area de modal */}
-                <ModalMultimedia 
-                show={showUnsplash}
-                handleClose={handleShowUnsplash}
-                origin="unsplash"
-                onSelectMedia={handleSelectMedia}
+                <ModalMultimedia
+                    show={showUnsplash}
+                    handleClose={handleShowUnsplash}
+                    origin="unsplash"
+                    onSelectMedia={handleSelectMediaNewQuestion}
                 />
-                <ModalMultimedia 
-                show={showYoutube}
-                handleClose={handleShowYoutube}
-                origin="youtube"
-                onSelectMedia={handleSelectMedia}
+                <ModalMultimedia
+                    show={showYoutube}
+                    handleClose={handleShowYoutube}
+                    origin="youtube"
+                    onSelectMedia={handleSelectMediaNewQuestion}
                 />
-                <ModalMultimedia 
-                show={showFreesound}
-                handleClose={handleShowFreesound}
-                origin="freesound"
-                onSelectMedia={handleSelectMedia}
+                <ModalMultimedia
+                    show={showFreesound}
+                    handleClose={handleShowFreesound}
+                    origin="freesound"
+                    onSelectMedia={handleSelectMediaNewQuestion}
                 />
-                {/** Area de modal */}
-                {
-                    !isFullWidth && (
-                        <div className="col-3 card shadow-sm rounded p-3"> {/* Columna 2 ocupa un cuarto del tamaño total */}
-                            <h5 className="card-title placeholder-glow">
-                                <span className="placeholder col-6"></span>
-                            </h5>
-                            <p className="card-text placeholder-glow">
-                                <span className="placeholder col-7"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-6"></span>
-                                <span className="placeholder col-8"></span>
-                            </p>
-                            <p className="card-text placeholder-glow">
-                                <span className="placeholder col-7"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-6"></span>
-                                <span className="placeholder col-8"></span>
-                            </p>
-                        </div>
-                    )
-                }
+                {!isFullWidth && (
+                    <div className="col-2 card shadow-sm rounded p-3">
+                        <h5 className="card-title placeholder-glow">
+                            <span className="placeholder col-6"></span>
+                        </h5>
+                        <p className="card-text placeholder-glow">
+                            <span className="placeholder col-7"></span>
+                            <span className="placeholder col-4"></span>
+                            <span className="placeholder col-4"></span>
+                            <span className="placeholder col-6"></span>
+                            <span className="placeholder col-8"></span>
+                        </p>
+                        <p className="card-text placeholder-glow">
+                            <span className="placeholder col-7"></span>
+                            <span className="placeholder col-4"></span>
+                            <span className="placeholder col-4"></span>
+                            <span className="placeholder col-6"></span>
+                            <span className="placeholder col-8"></span>
+                        </p>
+                    </div>
+                )}
             </div>
         </>
     );

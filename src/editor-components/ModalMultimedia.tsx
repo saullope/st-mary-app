@@ -4,6 +4,7 @@ import { Modal } from "react-bootstrap";
 import style from "../../public/css/editor-activity.module.css";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 interface ModalProps {
   show: boolean;
@@ -156,7 +157,7 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
                       handleClose();
                     }}
                   >
-                    <img
+                    <Image 
                       src={item.urls.small}
                       alt={item.alt_description || "Imagen Unsplash"}
                       className={style["modal-image"]}
@@ -184,10 +185,13 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
                     className={`${style["result-item"]}`}
                     onClick={() => setPreviewVideo(`https://www.youtube.com/embed/${item.id.videoId}`)} // Muestra la previsualización
                   >
-                    <img
+                    <Image
                       src={item.snippet.thumbnails.medium.url}
                       alt={item.snippet.title}
                       className={style["modal-image"]}
+                      width={320}
+                      height={180}
+                      style={{ objectFit: "cover" }}
                     />
                     <p className={style["video-title"]}>
                       {item.snippet.title.length > 50

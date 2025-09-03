@@ -11,6 +11,7 @@ import styles from '../../public/css/landing.module.css';
 import logoGoogle from '../../public/images/LogoGoogle.png';
 import loginBanner from '../../public/images/LoginBanner.png';
 import Image from "next/image";
+import { Toaster, toast } from "sonner";
 
 
 export const SignInForm = () => {
@@ -20,6 +21,10 @@ export const SignInForm = () => {
     const googleProvider = new GoogleAuthProvider();
     const [errorLogin, setErrorLogin] = useState("");
     const [isLoading, setLoading] = useState(false);
+
+    googleProvider.setCustomParameters({
+    prompt: 'select_account',
+});
 
     const router = useRouter();
 
@@ -47,7 +52,7 @@ export const SignInForm = () => {
                     },
                 }).then((response) => {
                     if (response.status === 200) {
-                        //router.push('/dashboard');
+                        toast.success(`${t("welcome")}, ${userCredential.user.displayName}`);
                         router.push('/welcome-educator');
                         router.refresh();
                     }
@@ -55,16 +60,31 @@ export const SignInForm = () => {
             };
         } catch (error: any) {
             setLoading(false);
-            console.log("termino de cargar");
-            if (error.code == "auth/invalid-login-credentials") {
-                setErrorLogin(error)
-            }
-            else if (error.code == "auth/too-many-requests") {
-                setErrorLogin(error);
-            }
-            else {
-                setErrorLogin(`Error signin in, ${error}`)
-            }
+           const errorMap: Record<string, { message: string, type: "error" | "warning" | "info" }> = {
+            "auth/invalid-credential": { message: t("errorInvalidCredentials"), type: "error" },
+            "auth/user-not-found": { message: t("errorUserNotFound"), type: "error" },
+            "auth/wrong-password": { message: t("errorWrongPassword"), type: "error" },
+            "auth/invalid-email": { message: t("errorInvalidEmail"), type: "error" },
+            "auth/user-disabled": { message: t("errorUserDisabled"), type: "error" },
+            "auth/too-many-requests": { message: t("errorTooManyRequests"), type: "warning" },
+            "auth/network-request-failed": { message: t("errorNetwork"), type: "warning" },
+            "auth/internal-error": { message: t("errorInternal"), type: "info" },
+        };
+
+        const fallbackMessage = t("genericError");
+        const errorData = errorMap[error.code] || { message: fallbackMessage, type: "error" };
+
+        switch (errorData.type) {
+            case "error":
+                toast.error(errorData.message);
+                break;
+            case "warning":
+                toast.warning(errorData.message);
+                break;
+            case "info":
+                toast.info(errorData.message);
+                break;
+        }
         }
 
     }
@@ -72,32 +92,35 @@ export const SignInForm = () => {
     const onGoogleSignin = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
-
+    
             if (result.user) {
                 const idToken = await result.user.getIdToken(true);
-
-                await fetch("/api/auth/login", {
+    
+                const response = await fetch("/api/auth/login", {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${idToken}`,
                     },
-                }).then((response) => {
-                    if (response.status === 200) {
-                        console.log("setUpdate(true)");
-                        //router.push('/dashboard');
-                        router.push('/welcome-educator');
-                        router.refresh();
-                    }
                 });
+    
+                if (response.status === 200) {
+                    toast.success(`${t("welcome")}, ${result.user.displayName}`);
+                    router.push('/welcome-educator');
+                    router.refresh();
+                } else {
+                    toast.error(t("genericError"));
+                }
+            } else {
+                toast.error(t("errorNotFindUser"));
             }
         } catch (error: any) {
-            console.log("Error en el inicio de sesión con Google");
-            setErrorLogin(`Error signin in with Google, ${error.message}`);
+            toast.error(`${t("errorLogionWithGoogle")}`);
         }
-    }
+    };
 
     return (
         <div className={styles['login-container']}>
+            <Toaster richColors position="bottom-right" closeButton={true} expand={true} duration={5000} />
             <div className={styles['login-info-container']}>
                 <h1 className={styles['title-login']}>
                     {t("titleForm")} </h1>
@@ -115,7 +138,7 @@ export const SignInForm = () => {
                         {t("SignInWithGoogle")}
                     </div>
                 </div>
-                <p>o</p>
+                <p>{t("orSignIn")}</p>
                 <Formik
                     initialValues={{ emailUser: '', password: '' }}
                     validationSchema={validationSchema}

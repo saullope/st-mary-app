@@ -1,6 +1,7 @@
 // path: /src/editor-components/ImagePreview.tsx
 
 import uploadImageStyle from '../../public/css/true-or-false.module.css';
+import Image from 'next/image';
 
 interface ImagePreviewProps {
     selectedImages: string[],
@@ -12,7 +13,13 @@ export const Imagepreview = ({selectedImages, onDeleteImage}: ImagePreviewProps)
         <div className={uploadImageStyle['image-preview-container']}>
             {selectedImages.map((image, index) => (
                 <div key={index} className={uploadImageStyle['image-preview']}>
-                    <img src={image} alt={`Image ${index + 1}`}/>
+                    <Image
+                        src={image}
+                        alt={`Image ${index + 1}`}
+                        width={150}
+                        height={150}
+                        className={uploadImageStyle['preview-img']}
+                    />
                     <button
                         className={uploadImageStyle['delete-button']}
                         onClick={() => onDeleteImage(index)}

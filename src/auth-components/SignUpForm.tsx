@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } 
 import { auth } from "@/firebase/firebase";
 import * as Yup from 'yup';
 import styles from '../../public/css/landing.module.css';
+import { Toaster, toast } from "sonner";
 
 export const SignUpForm = () => {
 
@@ -38,7 +39,12 @@ export const SignUpForm = () => {
        
             if (auth.currentUser) {
                 await updateProfile(auth.currentUser, { displayName: `${values.name} ${values.lastName}` });
-                alert("Usuario creado correctamente")
+                toast.success(t("usercreate"));
+
+                toast.message(t("verifyEmailTitle"), {
+                    description: t("verifyEmailDescription"),
+                });
+
             }
 
             // clear los inputs
@@ -46,7 +52,7 @@ export const SignUpForm = () => {
         } catch (error: any) {
             if (error.code === 'auth/email-already-in-use') {
                 //setErrors({ email: t("emailInUse") });
-                alert("El correo ya se encuentra en uso")
+                toast.warning(t("errorEmailAlreadyInUse"));
             } else {
                 setErrors({ submit: "No hay error" });
             }
@@ -58,6 +64,7 @@ export const SignUpForm = () => {
     return (
         <>
             <div className={styles['body-registro']}>
+                <Toaster richColors position="bottom-right" closeButton={true} expand={true} duration={6000}/>
                     <div className="">
                         <Formik
                             initialValues={{ email: '', password: '', confirmPassword: '', name: '', lastName: '' }}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import style2 from "../../public/css/editor-activity.module.css";
 import style3 from "../../public/css/ludiquiz.module.css";
+import Image from "next/image";
 
 interface LoadMultimediaProps {
   type: "image" | "youtube" | "audio" | "video" | null; // Tipo de medio
@@ -47,12 +48,15 @@ export const LoadMultimediaFile = ({
           {url && (
             <div id="media-preview" className={styleComponent == "trueorfalse" ? style2["media-preview"] : style3["media-preview"]}>
               <div className={styleComponent == "trueorfalse" ? style2["media-item"] : style3["media-item"]}>
-                {type === "image" && (
-                  <img
+                {type === "image" && url && (
+                  <Image
                     src={url}
                     alt="Imagen seleccionada"
                     className={styleComponent == "trueorfalse" ? style2["media-preview-content"] : style3["media-preview-content"]}
                     style={{ transform: `scale(${scale / 100})` }}
+                    width={400}
+                    height={300}
+                    unoptimized
                   />
                 )}
                 {type === "video" && (
