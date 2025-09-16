@@ -2,8 +2,18 @@ import { registerUserWithEmailPassword,
     signInWithGoogle, 
     LoginWithEmailPassword, 
     logoutFirebase } from "../../firebase/provider";
-import { checkingCredentials, login, logout, setLoginError, setSignupError } from "./authSlice";
+import { 
+    checkingCredentials, 
+    login, 
+    logout, 
+    setLoginError, 
+    setSignupError,
+    setLoading,
+    updateSession,
+    clearSession
+} from "./authSlice";
 import { Dispatch } from "@reduxjs/toolkit";
+import { getUserInfo } from "@/lib/user/getUserInfo";
 
 type AppDispatch = Dispatch<any>;
 
@@ -84,5 +94,48 @@ export const startLogout = () => {
     return async (dispatch : AppDispatch) => {
         await logoutFirebase()
         dispatch(logout())
+    }
+}
+
+// Nuevos thunks para funcionalidades del SessionContext
+export const fetchUserSession = () => {
+    return async (dispatch: AppDispatch) => {
+        dispatch(setLoading(true));
+        
+        try {
+            const response = await fetch("/api/auth");
+            if (response.status === 200) {
+                const data = await response.json();
+                const userUID = data?.uid;
+                const userEmail = data?.email;
+                
+                if (userUID && userUID !== "") {
+                    const userInfo = await getUserInfo(userUID);
+                    if (userInfo) {
+                        dispatch(updateSession({
+                            uid: userInfo.uid,
+                            email: userEmail || "",
+                            photoURL: userInfo.photoURL,
+                            displayName: userInfo.displayName
+                        }));
+                    }
+                } else {
+                    dispatch(clearSession());
+                }
+            } else {
+                dispatch(clearSession());
+            }
+        } catch (error) {
+            console.error("Error fetching user session:", error);
+            dispatch(clearSession());
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+}
+
+export const refreshUserSession = () => {
+    return async (dispatch: AppDispatch) => {
+        dispatch(fetchUserSession());
     }
 }

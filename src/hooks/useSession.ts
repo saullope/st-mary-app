@@ -1,7 +1,14 @@
 // src/hooks/useSession.ts
-import { SessionContext } from "@/contexts/SessionContext";
-import { useContext } from "react"
+import { useAuth } from "./useAuth";
 
 export const useSession = () => {
-    return useContext(SessionContext);
+    const auth = useAuth();
+    
+    return {
+        session: auth.user,
+        setSession: auth.updateSession,
+        setUpdate: auth.refreshUserSession,
+        selectedGrade: auth.selectedGrade,
+        setSelectedGrade: auth.setSelectedGrade,
+    };
 }

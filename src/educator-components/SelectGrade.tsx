@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useContext, useEffect, useState } from 'react';
-import { SessionContext } from "@/contexts/SessionContext";
+import React, { useEffect, useState } from 'react';
+import { useAuth } from "@/hooks/useAuth";
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '../../public/css/bienvenida.module.css';
@@ -26,7 +26,7 @@ interface SelectGradeProps {
 
 export const SelectGrade = ({ grades }: SelectGradeProps) => {
 
-    const { setSelectedGrade } = useContext(SessionContext);
+    const { setSelectedGrade } = useAuth();
     const [selectedGrade, setSelectedGradeState] = useState<string | null>(null);
 
     const t = useTranslations("WelcomeTeacherView");

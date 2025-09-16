@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useContext, useEffect, useState } from "react";
-import { SessionContext } from "@/contexts/SessionContext";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { CardGrade, CardActivity } from "@/educator-components";
 import PrimerGrado from '../../public/images/primer-grado/PrimerGrado.png';
 import MisActividades from '../../public/images/primer-grado/Mis-actividades.png';
@@ -46,9 +46,7 @@ const renderGradeContent = (grade: GradeKey, t: any, t2: any, images: any, onCar
 );
 
 export const ActivityDasboard = () => {
-
-
-  const { setSelectedGrade } = useContext(SessionContext);
+  const { setSelectedGrade } = useAuth();
   const [grade, setGrade] = useState<GradeKey>('firstGrade');
 
   const t = useTranslations(`${grade}ItemDashboard`);

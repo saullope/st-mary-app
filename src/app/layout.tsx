@@ -1,7 +1,7 @@
 import {NextIntlClientProvider} from 'next-intl';
 import {getMessages} from 'next-intl/server';
-//import {AuthProvider} from '@/components';
-import SessionProvider from '../contexts/SessionContext';
+import { ReduxProvider } from '@/components/ReduxProvider';
+import { SessionInitializer } from '@/components/SessionInitializer';
 import getSession from '@/lib/auth/getSession';
 
 export default async function LocaleLayout({
@@ -16,14 +16,15 @@ export default async function LocaleLayout({
   const messages = await getMessages();
  
   return (
-    <SessionProvider >
-    <html lang={locale}>
-      <body>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      </body>
-    </html>
-    </SessionProvider>
+    <ReduxProvider>
+      <html lang={locale}>
+        <body>
+          <NextIntlClientProvider messages={messages}>
+            <SessionInitializer />
+            {children}
+          </NextIntlClientProvider>
+        </body>
+      </html>
+    </ReduxProvider>
   );
 }

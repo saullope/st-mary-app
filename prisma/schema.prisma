@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,29 +8,263 @@ datasource db {
 }
 
 model LUDI_COMMON_GRADE {
-  id                Int       @id @default(autoincrement())
-  grade_type_name   String
-  grade_type_desc   String?
-  created_date      DateTime
-  modified_date     DateTime
-  image_url        String?
-  key_string       String?
-  images            LUDI_COMMON_GRADE_IMAGES[]
+  id              Int                        @id @default(autoincrement())
+  grade_type_name String
+  grade_type_desc String?
+  created_date    DateTime                   @default(now())
+  modified_date   DateTime                   @default(now())
+  image_url       String?
+  key_string      String?
+  ludiactividades LudiActividad[]
+  images          LUDI_COMMON_GRADE_IMAGES[]
 }
 
 model LUDI_COMMON_GRADE_IMAGES {
-  id                Int       @id @default(autoincrement())
-  grade_id          Int
-  image_url         String
-  description       String?
-  grade             LUDI_COMMON_GRADE @relation(fields: [grade_id], references: [id])
+  id          Int               @id @default(autoincrement())
+  grade_id    Int
+  image_url   String
+  description String?
+  grade       LUDI_COMMON_GRADE @relation(fields: [grade_id], references: [id])
 }
 
 model ACTIVITY {
-  id                Int       @id @default(autoincrement())
-  activity_name     String  @db.VarChar(100)
-  activity_desc     String? @db.VarChar(100)
-  created_date      DateTime @default(now())
-  modified_date     DateTime
-  image_url         String? @db.VarChar(100)
+  id              Int            @id @default(autoincrement())
+  activity_name   String         @db.VarChar(100)
+  activity_desc   String?        @db.VarChar(100)
+  created_date    DateTime       @default(now())
+  modified_date   DateTime       @default(now())
+  image_url       String?        @db.VarChar(100)
+  ludiactividades LudiActividad?
+}
+
+model LudiActividad {
+  activityId      Int                  @id(map: "PK__LUDI_ACT__482FBD6332AE6D54") @map("activity_id")
+  tipoActividadId Int                  @map("tipo_actividad_id") @db.TinyInt
+  educadorId      BigInt               @map("educador_id")
+  gradoId         Int?                 @map("grado_id")
+  temaId          BigInt?              @map("tema_id")
+  publico         Boolean              @default(false, map: "DF_LUDI_ACT_publico")
+  activity        ACTIVITY             @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_ACTI__activ__32767D0B")
+  educador        LudiEducador         @relation(fields: [educadorId], references: [id], onUpdate: NoAction, map: "FK__LUDI_ACTI__educa__345EC57D")
+  grado           LUDI_COMMON_GRADE?   @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__grado__3552E9B6")
+  tema            LudiTema?            @relation(fields: [temaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__tema___36470DEF")
+  tipoActividad   LudiTipoActividad    @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_ACTI__tipo___336AA144")
+  config          LudiActividadConfig?
+  memoriaParejas  LudiMemoriaPareja[]  @relation("MemoriaParejaActivity")
+  preguntas       LudiPregunta[]       @relation("PreguntaActivity")
+  LUDI_SESION     LUDI_SESION[]
+
+  @@map("LUDI_ACTIVIDAD")
+}
+
+model LudiActividadConfig {
+  activityId       Int                   @id(map: "PK__LUDI_ACT__482FBD630AF4F7DC") @map("activity_id")
+  tiempoPreguntaMs Int?                  @map("tiempo_pregunta_ms")
+  tipoPuntuacionId Int                   @default(1, map: "DF_LUDI_ACTCFG_tipoPunt") @map("tipo_puntuacion_id") @db.TinyInt
+  puntajeBase      Int                   @default(1000, map: "DF_LUDI_ACTCFG_puntaje") @map("puntaje_base")
+  feedbackId       Int?                  @map("feedback_id")
+  ajustesJson      String?               @map("ajustes_json") @db.NVarChar(Max)
+  activity         LudiActividad         @relation(fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_ACTI__activ__3A179ED3")
+  feedback         LudiComponenteLudico? @relation(fields: [feedbackId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__feedb__3DE82FB7")
+  tipoPuntuacion   LudiTipoPuntuacion    @relation(fields: [tipoPuntuacionId], references: [id], onUpdate: NoAction, map: "FK__LUDI_ACTI__tipo___3B0BC30C")
+
+  @@map("LUDI_ACTIVIDAD_CONFIG")
+}
+
+model LudiComponenteLudico {
+  id         Int                   @id(map: "PK__LUDI_COM__3213E83F85CE91FE") @default(autoincrement())
+  tipoId     Int                   @map("tipo_id") @db.TinyInt
+  nombre     String                @db.NVarChar(80)
+  assetUrl   String?               @map("asset_url") @db.NVarChar(600)
+  configJson String?               @map("config_json") @db.NVarChar(Max)
+  configs    LudiActividadConfig[]
+  tipo       LudiTipoFeedback      @relation(fields: [tipoId], references: [id], onUpdate: NoAction, map: "FK__LUDI_COMP__tipo___2F9A1060")
+
+  @@map("LUDI_COMPONENTE_LUDICO")
+}
+
+model LudiEducador {
+  id          BigInt          @id(map: "PK__LUDI_EDU__3213E83F97CB6106") @default(autoincrement())
+  firebaseUid String          @unique(map: "UQ__LUDI_EDU__1E65B7F8214D7406") @map("firebase_uid") @db.NVarChar(128)
+  nombre      String          @db.NVarChar(120)
+  email       String?         @unique(map: "UQ__LUDI_EDU__AB6E6164AA9DFFD1") @db.NVarChar(160)
+  creadoEn    DateTime        @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_EDU_creado") @map("creado_en")
+  actividades LudiActividad[]
+  LUDI_SESION LUDI_SESION[]
+
+  @@map("LUDI_EDUCADOR")
+}
+
+model LudiMemoriaPareja {
+  id         BigInt               @id(map: "PK__LUDI_MEM__3213E83FE16E28DC") @default(autoincrement())
+  activityId Int                  @map("activity_id")
+  etiqueta   String?              @db.NVarChar(80)
+  activity   LudiActividad        @relation("MemoriaParejaActivity", fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK_MemoriaPareja_Activity")
+  tarjetas   LudiMemoriaTarjeta[]
+
+  @@map("LUDI_MEMORIA_PAREJA")
+}
+
+model LudiMemoriaTarjeta {
+  id        BigInt            @id(map: "PK__LUDI_MEM__3213E83FD3AE0800") @default(autoincrement())
+  parejaId  BigInt            @map("pareja_id")
+  recursoId BigInt            @map("recurso_id")
+  lado      String            @db.Char(1)
+  pareja    LudiMemoriaPareja @relation(fields: [parejaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_MEMO__parej__5C6CB6D7")
+  recurso   LudiRecurso       @relation(fields: [recursoId], references: [id], onUpdate: NoAction, map: "FK__LUDI_MEMO__recur__5D60DB10")
+
+  @@unique([parejaId, lado], map: "UQ_LUDI_MEM_tarjeta")
+  @@map("LUDI_MEMORIA_TARJETA")
+}
+
+model LudiOpcion {
+  id             BigInt              @id(map: "PK__LUDI_OPC__3213E83F58810239") @default(autoincrement())
+  preguntaId     BigInt              @map("pregunta_id")
+  indice         Int                 @db.TinyInt
+  texto          String?             @db.NVarChar(400)
+  esCorrecta     Boolean             @default(false, map: "DF_LUDI_OPC_correcta") @map("es_correcta")
+  pregunta       LudiPregunta        @relation(fields: [preguntaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_OPCI__pregu__5006DFF2")
+  opcionRecursos LudiOpcionRecurso[]
+
+  @@unique([preguntaId, indice], map: "UQ_LUDI_OPC_pre_ind")
+  @@map("LUDI_OPCION")
+}
+
+model LudiOpcionRecurso {
+  opcionId  BigInt      @map("opcion_id")
+  recursoId BigInt      @map("recurso_id")
+  rol       String      @db.NVarChar(20)
+  opcion    LudiOpcion  @relation(fields: [opcionId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_OPCI__opcio__53D770D6")
+  recurso   LudiRecurso @relation(fields: [recursoId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_OPCI__recur__54CB950F")
+
+  @@id([opcionId, recursoId, rol], map: "PK__LUDI_OPC__A930ED371C9C42E1")
+  @@map("LUDI_OPCION_RECURSO")
+}
+
+model LudiOrigenRecurso {
+  id       Int           @id(map: "PK__LUDI_ORI__3213E83F68533875") @db.TinyInt
+  nombre   String        @unique(map: "UQ__LUDI_ORI__72AFBCC617D2E32D") @db.NVarChar(20)
+  recursos LudiRecurso[]
+
+  @@map("LUDI_ORIGEN_RECURSO")
+}
+
+model LudiPregunta {
+  id               BigInt                @id(map: "PK__LUDI_PRE__3213E83F7B9AA76F") @default(autoincrement())
+  activityId       Int                   @map("activity_id")
+  numero           Int                   @db.SmallInt
+  tipoActividadId  Int                   @map("tipo_actividad_id") @db.TinyInt
+  enunciado        String                @db.NVarChar(Max)
+  tiempoLimiteMs   Int?                  @map("tiempo_limite_ms")
+  puntaje          Int?
+  activo           Boolean               @default(true, map: "DF_LUDI_PREG_activo")
+  opciones         LudiOpcion[]
+  activity         LudiActividad         @relation("PreguntaActivity", fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Pregunta_Activity")
+  tipoActividad    LudiTipoActividad     @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_PREG__tipo___467D75B8")
+  preguntaRecursos LudiPreguntaRecurso[]
+
+  @@unique([activityId, numero], map: "UQ_LUDI_PREG_act_num")
+  @@map("LUDI_PREGUNTA")
+}
+
+model LudiPreguntaRecurso {
+  preguntaId BigInt       @map("pregunta_id")
+  recursoId  BigInt       @map("recurso_id")
+  rol        String       @db.NVarChar(20)
+  pregunta   LudiPregunta @relation(fields: [preguntaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_PREG__pregu__4A4E069C")
+  recurso    LudiRecurso  @relation(fields: [recursoId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_PREG__recur__4B422AD5")
+
+  @@id([preguntaId, recursoId, rol], map: "PK__LUDI_PRE__E29AD22F0CA2C29F")
+  @@map("LUDI_PREGUNTA_RECURSO")
+}
+
+model LudiRecurso {
+  id               BigInt                @id(map: "PK__LUDI_REC__3213E83FF642418B") @default(autoincrement())
+  tipoId           Int                   @map("tipo_id") @db.TinyInt
+  origenId         Int                   @map("origen_id") @db.TinyInt
+  url              String                @db.NVarChar(600)
+  externalId       String?               @map("external_id") @db.NVarChar(128)
+  titulo           String?               @db.NVarChar(200)
+  creditos         String?               @db.NVarChar(200)
+  anchoPx          Int?                  @map("ancho_px")
+  altoPx           Int?                  @map("alto_px")
+  duracionMs       Int?                  @map("duracion_ms")
+  metadataJson     String?               @map("metadata_json") @db.NVarChar(Max)
+  memoriaTarjetas  LudiMemoriaTarjeta[]
+  opcionRecursos   LudiOpcionRecurso[]
+  preguntaRecursos LudiPreguntaRecurso[]
+  origen           LudiOrigenRecurso     @relation(fields: [origenId], references: [id], onUpdate: NoAction, map: "FK__LUDI_RECU__orige__41B8C09B")
+  tipo             LudiTipoRecurso       @relation(fields: [tipoId], references: [id], onUpdate: NoAction, map: "FK__LUDI_RECU__tipo___40C49C62")
+
+  @@index([origenId, externalId], map: "IX_LUDI_RECURSO_origen_ext")
+  @@map("LUDI_RECURSO")
+}
+
+model LudiTema {
+  id          BigInt          @id(map: "PK__LUDI_TEM__3213E83F78611B40") @default(autoincrement())
+  nombre      String          @db.NVarChar(80)
+  imageUrl    String          @map("image_url") @db.NVarChar(600)
+  descripcion String?         @db.NVarChar(300)
+  activo      Boolean         @default(true, map: "DF_LUDI_TEMA_activo")
+  actividades LudiActividad[]
+
+  @@map("LUDI_TEMA")
+}
+
+model LudiTipoActividad {
+  id          Int             @id(map: "PK__LUDI_TIP__3213E83F41FA798F") @db.TinyInt
+  nombre      String          @unique(map: "UQ__LUDI_TIP__72AFBCC60DE48EAA") @db.NVarChar(40)
+  actividades LudiActividad[]
+  preguntas   LudiPregunta[]
+
+  @@map("LUDI_TIPO_ACTIVIDAD")
+}
+
+model LudiTipoFeedback {
+  id          Int                    @id(map: "PK__LUDI_TIP__3213E83F02C7D7CD") @db.TinyInt
+  nombre      String                 @unique(map: "UQ__LUDI_TIP__72AFBCC64282437F") @db.NVarChar(40)
+  componentes LudiComponenteLudico[]
+
+  @@map("LUDI_TIPO_FEEDBACK")
+}
+
+model LudiTipoPuntuacion {
+  id      Int                   @id(map: "PK__LUDI_TIP__3213E83F139ECB51") @db.TinyInt
+  nombre  String                @unique(map: "UQ__LUDI_TIP__72AFBCC6DEF81825") @db.NVarChar(30)
+  configs LudiActividadConfig[]
+
+  @@map("LUDI_TIPO_PUNTUACION")
+}
+
+model LudiTipoRecurso {
+  id       Int           @id(map: "PK__LUDI_TIP__3213E83F410C3E21") @db.TinyInt
+  nombre   String        @unique(map: "UQ__LUDI_TIP__72AFBCC676919663") @db.NVarChar(20)
+  recursos LudiRecurso[]
+
+  @@map("LUDI_TIPO_RECURSO")
+}
+
+model LUDI_SESION {
+  id                       BigInt                     @id(map: "PK__LUDI_SES__3213E83FFE0EE0FD") @default(autoincrement())
+  activity_id              Int
+  educador_id              BigInt
+  codigo                   String                     @unique(map: "UQ__LUDI_SES__40F9A2061D1921D8") @db.Char(6)
+  estado                   String                     @db.NVarChar(12)
+  iniciada_en              DateTime?
+  finalizada_en            DateTime?
+  creada_en                DateTime                   @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_SES_creada")
+  LUDI_ACTIVIDAD           LudiActividad              @relation(fields: [activity_id], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_SESI__activ__6225902D")
+  LUDI_EDUCADOR            LudiEducador               @relation(fields: [educador_id], references: [id], onUpdate: NoAction, map: "FK__LUDI_SESI__educa__6319B466")
+  LUDI_SESION_PARTICIPANTE LUDI_SESION_PARTICIPANTE[]
+}
+
+model LUDI_SESION_PARTICIPANTE {
+  id            BigInt      @id(map: "PK__LUDI_SES__3213E83F49938736") @default(autoincrement())
+  sesion_id     BigInt
+  nombre        String      @db.NVarChar(80)
+  unido_en      DateTime    @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_PART_unido")
+  puntaje_total Int         @default(0, map: "DF_LUDI_PART_punt")
+  LUDI_SESION   LUDI_SESION @relation(fields: [sesion_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_SESI__sesio__69C6B1F5")
+
+  @@unique([sesion_id, nombre], map: "UQ_LUDI_PART_ses_nom")
 }
