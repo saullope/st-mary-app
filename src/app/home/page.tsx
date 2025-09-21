@@ -58,7 +58,7 @@ export default function HomePage() {
           {/* <!-- Card 1 --> */}
           <div className={styles['ludi-importance-card']}>
             <div className={styles['ludi-importance-icon']}>
-              <Image className={styles.imgludi} src={fomentaInt} alt="Fomenta el interés" />
+              <Image className={styles.imgludi} src={fomentaInt} alt="Fomenta el interés" width={100} height={100} />
             </div>
             <h3>Fomenta el interés</h3>
             <p>Transforma tareas en retos que despiertan curiosidad y
@@ -67,7 +67,7 @@ export default function HomePage() {
           {/* <!-- Card 2 --> */}
           <div className={styles['ludi-importance-card']}>
             <div className={styles['ludi-importance-icon']}>
-              <Image src={mejoraAprendizaje} alt="Mejora el aprendizaje" />
+              <Image src={mejoraAprendizaje} alt="Mejora el aprendizaje" width={100} height={100} />
             </div>
             <h3>Mejora el aprendizaje</h3>
             <p>Favorece la memoria, la atención y la comprensión a través del
@@ -77,7 +77,7 @@ export default function HomePage() {
           {/* <!-- Card 3 --> */}
           <div className={styles['ludi-importance-card']}>
             <div className={styles['ludi-importance-icon']}>
-              <Image src={facilitaParticipacion} alt="Facilita la participación" />
+              <Image src={facilitaParticipacion} alt="Facilita la participación" width={100} height={100} />
             </div>
             <h3>Facilita la participación</h3>
             <p>Involucra activamente a todo el grupo en dinámicas educativas
@@ -107,13 +107,13 @@ export default function HomePage() {
         <div className={styles.cards}>
           <div className={styles.card}>
             <Image className={styles.imgcard} src={Ludiquiz}
-            alt="LudiQuiz" /><p>LudiQuiz</p></div>
+            alt="LudiQuiz" width={100} height={100} /><p>LudiQuiz</p></div>
           <div className={styles.card}>
             <Image className={styles.imgcard} src={Memory}
-            alt="LudiMemory" /><p>LudiMemory</p></div>
+            alt="LudiMemory" width={100} height={100} /><p>LudiMemory</p></div>
           <div className={styles.card}>
             <Image className={styles.imgcard} src={TrueOrFalse}
-            alt="True or False" /><p>True or False</p></div>
+            alt="True or False" width={100} height={100} /><p>True or False</p></div>
         </div>
       </section>
 

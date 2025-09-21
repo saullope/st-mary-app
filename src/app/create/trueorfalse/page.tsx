@@ -93,7 +93,7 @@ export default function TrueOrFalse() {
 
                 if (fileType) {
                     const fileURL = URL.createObjectURL(file);
-                    handleSelectMedia(fileType, fileURL);
+                    handleSelectMediaNewQuestion(fileType, fileURL);
                 }
             }
         };
@@ -155,6 +155,17 @@ export default function TrueOrFalse() {
         });
     };
 
+    const handleCancelEdit = () => {
+        setEditingId(null);
+        setNewQuestion({
+            id: questionId,
+            text: "",
+            correctAnswer: null,
+            mediaType: null,
+            mediaUrl: null,
+        });
+    };
+
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
@@ -175,7 +186,28 @@ export default function TrueOrFalse() {
                             <LanguageSelector />
                         </div>
                         <ThemeButton onClick={handleShowTheme} />
-                        <button className="btn btn-primary" onClick={toggleFullWidth}>
+                        <button 
+                            className="btn" 
+                            onClick={toggleFullWidth}
+                            style={{
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                border: 'none',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                borderRadius: '15px',
+                                padding: '10px 20px',
+                                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                                transition: 'all 0.3s ease'
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+                            }}
+                        >
                             {isFullWidth ? <TbArrowsMinimize /> : <FaExpand />}
                         </button>
                     </div>
@@ -210,12 +242,60 @@ export default function TrueOrFalse() {
                             )}
                         </ul>
 
-                        <button
-                            className="btn btn-primary btn-sm"
-                            onClick={handleAddQuestion}
-                        >
-                            {editingId !== null ? "Guardar" : "Agregar"}
-                        </button>
+                        <div className="d-flex flex-column gap-2">
+                            <button
+                                className="btn btn-sm w-100"
+                                onClick={handleAddQuestion}
+                                style={{
+                                    background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                    border: 'none',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    borderRadius: '15px',
+                                    padding: '12px',
+                                    boxShadow: '0 4px 15px rgba(40, 167, 69, 0.3)',
+                                    transition: 'all 0.3s ease',
+                                    fontFamily: 'Comic Sans MS, cursive'
+                                }}
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(40, 167, 69, 0.4)';
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(40, 167, 69, 0.3)';
+                                }}
+                            >
+                                {editingId !== null ? "💾 Guardar" : "➕ Agregar"}
+                            </button>
+                            {editingId && (
+                                <button
+                                    className="btn btn-sm w-100"
+                                    onClick={handleCancelEdit}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #6c757d 0%, #495057 100%)',
+                                        border: 'none',
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        borderRadius: '15px',
+                                        padding: '12px',
+                                        boxShadow: '0 4px 15px rgba(108, 117, 125, 0.3)',
+                                        transition: 'all 0.3s ease',
+                                        fontFamily: 'Comic Sans MS, cursive'
+                                    }}
+                                    onMouseOver={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(-2px)';
+                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(108, 117, 125, 0.4)';
+                                    }}
+                                    onMouseOut={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(108, 117, 125, 0.3)';
+                                    }}
+                                >
+                                    ❌ Cancelar
+                                </button>
+                            )}
+                        </div>
                     </div>
                 )}
                 <div
@@ -229,11 +309,29 @@ export default function TrueOrFalse() {
                         width: "100%",
                         minHeight: "100vh",
                         transition: "background 0.3s ease-in-out",
+                        position: "relative"
                     }}
                 >
-                    <div className="col d-flex justify-content-center align-items-center">
+                    {/* Overlay semi-transparente para mejorar legibilidad */}
+                    <div style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: "rgba(0, 0, 0, 0.3)",
+                        borderRadius: "10px"
+                    }}></div>
+                    
+                    <div className="col d-flex justify-content-center align-items-center position-relative">
                         <div className={style2.container}>
-                            <h1 className={style2.acth1}>Verdadero o Falso</h1>
+                            <h1 className={style2.acth1} style={{ 
+                                fontFamily: 'Comic Sans MS, cursive',
+                                fontSize: '2.5rem',
+                                fontWeight: 'bold',
+                                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                                color: '#2c3e50'
+                            }}>Verdadero o Falso</h1>
                             <div className={style2.card}>
                                 <input
                                     type="text"
@@ -273,6 +371,35 @@ export default function TrueOrFalse() {
                                         onClick={() =>
                                             setNewQuestion({ ...newQuestion, correctAnswer: "true" })
                                         }
+                                        style={{
+                                            background: newQuestion.correctAnswer === "true" 
+                                                ? 'linear-gradient(135deg, #28a745 0%, #20c997 100%)'
+                                                : 'linear-gradient(135deg, #17a2b8 0%, #138496 100%)',
+                                            border: 'none',
+                                            color: 'white',
+                                            fontWeight: 'bold',
+                                            borderRadius: '20px',
+                                            padding: '15px 25px',
+                                            boxShadow: newQuestion.correctAnswer === "true" 
+                                                ? '0 6px 20px rgba(40, 167, 69, 0.4)'
+                                                : '0 4px 15px rgba(23, 162, 184, 0.3)',
+                                            transition: 'all 0.3s ease',
+                                            fontFamily: 'Comic Sans MS, cursive',
+                                            fontSize: '1.1rem',
+                                            transform: newQuestion.correctAnswer === "true" ? 'scale(1.05)' : 'scale(1)'
+                                        }}
+                                        onMouseOver={(e) => {
+                                            if (newQuestion.correctAnswer !== "true") {
+                                                e.currentTarget.style.transform = 'scale(1.05)';
+                                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(23, 162, 184, 0.4)';
+                                            }
+                                        }}
+                                        onMouseOut={(e) => {
+                                            if (newQuestion.correctAnswer !== "true") {
+                                                e.currentTarget.style.transform = 'scale(1)';
+                                                e.currentTarget.style.boxShadow = '0 4px 15px rgba(23, 162, 184, 0.3)';
+                                            }
+                                        }}
                                     >
                                         🔷 Verdadero
                                     </button>
@@ -283,6 +410,35 @@ export default function TrueOrFalse() {
                                         onClick={() =>
                                             setNewQuestion({ ...newQuestion, correctAnswer: "false" })
                                         }
+                                        style={{
+                                            background: newQuestion.correctAnswer === "false" 
+                                                ? 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)'
+                                                : 'linear-gradient(135deg, #fd7e14 0%, #e55a00 100%)',
+                                            border: 'none',
+                                            color: 'white',
+                                            fontWeight: 'bold',
+                                            borderRadius: '20px',
+                                            padding: '15px 25px',
+                                            boxShadow: newQuestion.correctAnswer === "false" 
+                                                ? '0 6px 20px rgba(220, 53, 69, 0.4)'
+                                                : '0 4px 15px rgba(253, 126, 20, 0.3)',
+                                            transition: 'all 0.3s ease',
+                                            fontFamily: 'Comic Sans MS, cursive',
+                                            fontSize: '1.1rem',
+                                            transform: newQuestion.correctAnswer === "false" ? 'scale(1.05)' : 'scale(1)'
+                                        }}
+                                        onMouseOver={(e) => {
+                                            if (newQuestion.correctAnswer !== "false") {
+                                                e.currentTarget.style.transform = 'scale(1.05)';
+                                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(253, 126, 20, 0.4)';
+                                            }
+                                        }}
+                                        onMouseOut={(e) => {
+                                            if (newQuestion.correctAnswer !== "false") {
+                                                e.currentTarget.style.transform = 'scale(1)';
+                                                e.currentTarget.style.boxShadow = '0 4px 15px rgba(253, 126, 20, 0.3)';
+                                            }
+                                        }}
                                     >
                                         ⚠️ Falso
                                     </button>
@@ -290,6 +446,22 @@ export default function TrueOrFalse() {
                             </div>
                         </div>
                     </div>
+                    
+                    {/* Tip del tema */}
+                    <div className="text-center mt-4">
+                        <div className="alert alert-info border-0 shadow-sm" style={{ 
+                            borderRadius: '15px',
+                            background: 'rgba(13, 202, 240, 0.1)',
+                            border: '1px solid rgba(13, 202, 240, 0.3)',
+                            color: '#0dcaf0',
+                            fontSize: '0.9rem'
+                        }}>
+                            <small>
+                                💡 <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
+                            </small>
+                        </div>
+                    </div>
+                    
                     <ThemeContainer
                         show={showTheme}
                         onThemeChange={handleThemeChange}
@@ -313,27 +485,7 @@ export default function TrueOrFalse() {
                     origin="freesound"
                     onSelectMedia={handleSelectMediaNewQuestion}
                 />
-                {!isFullWidth && (
-                    <div className="col-2 card shadow-sm rounded p-3">
-                        <h5 className="card-title placeholder-glow">
-                            <span className="placeholder col-6"></span>
-                        </h5>
-                        <p className="card-text placeholder-glow">
-                            <span className="placeholder col-7"></span>
-                            <span className="placeholder col-4"></span>
-                            <span className="placeholder col-4"></span>
-                            <span className="placeholder col-6"></span>
-                            <span className="placeholder col-8"></span>
-                        </p>
-                        <p className="card-text placeholder-glow">
-                            <span className="placeholder col-7"></span>
-                            <span className="placeholder col-4"></span>
-                            <span className="placeholder col-4"></span>
-                            <span className="placeholder col-6"></span>
-                            <span className="placeholder col-8"></span>
-                        </p>
-                    </div>
-                )}
+                
             </div>
         </>
     );

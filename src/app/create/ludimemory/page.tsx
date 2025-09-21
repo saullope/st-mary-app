@@ -40,7 +40,7 @@ export default function LudiMemory() {
 
     const toggleFullWidth = () => setIsFullWidth(!isFullWidth);
 
-    const handleSelectImageUnsplash = (url: string) => {
+    const handleSelectImageUnsplash = (type: string, url: string) => {
         setSelectedImages((prevImages) => [...prevImages, url]); // Agrega la URL de la imagen al estado
     };
 
@@ -94,8 +94,8 @@ export default function LudiMemory() {
                     </div>
                 </div>
             </nav>
-            <div className="row" style={{ height: "100vh" }}> {/* Hace que las columnas ocupen toda la altura de la pantalla */}
-                <div className={`col card shadow-sm rounded p-3 h-100 me-3 d-flex ${isFullWidth ? "col-12" : "col"}`}
+            <div className="row" style={{ height: "100vh" }}>
+                <div className={`col card shadow-sm rounded p-3 h-100 me-3 d-flex justify-content-center align-items-center ${isFullWidth ? "col-12" : "col"}`}
                     style={{
                         backgroundImage: `url(${backgroundImage})`,
                         backgroundSize: "cover",
@@ -105,70 +105,226 @@ export default function LudiMemory() {
                         width: "100%",
                         height: "100vh",
                         transition: "background 0.3s ease-in-out",
-                    }}> {/* Clase d-flex para alinear horizontalmente */}
-                    <div className='col'>
-                        {/** 
-                        <h5 className="card-title">LudiMemory</h5>
-                        <p className="card-text">{t("ludimemorySubTitle")}</p>
-                        */}
-                        <br /><br />
-                        {/** INICIO AREA DE CARGA DE IMAGEN */}
-                        <div className={`${uploadImageStyle['card-inv']}`} data-index="0">
-                            <LoadImagesComponent
-                                space="memory"
-                                handleOpenModal={handleShow}
-                                handleSelectImage={handleSelectImage}
-                                addFileTraslation={t2("uploadSpace")}
-                                searchUnsplashTraslation={t2("searchUnsplash")}
-                                searchYoutubeTraslation={t2("searchYoutube")}
-                                uploadFileTranslation={t2("uploadFile")}
-                            />
-                            {/** INICIO AREA DE MOSTRAR IMAGENES SELECCIONADAS*/}
-                            <div className={uploadImageStyle['media-selector-img-prev']}>
-                                <h6>{t2("imageArea")}</h6>
-                                <Imagepreview
-                                    selectedImages={selectedImages}
-                                    onDeleteImage={handleDeleteImage}
-                                />
+                        position: "relative"
+                    }}>
+                    
+                    {/* Overlay semi-transparente para mejorar legibilidad */}
+                    <div style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: "rgba(0, 0, 0, 0.3)",
+                        borderRadius: "10px"
+                    }}></div>
+                    
+                    {/* Panel único integrado */}
+                    <div className="card shadow-lg border-0 position-relative" style={{
+                        background: 'rgba(255, 255, 255, 0.95)',
+                        backdropFilter: 'blur(10px)',
+                        borderRadius: '25px',
+                        border: '2px solid rgba(255,255,255,0.3)',
+                        width: '90%',
+                        maxWidth: '900px',
+                        minHeight: '650px',
+                        maxHeight: '90vh',
+                        overflow: 'auto'
+                    }}>
+                        {/* Header del panel */}
+                        <div className="card-header border-0 text-center py-3" style={{
+                            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%)',
+                            borderRadius: '25px 25px 0 0',
+                            backdropFilter: 'blur(5px)'
+                        }}>
+                            <div className="d-flex align-items-center justify-content-center mb-2">
+                                <div className="me-3" style={{ fontSize: '2.5rem' }}>🧠</div>
+                                <div>
+                                    <h1 className="text-white fw-bold mb-1" style={{ 
+                                        fontSize: '2rem',
+                                        fontFamily: 'Comic Sans MS, cursive',
+                                        textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                                    }}>
+                                        LudiMemory
+                                    </h1>
+                                </div>
                             </div>
-                            {/** FIN AREA DE MOSTRAR IMAGENES SELECCIONADAS*/}
+                            
+                            {/* Indicadores de progreso */}
+                            
                         </div>
+
+                        {/* Contenido principal del panel */}
+                        <div className="card-body p-5">
+                            <div className="row g-4">
+                                {/* Sección izquierda - Carga de imágenes */}
+                                <div className="col-md-5">
+                                    <div className="h-100 d-flex flex-column">
+                                        <div className="text-center mb-4">
+                                            <div className="display-4 mb-3">📸</div>
+                                            <h4 className="text-dark fw-bold mb-2" style={{ fontFamily: 'Comic Sans MS, cursive' }}>
+                                                Agregar Imágenes
+                                            </h4>
+                                            <p className="text-muted small">
+                                                Sube tus propias imágenes o busca en Unsplash
+                                            </p>
+                                        </div>
+                                        
+                                        <div className="d-grid gap-3 flex-grow-1">
+                                            <button 
+                                                className="btn btn-light btn-lg fw-bold shadow-sm"
+                                                onClick={handleSelectImage}
+                                                style={{ 
+                                                    borderRadius: '15px',
+                                                    fontFamily: 'Comic Sans MS, cursive',
+                                                    transition: 'all 0.3s ease',
+                                                    border: '2px solid rgba(0,0,0,0.1)'
+                                                }}
+                                                onMouseOver={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1.02)';
+                                                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1)';
+                                                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+                                                }}
+                                            >
+                                                📁 Subir desde mi dispositivo
+                                            </button>
+                                            
+                                            <button 
+                                                className="btn btn-warning btn-lg fw-bold shadow-sm"
+                                                onClick={handleShow}
+                                                style={{ 
+                                                    borderRadius: '15px',
+                                                    fontFamily: 'Comic Sans MS, cursive',
+                                                    transition: 'all 0.3s ease',
+                                                    border: '2px solid rgba(0,0,0,0.1)'
+                                                }}
+                                                onMouseOver={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1.02)';
+                                                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1)';
+                                                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+                                                }}
+                                            >
+                                                🌟 Buscar en Unsplash
+                                            </button>
+                                        </div>
+                                        
+                                        <div className="mt-3">
+                                            <div className="alert alert-info border-0" style={{ 
+                                                borderRadius: '15px',
+                                                background: 'rgba(13, 202, 240, 0.1)',
+                                                border: '1px solid rgba(13, 202, 240, 0.3)',
+                                                color: '#0dcaf0',
+                                                fontSize: '0.9rem'
+                                            }}>
+                                                <small>
+                                                    💡 <strong>Tip:</strong> Necesitas al menos 2 imágenes para crear el juego
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Sección derecha - Vista previa de imágenes */}
+                                <div className="col-md-7">
+                                    <div className="h-100">
+                                        <div className="text-center mb-4">
+                                            <div className="display-4 mb-3">🎯</div>
+                                            <h4 className="text-dark fw-bold mb-2" style={{ fontFamily: 'Comic Sans MS, cursive' }}>
+                                                Tus Imágenes
+                                            </h4>
+                                            <p className="text-muted">
+                                                {selectedImages.length} imagen{selectedImages.length !== 1 ? 'es' : ''} seleccionada{selectedImages.length !== 1 ? 's' : ''}
+                                            </p>
+                                        </div>
+                                        
+                                        {selectedImages.length === 0 ? (
+                                            <div className="text-center text-muted py-4">
+                                                <div className="display-1 mb-3">😴</div>
+                                                <p className="mb-2">¡Aún no hay imágenes!</p>
+                                                <p className="small">Agrega algunas desde el panel izquierdo</p>
+                                            </div>
+                                        ) : (
+                                            <div className="row g-2">
+                                                {selectedImages.map((image, index) => (
+                                                    <div key={index} className="col-6 col-lg-4">
+                                                        <div className="position-relative">
+                                                            <img 
+                                                                src={image} 
+                                                                alt={`Imagen ${index + 1}`}
+                                                                className="img-fluid rounded shadow-sm"
+                                                                style={{ 
+                                                                    width: '100%', 
+                                                                    height: '100px', 
+                                                                    objectFit: 'cover',
+                                                                    border: '2px solid white',
+                                                                    borderRadius: '12px'
+                                                                }}
+                                                            />
+                                                            <button
+                                                                className="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 rounded-circle"
+                                                                style={{ width: '25px', height: '25px', padding: '0', fontSize: '12px' }}
+                                                                onClick={() => handleDeleteImage(index)}
+                                                            >
+                                                                ×
+                                                            </button>
+                                                            <div className="position-absolute bottom-0 start-0 m-1">
+                                                                <span className="badge bg-primary rounded-pill" style={{ fontSize: '10px' }}>
+                                                                    {index + 1}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                        
+                                        {selectedImages.length >= 2 && (
+                                            <div className="text-center mt-4">
+                                                <div className="alert alert-success border-0 shadow-sm" style={{ 
+                                                    borderRadius: '15px',
+                                                    background: 'rgba(40, 167, 69, 0.1)',
+                                                    border: '1px solid rgba(40, 167, 69, 0.3)',
+                                                    color: '#28a745'
+                                                }}>
+                                                    <div className="display-6 mb-2">🎉</div>
+                                                    <strong>¡Perfecto!</strong> Ya tienes suficientes imágenes para crear el juego de memoria.
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer del panel */}
+                        <div className="card-footer border-0 text-center py-3" style={{
+                            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%)',
+                            borderRadius: '0 0 25px 25px',
+                            backdropFilter: 'blur(5px)'
+                        }}>
+                            <small className="text-white-75">
+                                💡 Tip: El tema de fondo se aplicará automáticamente al juego de memoria
+                            </small>
+                        </div>
+                    </div>
+
                         <ModalMultimedia
                             show={show}
                             handleClose={handleClose}
                             origin="unsplash"
                             onSelectMedia={handleSelectImageUnsplash}
                         />
-                        {/** FIN AREA DE CARGA DE IMAGEN */}
-                    </div>
                     <ThemeContainer
                         show={showTheme}
                         onThemeChange={handleThemeChange}
                     />
                 </div>
-                {
-                    !isFullWidth && (
-                        <div className="col-3 card shadow-sm rounded p-3 h-100"> {/* Columna 2 ocupa un cuarto del tamaño total */}
-                            <h5 className="card-title placeholder-glow">
-                                <span className="placeholder col-6"></span>
-                            </h5>
-                            <p className="card-text placeholder-glow">
-                                <span className="placeholder col-7"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-6"></span>
-                                <span className="placeholder col-8"></span>
-                            </p>
-                            <p className="card-text placeholder-glow">
-                                <span className="placeholder col-7"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-6"></span>
-                                <span className="placeholder col-8"></span>
-                            </p>
-                        </div>
-                    )
-                }
             </div>
         </>
     );

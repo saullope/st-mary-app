@@ -3,7 +3,7 @@
 "use client"
 
 import { useState } from 'react';
-import { TitleActivity, ModalMultimedia, ThemeButton, ThemeContainer, LoadMultimediaFile, AnswerContainer }
+import { TitleActivity, ModalMultimedia, ThemeButton, ThemeContainer, LoadMultimediaFile, AnswerContainer, QuestionListItem }
     from "@/editor-components";
 import Image from 'next/image';
 import styles from '../../../../public/css/editor.module.css';
@@ -14,6 +14,7 @@ import { LanguageSelector } from "../../../components/LanguageSelector";
 import { BsGlobe } from 'react-icons/bs';
 import { TbArrowsMinimize } from "react-icons/tb";
 import { FaExpand } from "react-icons/fa6";
+import { LudiQuizQuestion, LudiQuizAnswer } from '@/lib/types/';
 
 interface Answer {
     id: number;
@@ -42,6 +43,23 @@ export default function LudiQuiz() {
         { id: 0, text: '', isCorrect: false },
         { id: 1, text: '', isCorrect: false },
     ]);
+
+    // Estado para múltiples preguntas
+    const [questions, setQuestions] = useState<LudiQuizQuestion[]>([]);
+    const [questionId, setQuestionId] = useState(1);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [questionText, setQuestionText] = useState("");
+
+    const [newQuestion, setNewQuestion] = useState<LudiQuizQuestion>({
+        id: questionId,
+        text: "",
+        answers: [
+            { id: 0, text: '', isCorrect: false },
+            { id: 1, text: '', isCorrect: false },
+        ],
+        mediaType: null,
+        mediaUrl: null,
+    });
 
     const addAnswer = () => {
         setAnswer((prev) => [
@@ -104,11 +122,130 @@ export default function LudiQuiz() {
 
                 if (fileType) {
                     const fileURL = URL.createObjectURL(file); // Genera una URL temporal
-                    handleSelectMedia(fileType, fileURL); // Establece el tipo y la URL en el estado
+                    handleSelectMediaNewQuestion(fileType, fileURL); // Establece el tipo y la URL en el estado
                 }
             }
         };
         input.click(); // Simula un clic para abrir el explorador de archivos
+    };
+
+    // Funciones para manejar múltiples preguntas
+    const handleInputNewQuestion = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setQuestionText(event.target.value);
+    };
+
+    const handleSelectMediaNewQuestion = (type: string, url: string) => {
+        setNewQuestion({ ...newQuestion, mediaType: type as "image" | "youtube" | "audio" | "video", mediaUrl: url });
+    };
+
+    const addAnswerToNewQuestion = () => {
+        setNewQuestion(prev => ({
+            ...prev,
+            answers: [
+                ...prev.answers,
+                { id: prev.answers.length, text: '', isCorrect: false }
+            ]
+        }));
+    };
+
+    const updateAnswerTextInNewQuestion = (id: number, text: string) => {
+        setNewQuestion(prev => ({
+            ...prev,
+            answers: prev.answers.map(answer => 
+                answer.id === id ? { ...answer, text } : answer
+            )
+        }));
+    };
+
+    const toggleCorrectAnswerInNewQuestion = (id: number) => {
+        setNewQuestion(prev => ({
+            ...prev,
+            answers: prev.answers.map(answer =>
+                answer.id === id
+                    ? { ...answer, isCorrect: !answer.isCorrect }
+                    : { ...answer, isCorrect: false }
+            )
+        }));
+    };
+
+    const handleAddQuestion = () => {
+        if (!questionText.trim() || !newQuestion.answers.some(a => a.isCorrect) || newQuestion.answers.some(a => !a.text.trim())) {
+            alert("Por favor completa la pregunta, todas las respuestas y selecciona la respuesta correcta");
+            return;
+        }
+
+        const questionToAdd = {
+            ...newQuestion,
+            text: questionText,
+            id: questionId
+        };
+
+        setQuestions(prev => [...prev, questionToAdd]);
+        setQuestionId(prev => prev + 1);
+        setQuestionText("");
+        setNewQuestion({
+            id: questionId + 1,
+            text: "",
+            answers: [
+                { id: 0, text: '', isCorrect: false },
+                { id: 1, text: '', isCorrect: false },
+            ],
+            mediaType: null,
+            mediaUrl: null,
+        });
+    };
+
+    const handleEditQuestion = (id: number) => {
+        const question = questions.find(q => q.id === id);
+        if (question) {
+            setEditingId(id);
+            setQuestionText(question.text);
+            setNewQuestion(question);
+        }
+    };
+
+    const handleUpdateQuestion = () => {
+        if (!questionText.trim() || !newQuestion.answers.some(a => a.isCorrect) || newQuestion.answers.some(a => !a.text.trim())) {
+            alert("Por favor completa la pregunta, todas las respuestas y selecciona la respuesta correcta");
+            return;
+        }
+
+        setQuestions(prev => prev.map(q => 
+            q.id === editingId 
+                ? { ...newQuestion, text: questionText }
+                : q
+        ));
+        setEditingId(null);
+        setQuestionText("");
+        setNewQuestion({
+            id: questionId,
+            text: "",
+            answers: [
+                { id: 0, text: '', isCorrect: false },
+                { id: 1, text: '', isCorrect: false },
+            ],
+            mediaType: null,
+            mediaUrl: null,
+        });
+    };
+
+    const handleDeleteQuestion = (id: number) => {
+        setQuestions(prev => prev.filter(q => q.id !== id));
+    };
+
+    const handleCancelEdit = () => {
+        setEditingId(null);
+        setQuestionText("");
+        setNewQuestion({
+            id: questionId,
+            text: "",
+            answers: [
+                { id: 0, text: '', isCorrect: false },
+                { id: 1, text: '', isCorrect: false },
+            ],
+            mediaType: null,
+            mediaUrl: null,
+        });
     };
 
 
@@ -135,8 +272,26 @@ export default function LudiQuiz() {
                             onClick={handleShowTheme}
                         />
                         <button
-                            className="btn btn-primary" // Botón para alternar
+                            className="btn" // Botón para alternar
                             onClick={toggleFullWidth}
+                            style={{
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                border: 'none',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                borderRadius: '15px',
+                                padding: '10px 20px',
+                                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                                transition: 'all 0.3s ease'
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+                            }}
                         >
                             {isFullWidth ? <TbArrowsMinimize /> : <FaExpand />}
                         </button>
@@ -145,14 +300,87 @@ export default function LudiQuiz() {
             </nav>
             <div className="row" style={{ height: "100vh" }}> {/* Hace que las columnas ocupen toda la altura de la pantalla */}
                 {!isFullWidth && (
-                    <div className='col-1 card shadow-sm rounded p-3 me-3'>
-                        <p className="card-text placeholder-glow">
-                            <span className="placeholder col-7"></span>
-                            <span className="placeholder col-4"></span>
-                            <span className="placeholder col-4"></span>
-                            <span className="placeholder col-6"></span>
-                            <span className="placeholder col-8"></span>
-                        </p>
+                    <div className="col-2 card shadow-sm rounded p-3 me-3">
+                        <ul className="mt-3 p-0">
+                            {questions.map((q) => (
+                                <QuestionListItem
+                                    key={q.id}
+                                    id={q.id}
+                                    text={q.text}
+                                    mediaType={q.mediaType}
+                                    mediaUrl={q.mediaUrl}
+                                    correctAnswer={q.answers.find(a => a.isCorrect) ? "true" : "false"}
+                                    isSelected={editingId === q.id}
+                                    onClick={() => handleEditQuestion(q.id)}
+                                />
+                            ))}
+                            {!editingId && (
+                                <QuestionListItem
+                                    id={newQuestion.id}
+                                    text={newQuestion.text}
+                                    mediaType={newQuestion.mediaType}
+                                    mediaUrl={newQuestion.mediaUrl}
+                                    correctAnswer={newQuestion.answers.find(a => a.isCorrect) ? "true" : "false"}
+                                    isSelected={true}
+                                    onClick={() => {}}
+                                />
+                            )}
+                        </ul>
+
+                        <div className="d-flex flex-column gap-2">
+                            <button
+                                className="btn btn-sm w-100"
+                                onClick={editingId ? handleUpdateQuestion : handleAddQuestion}
+                                style={{
+                                    background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                    border: 'none',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    borderRadius: '15px',
+                                    padding: '12px',
+                                    boxShadow: '0 4px 15px rgba(40, 167, 69, 0.3)',
+                                    transition: 'all 0.3s ease',
+                                    fontFamily: 'Comic Sans MS, cursive'
+                                }}
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(40, 167, 69, 0.4)';
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(40, 167, 69, 0.3)';
+                                }}
+                            >
+                                {editingId !== null ? "💾 Guardar" : "➕ Agregar"}
+                            </button>
+                            {editingId && (
+                                <button
+                                    className="btn btn-sm w-100"
+                                    onClick={handleCancelEdit}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #6c757d 0%, #495057 100%)',
+                                        border: 'none',
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        borderRadius: '15px',
+                                        padding: '12px',
+                                        boxShadow: '0 4px 15px rgba(108, 117, 125, 0.3)',
+                                        transition: 'all 0.3s ease',
+                                        fontFamily: 'Comic Sans MS, cursive'
+                                    }}
+                                    onMouseOver={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(-2px)';
+                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(108, 117, 125, 0.4)';
+                                    }}
+                                    onMouseOut={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(108, 117, 125, 0.3)';
+                                    }}
+                                >
+                                    ❌ Cancelar
+                                </button>
+                            )}
+                        </div>
                     </div>
                 )}
                 <div className={`col card shadow-sm rounded p-3 me-3 d-flex ${isFullWidth ? "col-12" : "col"}`}
@@ -165,22 +393,49 @@ export default function LudiQuiz() {
                         width: "100%",
                         minHeight: "100vh",
                         transition: "background 0.3s ease-in-out",
+                        position: "relative"
                     }}> {/* Clase d-flex para alinear horizontalmente */}
-                    <div className='col d-flex justify-content-center align-items-center'>
+                    
+                    {/* Overlay semi-transparente para mejorar legibilidad */}
+                    <div style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: "rgba(0, 0, 0, 0.3)",
+                        borderRadius: "10px"
+                    }}></div>
+                    
+                    <div className='col d-flex justify-content-center align-items-center position-relative'>
                         {/** INICIO CONTENIDO DEL EDITOR */}
                         <div className={style2.container}>
-                            <h1 className={style2.acth1}>LudiQuiz</h1>
+                            <h1 className={style2.acth1} style={{ 
+                                fontFamily: 'Comic Sans MS, cursive',
+                                fontSize: '2.5rem',
+                                fontWeight: 'bold',
+                                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                                color: '#2c3e50'
+                            }}>LudiQuiz</h1>
 
                             {/* <!-- Tarjeta de Pregunta --> */}
                             <div className={style2.card}>
                                 {/* <!-- Campo de Pregunta --> */}
-                                <input type="text" className={style2['question-input']}
-                                    placeholder="Escribe tu pregunta" aria-label="Pregunta" />
+                                <input 
+                                    type="text" 
+                                    className={style2['question-input']}
+                                    placeholder="Escribe tu pregunta" 
+                                    aria-label="Pregunta"
+                                    value={questionText}
+                                    onChange={handleInputNewQuestion}
+                                />
 
                                 <LoadMultimediaFile
-                                    type={mediaType}
-                                    url={mediUrl}
-                                    onRemove={handleRemoveMedia}
+                                    type={newQuestion.mediaType}
+                                    url={newQuestion.mediaUrl}
+                                    onRemove={() =>
+                                        setNewQuestion({ ...newQuestion, mediaType: null, mediaUrl: null })
+                                    }
                                     onUpload={handleSelectFile}
                                     onUnsplash={handleShowUnsplash}
                                     onYoutube={handleShowYoutube}
@@ -194,28 +449,33 @@ export default function LudiQuiz() {
 
                                 <div className={style2['main-container']}>
                                     <AnswerContainer
-                                        answers={answer}
-                                        onAddAnswer={addAnswer}
-                                        onUpdateAnswerText={updateAnswerText}
-                                        onToggleCorrectAnswer={toggleCorrectAnswer}
+                                        answers={newQuestion.answers}
+                                        onAddAnswer={addAnswerToNewQuestion}
+                                        onUpdateAnswerText={updateAnswerTextInNewQuestion}
+                                        onToggleCorrectAnswer={toggleCorrectAnswerInNewQuestion}
                                     />
                                 </div>
 
                             </div>
-
-                            {/* <!-- Template para elementos multimedia con botón de eliminar --> */}
-                            {mediUrl && (
-                                <template>
-                                    <div className={style2['media-item']}>
-                                        <button className={style2['remove-media-btn']}
-                                        >×</button>
-                                        <div className={style2['media-content']}></div>
-                                    </div>
-                                </template>
-                            )}
                         </div>
                         {/** FIN CONTENIDO DEL EDITOR */}
                     </div>
+                    
+                    {/* Tip del tema */}
+                    <div className="text-center mt-4">
+                        <div className="alert alert-info border-0 shadow-sm" style={{ 
+                            borderRadius: '15px',
+                            background: 'rgba(13, 202, 240, 0.1)',
+                            border: '1px solid rgba(13, 202, 240, 0.3)',
+                            color: '#0dcaf0',
+                            fontSize: '0.9rem'
+                        }}>
+                            <small>
+                                💡 <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
+                            </small>
+                        </div>
+                    </div>
+                    
                     <ThemeContainer
                         show={showTheme}
                         onThemeChange={handleThemeChange}
@@ -226,44 +486,22 @@ export default function LudiQuiz() {
                     show={showUnsplash}
                     handleClose={handleShowUnsplash}
                     origin="unsplash"
-                    onSelectMedia={handleSelectMedia}
+                    onSelectMedia={handleSelectMediaNewQuestion}
                 />
                 <ModalMultimedia
                     show={showYoutube}
                     handleClose={handleShowYoutube}
                     origin="youtube"
-                    onSelectMedia={handleSelectMedia}
+                    onSelectMedia={handleSelectMediaNewQuestion}
                 />
                 <ModalMultimedia
                     show={showFreesound}
                     handleClose={handleShowFreesound}
                     origin="freesound"
-                    onSelectMedia={handleSelectMedia}
+                    onSelectMedia={handleSelectMediaNewQuestion}
                 />
                 {/** Area de modal */}
-                {
-                    !isFullWidth && (
-                        <div className="col-3 card shadow-sm rounded p-3"> {/* Columna 2 ocupa un cuarto del tamaño total */}
-                            <h5 className="card-title placeholder-glow">
-                                <span className="placeholder col-6"></span>
-                            </h5>
-                            <p className="card-text placeholder-glow">
-                                <span className="placeholder col-7"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-6"></span>
-                                <span className="placeholder col-8"></span>
-                            </p>
-                            <p className="card-text placeholder-glow">
-                                <span className="placeholder col-7"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-4"></span>
-                                <span className="placeholder col-6"></span>
-                                <span className="placeholder col-8"></span>
-                            </p>
-                        </div>
-                    )
-                }
+               
             </div>
         </>
     );

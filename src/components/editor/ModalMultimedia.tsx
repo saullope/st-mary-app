@@ -1,7 +1,7 @@
 'use client';
 
 import { Modal } from "react-bootstrap";
-import style from "../../public/css/editor-activity.module.css";
+import style from "../../../public/css/editor-activity.module.css";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";

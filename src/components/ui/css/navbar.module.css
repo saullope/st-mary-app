@@ -1,0 +1,63 @@
+.bodydiv {
+  background-color: #e0f0ff;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* .navludi, .headerludi, .sectionludi, .footerludi {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .navludi.animate-in, .headerludi.animate-in, .sectionludi.animate-in, .footerludi.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+      } */
+
+.navludi {
+  background-color: #7bcfff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  gap: 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+  flex-wrap: wrap;
+}
+
+.navludi .imgludi {
+  height: 70px;
+  transition: transform 0.3s ease;
+}
+
+.navludi .imgludi:hover {
+  transform: scale(1.1);
+}
+
+.navludi button {
+  background-color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.3rem;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #222;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+.navludi button:hover {
+  background-color: #ffd400;
+  color: #222;
+  box-shadow: 0 4px 12px rgba(255, 212, 0, 0.5);
+}
+
+.navludi .institucion {
+  background-color: #8860FF;
+  color: white;
+}

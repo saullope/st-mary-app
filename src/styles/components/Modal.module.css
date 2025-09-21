@@ -1,0 +1,312 @@
+/* Variables CSS se importan globalmente en globals.css */
+
+/* ========== MODAL BASE ========== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-30px);
+}
+
+.modal.hidden * {
+  pointer-events: none;
+}
+
+/* ========== CONTENIDO DEL MODAL ========== */
+.modalContent {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  height: 80%;
+  background: var(--white);
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transform: scale(1);
+  transition: transform var(--transition-normal);
+}
+
+.modal:not(.hidden) .modalContent {
+  transform: scale(1.02);
+}
+
+/* ========== PANEL IZQUIERDO (CONTROLES) ========== */
+.modalLeft {
+  width: 30%;
+  padding: var(--spacing-lg);
+  border-right: var(--border-width-medium) solid var(--gray-200);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  background: var(--bg-secondary);
+}
+
+.modalLeft h2 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.modalLeft input {
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  border: var(--border-width-medium) solid var(--gray-300);
+  font-size: var(--font-size-base);
+  outline: none;
+  background: var(--white);
+  transition: border-color var(--transition-normal);
+}
+
+.modalLeft input:focus {
+  border-color: var(--primary-color);
+}
+
+.modalLeft button {
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-base);
+  border: none;
+  border-radius: var(--border-radius-md);
+  background: var(--primary-color);
+  color: var(--white);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background var(--transition-normal), transform var(--transition-fast);
+}
+
+.modalLeft button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+/* ========== PANEL DERECHO (RESULTADOS) ========== */
+.modalRight {
+  width: 65%;
+  padding: var(--spacing-lg);
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+  background: var(--white);
+  box-sizing: border-box;
+}
+
+.modalRight::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modalRight::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 10px;
+}
+
+.modalRight::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* ========== ELEMENTOS DE RESULTADO ========== */
+.resultItem {
+  width: 150px;
+  text-align: center;
+  background: var(--white);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.resultItem:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.modalImage,
+.modalVideo {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: var(--border-radius-md);
+  transition: transform var(--transition-fast);
+  cursor: pointer;
+}
+
+.modalImage:hover,
+.modalVideo:hover {
+  transform: scale(1.05);
+}
+
+.resultItem p {
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-tight);
+  max-height: 2.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ========== BOTÓN CERRAR ========== */
+.closeBtn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-md);
+  font-size: var(--font-size-2xl);
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  background: none;
+  border: none;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.closeBtn:hover {
+  color: var(--text-primary);
+  background: var(--gray-100);
+}
+
+/* ========== RESULTADOS DE AUDIO ========== */
+.resultAudio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  padding: var(--spacing-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius-md);
+  background: var(--white);
+  overflow: hidden;
+}
+
+.resultAudio .audioElement {
+  width: 100%;
+}
+
+.resultAudio p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  text-align: center;
+  line-height: var(--line-height-tight);
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  line-clamp: 2;
+  box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========== VARIANTES DE MODAL ========== */
+.modal--small .modalContent {
+  max-width: 500px;
+  height: auto;
+  max-height: 80%;
+}
+
+.modal--large .modalContent {
+  max-width: 1200px;
+  height: 90%;
+}
+
+.modal--fullscreen .modalContent {
+  width: 95%;
+  height: 95%;
+  max-width: none;
+}
+
+/* ========== MODAL CENTRADO SIMPLE ========== */
+.modal--centered .modalContent {
+  width: auto;
+  height: auto;
+  max-width: 500px;
+  max-height: 80%;
+  display: block;
+  padding: var(--spacing-xl);
+}
+
+.modal--centered .modalLeft,
+.modal--centered .modalRight {
+  width: 100%;
+  border: none;
+  padding: 0;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95%;
+    height: 90%;
+    flex-direction: column;
+  }
+  
+  .modalLeft {
+    width: 100%;
+    border-right: none;
+    border-bottom: var(--border-width-medium) solid var(--gray-200);
+    padding: var(--spacing-md);
+  }
+  
+  .modalRight {
+    width: 100%;
+    padding: var(--spacing-md);
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--spacing-sm);
+  }
+  
+  .resultItem {
+    width: 100%;
+  }
+  
+  .modalImage,
+  .modalVideo {
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalContent {
+    width: 98%;
+    height: 95%;
+  }
+  
+  .modalLeft,
+  .modalRight {
+    padding: var(--spacing-sm);
+  }
+  
+  .modalRight {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  
+  .modalImage,
+  .modalVideo {
+    height: 60px;
+  }
+}
