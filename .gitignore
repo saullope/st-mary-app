@@ -6,6 +6,9 @@
 .pnp.js
 .yarn/install-state.gz
 
+# cursor rules and files
+/.cursor/
+
 # testing
 /coverage
 
