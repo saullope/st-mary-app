@@ -20,7 +20,8 @@ export type LudiQuizQuestion = {
 };
 
 export type LudiQuizAnswer = {
-    id: number; // Identificador único de la respuesta
+    id: number; // Identificador unico de la respuesta
     text: string; // Texto de la respuesta
     isCorrect: boolean; // Si es la respuesta correcta
+    imageUrl?: string | null; // URL de imagen opcional para la respuesta
 };

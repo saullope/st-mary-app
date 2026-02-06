@@ -1,5 +1,5 @@
 import { FaPencilAlt } from "react-icons/fa"; // Importa el ícono de lápiz
-import  style  from "../../../public/css/editor.module.css";
+import style from '@/styles/pages/editor.module.css';
 
 interface TitleActivityProps {
     title: string;

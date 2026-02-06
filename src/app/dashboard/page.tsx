@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { ActivityDasboard } from "@/dashboard-components";
+import { ActivityDasboard } from "@/components/dashboard";
 import getSession from '@/lib/auth/getSession'; 
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { redirect } from 'next/navigation';

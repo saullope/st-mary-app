@@ -4,11 +4,10 @@
 
 import { useState } from 'react';
 import { TitleActivity, ModalMultimedia, ThemeButton, ThemeContainer, LoadMultimediaFile, QuestionListItem }
-    from "@/editor-components";
+    from "@/components/editor";
 import Image from 'next/image';
-import styles from '../../../../public/css/editor.module.css';
-import style2 from '../../../../public/css/editor-activity.module.css';
-import partialLogo from '../../../../public/images/PartialLogo.png';
+import styles from '@/styles/pages/editor.module.css';
+import style2 from '@/styles/pages/editor-activity.module.css';
 import { useTranslations } from 'next-intl';
 import { LanguageSelector } from "../../../components/LanguageSelector";
 import { BsGlobe } from 'react-icons/bs';
@@ -172,8 +171,9 @@ export default function TrueOrFalse() {
                 <div className="container-fluid d-flex align-items-center">
                     <div className={styles.logo}>
                         <Image
-                            src={partialLogo}
+                            src="/images/PartialLogo.png"
                             width={45}
+                            height={45}
                             alt="logo"
                         />
                     </div>
@@ -464,6 +464,7 @@ export default function TrueOrFalse() {
                     
                     <ThemeContainer
                         show={showTheme}
+                        onClose={() => setShowTheme(false)}
                         onThemeChange={handleThemeChange}
                     />
                 </div>

@@ -4,8 +4,7 @@ import { useTranslations } from "next-intl";
 import { LanguageSelector } from "./LanguageSelector";
 import { BsGlobe } from 'react-icons/bs';
 import Image from 'next/image';
-import logo from '../../public/images/Logo-LudiGame.png';
-// import bannerStMary from '../../public/images/BannerStmary.png';
+const LOGO_URL = '/images/Logo-LudiGame.png';
 import styles from './css/navbar.module.css';
 
 export const Sidebar = () => {
@@ -16,7 +15,7 @@ export const Sidebar = () => {
     <>
       <nav className={`${styles.navludi}`}>
         <Image
-          src={logo}
+          src={LOGO_URL}
           alt="LudiGame logo"
           width={190.2}
           height={70}

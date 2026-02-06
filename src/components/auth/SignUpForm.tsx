@@ -6,7 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import * as Yup from 'yup';
-import styles from '../../../public/css/landing.module.css';
+import styles from '@/styles/pages/landing.module.css';
 import { Toaster, toast } from "sonner";
 
 export const SignUpForm = () => {

@@ -4,10 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from "@/hooks/useAuth";
 import Link from 'next/link';
 import Image from 'next/image';
-import styles from '../../../public/css/bienvenida.module.css';
-import imgPrimero from '../../../public/images/bienvenida/Primero.png';
-import imgSegundo from '../../../public/images/bienvenida/Segundo.png';
-import imgTercero from '../../../public/images/bienvenida/Tercero.png';
+import styles from '@/styles/pages/bienvenida.module.css';
 import { useTranslations } from "next-intl";
 
 interface Grade {
@@ -32,9 +29,9 @@ export const SelectGrade = ({ grades }: SelectGradeProps) => {
     const t = useTranslations("WelcomeTeacherView");
 
     const localImages: { [key: string]: string } = {
-        'Primero.png': imgPrimero.src,
-        'Segundo.png': imgSegundo.src,
-        'Tercero.png': imgTercero.src
+        'Primero.png': '/images/bienvenida/Primero.png',
+        'Segundo.png': '/images/bienvenida/Segundo.png',
+        'Tercero.png': '/images/bienvenida/Tercero.png'
     };
 
     const gradeStyles: { [key: string]: string } = {

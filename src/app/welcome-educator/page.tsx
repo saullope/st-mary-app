@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import styles from '../../../public/css/bienvenida.module.css';
+import styles from '@/styles/pages/bienvenida.module.css';
 import { Metadata } from "next";
 import getSession from '@/lib/auth/getSession'; 
 import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { getTranslations } from "next-intl/server";
-import { SelectGrade } from "@/educator-components";
+import { SelectGrade } from "@/components/educator";
 import prisma from "@/lib/db";
 
 

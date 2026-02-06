@@ -1,26 +1,23 @@
 import { cookies } from "next/headers";
 import { adminAuth } from "@/firebase/firebase-admin";
+import { AUTH_COOKIE_NAME } from "./constants";
 
-// Obtiene al usuario desde la cookie de sesión
-// Si no hay sesión o es inválida, retorna null
+// Returns decoded user from session cookie, or null if invalid/expired
 const getSession = async () => {
-    const session = cookies().get("session")?.value;
+    const session = cookies().get(AUTH_COOKIE_NAME)?.value;
 
     if (!session) {
-        console.log("No se encontró la cookie de sesión.");
-        return null; // No hay cookie de sesión
+        return null;
     }
 
     try {
         const user = await adminAuth.verifySessionCookie(session, true);
-        return user; // Retorna el usuario autenticado
+        return user;
     } catch (error: any) {
         if (error?.errorInfo?.code === "auth/session-cookie-expired") {
-            console.log("La cookie de sesión ha expirado. Redirigiendo al login...");
-        } else {
-            console.log("Error inesperado al verificar la cookie de sesión:", error);
+            console.log("Session cookie expired");
         }
-        return null; // Retorna null si la cookie es inválida o ha expirado
+        return null;
     }
 };
 

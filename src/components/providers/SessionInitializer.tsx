@@ -1,24 +1,33 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { useTokenRefresh } from '@/hooks/useTokenRefresh';
 
 /**
- * Componente que inicializa la sesión del usuario al cargar la aplicación
- * Se ejecuta una sola vez y no renderiza contenido visual
+ * Initializes user session and handles automatic token refresh
  */
 export const SessionInitializer = () => {
-    const { fetchUserSession } = useAuth();
+    const { fetchUserSession, isAuthenticated, clearSession } = useAuth();
     const isSessionInitialized = useRef(false);
 
+    const handleRefreshError = useCallback((error: Error) => {
+        console.error('Session refresh failed:', error);
+        clearSession();
+    }, [clearSession]);
+
+    // Enable token refresh only when user is authenticated
+    useTokenRefresh({
+        enabled: isAuthenticated,
+        onRefreshError: handleRefreshError,
+    });
+
     useEffect(() => {
-        // Solo inicializar una vez al montar el componente
         if (!isSessionInitialized.current) {
-            console.debug('🚀 Initializing user session...');
             isSessionInitialized.current = true;
             fetchUserSession();
         }
     }, [fetchUserSession]);
 
-    return null; // Este componente no renderiza nada
+    return null;
 };

@@ -3,24 +3,28 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { CardGrade, CardActivity } from "@/components/educator";
-import PrimerGrado from '../../../public/images/primer-grado/PrimerGrado.png';
-import MisActividades from '../../../public/images/primer-grado/Mis-actividades.png';
-import CrearActividades from '../../../public/images/primer-grado/Crear-actividades.png'
-import MatImage from '../../../public/images/primer-grado/BannerMat.png';
-import LenguaLit from '../../../public/images/primer-grado/BannerLyL.png';
-import Tecno from '../../../public/images/primer-grado/BannerTecno.png';
+import styles from '@/styles/pages/create-activity.module.css';
 
-import SegundoGrado from '../../../public/images/segundo-grado/SegundoGrado.png';
-import MatImageSecond from '../../../public/images/segundo-grado/BannerMat-Segundo.png';
-import LenguaLitSecond from '../../../public/images/segundo-grado/BannerLyL-Segundo.png';
-import TecnoSecond from '../../../public/images/segundo-grado/BannerTecno-Segundo.png';
-
-import TercerGrado from '../../../public/images/tercer-grado/TercerGrado.png';
-import MatImageThird from '../../../public/images/tercer-grado/BannerMat-Tercero.png';
-import LenguaLitThird from '../../../public/images/tercer-grado/BannerLyL-Tercero.png';
-import TecnoThird from '../../../public/images/tercer-grado/BannerTecno-Tercero.png';
-
-import styles from '../../../public/css/create-activity.module.css';
+// Static image URLs
+const IMAGES = {
+  // Primer Grado
+  primerGrado: '/images/primer-grado/PrimerGrado.png',
+  misActividades: '/images/primer-grado/Mis-actividades.png',
+  crearActividades: '/images/primer-grado/Crear-actividades.png',
+  matFirst: '/images/primer-grado/BannerMat.png',
+  lenguaLitFirst: '/images/primer-grado/BannerLyL.png',
+  tecnoFirst: '/images/primer-grado/BannerTecno.png',
+  // Segundo Grado
+  segundoGrado: '/images/segundo-grado/SegundoGrado.png',
+  matSecond: '/images/segundo-grado/BannerMat-Segundo.png',
+  lenguaLitSecond: '/images/segundo-grado/BannerLyL-Segundo.png',
+  tecnoSecond: '/images/segundo-grado/BannerTecno-Segundo.png',
+  // Tercer Grado
+  tercerGrado: '/images/tercer-grado/TercerGrado.png',
+  matThird: '/images/tercer-grado/BannerMat-Tercero.png',
+  lenguaLitThird: '/images/tercer-grado/BannerLyL-Tercero.png',
+  tecnoThird: '/images/tercer-grado/BannerTecno-Tercero.png',
+} as const;
 import { useTranslations } from "next-intl";
 
 type GradeKey = 'firstGrade' | 'secondGrade' | 'thirdGrade';
@@ -29,8 +33,8 @@ const renderGradeContent = (grade: GradeKey, t: any, t2: any, images: any, onCar
   <>
     <div className={styles['container-card-activity']}>
       <CardGrade cardTitle={t('gradeName')} cardAlt={`Crear Actividades ${grade}`} srcImageGrade={images.gradeImage} />
-      <CardActivity cardTitle={t('createActivity')} cardAlt="Crear Actividades" srcImageGrade={CrearActividades} typeButton="primary" onClick={onCardClick} />
-      <CardActivity cardTitle={t('myActivities')} cardAlt="Crear Actividades" srcImageGrade={MisActividades} typeButton="primary" onClick={onCardClick} />
+      <CardActivity cardTitle={t('createActivity')} cardAlt="Crear Actividades" srcImageGrade={IMAGES.crearActividades} typeButton="primary" onClick={onCardClick} />
+      <CardActivity cardTitle={t('myActivities')} cardAlt="Crear Actividades" srcImageGrade={IMAGES.misActividades} typeButton="primary" onClick={onCardClick} />
     </div>
     <div className={`${styles['text-plantillas-activity']} pt-2 pb-2`}>
       <h2 className={`${styles.h2} text-center`}>{t2('ludiTemplates')}</h2>
@@ -68,22 +72,22 @@ export const ActivityDasboard = () => {
 
   const gradeImages: Record<GradeKey, any> = {
     firstGrade: {
-      gradeImage: PrimerGrado,
-      matImage: MatImage,
-      lenguaLitImage: LenguaLit,
-      tecnoImage: Tecno,
+      gradeImage: IMAGES.primerGrado,
+      matImage: IMAGES.matFirst,
+      lenguaLitImage: IMAGES.lenguaLitFirst,
+      tecnoImage: IMAGES.tecnoFirst,
     },
     secondGrade: {
-      gradeImage: SegundoGrado,
-      matImage: MatImageSecond,
-      lenguaLitImage: LenguaLitSecond,
-      tecnoImage: TecnoSecond,
+      gradeImage: IMAGES.segundoGrado,
+      matImage: IMAGES.matSecond,
+      lenguaLitImage: IMAGES.lenguaLitSecond,
+      tecnoImage: IMAGES.tecnoSecond,
     },
     thirdGrade: {
-      gradeImage: TercerGrado,
-      matImage: MatImageThird,
-      lenguaLitImage: LenguaLitThird,
-      tecnoImage: TecnoThird,
+      gradeImage: IMAGES.tercerGrado,
+      matImage: IMAGES.matThird,
+      lenguaLitImage: IMAGES.lenguaLitThird,
+      tecnoImage: IMAGES.tecnoThird,
     },
   };
 

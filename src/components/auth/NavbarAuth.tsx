@@ -1,7 +1,6 @@
 import { useTranslations } from "next-intl";
 import {LanguageSelector} from "@/components/ui";
 import { BsGlobe } from 'react-icons/bs';
-import logo from '../../../public/images/Logo.png';
 import Image from "next/image";
 import Link from 'next/link';
 
@@ -14,9 +13,11 @@ export const NavbarAuth = () => {
             <div className="container-fluid">
                 <Link href={'/home'}>
                 <Image
-              src={logo}
+              src="/images/Logo.png"
               alt="LudiGame logo"
-              style={{ width: '150px', height: '55.19px', margin: '0px 30px' }}
+              width={150}
+              height={55}
+              style={{ margin: '0px 30px' }}
               className="-inline-block align-top"
             />
                 </Link>

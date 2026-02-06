@@ -7,9 +7,7 @@ import * as Yup from 'yup';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import styles from '../../../public/css/landing.module.css';
-import logoGoogle from '../../../public/images/LogoGoogle.png';
-import loginBanner from '../../../public/images/LoginBanner.png';
+import styles from '@/styles/pages/landing.module.css';
 import Image from "next/image";
 import { Toaster, toast } from "sonner";
 
@@ -130,7 +128,7 @@ export const SignInForm = () => {
                         className={styles['social-login-element']}
                     >
                         <Image
-                            src={logoGoogle}
+                            src="/images/LogoGoogle.png"
                             width={50}
                             height={50}
                             alt="google-image"
@@ -199,7 +197,7 @@ export const SignInForm = () => {
             </div>
             <Image
                 className={styles['image-login']}
-                src={loginBanner}
+                src="/images/LoginBanner.png"
                 width={400}
                 height={540}
                 alt="Log in Image"

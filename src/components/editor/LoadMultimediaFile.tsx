@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import style2 from "../../../public/css/editor-activity.module.css";
-import style3 from "../../../public/css/ludiquiz.module.css";
+import style2 from '@/styles/pages/editor-activity.module.css';
+import style3 from '@/styles/pages/ludiquiz.module.css';
 import Image from "next/image";
 
 interface LoadMultimediaProps {

@@ -1,6 +1,6 @@
 // path: /src/editor-components/ThemeButton.tsx
 
-import style from "../../../public/css/editor-activity.module.css";
+import style from '@/styles/pages/editor-activity.module.css';
 import { IoIosColorPalette } from "react-icons/io";
 
 interface ThemeButtonProps {
@@ -37,7 +37,7 @@ export const ThemeButton = ({onClick}: ThemeButtonProps) => {
             }}
         >
             <IoIosColorPalette style={{ fontSize: '1.2rem' }} />
-            🎨 Tema
+            Tema
         </button>
     )
 }

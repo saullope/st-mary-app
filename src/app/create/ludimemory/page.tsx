@@ -3,11 +3,10 @@
 
 import { useState } from 'react';
 import { TitleActivity, LoadImagesComponent, Imagepreview, ModalMultimedia, ThemeButton, ThemeContainer }
-    from "@/editor-components";
+    from "@/components/editor";
 import Image from 'next/image';
-import styles from '../../../../public/css/editor.module.css';
-import uploadImageStyle from '../../../../public/css/true-or-false.module.css';
-import partialLogo from '../../../../public/images/PartialLogo.png';
+import styles from '@/styles/pages/editor.module.css';
+import uploadImageStyle from '@/styles/pages/true-or-false.module.css';
 import { useTranslations } from 'next-intl';
 import { LanguageSelector } from "../../../components/LanguageSelector";
 import { BsGlobe } from 'react-icons/bs';
@@ -69,8 +68,9 @@ export default function LudiMemory() {
                 <div className="container-fluid d-flex align-items-center">
                     <div className={styles.logo}>
                         <Image
-                            src={partialLogo}
+                            src="/images/PartialLogo.png"
                             width={45}
+                            height={45}
                             alt="logo"
                         />
                     </div>
@@ -322,6 +322,7 @@ export default function LudiMemory() {
                         />
                     <ThemeContainer
                         show={showTheme}
+                        onClose={() => setShowTheme(false)}
                         onThemeChange={handleThemeChange}
                     />
                 </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import styles from '../../../public/css/create-activity.module.css';
+import styles from '@/styles/pages/create-activity.module.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 interface Props {

@@ -156,11 +156,18 @@
   },
   "themeBackground": {
     "tema1": "Frutas",
+    "tema1_desc": "Fondo colorido con frutas tropicales",
     "tema2": "Sol",
+    "tema2_desc": "Fondo brillante con sol radiante",
     "tema3": "Animales",
+    "tema3_desc": "Fondo con animales de la naturaleza",
     "tema4": "Aula de Clases",
+    "tema4_desc": "Fondo de ambiente escolar",
     "tema5": "Espacio",
-    "tema6": "Océano",
-    "tema7": "Cerebros Animados"
+    "tema5_desc": "Fondo con planetas y estrellas",
+    "tema6": "Oceano",
+    "tema6_desc": "Fondo marino con vida acuatica",
+    "tema7": "Cerebros Animados",
+    "tema7_desc": "Fondo con cerebros animados para estimulacion cognitiva"
   }
 }

@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import { useTranslations } from "next-intl"
-import styles from '@/css/new-home.module.css'
+import styles from '@/styles/pages/new-home.module.css'
 import Image from "next/image"
 import fomentaInt from "@/images/fomenta-interes.png"
 import mejoraAprendizaje from "@/images/mejora-aprendizaje.png"

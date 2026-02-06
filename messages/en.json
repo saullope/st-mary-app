@@ -156,11 +156,18 @@
   },
   "themeBackground": {
     "tema1": "Fruits",
+    "tema1_desc": "Colorful background with tropical fruits",
     "tema2": "Sun",
+    "tema2_desc": "Bright background with radiant sun",
     "tema3": "Animals",
+    "tema3_desc": "Background with nature animals",
     "tema4": "Classroom",
+    "tema4_desc": "School environment background",
     "tema5": "Space",
+    "tema5_desc": "Background with planets and stars",
     "tema6": "Ocean",
-    "tema7": "Animated Brains"
+    "tema6_desc": "Marine background with aquatic life",
+    "tema7": "Animated Brains",
+    "tema7_desc": "Background with animated brains for cognitive stimulation"
   }
 }

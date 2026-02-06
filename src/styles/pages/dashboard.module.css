@@ -1,4 +1,4 @@
-/* src/dashboard-components/NavBarDashboard.css */
+/* NavBarDashboard styles */
 .user-dropdown {
   position: relative;
   display: inline-block;
@@ -37,3 +37,4 @@
 .dropdown-menu li:hover {
   background-color: #ddd;
 }
+

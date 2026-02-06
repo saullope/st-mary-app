@@ -4,11 +4,10 @@
 
 import { useState } from 'react';
 import { TitleActivity, ModalMultimedia, ThemeButton, ThemeContainer, LoadMultimediaFile, AnswerContainer, QuestionListItem }
-    from "@/editor-components";
+    from "@/components/editor";
 import Image from 'next/image';
-import styles from '../../../../public/css/editor.module.css';
-import style2 from '../../../../public/css/ludiquiz.module.css';
-import partialLogo from '../../../../public/images/PartialLogo.png';
+import styles from '@/styles/pages/editor.module.css';
+import style2 from '@/styles/pages/ludiquiz.module.css';
 import { useTranslations } from 'next-intl';
 import { LanguageSelector } from "../../../components/LanguageSelector";
 import { BsGlobe } from 'react-icons/bs';
@@ -20,6 +19,7 @@ interface Answer {
     id: number;
     text: string;
     isCorrect: boolean;
+    imageUrl?: string | null;
 }
 
 export default function LudiQuiz() {
@@ -168,6 +168,22 @@ export default function LudiQuiz() {
         }));
     };
 
+    const updateAnswerImageInNewQuestion = (id: number, imageUrl: string | null) => {
+        setNewQuestion(prev => ({
+            ...prev,
+            answers: prev.answers.map(answer =>
+                answer.id === id ? { ...answer, imageUrl } : answer
+            )
+        }));
+    };
+
+    const deleteAnswerFromNewQuestion = (id: number) => {
+        setNewQuestion(prev => ({
+            ...prev,
+            answers: prev.answers.filter(answer => answer.id !== id)
+        }));
+    };
+
     const handleAddQuestion = () => {
         if (!questionText.trim() || !newQuestion.answers.some(a => a.isCorrect) || newQuestion.answers.some(a => !a.text.trim())) {
             alert("Por favor completa la pregunta, todas las respuestas y selecciona la respuesta correcta");
@@ -255,8 +271,9 @@ export default function LudiQuiz() {
                 <div className="container-fluid d-flex align-items-center">
                     <div className={styles.logo}>
                         <Image
-                            src={partialLogo}
+                            src="/images/PartialLogo.png"
                             width={45}
+                            height={45}
                             alt="logo"
                         />
                     </div>
@@ -453,6 +470,8 @@ export default function LudiQuiz() {
                                         onAddAnswer={addAnswerToNewQuestion}
                                         onUpdateAnswerText={updateAnswerTextInNewQuestion}
                                         onToggleCorrectAnswer={toggleCorrectAnswerInNewQuestion}
+                                        onUpdateAnswerImage={updateAnswerImageInNewQuestion}
+                                        onDeleteAnswer={deleteAnswerFromNewQuestion}
                                     />
                                 </div>
 
@@ -478,6 +497,7 @@ export default function LudiQuiz() {
                     
                     <ThemeContainer
                         show={showTheme}
+                        onClose={() => setShowTheme(false)}
                         onThemeChange={handleThemeChange}
                     />
                 </div>

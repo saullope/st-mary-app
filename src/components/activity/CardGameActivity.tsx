@@ -1,6 +1,6 @@
 'use client'
 
-import style from "../../../public/css/activity-component.module.css";
+import style from '@/styles/pages/activity-component.module.css';
 import Image from "next/image";
 import { TbPencilStar } from "react-icons/tb";
 import Link from "next/link";

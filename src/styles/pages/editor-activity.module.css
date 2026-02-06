@@ -1,6 +1,4 @@
-
-
-.actbody {
+.act-body {
     font-family: 'Baloo 2', 'Comic Neue', cursive;
     min-height: 100vh;
     display: flex;
@@ -19,16 +17,16 @@
     width: 70%;
     max-width: 700px;
     text-align: center;
-    background: #ABB8D1C5;
+    background: #C4E3F8;
     border-radius: 25px;
     padding: 20px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 
-/* Título */
+/* Titulo */
 .acth1 {
     margin-bottom: 20px;
-    color: white;
+    color: #428CBD;
     font-size: 1.8em;
 }
 
@@ -37,7 +35,7 @@
     background: white;
     padding: 24px;
     border-radius: 24px;
-    box-shadow: 0 6px 12px rgba(211, 211, 211, 0.5);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
     margin-bottom: 30px;
     position: relative;
     transition: transform 0.3s ease;
@@ -48,33 +46,27 @@
 
 /* Campo de pregunta */
 .question-input {
-    width: 80%;
+    width: 70%;
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 20px;
+    border: 3px dashed #70B6C4;
+    border-radius: 15px;
     font-size: 1.2em;
     outline: none;
-    border: 1px solid #988D8D;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-
 .question-input:focus {
-    border-color: #D2DAE9;  
-    box-shadow: inset 0px 0px 8px rgba(0,0,0,0.1);  /* Sombra interna más suave */
-}
-
-/* Elimina la sombra cuando el usuario no está escribiendo */
-.question-input:not(:focus) {
-    box-shadow: none;
+    border-color: #E97272;
+    box-shadow: inset 2px 2px 6px rgba(0,0,0,0.1);
 }
 
 /* Media selector */
 .media-selector {
-    margin: 0 auto 20px auto; /* Centrado, margen inferior */
+    margin: 0 auto 20px auto;
     position: relative;
 }
 .media-placeholder {
-    border: 3px dashed #D1B7C6;
+    border: 3px dashed #FA7F7F;
     padding: 30px;
     border-radius: 20px;
     margin-bottom: 15px;
@@ -83,20 +75,20 @@
     transition: background 0.3s;
 }
 .media-placeholder:hover {
-    background: #E5EBF6;
+    background: #FFFDE7;
 }
 .media-placeholder span {
     font-size: 3em;
-    color: #B8B8FF;
+    color: #428CBD;
 }
 .media-placeholder p {
     margin-top: 10px;
     font-size: 1.1em;
-    color: #8E8C98;
+    color: #428CBD;
 }
 .media-placeholder.loaded {
-    background: #E5EBF6;
-    border: 3px solid #8E8C98;
+    background: #FFFDE7;
+    border: 3px solid #428CBD;
 }
 
 /* Vista previa de medios */
@@ -113,12 +105,12 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Botón eliminar media */
+/* Boton eliminar media */
 .remove-media-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: #6BA6D3;
+    background: rgba(255, 0, 0, 0.8);
     color: white;
     border: none;
     border-radius: 50%;
@@ -144,115 +136,70 @@
     font-size: 14px;
     cursor: pointer;
     border: none;
-    background:#8D869D;
+    background: #4D7E9F;
     color: white;
     border-radius: 8px;
     transition: background 0.2s;
 }
 
 .small-btn:hover {
-    background: #889DAE;
+    background: #0056b3;
 }
 
-/* Respuestas */
-/* Contenedor principal */
-.main-container {
+/* Botones de respuesta */
+.answer-options {
     display: flex;
+    gap: 20px;
+    margin-top: 30px;
     justify-content: center;
-    width: 100%;
 }
-
-/* Contenedor del quiz */
-.quiz-container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 700px;
-    text-align: center;
-}
-
-/* Contenedor de respuestas */
-.answers-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-    gap: 10px;
-    width: 100%;
-    margin-bottom: 15px;
-}
-
-/* Estilo de cada respuesta */
-.answer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #ddd;
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 19px;
+.answer-btn {
+    flex: 1;
+    padding: 20px 0;
+    font-size: 20px;
+    border: 3px solid transparent;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
     cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s, opacity 0.2s, background-color 0.2s, border 0.2s;
+    max-width: 270px;
     position: relative;
-    transition: background 0.3s ease;
+}
+.answer-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+.answer-btn:active {
+    transform: translateY(1px);
+    box-shadow: inset 2px 2px 6px rgba(0,0,0,0.2), inset -1px -1px 4px rgba(255,255,255,0.7);
 }
 
-/* Estilo del input dentro de cada respuesta */
-.answer .actinput {
-    border: none;
-    background: transparent;
-    font-size: 16px;
-    width: 80%;
-    padding: 5px;
-    outline: none;
+/* Colores para botones de respuesta */
+.btn-verdadero {
+    background: #5F86E2;
+}
+.btn-falso {
+    background: #FD4646;
 }
 
-/* Estilo del Check (círculo) */
-.answer .check {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 2px solid #796E6E;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: transparent;
-    transition: all 0.3s ease;
+/* Estado seleccionado */
+.btn-verdadero.selected {
+    background-color: #70B6C4;
+    border: 3px solid #869ED6;
+}
+.btn-falso.selected {
+    background-color: #DDA0A0;
+    border: 3px solid #DDA0A0;
 }
 
-/* Respuesta seleccionada como correcta */
-.answer.correct {
-    background: #d9534f; /* Rojo */
-    color: white;
-}
 
-.answer.correct .check {
-    background: white;
-    color: #28a745; /* Verde */
-    border-color: white;
-}
-
-/* Botón para agregar respuestas */
-.add-answer {
-    background: #95A0B4;
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.add-answer:hover {
-    background: #718494;
-}
-
-/* Botón principal */
+/* Boton principal */
 .primary-btn {
     padding: 16px 24px;
     font-size: 18px;
-    background: #99B3C7;
+    background: #62A4D0;
     color: white;
     border: none;
     border-radius: 50px;
@@ -263,7 +210,7 @@
     margin-top: 2px;
 }
 
-/* Menú flotante */
+/* Menu flotante */
 .media-float-btn {
     position: absolute;
     top: 8px;
@@ -271,7 +218,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: #B4BED0;
+    background: #007bff;
     color: white;
     display: flex;
     align-items: center;
@@ -281,7 +228,7 @@
     transition: background 0.2s, transform 0.2s;
 }
 .media-float-btn:hover {
-    background: #B4BED0;
+    background: #0056b3;
     transform: scale(1.1);
 }
 .media-float-menu {
@@ -310,7 +257,7 @@
 }
 
 /* Estilos para resultados de Unsplash y Videos */
-.modal-results {
+#modal-results {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 10px;
@@ -329,7 +276,7 @@
     transform: scale(1.05);
 }
 
-/* Modal con diseño de barra lateral */
+/* Modal con diseno de barra lateral */
 .modal.hidden {
     opacity: 0;
     pointer-events: none;
@@ -380,37 +327,35 @@
     flex-direction: column;
     gap: 12px;
 }
-.modal-left .acth2 {
+.modal-left h2 {
     margin-bottom: 10px;
     color: #333;
 }
-.modal-left .actinput {
+.modal-left input {
     padding: 12px;
     border-radius: 8px;
     border: 2px solid #ddd;
-    width: 100%;
     font-size: 16px;
     outline: none;
     background: white;
     transition: border-color 0.3s ease;
 }
-.modal-left .actinput:focus {
-    border-color: #B0A6BD;
+.modal-left input:focus {
+    border-color: #0056b3;
 }
 .modal-left button {
     padding: 10px;
-    margin: 0%;
     font-size: 16px;
     border: none;
     border-radius: 8px;
-    background: #718494;
+    background: #007bff;
     color: white;
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
 }
 .modal-left button:hover {
-    background: #8C8694;
+    background: #0056b3;
     transform: translateY(-2px);
 }
 
@@ -436,7 +381,7 @@
     background: #aaa;
 }
 
-/* Estilo de imágenes y videos en el modal */
+/* Estilo de imagenes y videos en el modal */
 .result-item {
     width: 150px;
     text-align: center;
@@ -482,7 +427,7 @@
     -webkit-box-orient: vertical;
 }
 
-/* Botón cerrar modal */
+/* Boton cerrar modal */
 .close-btn {
     position: absolute;
     top: 10px;
@@ -496,7 +441,7 @@
     color: #333;
 }
 
-/* Botón "+" flotante */
+/* Boton "+" flotante */
 .media-float-btn {
     position: absolute;
     top: 8px;
@@ -504,7 +449,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: #E8A997;
+    background: #007bff;
     color: white;
     display: flex;
     align-items: center;
@@ -514,16 +459,15 @@
     transition: background 0.2s, transform 0.2s;
 }
 .media-float-btn:hover {
-    background: #B4BED0;
+    background: #0056b3;
     transform: scale(1.1);
 }
 
-/* Menú desplegable */
+/* Menu desplegable */
 .media-float-menu {
     position: absolute;
     top: 50px;
     right: 8px;
-    display: none;
     background: white;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -533,13 +477,30 @@
 .media-float-menu.show {
     display: block;
 }
-.media-float-menu button {
+.media-float-menu .actbutton {
     display: block;
     width: 100%;
     padding: 8px 12px;
 }
 
-/* Botón para abrir sidebar */
+/* Boton flotante para agregar tarjeta */
+.add-card-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: #28a745;
+    color: white;
+    font-size: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Boton para abrir sidebar */
 .open-sidebar-btn {
     position: fixed;
     top: 30px;
@@ -555,8 +516,20 @@
     transition: background 0.3s, transform 0.2s;
 }
 .open-sidebar-btn:hover {
-    background: #B4BED0;
+    background: #0056b3;
     transform: translateY(-2px);
+}
+
+/* Estado seleccionado para respuestas */
+.btn-verdadero.selected {
+    background-color: #1abc9c;
+    border: 3px solid #148f77;
+    color: white;
+}
+.btn-falso.selected {
+    background-color: #E0A13A;
+    border: 3px solid #c0392b;
+    color: white;
 }
 
 /* Contenedor del elemento multimedia */
@@ -566,7 +539,7 @@
     margin-top: 15px;
 }
 
-/* Controles para ajustar el tamaño del medio */
+/* Controles para ajustar el tamano del medio */
 .media-controls {
     margin-top: 10px;
     display: flex;
@@ -575,7 +548,7 @@
 }
 .media-controls .actlabel {
     font-size: 14px;
-    color: #4F4B54;
+    color: #428CBD;
 }
 .media-size-range {
     width: 100%;
@@ -599,7 +572,7 @@
     width: 100%;
   }
   
-  /* Título del audio */
+  /* Titulo del audio */
   .result-audio p {
     margin: 0;
     font-size: 14px;
@@ -616,100 +589,319 @@
     text-overflow: ellipsis;
   }
 
- /* Responsive container principal */
+/* Selector de Temas */
+.theme-button {
+    background: #2C7EA2;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.theme-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Overlay backdrop behind theme panel */
+.theme-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 8999;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.theme-overlay-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Theme panel: fixed to right edge of viewport */
+.theme-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    max-width: 350px;
+    height: 100vh;
+    z-index: 9000;
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    padding: 60px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Open state: slide into view */
+.theme-container.open {
+    transform: translateX(0);
+}
+
+/* Close button */
+.theme-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.08);
+    color: #333;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+    z-index: 1;
+}
+
+.theme-close-btn:hover {
+    background: rgba(0, 0, 0, 0.15);
+    transform: scale(1.1);
+}
+
+.theme-close-btn:focus {
+    outline: 2px solid #428CBD;
+    outline-offset: 2px;
+}
+
+.theme-container .acth1 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Scrollable theme list */
+.theme-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 5px 30px 5px;
+    width: 100%;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Thin scrollbar styling */
+.theme-selector::-webkit-scrollbar {
+    width: 6px;
+}
+
+.theme-selector::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.theme-selector::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.theme-selector::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* Mejora de calidad en las imagenes */
+.theme-card {
+    width: 100%;
+    height: 120px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+    padding-bottom: 10px;
+}
+
+.theme-card .actimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.theme-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    border: 2px solid #146284;
+}
+
+.theme-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.theme-item:last-child {
+    margin-bottom: 15px;
+}
+
+/* Asegura que el texto sea visible y alineado */
+.theme-title {
+    font-family: "Poppins", sans-serif;
+    color: #333;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 5px;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+/* Modo oscuro */
+.dark-mode .theme-title {
+    color: white;
+}
+
+/* Modo Oscuro */
+.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.dark-mode .theme-container {
+    background: #1e1e1e;
+    color: white;
+}
+
+.dark-mode .theme-card {
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .theme-card:hover {
+    border: 2px solid #bb86fc;
+}
+
+.dark-mode .theme-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.dark-mode .theme-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Boton de Modo Oscuro */
+#darkModeToggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #333;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 100;
+    transition: background 0.3s;
+}
+
+#darkModeToggle:hover {
+    background: #555;
+}
+
+/* Responsive: tablet screens */
+@media (max-width: 992px) {
+    .theme-container {
+        width: 280px;
+    }
+}
+
+/* Responsive: mobile screens */
 @media (max-width: 600px) {
     .container {
-      width: 90%;
-      padding: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        width: 90%;
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-  
-    /* Título más pequeño */
-    .acth1 {
-      font-size: 1.5em;
-      margin-bottom: 15px;
-    }
-  
-    /* Campo de pregunta más adaptable */
-    .question-input {
-      width: 100%;
-      padding: 10px;
-      font-size: 1em;
-    }
-  
-    /* Media selector y placeholder */
-    .media-selector {
-      margin: 0 auto 15px auto;
-    }
-    .media-placeholder {
-      padding: 20px;
-    }
-    .media-placeholder span {
-      font-size: 2.5em;
-    }
-    .media-placeholder p {
-      font-size: 1em;
-    }
-  
-    /* Ajustes en el menú flotante */
-    .media-float-btn {
-      width: 32px;
-      height: 32px;
-    }
-  }
-  
 
-/* Responsive para las Respuestas */
-@media (max-width: 768px) {
-    /* Contenedor del quiz */
-    .quiz-container {
-        padding: 15px;
+    .acth1 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    .question-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    .media-selector {
+        margin: 0 auto 15px auto;
+    }
+
+    .media-placeholder {
+        padding: 20px;
+    }
+
+    .media-placeholder span {
+        font-size: 2.5em;
+    }
+
+    .media-placeholder p {
+        font-size: 1em;
+    }
+
+    .answer-options {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .answer-btn {
+        padding: 16px 0;
+        font-size: 18px;
         max-width: 100%;
     }
 
-    /* Respuestas: pasar a una columna */
-    .answers-container {
-        grid-template-columns: 1fr;
-    }
-
-    /* Ajusta el tamaño de la fuente */
-    .answer {
+    .primary-btn {
         font-size: 16px;
+        padding: 10px 18px;
     }
 
-    .answer .actinput {
-        font-size: 14px;
+    .open-sidebar-btn {
+        top: 15px;
+        right: 15px;
+        padding: 10px 14px;
     }
 
-    /* Botón */
-    .add-answer {
-        font-size: 14px;
-        padding: 8px;
+    .media-float-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    /* Theme panel: capped width on mobile to avoid full screen coverage */
+    .theme-container {
+        width: 85%;
+        max-width: 350px;
     }
 }
 
-/* Pantallas pequeñas (móviles) */
-@media (max-width: 480px) {
-    .quiz-container {
-        padding: 10px;
-    }
-
-    .answers-container {
-        gap: 8px;
-    }
-
-    /* Ajusta el tamaño de las respuestas y el botón */
-    .answer {
-        font-size: 14px;
-        padding: 8px;
-    }
-
-    .answer .actinput {
-        font-size: 12px;
-    }
-
-    .add-answer {
-        font-size: 12px;
-        padding: 6px;
-    }
-}

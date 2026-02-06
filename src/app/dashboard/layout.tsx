@@ -1,8 +1,8 @@
-import { NavbarDashboard, SidebarDashboard } from "@/dashboard-components";
+import { NavbarDashboard, SidebarDashboard } from "@/components/dashboard";
 import getSession from '@/lib/auth/getSession';
 import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import styles from '../../../public/css/sidebar.module.css';
+import styles from '@/styles/pages/sidebar.module.css';
 
 
 interface FirebaseSession {

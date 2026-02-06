@@ -1,44 +1,130 @@
-// path: /src/editor-components/ThemeButton.tsx
+'use client';
 
-import style from "../../../public/css/editor-activity.module.css";
-import { useTranslations } from "next-intl";
-import Image from "next/image";
+import { useState, useEffect, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
+import { Spinner } from 'react-bootstrap';
+import Image from 'next/image';
+import { IoClose } from 'react-icons/io5';
+import style from '@/styles/pages/editor-activity.module.css';
+
+interface Theme {
+    id: number;
+    nombre: string;
+    imageUrl: string;
+    descripcion: string | null;
+}
 
 interface ThemeContainerProps {
     show: boolean;
+    onClose: () => void;
     onThemeChange: (themePath: string) => void;
 }
 
-const themes = [
-    { id: 1, title: "tema1", image: "/images/theme/tema1.jpg" },
-    { id: 2, title: "tema2", image: "/images/theme/tema2.jpg" },
-    { id: 3, title: "tema3", image: "/images/theme/tema3.jpg" },
-    { id: 4, title: "tema4", image: "/images/theme/tema4.jpg" },
-    { id: 5, title: "tema5", image: "/images/theme/tema5.jpg" },
-    { id: 6, title: "tema6", image: "/images/theme/tema6.jpg" },
-    { id: 7, title: "tema7", image: "/images/theme/tema7.jpg" }
-];
+export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerProps) => {
+    const t = useTranslations('themeBackground');
+    const [themes, setThemes] = useState<Theme[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-export const ThemeContainer = ({show, onThemeChange}: ThemeContainerProps) => {
- 
- const t = useTranslations("themeBackground");
+    // ESC key handler
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        if (e.key === 'Escape' && show) {
+            onClose();
+        }
+    }, [show, onClose]);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [handleKeyDown]);
+
+    useEffect(() => {
+        const fetchThemes = async () => {
+            try {
+                setIsLoading(true);
+                const response = await fetch('/api/common/themes');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch themes');
+                }
+                
+                const data = await response.json();
+                setThemes(data);
+                setError(null);
+            } catch (err) {
+                console.error('Error fetching themes:', err);
+                setError('Error loading themes');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchThemes();
+    }, []);
 
     return (
-        <div 
-        className={`${style['theme-container']} ${show ? style.open: ''}`} 
-        id="themeContainer">
+        <>
+            {/* Overlay backdrop */}
+            <div
+                className={`${style['theme-overlay']} ${show ? style['theme-overlay-visible'] : ''}`}
+                onClick={onClose}
+                aria-hidden="true"
+            />
+
+            {/* Theme panel */} 
+            <div
+                className={`${style['theme-container']} ${show ? style.open : ''}`}
+                id="themeContainer"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Theme selector"
+            >
+                {/* Close button */}
+                <button
+                    className={style['theme-close-btn']}
+                    onClick={onClose}
+                    aria-label="Close theme panel"
+                    type="button"
+                >
+                    <IoClose />
+                </button>
+
                 <h1 className={style.acth1}>Selecciona un Tema</h1>
                 <div className={style['theme-selector']} id="themeList">
-                {themes.map((theme) => (
-                    <div key={theme.id} className={style['theme-item']}>
-                        <div className={style['theme-card']}
-                        onClick={() => onThemeChange(theme.image)}>
-                            <img className={style.actimg} src={theme.image} alt={theme.title} />
+                    {isLoading && (
+                        <div className="d-flex justify-content-center align-items-center w-100 py-4">
+                            <Spinner animation="border" variant="primary" />
                         </div>
-                        <div className={style['theme-title']}>{t(theme.title)}</div>
-                    </div>
-                ))}
+                    )}
+
+                    {error && (
+                        <div className="alert alert-danger text-center w-100">
+                            {error}
+                        </div>
+                    )}
+
+                    {!isLoading && !error && themes.map((theme) => (
+                        <div key={theme.id} className={style['theme-item']}>
+                            <div
+                                className={style['theme-card']}
+                                onClick={() => onThemeChange(theme.imageUrl)}
+                            >
+                                <Image
+                                    className={style.actimg}
+                                    src={theme.imageUrl}
+                                    alt={t(theme.nombre)}
+                                    width={120}
+                                    height={80}
+                                    style={{ objectFit: 'cover' }}
+                                />
+                            </div>
+                            <div className={style['theme-title']}>
+                                {t(theme.nombre)}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-        </div>
+            </div>
+        </>
     );
-}
+};

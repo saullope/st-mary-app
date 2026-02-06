@@ -5,18 +5,6 @@
   color: #222;
   line-height: 1.6;
 }
-/* 
-========== Animación  ==========
-..navludi , .headerludi_next, .section_next, ..footer_next {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.8s ease, transform 0.8s ease;
-      }
-
-      ..navludi .animate-in, .headerludi.animate-in, .section.animate-in, ..footer.animate-in {
-        opacity: 1;
-        transform: translateY(0);
-      } */
 
 /* ========== .navludi BAR ========== */
 .navludi {
@@ -191,7 +179,6 @@
     radial-gradient(circle, rgba(255,255,255,0.5) 0.3px, transparent 0.8px);
   background-size: 120px 120px, 60px 60px;
   background-repeat: repeat;
-  /* Movimiento lento del fondo */
   animation: starMove 30s linear infinite;
   z-index: 0;
   opacity: 0.5;
@@ -324,14 +311,14 @@
   animation: pulseColor 5s ease-in-out infinite alternate;
 }
 
-/* Contenedor para organizar ícono + texto */
+/* Contenedor para organizar icono + texto */
 .ludi-contenido {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Título */
+/* Titulo */
 .ludi-experiencias-title {
   color: #6b21a8;
   font-size: 13px;
@@ -479,7 +466,7 @@
   user-select: none;
 }
 
-/* Animación de pulso suave para el título */
+/* Animacion de pulso suave para el titulo */
 @keyframes pulseText {
   0%,
   100% {

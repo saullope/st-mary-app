@@ -1,6 +1,6 @@
 // path: /src/editor-components/ImagePreview.tsx
 
-import uploadImageStyle from '../../../public/css/true-or-false.module.css';
+import uploadImageStyle from '@/styles/pages/true-or-false.module.css';
 import Image from 'next/image';
 
 interface ImagePreviewProps {

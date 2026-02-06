@@ -1,11 +1,11 @@
 .body-vistaeducador{
-    background-image: url(../../public/images/bienvenida/Fondo-bienvenida.png);
+    background-image: url('/images/bienvenida/Fondo-bienvenida.png');
     width: 100%;
     align-items: center;
     justify-content: center;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-repeat: no-repeat;
     min-height: 85vh;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .texto-bienvenida:hover {
-    transform: scale(1.1); /* Aumenta el tamaño del texto al pasar el cursor */
+    transform: scale(1.1);
 }
 
 .texto-bienvenida h1{
@@ -31,7 +31,7 @@
 }
 
 .img-primero:hover {
-    transform: scale(1.1); /* Aumenta el tamaño de la imagen al pasar el cursor */
+    transform: scale(1.1);
 }
 
 .img-segundo{
@@ -40,7 +40,7 @@
 }
 
 .img-segundo:hover {
-    transform: scale(1.1); /* Aumenta el tamaño de la imagen al pasar el cursor */
+    transform: scale(1.1);
 }
 
 .img-tercero{
@@ -49,7 +49,7 @@
 }
 
 .img-tercero:hover {
-    transform: scale(1.1); /* Aumenta el tamaño de la imagen al pasar el cursor */
+    transform: scale(1.1);
 }
 
 .texto-grados{
@@ -65,5 +65,6 @@
 }
 
 .texto-grados:hover {
-    transform: scale(1.1); /* Aumenta el tamaño del texto al pasar el cursor */
+    transform: scale(1.1);
 }
+

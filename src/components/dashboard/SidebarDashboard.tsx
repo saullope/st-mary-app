@@ -1,9 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import partialLogo from '../../../public/images/PartialLogo.png';
 import Image from 'next/image';
-import styles from '../../../public/css/sidebar.module.css';
+import styles from '@/styles/pages/sidebar.module.css';
 import { FaHome, FaPlus, FaListOl, FaFileAlt } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from "next-intl";
@@ -23,7 +22,7 @@ export const SidebarDashboard = () => {
         <div className={styles.sidebar}>
             <div className={styles.logo}>
                 <Image
-                    src={partialLogo}
+                    src="/images/PartialLogo.png"
                     className={styles.image}
                     alt="logo"
                     width={150}

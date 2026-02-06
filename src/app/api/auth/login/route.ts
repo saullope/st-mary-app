@@ -1,6 +1,7 @@
 import { adminAuth } from "@/firebase/firebase-admin";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { AUTH_COOKIE_NAME, AUTH_COOKIE_MAX_AGE, AUTH_COOKIE_MAX_AGE_MS } from "@/lib/auth/constants";
 
 export async function POST(request: NextRequest) {
     try {
@@ -8,49 +9,42 @@ export async function POST(request: NextRequest) {
 
         if (!authorization?.startsWith("Bearer ")) {
             return NextResponse.json(
-                { error: "No se proporcionó un token válido." },
+                { error: "No valid token provided." },
                 { status: 401 }
             );
         }
 
         const idToken = authorization.split("Bearer ")[1];
 
-        // Verificar el token de ID
         const decodedToken = await adminAuth.verifyIdToken(idToken);
         if (!decodedToken) {
             return NextResponse.json(
-                { error: "Token de ID inválido." },
+                { error: "Invalid ID token." },
                 { status: 401 }
             );
         }
 
-        // Generar la cookie de sesión
-        const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 días
         const sessionCookie = await adminAuth.createSessionCookie(idToken, {
-            expiresIn,
+            expiresIn: AUTH_COOKIE_MAX_AGE_MS,
         });
 
-        // Configurar las opciones de la cookie
-        const options = {
-            name: "session",
+        cookies().set({
+            name: AUTH_COOKIE_NAME,
             value: sessionCookie,
-            maxAge: expiresIn / 1000, // Max-Age en segundos
+            maxAge: AUTH_COOKIE_MAX_AGE,
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
-            path: "/", // Disponible en toda la aplicación
-        };
-
-        // Establecer la cookie en el navegador
-        cookies().set(options);
+            secure: process.env.NODE_ENV === "production",
+            path: "/",
+        });
 
         return NextResponse.json(
-            { message: "Sesión creada exitosamente." },
+            { message: "Session created successfully." },
             { status: 200 }
         );
     } catch (error: any) {
-        console.error("Error al crear la cookie de sesión:", error);
+        console.error("Error creating session cookie:", error);
         return NextResponse.json(
-            { error: "No se pudo crear la sesión." },
+            { error: "Failed to create session." },
             { status: 500 }
         );
     }

@@ -1,7 +1,7 @@
 
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server";
-import { CardGameActivity } from "@/activity-components";
+import { CardGameActivity } from "@/components/activity";
 import prisma from "@/lib/db";
 
 export async function generateMetadata(): Promise<Metadata> {
