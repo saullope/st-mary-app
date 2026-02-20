@@ -169,5 +169,16 @@
     "tema6_desc": "Fondo marino con vida acuatica",
     "tema7": "Cerebros Animados",
     "tema7_desc": "Fondo con cerebros animados para estimulacion cognitiva"
+  },
+  "ForgotPassword": {
+    "titleForgotPassword": "Recuperar Contraseña",
+    "recoverDescription": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "emailPlaceholder": "nombre@ejemplo.com",
+    "emailInvalid": "Correo electrónico inválido",
+    "emailRequired": "El correo electrónico es obligatorio",
+    "sendButton": "Enviar correo",
+    "backToLogin": "Volver al inicio de sesión",
+    "emailSentSuccess": "Si el correo existe, recibirás un enlace de recuperación.",
+    "genericError": "Ocurrió un error. Inténtalo de nuevo."
   }
 }

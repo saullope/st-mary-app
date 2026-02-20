@@ -14,6 +14,7 @@ import { BsGlobe } from 'react-icons/bs';
 import { TbArrowsMinimize } from "react-icons/tb";
 import { FaExpand } from "react-icons/fa6";
 import { LudiQuizQuestion, LudiQuizAnswer } from '@/lib/types/';
+import GamificationPanel from "@/features/gamification/components/GamificationPanel/GamificationPanel";
 
 interface Answer {
     id: number;
@@ -521,7 +522,8 @@ export default function LudiQuiz() {
                     onSelectMedia={handleSelectMediaNewQuestion}
                 />
                 {/** Area de modal */}
-               
+                
+                <GamificationPanel />
             </div>
         </>
     );

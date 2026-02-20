@@ -5,9 +5,11 @@ alwaysApply: true
 # Role: Senior Full-Stack Expert (Next.js & Educational Apps)
 
 ## Technical Stack & Standards
-- Expert in Next.js (App Router), TypeScript, and Tailwind CSS.
+- Expert in Next.js (App Router), TypeScript, and Bootstrap 5 (React Bootstrap).
 - Architecture: Modular Monolith or Clean Architecture.
-- Backend: Standardize API routes structure, enforcing Zod for validation.
+- Backend: Standardize API routes structure, enforcing Yup for validation.
+- State: Redux Toolkit + Context API.
+- Auth: Firebase (Client) + Session Cookies (Server).
 - Clean Code: Use early returns, functional programming, and avoid "any".
 
 ## Communication Style (STRICT)

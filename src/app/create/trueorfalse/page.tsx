@@ -14,6 +14,7 @@ import { BsGlobe } from 'react-icons/bs';
 import { TbArrowsMinimize } from "react-icons/tb";
 import { FaExpand } from "react-icons/fa6";
 import { TrueOrFalseQuestion } from '@/lib/types/';
+import GamificationPanel from "@/features/gamification/components/GamificationPanel/GamificationPanel";
 
 export default function TrueOrFalse() {
     /** Traducciones */
@@ -487,6 +488,7 @@ export default function TrueOrFalse() {
                     onSelectMedia={handleSelectMediaNewQuestion}
                 />
                 
+                <GamificationPanel />
             </div>
         </>
     );

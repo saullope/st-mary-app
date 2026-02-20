@@ -3,15 +3,17 @@
 import Link from 'next/link';
 import { useTranslations } from "next-intl";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
-import { auth } from "@/firebase/firebase";
 import * as Yup from 'yup';
 import styles from '@/styles/pages/landing.module.css';
 import { Toaster, toast } from "sonner";
+import { registerUser } from "@/features/auth/services/authService";
+import { useRouter } from "next/navigation";
+import { FirebaseError } from "firebase/app";
 
 export const SignUpForm = () => {
 
     const t = useTranslations("SignUpForm");
+    const router = useRouter();
 
     const validationSchema = Yup.object({
         email: Yup.string().email(t("emailInvalid")).required(t("emailRequired")),
@@ -28,33 +30,38 @@ export const SignUpForm = () => {
         lastName: Yup.string().default("")
     });
 
-    const onSubmit = async (values: { email: string, password: string, name: string, lastName: string }, { setSubmitting, setErrors, resetForm }: any) => {
-        
+    const onSubmit = async (
+        values: { email: string, password: string, name: string, lastName: string }, 
+        { setSubmitting, resetForm }: any
+    ) => {
         try {
-            
-            const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-            const user = userCredential.user;
+            const response = await registerUser(values.email, values.password, values.name, values.lastName);
 
-            await sendEmailVerification(user);
-       
-            if (auth.currentUser) {
-                await updateProfile(auth.currentUser, { displayName: `${values.name} ${values.lastName}` });
+            if (response.success) {
                 toast.success(t("usercreate"));
-
                 toast.message(t("verifyEmailTitle"), {
                     description: t("verifyEmailDescription"),
                 });
 
+                // Auto-login successful: Redirect
+                // Small delay to let the toast be seen or immediately redirect? 
+                // Usually immediate is fine with toast persistence or dashboard welcome.
+                router.push('/welcome-educator');
+                router.refresh();
+                resetForm();
+            } else {
+                toast.error(response.message || t("genericError"));
             }
 
-            // clear los inputs
-            resetForm();
-        } catch (error: any) {
-            if (error.code === 'auth/email-already-in-use') {
-                //setErrors({ email: t("emailInUse") });
+        } catch (error: unknown) {
+            const errorCode = error instanceof FirebaseError ? error.code : "unknown";
+            
+            if (errorCode === 'auth/email-already-in-use') {
                 toast.warning(t("errorEmailAlreadyInUse"));
             } else {
-                setErrors({ submit: "No hay error" });
+                // Log unhandled errors for debugging
+                console.error("Registration error:", error);
+                toast.error(t("genericError"));
             }
         } finally {
             setSubmitting(false);
@@ -71,7 +78,7 @@ export const SignUpForm = () => {
                             validationSchema={validationSchema}
                             onSubmit={onSubmit}
                         >
-                            {({ isSubmitting, errors }) => (
+                            {({ isSubmitting }) => (
                                 <Form className={styles['form-register']}>
                                     <h4>{t("titleForm")}</h4>
                                         <Field
@@ -120,13 +127,25 @@ export const SignUpForm = () => {
                                         <Link href={'/auth/login'}>{t('signIn')}</Link>
                                         </p>
         
-                                        <button
-                                            type="submit"
-                                            className={styles['btn-register']}
-                                            disabled={isSubmitting}
-                                        >
-                                            {t("signUpButton")}
-                                        </button>
+                                        {isSubmitting ? (
+                                            <button
+                                                type="submit"
+                                                className={styles['btn-register']}
+                                                disabled
+                                            >
+                                                <div className="spinner-border text-light spinner-border-sm" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="submit"
+                                                className={styles['btn-register']}
+                                                disabled={isSubmitting}
+                                            >
+                                                {t("signUpButton")}
+                                            </button>
+                                        )}
                                 </Form>
                             )}
                         </Formik>

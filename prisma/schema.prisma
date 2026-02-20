@@ -268,3 +268,28 @@ model LUDI_SESION_PARTICIPANTE {
 
   @@unique([sesion_id, nombre], map: "UQ_LUDI_PART_ses_nom")
 }
+
+model LudiRol {
+  id          Int        @id @default(autoincrement())
+  nombre      String     @unique @db.NVarChar(50)
+  descripcion String?    @db.NVarChar(200)
+  users       LudiUser[]
+
+  @@map("LUDI_ROL")
+}
+
+model LudiUser {
+  id           String   @id @default(uuid())
+  firebaseUid  String?  @map("firebase_uid") @db.NVarChar(128)
+  email        String?  @db.NVarChar(160)
+  nombre       String   @db.NVarChar(120)
+  username     String?  @db.NVarChar(50)
+  passwordHash String?  @map("password_hash") @db.NVarChar(256)
+  rolId        Int      @map("rol_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  rol          LudiRol  @relation(fields: [rolId], references: [id], onUpdate: NoAction, map: "FK_LUDI_USER_ROL")
+
+  @@map("LUDI_USERS")
+}
+

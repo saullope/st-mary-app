@@ -12,6 +12,7 @@ import { LanguageSelector } from "../../../components/LanguageSelector";
 import { BsGlobe } from 'react-icons/bs';
 import { TbArrowsMinimize } from "react-icons/tb";
 import { FaExpand } from "react-icons/fa6";
+import GamificationPanel from "@/features/gamification/components/GamificationPanel/GamificationPanel";
 
 export default function LudiMemory() {
 
@@ -327,6 +328,7 @@ export default function LudiMemory() {
                     />
                 </div>
             </div>
+            <GamificationPanel />
         </>
     );
 }

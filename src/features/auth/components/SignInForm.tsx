@@ -1,64 +1,34 @@
 'use client'
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { auth } from "@/firebase/firebase";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from '@/styles/pages/landing.module.css';
 import Image from "next/image";
 import { Toaster, toast } from "sonner";
-
+import { loginWithEmail, loginWithGoogle } from "@/features/auth/services/authService";
+import { FirebaseError } from "firebase/app";
 
 export const SignInForm = () => {
-
-    // se obtiene la traduccion del componente
     const t = useTranslations("SignInForm");
-    const googleProvider = new GoogleAuthProvider();
     const [errorLogin, setErrorLogin] = useState("");
     const [isLoading, setLoading] = useState(false);
-
-    googleProvider.setCustomParameters({
-    prompt: 'select_account',
-});
-
     const router = useRouter();
 
-    // Esquema de validación con Yup
     const validationSchema = Yup.object({
         emailUser: Yup.string().email(t("emailInvalid")).required(t("emailRequired")),
         password: Yup.string().required(t("passwordRequired")),
     });
 
-    // Función para manejar el submit del formulario
-    const onSubmit = async (values: { emailUser: string, password: string }) => {
+    const handleAuthError = (error: unknown) => {
+        setLoading(false);
+        
+        // Define specific Firebase error type locally or import if available
+        const errorCode = error instanceof FirebaseError ? error.code : "unknown";
 
-        setLoading(true);
-
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, values.emailUser, values.password);
-
-            if (userCredential.user) {
-                const idToken = await userCredential.user.getIdToken(true);
-
-                await fetch("/api/auth/login", {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${idToken}`,
-                    },
-                }).then((response) => {
-                    if (response.status === 200) {
-                        toast.success(`${t("welcome")}, ${userCredential.user.displayName}`);
-                        router.push('/welcome-educator');
-                        router.refresh();
-                    }
-                });
-            };
-        } catch (error: any) {
-            setLoading(false);
-           const errorMap: Record<string, { message: string, type: "error" | "warning" | "info" }> = {
+        const errorMap: Record<string, { message: string, type: "error" | "warning" | "info" }> = {
             "auth/invalid-credential": { message: t("errorInvalidCredentials"), type: "error" },
             "auth/user-not-found": { message: t("errorUserNotFound"), type: "error" },
             "auth/wrong-password": { message: t("errorWrongPassword"), type: "error" },
@@ -70,49 +40,56 @@ export const SignInForm = () => {
         };
 
         const fallbackMessage = t("genericError");
-        const errorData = errorMap[error.code] || { message: fallbackMessage, type: "error" };
+        const errorData = errorMap[errorCode] || { message: fallbackMessage, type: "error" };
 
         switch (errorData.type) {
-            case "error":
-                toast.error(errorData.message);
-                break;
-            case "warning":
-                toast.warning(errorData.message);
-                break;
-            case "info":
-                toast.info(errorData.message);
-                break;
+            case "error": toast.error(errorData.message); break;
+            case "warning": toast.warning(errorData.message); break;
+            case "info": toast.info(errorData.message); break;
         }
-        }
+    };
 
-    }
+    const handleSuccess = (userName?: string | null) => {
+        toast.success(`${t("welcome")}, ${userName || 'User'}`);
+        router.push('/welcome-educator');
+        router.refresh();
+    };
+
+    const onSubmit = async (values: { emailUser: string, password: string }) => {
+        setLoading(true);
+        setErrorLogin(""); // Clear previous errors
+
+        try {
+            const response = await loginWithEmail(values.emailUser, values.password);
+            
+            if (response.success) {
+                handleSuccess(response.user?.displayName); 
+            } else {
+                setLoading(false);
+                toast.error(response.message || t("genericError"));
+            }
+        } catch (error) {
+            handleAuthError(error);
+        }
+    };
 
     const onGoogleSignin = async () => {
         try {
-            const result = await signInWithPopup(auth, googleProvider);
-    
-            if (result.user) {
-                const idToken = await result.user.getIdToken(true);
-    
-                const response = await fetch("/api/auth/login", {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${idToken}`,
-                    },
-                });
-    
-                if (response.status === 200) {
-                    toast.success(`${t("welcome")}, ${result.user.displayName}`);
-                    router.push('/welcome-educator');
-                    router.refresh();
-                } else {
-                    toast.error(t("genericError"));
-                }
+            const response = await loginWithGoogle();
+            
+            if (response.success) {
+                handleSuccess(response.user?.displayName);
             } else {
-                toast.error(t("errorNotFindUser"));
+                toast.error(response.message || t("genericError"));
             }
         } catch (error: any) {
-            toast.error(`${t("errorLogionWithGoogle")}`);
+            // Handle Google popup closure gracefully
+            if (error?.code === 'auth/popup-closed-by-user') {
+                return; // User cancelled, no need to show error
+            }
+            
+            console.error(error);
+            toast.error(t("errorLogionWithGoogle"));
         }
     };
 
@@ -126,6 +103,8 @@ export const SignInForm = () => {
                     <div
                         onClick={onGoogleSignin}
                         className={styles['social-login-element']}
+                        role="button"
+                        tabIndex={0}
                     >
                         <Image
                             src="/images/LogoGoogle.png"

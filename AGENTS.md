@@ -18,12 +18,15 @@ This file provides context and guidelines for AI agents working in this reposito
 - **Dev Server:** `npm run dev` (starts on localhost:3000)
 - **Build:** `npm run build`
 - **Lint:** `npm run lint`
-- **Test:** *No testing framework is currently configured.* Do not attempt to run tests unless you set them up.
+- **Test:** `npm test` (Jest is configured)
+  - **Run single test file:** `npm test -- <path/to/file>`
+  - **Run specific test:** `npm test -- -t "test name"`
+  - **Watch mode:** `npm run test:watch`
 
 ## 2. Code Style & Conventions
 
 ### Formatting & Structure
-- **Indentation:** 2 spaces (inferred from codebase).
+- **Indentation:** 2 spaces.
 - **Semicolons:** Always use semicolons.
 - **Quotes:** Double quotes preferred for strings and JSX attributes.
 - **Component Structure:**
@@ -33,23 +36,23 @@ This file provides context and guidelines for AI agents working in this reposito
   - Use `export const ComponentName = () => { ... }` syntax (arrow functions) or `export default function ...`.
 
 ### Imports
-- Use the `@/` alias for internal imports (maps to `./src/*`, `./public/*`, `./components/*`).
+- Use the `@/` alias for internal imports.
+  - **Note:** `@/*` maps to `./src/*`, `./public/*`, and `./components/*` in `tsconfig.json`.
 - **Order:**
-  1. Next.js / React built-ins (next/*, react)
-  2. Third-party libraries (firebase, formik, yup, etc.)
+  1. Next.js / React built-ins (`next/*`, `react`)
+  2. Third-party libraries (`firebase`, `formik`, `yup`, `redux`, etc.)
   3. Internal components (`@/components/...`)
   4. Internal utilities/hooks/types (`@/lib/...`, `@/hooks/...`)
   5. Styles (`@/styles/...` or CSS modules)
 
 ### Naming
-- **Files:** `kebab-case.tsx` or `PascalCase.tsx` for components (codebase mixes them, prefer matching existing directory style).
-  - *Observation:* Components in `src/components` often use `PascalCase.tsx` (e.g., `SignInForm.tsx`).
+- **Files:** Match existing directory style (often `PascalCase.tsx` for components, `kebab-case` for utils).
 - **Components:** `PascalCase`.
 - **Functions/Variables:** `camelCase`.
 - **Constants:** `UPPER_SNAKE_CASE`.
 
 ### Typing
-- **Strictness:** `strict: true` is enabled in `tsconfig.json`.
+- **Strictness:** `strict: true` is enabled.
 - **No `any`:** Avoid `any` types. Define interfaces/types in `@/types` or colocated if specific to a file.
 - **Props:** Use `interface` for component props (e.g., `interface Props { ... }`).
 
@@ -58,7 +61,7 @@ This file provides context and guidelines for AI agents working in this reposito
 ### API Routes (Next.js App Router)
 - Located in `src/app/api/...`.
 - Use `NextRequest` and `NextResponse`.
-- **Validation:** Use `Yup` for validating request bodies (do NOT use Zod unless migrating).
+- **Validation:** Use `Yup` for validating request bodies.
 - **Error Handling:** Wrap logic in `try/catch`. Return JSON with standard error fields (`error`, `message`, `status`).
 
 ### Database (Prisma)
@@ -94,8 +97,11 @@ This file provides context and guidelines for AI agents working in this reposito
 - **Refactoring:** When modifying code, review the entire file context to ensure consistency.
 
 ## 5. Directory Structure
+- `src/features`: Feature-based modules (e.g., `auth`, `dashboard`, `activities`). Preferred for new logic.
+  - `src/features/auth/components`: Auth UI components.
+  - `src/features/auth/services`: Auth business logic.
 - `src/app`: App Router pages and API routes.
-- `src/components`: Reusable UI components.
+- `src/components`: Generic/Shared UI components.
 - `src/lib`: Utilities, database clients, shared types.
 - `src/firebase`: Firebase configuration.
 - `src/styles`: Global styles and CSS modules.

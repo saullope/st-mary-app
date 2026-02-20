@@ -169,5 +169,16 @@
     "tema6_desc": "Marine background with aquatic life",
     "tema7": "Animated Brains",
     "tema7_desc": "Background with animated brains for cognitive stimulation"
+  },
+  "ForgotPassword": {
+    "titleForgotPassword": "Recover Password",
+    "recoverDescription": "Enter your email address and we'll send you a link to reset your password.",
+    "emailPlaceholder": "name@example.com",
+    "emailInvalid": "Invalid email address",
+    "emailRequired": "Email is required",
+    "sendButton": "Send Email",
+    "backToLogin": "Back to Login",
+    "emailSentSuccess": "If the email exists, you will receive a recovery link.",
+    "genericError": "An error occurred. Please try again."
   }
 }

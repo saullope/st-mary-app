@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { NavbarAuth } from '@/components/auth';
+import { NavbarAuth } from '@/features/auth/components';
 import styles from '@/styles/pages/landing.module.css';
 
 const inter = Inter({ subsets: ["latin"] });
