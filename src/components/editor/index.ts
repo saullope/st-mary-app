@@ -12,3 +12,5 @@ export { ThemeContainer } from './ThemeContainer';
 export { LoadMultimediaFile } from './LoadMultimediaFile';
 export { AnswerContainer } from './AnswerContainer';
 export { QuestionListItem } from './QuestionListItem';
+export { SaveActivityButton } from './SaveActivityButton';
+export { CreateNavbar } from './CreateNavbar';

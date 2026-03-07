@@ -164,7 +164,9 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
                       width={300}
                       height={200}
                       style={{ objectFit: "cover" }}
+                      unoptimized // Fix 500 fetch error by bypassing server optimization
                     />
+
                   </div>
                 ) : origin === "freesound" ? (
                   <div
@@ -195,7 +197,9 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
                       width={320}
                       height={180}
                       style={{ objectFit: "cover" }}
+                      unoptimized // Fix 500 fetch error by bypassing server optimization
                     />
+
                     <p className={style["video-title"]}>
                       {item.snippet.title.length > 50
                         ? item.snippet.title.substring(0, 50) + "..."

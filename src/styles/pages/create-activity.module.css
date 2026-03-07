@@ -12,7 +12,25 @@
     background-color: var(--light);
 }
 
-/*/Container principal de las 3 primeras Cards/*/
+.pageContainer {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+}
+
+.headerTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #649eff, #c17bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+/*Container principal de las 3 primeras Cards*/
+
 
 .container-card-activity{
     width: 90%;

@@ -1,0 +1,182 @@
+.pageContainer {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Maintaining the playful ludi font if appropriate, or fallback to system */
+}
+
+.headerTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #649eff, #c17bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px dashed #e0e0e0;
+}
+
+.filterCard {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(107, 33, 168, 0.05);
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.filterCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(107, 33, 168, 0.1);
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #649eff, #4b89ff);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(100, 158, 255, 0.3);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 15px rgba(100, 158, 255, 0.4);
+  color: white;
+}
+
+.secondaryButton {
+  background: white;
+  color: #555;
+  border: 2px solid #eee;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.secondaryButton:hover {
+  border-color: #649eff;
+  color: #649eff;
+  background-color: #f0f8ff;
+}
+
+.tableCard {
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.tableHeader {
+  background-color: #f8fbff;
+  border-bottom: 2px solid #eef2f7;
+}
+
+.tableHeader th {
+  color: #6b7280;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  padding: 1.25rem 1.5rem;
+}
+
+.tableRow {
+  transition: background-color 0.2s ease;
+}
+
+.tableRow:hover {
+  background-color: #f9fcff;
+}
+
+.tableCell {
+  padding: 1.25rem 1.5rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.badgeType {
+  padding: 0.5em 1em;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.badgeQuiz {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.badgeTF {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badgeMemory {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.actionButtonIcon {
+  width: 35px;
+  height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  border: none;
+  background: transparent;
+}
+
+.actionButtonIcon:hover {
+  background-color: #f3f4f6;
+  transform: scale(1.1);
+}
+
+.editIcon { color: #3b82f6; }
+.deleteIcon { color: #ef4444; }
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.emptyStateIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+  opacity: 0.5;
+}
+
+.activityLink {
+  cursor: pointer;
+  transition: color 0.2s;
+  display: block;
+}
+
+.activityLink:hover {
+  color: #649eff !important;
+}

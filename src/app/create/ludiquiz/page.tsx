@@ -1,56 +1,35 @@
-// path: src/app/create/ludiquiz/page.tsx
-
 "use client"
 
-import { useState } from 'react';
-import { TitleActivity, ModalMultimedia, ThemeButton, ThemeContainer, LoadMultimediaFile, AnswerContainer, QuestionListItem }
-    from "@/components/editor";
-import Image from 'next/image';
-import styles from '@/styles/pages/editor.module.css';
+import { useState, useEffect } from 'react';
+import { ModalMultimedia, LoadMultimediaFile, AnswerContainer, QuestionListItem } from "@/components/editor";
 import style2 from '@/styles/pages/ludiquiz.module.css';
 import { useTranslations } from 'next-intl';
-import { LanguageSelector } from "../../../components/LanguageSelector";
-import { BsGlobe } from 'react-icons/bs';
-import { TbArrowsMinimize } from "react-icons/tb";
-import { FaExpand } from "react-icons/fa6";
-import { LudiQuizQuestion, LudiQuizAnswer } from '@/lib/types/';
-import GamificationPanel from "@/features/gamification/components/GamificationPanel/GamificationPanel";
-
-interface Answer {
-    id: number;
-    text: string;
-    isCorrect: boolean;
-    imageUrl?: string | null;
-}
+import { LudiQuizQuestion } from '@/lib/types/';
+import { useActivityEditor } from "@/context/ActivityEditorContext";
 
 export default function LudiQuiz() {
     /** Traducciones */
     const t = useTranslations("createActivityDashboard");
-    const t2 = useTranslations("ludiMemoryComponent");
-    const t3 = useTranslations("configurations");
 
-    const [title, setTitle] = useState(t3("titleActivity"));
-    const [selectMedia, setSelectMedia] = useState("");
+    // Usar Contexto Global
+    const { state, setActivityType, setQuestions } = useActivityEditor();
+    const { backgroundImage, fullScreen } = state; // Usar valores del contexto
+    
+    // Inicializar el tipo de actividad al montar
+    useEffect(() => {
+        setActivityType("ludiquiz");
+    }, [setActivityType]);
+
+    // Estado local para UI (modales)
     const [showYoutube, setShowYoutube] = useState(false);
     const [showUnsplash, setShowUnsplash] = useState(false);
     const [showFreesound, setShowFreesound] = useState(false);
-    const [showTheme, setShowTheme] = useState(false);
-    const [backgroundImage, setBackgroundImage] = useState<string>("/images/theme/tema4.jpg");
-    const [isFullWidth, setIsFullWidth] = useState(false);
-    const [mediaType, setMediaType] = useState<"image" | "youtube" | "audio" | "video" | null>(null);
-    const [mediUrl, setMediaUrl] = useState<string | null>(null);
-
-    const [answer, setAnswer] = useState<Answer[]>([
-        { id: 0, text: '', isCorrect: false },
-        { id: 1, text: '', isCorrect: false },
-    ]);
-
-    // Estado para múltiples preguntas
-    const [questions, setQuestions] = useState<LudiQuizQuestion[]>([]);
+    
+    // Estado local para la "Pregunta en Edición" (Staging area)
     const [questionId, setQuestionId] = useState(1);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [questionText, setQuestionText] = useState("");
-
+    
     const [newQuestion, setNewQuestion] = useState<LudiQuizQuestion>({
         id: questionId,
         text: "",
@@ -62,54 +41,51 @@ export default function LudiQuiz() {
         mediaUrl: null,
     });
 
-    const addAnswer = () => {
-        setAnswer((prev) => [
-            ...prev,
-            { id: prev.length, text: '', isCorrect: false },
-        ]);
-    }
+    // Lista de preguntas confirmadas localmente
+    const [localQuestions, setLocalQuestions] = useState<LudiQuizQuestion[]>([]);
 
-    const updateAnswerText = (id: number, text: string) => {
-        setAnswer((prev) =>
-            prev.map((answer) => (answer.id === id ? { ...answer, text } : answer))
-        )
-    }
+    // --- Sincronizar preguntas locales con el contexto global ---
+    useEffect(() => {
+        // Crear una lista combinada para el contexto
+        let questionsToSave: LudiQuizQuestion[] = [...localQuestions];
+        
+        const currentDraft = {
+            ...newQuestion,
+            text: questionText,
+            id: editingId !== null ? editingId : newQuestion.id
+        };
 
-    const toggleCorrectAnswer = (id: number) => {
-        setAnswer((prev) =>
-            prev.map((answer) =>
-                answer.id === id
-                    ? { ...answer, isCorrect: !answer.isCorrect }
-                    : { ...answer, isCorrect: false })
-        )
-    }
+        // Si estamos editando, reemplazamos en la lista temporal
+        if (editingId !== null) {
+             const index = questionsToSave.findIndex(q => q.id === editingId);
+             if (index !== -1) {
+                 questionsToSave[index] = currentDraft;
+             }
+        } 
+        // Si estamos agregando (y hay contenido), agregamos al final
+        // El usuario pidió: "Al hacer clic en Guardar, el arreglo debe incluir la pregunta actual"
+        // Esto lo logramos enviando el borrador actual al contexto.
+        else {
+            // Validamos mínimamente para no llenar de basura
+            // Solo sincronizamos si hay ALGO de texto en la pregunta o en alguna respuesta
+            if (questionText.trim() || newQuestion.answers.some(a => a.text.trim())) {
+                 questionsToSave.push(currentDraft);
+            }
+        }
 
-    const handleShowTheme = () => setShowTheme(!showTheme);
+        setQuestions(questionsToSave);
+    }, [localQuestions, newQuestion, questionText, editingId, setQuestions]);
+    
+    // --- Fin sincronización ---
+
     const handleShowUnsplash = () => setShowUnsplash(!showUnsplash);
     const handleShowYoutube = () => setShowYoutube(!showYoutube);
     const handleShowFreesound = () => setShowFreesound(!showFreesound);
 
-    const handleThemeChange = (imagePath: string) => {
-        setBackgroundImage(imagePath);
-        setShowTheme(false);
-    };
-
-    const handleRemoveMedia = () => {
-        setMediaType(null);
-        setMediaUrl(null);
-    }
-
-    const toggleFullWidth = () => setIsFullWidth(!isFullWidth);
-
-    const handleSelectMedia = (type: string, url: string) => {
-        setMediaType(type as "image" | "youtube" | "audio" | "video");
-        setMediaUrl(url);
-    };
-
     const handleSelectFile = () => {
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = 'image/*,video/*,audio/*'; // Acepta imágenes, videos y audios
+        input.accept = 'image/*,video/*,audio/*'; 
         input.onchange = (event) => {
             const file = (event.target as HTMLInputElement).files?.[0];
             if (file) {
@@ -122,12 +98,12 @@ export default function LudiQuiz() {
                             : null;
 
                 if (fileType) {
-                    const fileURL = URL.createObjectURL(file); // Genera una URL temporal
-                    handleSelectMediaNewQuestion(fileType, fileURL); // Establece el tipo y la URL en el estado
+                    const fileURL = URL.createObjectURL(file); 
+                    handleSelectMediaNewQuestion(fileType, fileURL); 
                 }
             }
         };
-        input.click(); // Simula un clic para abrir el explorador de archivos
+        input.click(); 
     };
 
     // Funciones para manejar múltiples preguntas
@@ -197,7 +173,7 @@ export default function LudiQuiz() {
             id: questionId
         };
 
-        setQuestions(prev => [...prev, questionToAdd]);
+        setLocalQuestions(prev => [...prev, questionToAdd]); 
         setQuestionId(prev => prev + 1);
         setQuestionText("");
         setNewQuestion({
@@ -213,7 +189,7 @@ export default function LudiQuiz() {
     };
 
     const handleEditQuestion = (id: number) => {
-        const question = questions.find(q => q.id === id);
+        const question = localQuestions.find(q => q.id === id); 
         if (question) {
             setEditingId(id);
             setQuestionText(question.text);
@@ -227,13 +203,14 @@ export default function LudiQuiz() {
             return;
         }
 
-        setQuestions(prev => prev.map(q => 
+        setLocalQuestions(prev => prev.map(q => 
             q.id === editingId 
                 ? { ...newQuestion, text: questionText }
                 : q
-        ));
+        )); 
         setEditingId(null);
         setQuestionText("");
+        // Reset to new question state for adding next one
         setNewQuestion({
             id: questionId,
             text: "",
@@ -247,7 +224,7 @@ export default function LudiQuiz() {
     };
 
     const handleDeleteQuestion = (id: number) => {
-        setQuestions(prev => prev.filter(q => q.id !== id));
+        setLocalQuestions(prev => prev.filter(q => q.id !== id)); 
     };
 
     const handleCancelEdit = () => {
@@ -265,62 +242,16 @@ export default function LudiQuiz() {
         });
     };
 
-
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
-                <div className="container-fluid d-flex align-items-center">
-                    <div className={styles.logo}>
-                        <Image
-                            src="/images/PartialLogo.png"
-                            width={45}
-                            height={45}
-                            alt="logo"
-                        />
-                    </div>
-                    <div className="ms-5" style={{ width: '400px', maxWidth: '100%' }}>
-                        <TitleActivity title={title} setTitle={setTitle} />
-                    </div>
-                    <div className="d-flex gap-2 ms-auto">
-                        <div className="d-grid gap-2 d-md-flex justify-content-center justify-content-md-end align-items-center">
-                            <BsGlobe />
-                            <LanguageSelector />
-                        </div>
-                        <ThemeButton
-                            onClick={handleShowTheme}
-                        />
-                        <button
-                            className="btn" // Botón para alternar
-                            onClick={toggleFullWidth}
-                            style={{
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                border: 'none',
-                                color: 'white',
-                                fontWeight: 'bold',
-                                borderRadius: '15px',
-                                padding: '10px 20px',
-                                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
-                                transition: 'all 0.3s ease'
-                            }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
-                            }}
-                        >
-                            {isFullWidth ? <TbArrowsMinimize /> : <FaExpand />}
-                        </button>
-                    </div>
-                </div>
-            </nav>
-            <div className="row" style={{ height: "100vh" }}> {/* Hace que las columnas ocupen toda la altura de la pantalla */}
-                {!isFullWidth && (
-                    <div className="col-2 card shadow-sm rounded p-3 me-3">
-                        <ul className="mt-3 p-0">
-                            {questions.map((q) => (
+            {/* El Navbar ahora está en layout.tsx */}
+            
+            <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}> 
+                {!fullScreen && (
+                    <div className="col-2 card shadow-sm rounded p-3 me-3" style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}>
+                        <h5 className="mb-3 text-muted">Preguntas ({localQuestions.length})</h5>
+                        <ul className="list-group list-group-flush p-0 mb-3">
+                            {localQuestions.map((q) => (
                                 <QuestionListItem
                                     key={q.id}
                                     id={q.id}
@@ -330,12 +261,13 @@ export default function LudiQuiz() {
                                     correctAnswer={q.answers.find(a => a.isCorrect) ? "true" : "false"}
                                     isSelected={editingId === q.id}
                                     onClick={() => handleEditQuestion(q.id)}
+                                    // Add delete handler if QuestionListItem supports it, otherwise need to add button
                                 />
                             ))}
                             {!editingId && (
                                 <QuestionListItem
                                     id={newQuestion.id}
-                                    text={newQuestion.text}
+                                    text={newQuestion.text || "Nueva pregunta..."}
                                     mediaType={newQuestion.mediaType}
                                     mediaUrl={newQuestion.mediaUrl}
                                     correctAnswer={newQuestion.answers.find(a => a.isCorrect) ? "true" : "false"}
@@ -345,9 +277,9 @@ export default function LudiQuiz() {
                             )}
                         </ul>
 
-                        <div className="d-flex flex-column gap-2">
+                        <div className="d-flex flex-column gap-2 mt-auto">
                             <button
-                                className="btn btn-sm w-100"
+                                className="btn w-100"
                                 onClick={editingId ? handleUpdateQuestion : handleAddQuestion}
                                 style={{
                                     background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
@@ -360,20 +292,12 @@ export default function LudiQuiz() {
                                     transition: 'all 0.3s ease',
                                     fontFamily: 'Comic Sans MS, cursive'
                                 }}
-                                onMouseOver={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(40, 167, 69, 0.4)';
-                                }}
-                                onMouseOut={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(40, 167, 69, 0.3)';
-                                }}
                             >
-                                {editingId !== null ? "💾 Guardar" : "➕ Agregar"}
+                                {editingId !== null ? "Guardar Cambios" : "Agregar Pregunta"}
                             </button>
                             {editingId && (
                                 <button
-                                    className="btn btn-sm w-100"
+                                    className="btn w-100"
                                     onClick={handleCancelEdit}
                                     style={{
                                         background: 'linear-gradient(135deg, #6c757d 0%, #495057 100%)',
@@ -386,22 +310,15 @@ export default function LudiQuiz() {
                                         transition: 'all 0.3s ease',
                                         fontFamily: 'Comic Sans MS, cursive'
                                     }}
-                                    onMouseOver={(e) => {
-                                        e.currentTarget.style.transform = 'translateY(-2px)';
-                                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(108, 117, 125, 0.4)';
-                                    }}
-                                    onMouseOut={(e) => {
-                                        e.currentTarget.style.transform = 'translateY(0)';
-                                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(108, 117, 125, 0.3)';
-                                    }}
                                 >
-                                    ❌ Cancelar
+                                    ❌ Cancelar Edición
                                 </button>
                             )}
                         </div>
                     </div>
                 )}
-                <div className={`col card shadow-sm rounded p-3 me-3 d-flex ${isFullWidth ? "col-12" : "col"}`}
+                
+                <div className={`col card shadow-sm rounded p-0 d-flex ${fullScreen ? "col-12" : "col"}`}
                     style={{
                         backgroundImage: `url(${backgroundImage})`,
                         backgroundSize: "cover",
@@ -409,10 +326,12 @@ export default function LudiQuiz() {
                         backgroundRepeat: "no-repeat",
                         backgroundAttachment: "fixed",
                         width: "100%",
-                        minHeight: "100vh",
-                        transition: "background 0.3s ease-in-out",
-                        position: "relative"
-                    }}> {/* Clase d-flex para alinear horizontalmente */}
+                        minHeight: "calc(100vh - 120px)", // Ajustado para el nuevo layout
+                        transition: "all 0.3s ease-in-out",
+                        position: "relative",
+                        border: 'none',
+                        overflow: 'hidden'
+                    }}>
                     
                     {/* Overlay semi-transparente para mejorar legibilidad */}
                     <div style={{
@@ -422,10 +341,10 @@ export default function LudiQuiz() {
                         right: 0,
                         bottom: 0,
                         background: "rgba(0, 0, 0, 0.3)",
-                        borderRadius: "10px"
+                        zIndex: 1
                     }}></div>
                     
-                    <div className='col d-flex justify-content-center align-items-center position-relative'>
+                    <div className='col d-flex flex-column justify-content-center align-items-center position-relative' style={{ zIndex: 2, padding: '2rem' }}>
                         {/** INICIO CONTENIDO DEL EDITOR */}
                         <div className={style2.container}>
                             <h1 className={style2.acth1} style={{ 
@@ -433,7 +352,8 @@ export default function LudiQuiz() {
                                 fontSize: '2.5rem',
                                 fontWeight: 'bold',
                                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                                color: '#2c3e50'
+                                color: '#ffffff', // Cambiado a blanco para contraste con fondo oscuro
+                                marginBottom: '2rem'
                             }}>LudiQuiz</h1>
 
                             {/* <!-- Tarjeta de Pregunta --> */}
@@ -442,7 +362,7 @@ export default function LudiQuiz() {
                                 <input 
                                     type="text" 
                                     className={style2['question-input']}
-                                    placeholder="Escribe tu pregunta" 
+                                    placeholder="Escribe tu pregunta aquí..." 
                                     aria-label="Pregunta"
                                     value={questionText}
                                     onChange={handleInputNewQuestion}
@@ -479,29 +399,24 @@ export default function LudiQuiz() {
                             </div>
                         </div>
                         {/** FIN CONTENIDO DEL EDITOR */}
-                    </div>
-                    
-                    {/* Tip del tema */}
-                    <div className="text-center mt-4">
-                        <div className="alert alert-info border-0 shadow-sm" style={{ 
-                            borderRadius: '15px',
-                            background: 'rgba(13, 202, 240, 0.1)',
-                            border: '1px solid rgba(13, 202, 240, 0.3)',
-                            color: '#0dcaf0',
-                            fontSize: '0.9rem'
-                        }}>
-                            <small>
-                                💡 <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
-                            </small>
+                        
+                        {/* Tip del tema */}
+                        <div className="mt-4">
+                             <div className="alert alert-info border-0 shadow-sm d-inline-block" style={{ 
+                                borderRadius: '20px',
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                color: '#0dcaf0',
+                                fontSize: '0.9rem',
+                                padding: '0.5rem 1.5rem'
+                            }}>
+                                <small>
+                                    💡 <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
+                                </small>
+                            </div>
                         </div>
                     </div>
-                    
-                    <ThemeContainer
-                        show={showTheme}
-                        onClose={() => setShowTheme(false)}
-                        onThemeChange={handleThemeChange}
-                    />
                 </div>
+
                 {/** Area de modal */}
                 <ModalMultimedia
                     show={showUnsplash}
@@ -521,9 +436,6 @@ export default function LudiQuiz() {
                     origin="freesound"
                     onSelectMedia={handleSelectMediaNewQuestion}
                 />
-                {/** Area de modal */}
-                
-                <GamificationPanel />
             </div>
         </>
     );

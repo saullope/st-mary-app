@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import styles from "./GamificationPanel.module.css";
+import { useActivityEditor } from "@/context/ActivityEditorContext";
 
 // Definición de tipos para las misiones
 type Mission = {
@@ -43,13 +44,30 @@ const INSIGNIAS = [
   { id: "detective", name: "Detective", phrase: "¡Eres todo un Detective! Descubriste la respuesta correcta.", desc: "Para quienes descubren la respuesta correcta.", color: "#A567B6", img: "/images/panelludico/detective.png" },
 ];
 
-export default function GamificationPanel() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedGrade, setSelectedGrade] = useState<number>(1);
-  const [tiempo, setTiempo] = useState<string>("");
-  const [puntos, setPuntos] = useState<string>("");
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [selectedBadges, setSelectedBadges] = useState<Set<string>>(new Set());
+export default function GamificationPanel({
+  isOpen: controlledIsOpen,
+  onToggle: controlledOnToggle,
+  trigger
+}: {
+  isOpen?: boolean;
+  onToggle?: () => void;
+  trigger?: React.ReactNode;
+}) {
+  const { state, updateConfig } = useActivityEditor();
+  const { config } = state;
+
+  const [localIsOpen, setLocalIsOpen] = useState(false);
+  
+  const isControlled = controlledIsOpen !== undefined;
+  const isOpen = isControlled ? controlledIsOpen : localIsOpen;
+  
+  const togglePanel = () => {
+    if (controlledOnToggle) {
+      controlledOnToggle();
+    } else {
+      setLocalIsOpen(!localIsOpen);
+    }
+  };
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
@@ -73,7 +91,7 @@ export default function GamificationPanel() {
 
   // Función para hablar
   const speak = (text: string) => {
-    if (!voiceEnabled || !window.speechSynthesis) return;
+    if (!config.voiceEnabled || !window.speechSynthesis) return;
     
     // Cancelar cualquier audio previo para evitar superposiciones
     window.speechSynthesis.cancel();
@@ -87,47 +105,54 @@ export default function GamificationPanel() {
     window.speechSynthesis.speak(utterance);
   };
 
-  const togglePanel = () => setIsOpen(!isOpen);
-
   const handleGradeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedGrade(Number(e.target.value));
+    updateConfig({ gradeId: Number(e.target.value) });
   };
 
   const handleBadgeToggle = (id: string, phrase: string, name: string) => {
-    const newBadges = new Set(selectedBadges);
-    if (newBadges.has(id)) {
-      newBadges.delete(id);
+    const currentBadges = new Set(config.selectedBadges);
+    if (currentBadges.has(id)) {
+      currentBadges.delete(id);
     } else {
-      newBadges.add(id);
+      currentBadges.add(id);
       // Feedback visual y auditivo al seleccionar
       triggerConfetti();
-      if (voiceEnabled) speak(`Has seleccionado la insignia ${name}. ${phrase}`);
+      if (config.voiceEnabled) speak(`Has seleccionado la insignia ${name}. ${phrase}`);
     }
-    setSelectedBadges(newBadges);
+    updateConfig({ selectedBadges: Array.from(currentBadges) });
   };
 
   const handleMissionToggle = (text: string) => {
      // Solo feedback auditivo/visual simple, no guardamos estado de misiones seleccionadas en este ejemplo básico
      triggerConfetti();
-     if (voiceEnabled) speak(`Misión seleccionada: ${text}`);
+     if (config.voiceEnabled) speak(`Misión seleccionada: ${text}`);
+     
+     // Si quisiéramos guardar las misiones:
+     /*
+     const currentMissions = new Set(config.selectedMissions);
+     if (currentMissions.has(text)) currentMissions.delete(text);
+     else currentMissions.add(text);
+     updateConfig({ selectedMissions: Array.from(currentMissions) });
+     */
   };
 
   const handleSave = () => {
-    if (!tiempo || isNaN(Number(tiempo)) || Number(tiempo) <= 0) {
+    if (!config.timeLimit || config.timeLimit <= 0) {
       showFeedback("Por favor, ingresa un valor válido de tiempo.");
       return;
     }
-    if (!puntos || isNaN(Number(puntos)) || Number(puntos) <= 0) {
+    if (!config.pointsPerCorrect || config.pointsPerCorrect <= 0) {
       showFeedback("Por favor, ingresa un valor válido de puntos.");
       return;
     }
-    if (selectedBadges.size === 0) {
+    if (config.selectedBadges.length === 0) {
       showFeedback("Por favor, selecciona al menos una insignia.");
       return;
     }
 
     showFeedback("¡Configuración guardada!");
-    if (voiceEnabled) speak("¡Configuración guardada con éxito!");
+    if (config.voiceEnabled) speak("¡Configuración guardada con éxito!");
+    // Aquí ya no necesitamos hacer nada más porque el estado ya está actualizado en el Contexto
   };
 
   const showFeedback = (msg: string) => {
@@ -155,13 +180,17 @@ export default function GamificationPanel() {
   return createPortal(
     <>
       {/* Botón abrir panel */}
-      <button
-        className={`${styles.togglePanel} ${isOpen ? styles.hidden : ""}`}
-        onClick={togglePanel}
-        title="Abrir Panel Lúdico"
-      >
-        ⭐ Panel Lúdico
-      </button>
+      {trigger !== null ? (
+        trigger || (
+          <button
+            className={`${styles.togglePanel} ${isOpen ? styles.hidden : ""}`}
+            onClick={togglePanel}
+            title="Abrir Panel Lúdico"
+          >
+            ⭐ Panel Lúdico
+          </button>
+        )
+      ) : null}
 
       {/* Botón cerrar panel */}
       {isOpen && (
@@ -196,7 +225,7 @@ export default function GamificationPanel() {
         </label>
         <select
           id="grado"
-          value={selectedGrade}
+          value={config.gradeId}
           onChange={handleGradeChange}
           className={styles.select}
         >
@@ -216,8 +245,8 @@ export default function GamificationPanel() {
           max="300"
           placeholder="Ingresa el tiempo"
           className={styles.inputNumber}
-          value={tiempo}
-          onChange={(e) => setTiempo(e.target.value)}
+          value={config.timeLimit || ""}
+          onChange={(e) => updateConfig({ timeLimit: Number(e.target.value) })}
         />
         <div className={styles.desc}>
           Ajusta el tiempo que tiene el estudiante para responder.
@@ -234,8 +263,8 @@ export default function GamificationPanel() {
           max="100"
           placeholder="Ingresa los puntos"
           className={styles.inputNumber}
-          value={puntos}
-          onChange={(e) => setPuntos(e.target.value)}
+          value={config.pointsPerCorrect || ""}
+          onChange={(e) => updateConfig({ pointsPerCorrect: Number(e.target.value) })}
         />
         <div className={styles.desc}>
           Define los puntos que el estudiante gana por cada respuesta correcta.
@@ -250,7 +279,7 @@ export default function GamificationPanel() {
                 <input
                   type="checkbox"
                   id={`insignia-${badge.id}`}
-                  checked={selectedBadges.has(badge.id)}
+                  checked={config.selectedBadges.includes(badge.id)}
                   onChange={() => handleBadgeToggle(badge.id, badge.phrase, badge.name)}
                 />
                 <div className={styles.insignia} style={{ "--color-bg": badge.color } as React.CSSProperties}>
@@ -268,7 +297,7 @@ export default function GamificationPanel() {
         <fieldset className={styles.fieldset} aria-label="Misiones y Desafíos configurables">
           <legend className={styles.legend}>🎮 Misiones y Desafíos</legend>
           <div id="misiones-container">
-            {MISIONES_POR_GRADO[selectedGrade]?.map((mision) => (
+            {MISIONES_POR_GRADO[config.gradeId]?.map((mision) => (
               <label key={mision.id} className={styles.checkboxLabel}>
                 <input 
                     type="checkbox" 
@@ -287,8 +316,8 @@ export default function GamificationPanel() {
           <input
             type="checkbox"
             id="voice-toggle"
-            checked={voiceEnabled}
-            onChange={(e) => setVoiceEnabled(e.target.checked)}
+            checked={config.voiceEnabled}
+            onChange={(e) => updateConfig({ voiceEnabled: e.target.checked })}
           />
           <label htmlFor="voice-toggle" style={{ cursor: "pointer" }}>
             🔊 Voz activada

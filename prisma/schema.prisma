@@ -40,12 +40,12 @@ model ACTIVITY {
 model LudiActividad {
   activityId      Int                  @id(map: "PK__LUDI_ACT__482FBD6332AE6D54") @map("activity_id")
   tipoActividadId Int                  @map("tipo_actividad_id") @db.TinyInt
-  educadorId      BigInt               @map("educador_id")
+  userId          String               @map("user_id")
   gradoId         Int?                 @map("grado_id")
   temaId          BigInt?              @map("tema_id")
   publico         Boolean              @default(false, map: "DF_LUDI_ACT_publico")
   activity        ACTIVITY             @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_ACTI__activ__32767D0B")
-  educador        LudiEducador         @relation(fields: [educadorId], references: [id], onUpdate: NoAction, map: "FK__LUDI_ACTI__educa__345EC57D")
+  user            LudiUser             @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_LudiActividad_User")
   grado           LUDI_COMMON_GRADE?   @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__grado__3552E9B6")
   tema            LudiTema?            @relation(fields: [temaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__tema___36470DEF")
   tipoActividad   LudiTipoActividad    @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_ACTI__tipo___336AA144")
@@ -56,6 +56,7 @@ model LudiActividad {
 
   @@map("LUDI_ACTIVIDAD")
 }
+
 
 model LudiActividadConfig {
   activityId       Int                   @id(map: "PK__LUDI_ACT__482FBD630AF4F7DC") @map("activity_id")
@@ -83,19 +84,8 @@ model LudiComponenteLudico {
   @@map("LUDI_COMPONENTE_LUDICO")
 }
 
-model LudiEducador {
-  id          BigInt          @id(map: "PK__LUDI_EDU__3213E83F97CB6106") @default(autoincrement())
-  firebaseUid String          @unique(map: "UQ__LUDI_EDU__1E65B7F8214D7406") @map("firebase_uid") @db.NVarChar(128)
-  nombre      String          @db.NVarChar(120)
-  email       String?         @unique(map: "UQ__LUDI_EDU__AB6E6164AA9DFFD1") @db.NVarChar(160)
-  creadoEn    DateTime        @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_EDU_creado") @map("creado_en")
-  actividades LudiActividad[]
-  LUDI_SESION LUDI_SESION[]
-
-  @@map("LUDI_EDUCADOR")
-}
-
 model LudiMemoriaPareja {
+
   id         BigInt               @id(map: "PK__LUDI_MEM__3213E83FE16E28DC") @default(autoincrement())
   activityId Int                  @map("activity_id")
   etiqueta   String?              @db.NVarChar(80)
@@ -247,16 +237,17 @@ model LudiTipoRecurso {
 model LUDI_SESION {
   id                       BigInt                     @id(map: "PK__LUDI_SES__3213E83FFE0EE0FD") @default(autoincrement())
   activity_id              Int
-  educador_id              BigInt
+  userId                   String                     @map("user_id")
   codigo                   String                     @unique(map: "UQ__LUDI_SES__40F9A2061D1921D8") @db.Char(6)
   estado                   String                     @db.NVarChar(12)
   iniciada_en              DateTime?
   finalizada_en            DateTime?
   creada_en                DateTime                   @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_SES_creada")
   LUDI_ACTIVIDAD           LudiActividad              @relation(fields: [activity_id], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_SESI__activ__6225902D")
-  LUDI_EDUCADOR            LudiEducador               @relation(fields: [educador_id], references: [id], onUpdate: NoAction, map: "FK__LUDI_SESI__educa__6319B466")
+  user                     LudiUser                   @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_LudiSesion_User")
   LUDI_SESION_PARTICIPANTE LUDI_SESION_PARTICIPANTE[]
 }
+
 
 model LUDI_SESION_PARTICIPANTE {
   id            BigInt      @id(map: "PK__LUDI_SES__3213E83F49938736") @default(autoincrement())
@@ -279,16 +270,18 @@ model LudiRol {
 }
 
 model LudiUser {
-  id           String   @id @default(uuid())
-  firebaseUid  String?  @map("firebase_uid") @db.NVarChar(128)
-  email        String?  @db.NVarChar(160)
-  nombre       String   @db.NVarChar(120)
-  username     String?  @db.NVarChar(50)
-  passwordHash String?  @map("password_hash") @db.NVarChar(256)
-  rolId        Int      @map("rol_id")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  rol          LudiRol  @relation(fields: [rolId], references: [id], onUpdate: NoAction, map: "FK_LUDI_USER_ROL")
+  id           String          @id @default(uuid())
+  firebaseUid  String?         @map("firebase_uid") @db.NVarChar(128)
+  email        String?         @db.NVarChar(160)
+  nombre       String          @db.NVarChar(120)
+  username     String?         @db.NVarChar(50)
+  passwordHash String?         @map("password_hash") @db.NVarChar(256)
+  rolId        Int             @map("rol_id")
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+  rol          LudiRol         @relation(fields: [rolId], references: [id], onUpdate: NoAction, map: "FK_LUDI_USER_ROL")
+  actividades  LudiActividad[]
+  sesiones     LUDI_SESION[]
 
   @@map("LUDI_USERS")
 }

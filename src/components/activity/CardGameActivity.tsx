@@ -5,14 +5,17 @@ import Image from "next/image";
 import { TbPencilStar } from "react-icons/tb";
 import Link from "next/link";
 
+import { StaticImageData } from "next/image";
+
 interface CardGameActivityProps {
-    imageAct: string;
+    imageAct: string | StaticImageData;
     title: string;
     page_to: string;
     subtitle: string;
     description: string;
     buttonText: string;
 }
+
 
 export const CardGameActivity  = ({imageAct, title, page_to, subtitle, description, buttonText}: CardGameActivityProps) => {
 

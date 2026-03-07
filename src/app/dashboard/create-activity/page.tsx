@@ -1,8 +1,13 @@
-
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server";
 import { CardGameActivity } from "@/components/activity";
-import prisma from "@/lib/db";
+import Image from "next/image";
+import styles from "@/styles/pages/create-activity.module.css"; // Import styles
+
+// Import images from public/images via alias
+import LudiquizImg from "@/images/ludiquiz.png";
+import MemoryImg from "@/images/memory.png";
+import TrueOrFalseImg from "@/images/verdadero-falso.png";
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("createActivityDashboard");
@@ -13,35 +18,52 @@ export async function generateMetadata(): Promise<Metadata> {
     };
 }
 
-
 export default async function CreateActivity() {
-
     const t = await getTranslations("createActivityDashboard");
 
-    const games = await prisma.aCTIVITY.findMany();
+    // Static definition of supported game templates
+    const gameTemplates = [
+        {
+            id: 'ludiquiz',
+            image: LudiquizImg,
+            translationKey: 'ludiquiz',
+            route: 'ludiquiz'
+        },
+        {
+            id: 'ludimemory',
+            image: MemoryImg,
+            translationKey: 'ludimemory',
+            route: 'ludimemory'
+        },
+        {
+            id: 'trueorfalse',
+            image: TrueOrFalseImg,
+            translationKey: 'trueorfalse',
+            route: 'trueorfalse'
+        }
+    ];
 
     return (
-        <>
+        <div className={styles.pageContainer}>
             <div className="mb-5">
-                <h1>{t('titlePage')}</h1>
+                <h1 className={styles.headerTitle}>{t('titlePage')}</h1>
             </div>
 
             <div className="container my-4">
-            <div className="row g-4">
-            { games && games.map((game) => (
-                <CardGameActivity 
-                    key={game.id}
-                    imageAct={game.image_url || ""}
-                    title={t(`${game.activity_name}Title`)}
-                    page_to={game.activity_name}
-                    subtitle={t(`${game.activity_name}SubTitle`)}
-                    description={t(game.activity_desc)}
-                    buttonText={t('createText')}
-                />
-            ))
-            }
+                <div className="row g-4">
+                    {gameTemplates.map((game) => (
+                        <CardGameActivity 
+                            key={game.id}
+                            imageAct={game.image}
+                            title={t(`${game.translationKey}Title`)}
+                            page_to={game.route}
+                            subtitle={t(`${game.translationKey}SubTitle`)}
+                            description={t(`${game.translationKey}_desc`)}
+                            buttonText={t('createText')}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
-        </>
     )
 }

@@ -49,7 +49,9 @@ export const QuestionListItem = ({
                             alt="media preview"
                             width={40}
                             height={40}
+                            unoptimized // Bypass server optimization to avoid 500 errors
                         />
+
                     )}
                     {(mediaType === "video" || mediaType === "youtube") && (
                         <span className="text-muted">🎥</span>

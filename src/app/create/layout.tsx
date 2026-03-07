@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   description: 'Create a new activity',
 };
 
+import { ActivityEditorProvider } from "@/context/ActivityEditorContext";
+import { CreateNavbar } from "@/components/editor";
+
 export default async function CreateActivityLayout({
     children,
   }: Readonly<{
@@ -25,17 +28,19 @@ export default async function CreateActivityLayout({
     }
   
     return (
-      <div className="d-flex flex-column vh-100">
-        {/* Barra de navegación fija en la parte superior */}
-        
-  
-        {/* Contenedor principal */}
-        <div className="d-flex flex-grow-1" style={{ marginTop: '56px' }}>
-          {/* Área dinámica para editar preguntas o configuraciones */}
-          <main className="flex-grow-1 p-4 bg-light">
-            {children} {/* Aquí se renderizará el contenido dinámico */}
-          </main>
+      <ActivityEditorProvider>
+        <div className="d-flex flex-column vh-100">
+          {/* Barra de navegación fija en la parte superior */}
+          <CreateNavbar />
+    
+          {/* Contenedor principal */}
+          <div className="d-flex flex-grow-1" style={{ marginTop: '80px' }}>
+            {/* Área dinámica para editar preguntas o configuraciones */}
+            <main className="flex-grow-1 p-4 bg-light">
+              {children} {/* Aquí se renderizará el contenido dinámico */}
+            </main>
+          </div>
         </div>
-      </div>
+      </ActivityEditorProvider>
     );
   }
