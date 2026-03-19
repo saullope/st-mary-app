@@ -1,11 +1,13 @@
 "use client"
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { getActivityForEdit } from '@/app/actions/getActivityForEdit';
 import { ModalMultimedia } from "@/components/editor";
 import { useTranslations } from 'next-intl';
 import { useActivityEditor } from "@/context/ActivityEditorContext";
 import { useFirebaseStorage } from "@/hooks/useFirebaseStorage";
-import { FaTrash } from 'react-icons/fa6';
+import { FaTrash, FaPlus, FaUpload, FaImage } from 'react-icons/fa6';
 
 export default function LudiMemory() {
 
@@ -13,7 +15,9 @@ export default function LudiMemory() {
     const t = useTranslations("createActivityDashboard");
 
     // Contexto Global
-    const { state, setActivityType, setMemoryImages } = useActivityEditor();
+    const { state, setActivityType, setMemoryImages, setTitle, updateConfig, setActivityId, setBackgroundImage } = useActivityEditor();
+    const searchParams = useSearchParams();
+    const [isLoading, setIsLoading] = useState(false);
     const { backgroundImage, fullScreen } = state;
     const { uploadFiles, uploading } = useFirebaseStorage();
 
@@ -23,6 +27,29 @@ export default function LudiMemory() {
 
     // Estados locales
     const [showUnsplash, setShowUnsplash] = useState(false);
+
+    useEffect(() => {
+        const loadActivity = async () => {
+            const idParam = searchParams.get("id");
+            if (idParam) {
+                setIsLoading(true);
+                const result = await getActivityForEdit(parseInt(idParam));
+                if (result.success && result.data) {
+                    setActivityId(result.data.activityId);
+                    setTitle(result.data.title);
+                    updateConfig(result.data.config);
+                    setBackgroundImage(result.data.backgroundImage);
+                    
+                    if (result.data.memoryImages && result.data.memoryImages.length > 0) {
+                        setMemoryImages(result.data.memoryImages);
+                    }
+                }
+                setIsLoading(false);
+            }
+        };
+        loadActivity();
+    }, [searchParams, setActivityId, setTitle, updateConfig, setBackgroundImage, setMemoryImages]);
+
 
     const handleSelectImageUnsplash = (type: string, url: string) => {
         setMemoryImages([...state.memoryImages, url]); 
@@ -109,7 +136,6 @@ export default function LudiMemory() {
                             color: 'white'
                         }}>
                             <div className="d-flex align-items-center justify-content-center">
-                                <span style={{ fontSize: '2.5rem', marginRight: '15px' }}>🧠</span>
                                 <h1 className="fw-bold mb-0" style={{ 
                                     fontSize: '2.2rem',
                                     fontFamily: 'Comic Sans MS, cursive',
@@ -123,161 +149,128 @@ export default function LudiMemory() {
                         {/* Contenido principal del panel */}
                         <div className="card-body p-5">
                             <div className="row g-5">
-                                {/* Sección izquierda - Carga de imágenes */}
-                                <div className="col-md-5 d-flex flex-column">
-                                    <div className="text-center mb-4">
-                                        <div className="display-4 mb-3">📸</div>
-                                        <h4 className="fw-bold mb-2" style={{ fontFamily: 'Comic Sans MS, cursive', color: '#2c3e50' }}>
-                                            Agregar Imágenes
-                                        </h4>
-                                        <p className="text-muted small">
-                                            Sube tus propias imágenes o busca en Unsplash para crear las parejas.
-                                        </p>
-                                    </div>
-                                    
-                                    <div className="d-grid gap-3 mb-4">
-                                        <button 
-                                            className="btn btn-light btn-lg fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2"
-                                            onClick={handleSelectImage}
-                                            disabled={uploading}
-                                            style={{ 
-                                                borderRadius: '15px',
-                                                fontFamily: 'Comic Sans MS, cursive',
-                                                transition: 'all 0.3s ease',
-                                                border: '2px solid #e9ecef',
-                                                padding: '15px'
-                                            }}
-                                            onMouseOver={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.1)';
-                                            }}
-                                            onMouseOut={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(0)';
-                                                e.currentTarget.style.boxShadow = 'none';
-                                            }}
-                                        >
-                                            {uploading ? (
-                                                <>
-                                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    Subiendo...
-                                                </>
-                                            ) : (
-                                                <>📁 Subir desde PC</>
-                                            )}
-                                        </button>
-                                        
-                                        <button 
-                                            className="btn btn-warning btn-lg fw-bold shadow-sm text-white"
-                                            onClick={() => setShowUnsplash(true)}
-                                            style={{ 
-                                                borderRadius: '15px',
-                                                fontFamily: 'Comic Sans MS, cursive',
-                                                transition: 'all 0.3s ease',
-                                                border: 'none',
-                                                background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
-                                                padding: '15px'
-                                            }}
-                                            onMouseOver={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                                e.currentTarget.style.boxShadow = '0 8px 25px rgba(255, 165, 0, 0.4)';
-                                            }}
-                                            onMouseOut={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(0)';
-                                                e.currentTarget.style.boxShadow = 'none';
-                                            }}
-                                        >
-                                            🌟 Buscar en Unsplash
-                                        </button>
-                                    </div>
-                                    
-                                    <div className="mt-auto">
-                                        <div className="alert border-0 shadow-sm" style={{ 
-                                            borderRadius: '15px',
-                                            background: 'rgba(13, 202, 240, 0.1)',
-                                            color: '#0aa2c0',
-                                            fontSize: '0.9rem'
-                                        }}>
-                                            <small>
-                                                💡 <strong>Tip:</strong> Necesitas pares de imágenes. Sube al menos 2 imágenes diferentes.
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Sección derecha - Grid de imágenes */}
-                                <div className="col-md-7 border-start border-light ps-md-5">
-                                    <div className="text-center mb-4">
-                                        <h5 className="fw-bold mb-3" style={{ fontFamily: 'Comic Sans MS, cursive', color: '#4a5568' }}>
-                                            Galería ({state.memoryImages.length})
-                                        </h5>
-                                    </div>
-                                    
+                                {/* Sección principal - Grid de carga e imágenes */}
+                                <div className="col-12">
                                     <div style={{ 
-                                        maxHeight: '400px', 
+                                        maxHeight: '500px', 
                                         overflowY: 'auto', 
                                         padding: '10px',
-                                        background: '#f8f9fa',
-                                        borderRadius: '15px',
-                                        minHeight: '300px'
+                                        background: 'transparent',
                                     }} className="custom-scrollbar">
-                                        {state.memoryImages.length === 0 ? (
-                                            <div className="h-100 d-flex flex-column justify-content-center align-items-center text-muted">
-                                                <div style={{ fontSize: '3rem', marginBottom: '1rem', opacity: 0.5 }}>🖼️</div>
-                                                <p>La galería está vacía</p>
-                                            </div>
-                                        ) : (
-                                            <div className="row g-3">
-                                                {state.memoryImages.map((image, index) => (
-                                                    <div key={index} className="col-4 col-sm-3 col-lg-3">
-                                                        <div className="position-relative shadow-sm" style={{ 
-                                                            borderRadius: '12px',
-                                                            overflow: 'hidden',
-                                                            aspectRatio: '1/1',
-                                                            transition: 'transform 0.2s'
-                                                        }}>
-                                                            <img 
-                                                                src={image} 
-                                                                alt={`Memory card ${index + 1}`}
-                                                                style={{ 
-                                                                    width: '100%', 
-                                                                    height: '100%', 
-                                                                    objectFit: 'cover' 
-                                                                }}
-                                                            />
-                                                            <button
-                                                                className="btn btn-danger position-absolute top-0 end-0 m-1 d-flex justify-content-center align-items-center"
-                                                                style={{ 
-                                                                    width: '24px', 
-                                                                    height: '24px', 
-                                                                    padding: 0, 
-                                                                    borderRadius: '50%',
-                                                                    fontSize: '10px',
-                                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                                                }}
-                                                                onClick={() => handleDeleteImage(index)}
-                                                                title="Eliminar imagen"
-                                                            >
-                                                                <FaTrash />
-                                                            </button>
-                                                            <div className="position-absolute bottom-0 start-0 m-1">
-                                                                <span className="badge bg-white text-dark shadow-sm rounded-pill" style={{ fontSize: '10px', opacity: 0.9 }}>
-                                                                    #{index + 1}
-                                                                </span>
-                                                            </div>
+                                        <div className="row g-3">
+                                            {/* Tarjeta de Carga */}
+                                            <div className="col-6 col-sm-4 col-md-3 col-lg-2">
+                                                <div 
+                                                    className="position-relative shadow-sm d-flex flex-column justify-content-center align-items-center" 
+                                                    style={{ 
+                                                        borderRadius: '15px',
+                                                        aspectRatio: '1/1',
+                                                        background: 'rgba(255, 255, 255, 0.8)',
+                                                        border: '2px dashed #cbd5e1',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s ease',
+                                                        padding: '10px'
+                                                    }}
+                                                    onMouseOver={(e) => {
+                                                        e.currentTarget.style.borderColor = '#94a3b8';
+                                                        e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
+                                                    }}
+                                                    onMouseOut={(e) => {
+                                                        e.currentTarget.style.borderColor = '#cbd5e1';
+                                                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.8)';
+                                                    }}
+                                                >
+                                                    {uploading ? (
+                                                        <div className="spinner-border text-primary" role="status">
+                                                            <span className="visually-hidden">Cargando...</span>
                                                         </div>
-                                                    </div>
-                                                ))}
+                                                    ) : (
+                                                        <>
+                                                            <div style={{ fontSize: '2rem', color: '#94a3b8', marginBottom: '8px' }}>
+                                                                <FaPlus />
+                                                            </div>
+                                                            <div className="d-flex w-100 justify-content-around mt-2">
+                                                                <button 
+                                                                    className="btn btn-sm btn-light rounded-circle shadow-sm"
+                                                                    onClick={handleSelectImage}
+                                                                    title="Subir desde PC"
+                                                                    style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                                                >
+                                                                    <FaUpload color="#64748b" />
+                                                                </button>
+                                                                <button 
+                                                                    className="btn btn-sm btn-light rounded-circle shadow-sm"
+                                                                    onClick={() => setShowUnsplash(true)}
+                                                                    title="Buscar en Unsplash"
+                                                                    style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                                                >
+                                                                    <FaImage color="#64748b" />
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
-                                        )}
+
+                                            {/* Tarjetas de Imágenes */}
+                                            {state.memoryImages.map((image, index) => (
+                                                <div key={index} className="col-6 col-sm-4 col-md-3 col-lg-2">
+                                                    <div className="position-relative shadow-sm" style={{ 
+                                                        borderRadius: '15px',
+                                                        overflow: 'hidden',
+                                                        aspectRatio: '1/1',
+                                                        transition: 'transform 0.2s',
+                                                        border: '2px solid white'
+                                                    }}>
+                                                        <img 
+                                                            src={image} 
+                                                            alt={`Memory card ${index + 1}`}
+                                                            style={{ 
+                                                                width: '100%', 
+                                                                height: '100%', 
+                                                                objectFit: 'cover' 
+                                                            }}
+                                                        />
+                                                        <button
+                                                            className="btn btn-danger position-absolute top-0 end-0 m-2 d-flex justify-content-center align-items-center"
+                                                            style={{ 
+                                                                width: '28px', 
+                                                                height: '28px', 
+                                                                padding: 0, 
+                                                                borderRadius: '50%',
+                                                                fontSize: '12px',
+                                                                boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                                                                background: 'rgba(220, 53, 69, 0.9)',
+                                                                border: 'none'
+                                                            }}
+                                                            onClick={() => handleDeleteImage(index)}
+                                                            title="Eliminar imagen"
+                                                        >
+                                                            <FaTrash />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                     
-                                    {state.memoryImages.length >= 2 && (
-                                        <div className="mt-3 text-center">
-                                            <span className="badge bg-success rounded-pill px-3 py-2 shadow-sm">
-                                                ✅ Listo para jugar
-                                            </span>
+                                    <div className="d-flex justify-content-between align-items-center mt-4 px-3">
+                                        <div className="alert alert-info border-0 shadow-sm m-0" style={{ 
+                                            borderRadius: '20px',
+                                            background: 'rgba(255, 255, 255, 0.9)',
+                                            color: '#0dcaf0',
+                                            fontSize: '0.9rem',
+                                            padding: '0.5rem 1.5rem'
+                                        }}>
+                                            <small>
+                                                <strong>Tip:</strong> Sube al menos 2 imágenes. El juego generará los pares automáticamente.
+                                            </small>
                                         </div>
-                                    )}
+                                        
+                                        <div style={{ color: '#475569', fontWeight: '500' }}>
+                                            Total: {state.memoryImages.length} imágenes
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

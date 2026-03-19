@@ -187,7 +187,7 @@ export default function GamificationPanel({
             onClick={togglePanel}
             title="Abrir Panel Lúdico"
           >
-            ⭐ Panel Lúdico
+            Panel Lúdico
           </button>
         )
       ) : null}
@@ -200,7 +200,7 @@ export default function GamificationPanel({
           title="Cerrar Panel"
           aria-label="Cerrar panel"
         >
-          ⬅️
+          Cerrar
         </button>
       )}
 
@@ -221,7 +221,7 @@ export default function GamificationPanel({
 
         {/* Selección de Grado */}
         <label htmlFor="grado" className={styles.label}>
-          🎓 Selecciona el grado:
+          Selecciona el grado:
         </label>
         <select
           id="grado"
@@ -236,7 +236,7 @@ export default function GamificationPanel({
 
         {/* Configuración de Tiempo */}
         <label htmlFor="tiempo" className={styles.label}>
-          ⏱️ Tiempo por actividad (segundos):
+          Tiempo por actividad (segundos):
         </label>
         <input
           type="number"
@@ -254,7 +254,7 @@ export default function GamificationPanel({
 
         {/* Configuración de Puntos */}
         <label htmlFor="puntos" className={styles.label}>
-          🏅 Puntos por respuesta correcta:
+          Puntos por respuesta correcta:
         </label>
         <input
           type="number"
@@ -272,7 +272,7 @@ export default function GamificationPanel({
 
         {/* Insignias */}
         <fieldset className={styles.fieldset} aria-label="Insignias disponibles">
-          <legend className={styles.legend}>🏆 Insignias de recompensa</legend>
+          <legend className={styles.legend}>Insignias de recompensa</legend>
           <div className={styles.insigniasContainer}>
             {INSIGNIAS.map((badge) => (
               <label key={badge.id} className={styles.checkboxLabel} htmlFor={`insignia-${badge.id}`}>
@@ -295,7 +295,7 @@ export default function GamificationPanel({
 
         {/* Misiones */}
         <fieldset className={styles.fieldset} aria-label="Misiones y Desafíos configurables">
-          <legend className={styles.legend}>🎮 Misiones y Desafíos</legend>
+          <legend className={styles.legend}>Misiones y Desafíos</legend>
           <div id="misiones-container">
             {MISIONES_POR_GRADO[config.gradeId]?.map((mision) => (
               <label key={mision.id} className={styles.checkboxLabel}>
@@ -320,7 +320,7 @@ export default function GamificationPanel({
             onChange={(e) => updateConfig({ voiceEnabled: e.target.checked })}
           />
           <label htmlFor="voice-toggle" style={{ cursor: "pointer" }}>
-            🔊 Voz activada
+            Voz activada
           </label>
         </div>
 

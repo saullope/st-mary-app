@@ -2,6 +2,7 @@
 
 import { useActivityEditor } from "@/context/ActivityEditorContext";
 import { saveActivity } from "@/app/actions/saveActivity";
+import { updateActivity } from "@/app/actions/updateActivity";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -13,25 +14,36 @@ export const SaveActivityButton = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      // 1. Preparar datos para el Server Action
-      // Aquí mapeamos el estado del contexto al formato que espera el action
-      const activityData = {
-        title: state.title,
-        type: state.activityType || "ludiquiz", // Fallback por seguridad
-        questions: state.questions,
-        config: state.config,
-        memoryImages: state.memoryImages
-      };
+      let result;
 
-      // 2. Llamar al Server Action
-      const result = await saveActivity(activityData);
+      // 1. Preparar datos para el Server Action
+      if (state.activityId) {
+        const updateData = {
+          activityId: state.activityId,
+          title: state.title,
+          type: state.activityType || "ludiquiz", // Fallback por seguridad
+          questions: state.questions,
+          config: state.config,
+          memoryImages: state.memoryImages
+        };
+        result = await updateActivity(updateData);
+      } else {
+        const createData = {
+          title: state.title,
+          type: state.activityType || "ludiquiz", // Fallback por seguridad
+          questions: state.questions,
+          config: state.config,
+          memoryImages: state.memoryImages
+        };
+        result = await saveActivity(createData);
+      }
 
       if (result.error) {
         alert(`Error: ${result.error}`);
         return;
       }
 
-      // 3. Descargar JSON (Modo Simulación)
+      // 2. Descargar JSON (Modo Simulación)
       if (result.data) {
         const jsonString = JSON.stringify(result.data, null, 2);
         const blob = new Blob([jsonString], { type: "application/json" });
@@ -45,12 +57,20 @@ export const SaveActivityButton = () => {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         
-        alert("¡Actividad guardada en Base de Datos! Respaldo JSON descargado.");
+        if (state.activityId) {
+          alert("¡Actividad actualizada en Base de Datos! Respaldo JSON descargado.");
+        } else {
+          alert("¡Actividad guardada en Base de Datos! Respaldo JSON descargado.");
+        }
       } else {
-        alert("Actividad guardada exitosamente en la Base de Datos.");
+        if (state.activityId) {
+          alert("Actividad actualizada exitosamente en la Base de Datos.");
+        } else {
+          alert("Actividad guardada exitosamente en la Base de Datos.");
+        }
       }
 
-      // 4. Limpiar y Redirigir
+      // 3. Limpiar y Redirigir
       resetEditor();
       router.push("/dashboard"); 
 
@@ -83,7 +103,7 @@ export const SaveActivityButton = () => {
         </>
       ) : (
         <>
-           Guardar
+           {state.activityId ? "Actualizar" : "Guardar"}
         </>
       )}
     </button>

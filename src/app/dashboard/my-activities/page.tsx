@@ -3,15 +3,12 @@ import getCurrentUser from "@/lib/auth/getCurrentUser";
 import getSession from "@/lib/auth/getSession";
 import { getActivityTypes, getUserActivities } from "@/services/activityService";
 import ActivityFilter from "@/components/dashboard/ActivityFilter";
-import CopyableCode from "@/components/dashboard/CopyableCode";
-import CreatorCard from "@/components/dashboard/CreatorCard";
 import ExportActivitiesButton from "@/components/dashboard/ExportActivitiesButton";
 import NewActivityButton from "@/components/dashboard/NewActivityButton";
 import PaginationControls from "@/components/dashboard/PaginationControls";
 import { redirect } from "next/navigation";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import Link from "next/link";
 import styles from "@/styles/pages/my-activities.module.css";
+import ActivityCard from "@/components/dashboard/ActivityCard";
 
 export const metadata: Metadata = {
   title: "Mis Actividades | LudiGame",
@@ -40,12 +37,11 @@ export default async function MyActivities({ searchParams }: PageProps) {
   const selectedTypeId = searchParams.typeId ? parseInt(searchParams.typeId) : undefined;
   const searchQuery = searchParams.search;
   const page = searchParams.page ? parseInt(searchParams.page) : 1;
-  const limit = searchParams.limit ? parseInt(searchParams.limit) : 5;
+  const limit = searchParams.limit ? parseInt(searchParams.limit) : 6; // Changed to 6 for a nicer grid
   
   const { activities, total } = await getUserActivities(user.id, selectedTypeId, searchQuery, page, limit);
 
   const getGradeLabel = (gradeName?: string) => {
-
     if (!gradeName) return "N/A";
     const lower = gradeName.toLowerCase();
     // Mapa de traducción flexible
@@ -82,82 +78,38 @@ export default async function MyActivities({ searchParams }: PageProps) {
         <ActivityFilter types={types} />
       </div>
 
-      {/* Tabla de Actividades */}
-      <div className={styles.tableCard}>
-        <div className="table-responsive">
-          <table className="table align-middle mb-0">
-            <thead className={styles.tableHeader}>
-              <tr>
-                <th scope="col" className="ps-4">Código</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Grado</th>
-                <th scope="col">Creador</th>
-                <th scope="col" className="text-end pe-4">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {activities.length > 0 ? (
-                activities.map((act: any) => (
-                  <tr key={act.activityId} className={styles.tableRow}>
-                    <td className={`${styles.tableCell} ps-4`}>
-                      <CopyableCode code={act.activityId} />
-                    </td>
-                    <td className={styles.tableCell}>
-                      <Link href={`/views/activity/${act.activityId}`} className="text-decoration-none">
-                        <span className={`fw-bold text-dark ${styles.activityLink}`}>
-                          {act.activity.activity_name}
-                        </span>
-                      </Link>
-                      <small className="text-muted">
-                        Creado el {new Date(act.activity.created_date).toLocaleDateString()}
-                      </small>
-                    </td>
-                    <td className={styles.tableCell}>
-                      <span className={`${styles.badgeType} ${getTypeBadgeClass(act.tipoActividadId)}`}>
-                        {act.tipoActividad.nombre}
-                      </span>
-                    </td>
-                    <td className={styles.tableCell}>{getGradeLabel(act.grado?.grade_type_name)}</td>
-                    <td className={styles.tableCell}>
-                      <CreatorCard 
-                        name={act.user.nombre} 
-                        email={act.user.email} 
-                        pictureUrl={session.picture}
-                        isAdmin={user.rol.nombre === 'ADMIN'}
-                      />
-                    </td>
-                    <td className={`${styles.tableCell} text-end pe-4`}>
-                      <button className={`${styles.actionButtonIcon} ${styles.editIcon}`} title="Editar">
-                        <FaEdit size={18} />
-                      </button>
-                      <button className={`${styles.actionButtonIcon} ${styles.deleteIcon}`} title="Eliminar">
-                        <FaTrash size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className={styles.emptyState}>
-                    <div className={styles.emptyStateIcon}>📂</div>
-                    No se encontraron actividades.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      {/* Grid de Actividades */}
+      {activities.length > 0 ? (
+        <div className={styles.activitiesGrid}>
+          {activities.map((act: any) => (
+            <ActivityCard 
+              key={act.activityId}
+              activity={act}
+              gradeLabel={getGradeLabel(act.grado?.grade_type_name)}
+              typeBadgeClass={getTypeBadgeClass(act.tipoActividadId)}
+              sessionPicture={session.picture}
+              isAdmin={user.rol.nombre === 'ADMIN'}
+            />
+          ))}
         </div>
-        
-        {/* Paginación */}
-        <div className="border-top p-2 bg-light">
+      ) : (
+        <div className={styles.emptyStateCard}>
+          <div className={styles.emptyStateIcon}>🚀</div>
+          <h3>¡Tu aventura está a punto de comenzar!</h3>
+          <p>Aún no has creado ninguna actividad. Crea tu primer desafío y sorprende a tus estudiantes con una experiencia de aprendizaje inolvidable.</p>
+        </div>
+      )}
+      
+      {/* Paginación */}
+      {activities.length > 0 && (
+        <div className={styles.paginationCard}>
           <PaginationControls 
             totalCount={total} 
             currentPage={page} 
             pageSize={limit} 
           />
         </div>
-      </div>
+      )}
     </div>
   );
 }

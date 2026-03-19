@@ -3,17 +3,15 @@
 import getSession from '@/lib/auth/getSession';
 import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Metadata } from 'next';
+import { ActivityEditorProvider } from "@/context/ActivityEditorContext";
+import { CreateNavbar } from "@/components/editor";
 
 // add metadata to the page
 export const metadata: Metadata = {
   title: 'LudiGame | Crear actividad',
   description: 'Create a new activity',
 };
-
-import { ActivityEditorProvider } from "@/context/ActivityEditorContext";
-import { CreateNavbar } from "@/components/editor";
 
 export default async function CreateActivityLayout({
     children,

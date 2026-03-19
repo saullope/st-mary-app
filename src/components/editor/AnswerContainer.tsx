@@ -20,6 +20,7 @@ interface AnswersContainerProps {
     onToggleCorrectAnswer: (id: number) => void;
     onUpdateAnswerImage?: (id: number, imageUrl: string | null) => void;
     onDeleteAnswer?: (id: number) => void;
+    onAnswerKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>, index: number) => void;
 }
 
 const symbols = ['🔺', '🔷', '🟢', '🟪'];
@@ -32,6 +33,7 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
     onToggleCorrectAnswer,
     onUpdateAnswerImage,
     onDeleteAnswer,
+    onAnswerKeyDown,
 }) => {
     const [showModal, setShowModal] = useState(false);
     const [activeAnswerId, setActiveAnswerId] = useState<number | null>(null);
@@ -99,7 +101,8 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                     placeholder={`Respuesta ${index + 1}`}
                                     value={answer.text}
                                     onChange={(e) => onUpdateAnswerText(answer.id, e.target.value)}
-                                    className={styles.actinput}
+                                    className={`${styles.actinput} answer-input-field`}
+                                    onKeyDown={(e) => onAnswerKeyDown && onAnswerKeyDown(e, index)}
                                 />
                             </div>
 

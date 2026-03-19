@@ -43,6 +43,8 @@ export const SelectGrade = ({ grades }: SelectGradeProps) => {
     const handleGradeSelected = (grade: string) => {
         setSelectedGrade(grade);
         setSelectedGradeState(grade); // Actualiza el estado para el useEffect
+        // Guarda el grado seleccionado en una cookie para que el servidor (ej. Plantillas) pueda leerlo inmediatamente
+        document.cookie = `selectedGrade=${grade}; path=/; max-age=31536000`;
     };
 
     // Guarda el grado en localStorage cuando cambia
@@ -59,7 +61,7 @@ export const SelectGrade = ({ grades }: SelectGradeProps) => {
                 const imageName = grade.image_url?.split('/').pop() || '';
                 const imagePath = grade.image_url
                     ? localImages[grade.image_url.split('/').pop() || ''] || `/api/images/${grade.image_url}`
-                    : imgPrimero.src;  // Imagen por defecto
+                    : '/images/bienvenida/Primero.png';  // Imagen por defecto
 
                     const imageStyle = gradeStyles[imageName] || styles['img-primero'];
                 

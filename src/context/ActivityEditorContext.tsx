@@ -16,6 +16,7 @@ export interface GamificationConfig {
   // Estado global del editor
 interface ActivityEditorState {
   // Datos Generales
+  activityId: number | null; // ID para saber si estamos editando
   title: string;
   activityType: "ludiquiz" | "ludimemory" | "trueorfalse" | null;
   
@@ -38,6 +39,7 @@ interface ActivityEditorContextType {
   state: ActivityEditorState;
   
   // Setters Generales
+  setActivityId: (id: number | null) => void;
   setTitle: (title: string) => void;
   setActivityType: (type: "ludiquiz" | "ludimemory" | "trueorfalse") => void;
   
@@ -58,6 +60,7 @@ interface ActivityEditorContextType {
 }
 
 const defaultState: ActivityEditorState = {
+  activityId: null,
   title: "Nueva Actividad",
   activityType: null,
   backgroundImage: "/images/theme/tema4.jpg",
@@ -79,6 +82,10 @@ const ActivityEditorContext = createContext<ActivityEditorContextType | undefine
 
 export const ActivityEditorProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<ActivityEditorState>(defaultState);
+
+  const setActivityId = useCallback((activityId: number | null) => {
+    setState((prev) => ({ ...prev, activityId }));
+  }, []);
 
   const setTitle = useCallback((title: string) => {
     setState((prev) => ({ ...prev, title }));
@@ -123,6 +130,7 @@ export const ActivityEditorProvider = ({ children }: { children: ReactNode }) =>
     <ActivityEditorContext.Provider
       value={{
         state,
+        setActivityId,
         setTitle,
         setActivityType,
         setBackgroundImage,

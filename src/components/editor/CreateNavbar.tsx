@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { TitleActivity, SaveActivityButton, ThemeButton, ThemeContainer } from "@/components/editor";
+import { TitleActivity, SaveActivityButton, ThemeButton, ThemeContainer, InitialTitleModal } from "@/components/editor";
 import { useActivityEditor } from "@/context/ActivityEditorContext";
 import styles from './CreateNavbar.module.css';
 import { FaExpand, FaCompress, FaStar, FaEye, FaGamepad } from "react-icons/fa6";
@@ -97,6 +97,7 @@ export const CreateNavbar = () => {
                 onToggle={() => setGamificationOpen(!gamificationOpen)}
                 trigger={null} // We render the trigger in the Navbar manually
             />
+            <InitialTitleModal />
         </>
     );
 };

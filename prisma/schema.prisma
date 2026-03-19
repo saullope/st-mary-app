@@ -34,6 +34,7 @@ model ACTIVITY {
   created_date    DateTime       @default(now())
   modified_date   DateTime       @default(now())
   image_url       String?        @db.VarChar(100)
+  isTemplate      Boolean        @default(false) @map("isTemplate")
   ludiactividades LudiActividad?
 }
 
@@ -44,6 +45,8 @@ model LudiActividad {
   gradoId         Int?                 @map("grado_id")
   temaId          BigInt?              @map("tema_id")
   publico         Boolean              @default(false, map: "DF_LUDI_ACT_publico")
+  estatus         Boolean              @default(true) @map("estatus")
+
   activity        ACTIVITY             @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_ACTI__activ__32767D0B")
   user            LudiUser             @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_LudiActividad_User")
   grado           LUDI_COMMON_GRADE?   @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__grado__3552E9B6")

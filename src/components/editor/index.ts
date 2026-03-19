@@ -14,3 +14,4 @@ export { AnswerContainer } from './AnswerContainer';
 export { QuestionListItem } from './QuestionListItem';
 export { SaveActivityButton } from './SaveActivityButton';
 export { CreateNavbar } from './CreateNavbar';
+export { InitialTitleModal } from './InitialTitleModal';

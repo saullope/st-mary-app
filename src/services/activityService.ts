@@ -15,6 +15,10 @@ export async function getUserActivities(userId: string, typeId?: number, searchQ
   try {
     const whereClause: any = {
       userId: userId,
+      estatus: true, // Filtrar solo actividades activas
+      activity: {
+        isTemplate: false // Excluir plantillas del dashboard
+      }
     };
 
     if (typeId) {
@@ -23,6 +27,7 @@ export async function getUserActivities(userId: string, typeId?: number, searchQ
 
     if (searchQuery) {
       whereClause.activity = {
+        ...whereClause.activity,
         activity_name: {
           contains: searchQuery
         }
@@ -65,8 +70,11 @@ export async function getUserActivities(userId: string, typeId?: number, searchQ
 
 export async function getActivityById(activityId: number) {
   try {
-    const activity = await prisma.ludiActividad.findUnique({
-      where: { activityId: activityId },
+    const activity = await prisma.ludiActividad.findFirst({
+      where: { 
+        activityId: activityId,
+        estatus: true // Asegurar que no se obtengan actividades borradas lógicamente
+      },
       include: {
         tipoActividad: true,
         grado: true,

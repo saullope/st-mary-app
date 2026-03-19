@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/pages/sidebar.module.css';
-import { FaHome, FaPlus, FaListOl, FaFileAlt } from 'react-icons/fa';
+import { FaHome, FaPlus, FaListOl, FaFileAlt, FaClone } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from "next-intl";
 
@@ -16,6 +16,7 @@ export const SidebarDashboard = () => {
         { href: '/dashboard/create-activity', icon: FaPlus, text: t('createActivity') },
         { href: '/dashboard/my-activities', icon: FaListOl, text: t('myActivities') },
         { href: '/dashboard/reports', icon: FaFileAlt, text: t('reports') },
+        { href: '/dashboard/templates', icon: FaClone, text: 'Plantillas' }, // Temporarily hardcoded text, could add translation later
     ];
 
     return (

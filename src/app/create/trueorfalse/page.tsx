@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { getActivityForEdit } from '@/app/actions/getActivityForEdit';
 import { ModalMultimedia, LoadMultimediaFile, QuestionListItem } from "@/components/editor";
 import style2 from '@/styles/pages/ludiquiz.module.css'; // Using the same style as LudiQuiz for consistency
 import { TrueOrFalseQuestion } from '@/lib/types/';
@@ -8,7 +10,9 @@ import { useActivityEditor } from "@/context/ActivityEditorContext";
 
 export default function TrueOrFalse() {
     // Contexto Global
-    const { state, setActivityType, setQuestions } = useActivityEditor();
+    const { state, setActivityType, setQuestions, setTitle, updateConfig, setActivityId, setBackgroundImage } = useActivityEditor();
+    const searchParams = useSearchParams();
+    const [isLoading, setIsLoading] = useState(false);
     const { backgroundImage, fullScreen } = state;
 
     useEffect(() => {
@@ -19,10 +23,12 @@ export default function TrueOrFalse() {
     const [showYoutube, setShowYoutube] = useState(false);
     const [showUnsplash, setShowUnsplash] = useState(false);
     const [showFreesound, setShowFreesound] = useState(false);
+    const [showErrors, setShowErrors] = useState(false);
     
     // Estado de la pregunta en edición
     const [questionId, setQuestionId] = useState(1);
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
     
     // Estado local sincronizado
     const [localQuestions, setLocalQuestions] = useState<TrueOrFalseQuestion[]>([]);
@@ -34,6 +40,33 @@ export default function TrueOrFalse() {
         mediaType: null,
         mediaUrl: null,
     });
+
+    
+    useEffect(() => {
+        const loadActivity = async () => {
+            const idParam = searchParams.get("id");
+            if (idParam) {
+                setIsLoading(true);
+                const result = await getActivityForEdit(parseInt(idParam));
+                if (result.success && result.data) {
+                    setActivityId(result.data.activityId);
+                    setTitle(result.data.title);
+                    updateConfig(result.data.config);
+                    setBackgroundImage(result.data.backgroundImage);
+                    
+                    if (result.data.questions && result.data.questions.length > 0) {
+                        const questions = result.data.questions as TrueOrFalseQuestion[];
+                        setLocalQuestions(questions);
+                        const maxId = Math.max(...questions.map(q => q.id));
+                        setQuestionId(maxId + 1);
+                        setNewQuestion(prev => ({ ...prev, id: maxId + 1 }));
+                    }
+                }
+                setIsLoading(false);
+            }
+        };
+        loadActivity();
+    }, [searchParams, setActivityId, setTitle, updateConfig, setBackgroundImage]);
 
     // --- Sincronización en tiempo real con el contexto ---
     useEffect(() => {
@@ -61,6 +94,19 @@ export default function TrueOrFalse() {
         }
 
         setQuestions(questionsToSave);
+
+        // --- Actualizar estado visual de guardado ---
+        if (questionsToSave.length === 0) {
+            setSaveStatus('idle');
+            return;
+        }
+
+        setSaveStatus('saving');
+        const timeoutId = setTimeout(() => {
+            setSaveStatus('saved');
+        }, 800);
+        return () => clearTimeout(timeoutId);
+
     }, [localQuestions, newQuestion, editingId, setQuestions]);
     // --- Fin sincronización ---
 
@@ -68,13 +114,32 @@ export default function TrueOrFalse() {
     const handleShowYoutube = () => setShowYoutube(!showYoutube);
     const handleShowFreesound = () => setShowFreesound(!showFreesound);
 
-    const handleSelectMediaNewQuestion = (type: string, url: string) => {
-        setNewQuestion({ ...newQuestion, mediaType: type as "image" | "youtube" | "audio" | "video", mediaUrl: url });
+    // --- Validación Dinámica ---
+    const isQuestionTextValid = newQuestion.text.trim().length > 0;
+
+    const isAnswerSelected = newQuestion.correctAnswer !== null;
+    const isFormValid = isQuestionTextValid && isAnswerSelected;
+
+    const triggerValidation = () => {
+        setShowErrors(true);
+        setTimeout(() => setShowErrors(false), 3000);
+    };
+
+    const handleQuestionKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.ctrlKey && event.key === 'Enter') {
+            event.preventDefault();
+            if (isFormValid) {
+                if (editingId !== null) handleUpdateQuestion();
+                else handleAddQuestion();
+            } else {
+                triggerValidation();
+            }
+        }
     };
 
     const handleAddQuestion = () => {
-        if (!newQuestion.text.trim() || newQuestion.correctAnswer === null) {
-            alert("Por favor completa la pregunta y selecciona una respuesta.");
+        if (!isFormValid) {
+            triggerValidation();
             return;
         }
 
@@ -97,10 +162,10 @@ export default function TrueOrFalse() {
     };
 
     const handleUpdateQuestion = () => {
-         if (!newQuestion.text.trim() || newQuestion.correctAnswer === null) {
-            alert("Por favor completa la pregunta y selecciona una respuesta.");
+         if (!isFormValid) {
+            triggerValidation();
             return;
-        }
+         }
 
         setLocalQuestions(prev => prev.map(q => 
             q.id === editingId 
@@ -119,6 +184,13 @@ export default function TrueOrFalse() {
         });
     }
 
+    const handleDeleteQuestion = (id: number) => {
+        setLocalQuestions(prev => prev.filter(q => q.id !== id));
+        if (editingId === id) {
+            handleCancelEdit();
+        }
+    };
+
     const handleEditQuestion = (id: number) => {
         const q = localQuestions.find(q => q.id === id);
         if (!q) return;
@@ -133,6 +205,10 @@ export default function TrueOrFalse() {
         });
     };
 
+    const handleSelectMediaNewQuestion = (type: string, url: string) => {
+        setNewQuestion({ ...newQuestion, mediaType: type as "image" | "youtube" | "audio" | "video", mediaUrl: url });
+    };
+
     const handleCancelEdit = () => {
         setEditingId(null);
         setNewQuestion({
@@ -142,30 +218,6 @@ export default function TrueOrFalse() {
             mediaType: null,
             mediaUrl: null,
         });
-    };
-
-    const handleSelectFile = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*,video/*,audio/*'; 
-        input.onchange = (event) => {
-            const file = (event.target as HTMLInputElement).files?.[0];
-            if (file) {
-                const fileType = file.type.startsWith('image/')
-                    ? 'image'
-                    : file.type.startsWith('video/')
-                        ? 'video'
-                        : file.type.startsWith('audio/')
-                            ? 'audio'
-                            : null;
-
-                if (fileType) {
-                    const fileURL = URL.createObjectURL(file); 
-                    handleSelectMediaNewQuestion(fileType, fileURL); 
-                }
-            }
-        };
-        input.click(); 
     };
 
     return (
@@ -183,8 +235,10 @@ export default function TrueOrFalse() {
                                     mediaType={q.mediaType}
                                     mediaUrl={q.mediaUrl}
                                     correctAnswer={q.correctAnswer}
+                                    activityType="trueorfalse"
                                     isSelected={editingId === q.id}
                                     onClick={() => handleEditQuestion(q.id)}
+                                    onDelete={() => handleDeleteQuestion(q.id)}
                                 />
                             ))}
                             {!editingId && (
@@ -194,6 +248,7 @@ export default function TrueOrFalse() {
                                     mediaType={newQuestion.mediaType}
                                     mediaUrl={newQuestion.mediaUrl}
                                     correctAnswer={newQuestion.correctAnswer ?? "false"}
+                                    activityType="trueorfalse"
                                     isSelected={true}
                                     onClick={() => {}}
                                 />
@@ -234,7 +289,7 @@ export default function TrueOrFalse() {
                                         fontFamily: 'Comic Sans MS, cursive'
                                     }}
                                 >
-                                    ❌ Cancelar Edición
+                                    Cancelar Edición
                                 </button>
                             )}
                         </div>
@@ -269,25 +324,71 @@ export default function TrueOrFalse() {
                     
                     <div className="col d-flex flex-column justify-content-center align-items-center position-relative" style={{ zIndex: 2, padding: '2rem' }}>
                         <div className={style2.container}>
-                            <h1 className={style2.acth1} style={{ 
-                                fontFamily: 'Comic Sans MS, cursive',
-                                fontSize: '2.5rem',
-                                fontWeight: 'bold',
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                                color: '#ffffff',
-                                marginBottom: '2rem'
-                            }}>Verdadero o Falso</h1>
+                            <div className="d-flex flex-column align-items-center mb-4 position-relative w-100">
+                                <h1 className={style2.acth1} style={{ 
+                                    fontFamily: 'Comic Sans MS, cursive',
+                                    fontSize: '2.5rem',
+                                    fontWeight: 'bold',
+                                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                                    color: '#ffffff',
+                                    marginBottom: '0.5rem'
+                                }}>Verdadero o Falso</h1>
+                                
+                                {/* Indicador de autoguardado */}
+                                <div style={{
+                                    height: '24px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    opacity: saveStatus === 'idle' ? 0 : 1,
+                                    transition: 'opacity 0.3s ease',
+                                    background: 'rgba(0, 0, 0, 0.4)',
+                                    padding: '4px 12px',
+                                    borderRadius: '12px',
+                                    color: '#e2e8f0',
+                                    fontSize: '0.8rem',
+                                    backdropFilter: 'blur(2px)',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                }}>
+                                            {saveStatus === 'saving' ? (
+                                                <>
+                                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" style={{ width: '12px', height: '12px', borderWidth: '0.15em', marginRight: '4px' }}></span>
+                                                    Guardando...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '2px' }}>
+                                                        <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                                                    </svg>
+                                                    Borrador guardado
+                                                </>
+                                            )}
+                                </div>
+                            </div>
                             
                             <div className={style2.card}>
-                                <input
-                                    type="text"
-                                    className={style2["question-input"]}
-                                    placeholder="Escribe tu pregunta aquí..."
-                                    value={newQuestion.text}
-                                    onChange={(e) =>
-                                        setNewQuestion({ ...newQuestion, text: e.target.value })
-                                    }
-                                />
+                                <div style={{ position: 'relative', width: '100%' }}>
+                                    {showErrors && !isQuestionTextValid && (
+                                        <div style={{
+                                            position: 'absolute', bottom: 'calc(100% + 5px)', left: '50%', transform: 'translateX(-50%)',
+                                            background: 'rgba(50, 50, 50, 0.95)', color: 'white', padding: '6px 12px',
+                                            borderRadius: '6px', fontSize: '0.8rem', zIndex: 100, whiteSpace: 'nowrap',
+                                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                                        }}>
+                                            Falta escribir la afirmación
+                                        </div>
+                                    )}
+                                    <input
+                                        type="text"
+                                        className={style2["question-input"]}
+                                        placeholder="Escribe tu afirmación aquí..."
+                                        value={newQuestion.text}
+                                        onChange={(e) =>
+                                            setNewQuestion({ ...newQuestion, text: e.target.value })
+                                        }
+                                        onKeyDown={handleQuestionKeyDown}
+                                    />
+                                </div>
 
                                 <LoadMultimediaFile
                                     type={newQuestion.mediaType}
@@ -295,18 +396,24 @@ export default function TrueOrFalse() {
                                     onRemove={() =>
                                         setNewQuestion({ ...newQuestion, mediaType: null, mediaUrl: null })
                                     }
-                                    onUpload={handleSelectFile}
+                                    onUpload={handleSelectMediaNewQuestion}
                                     onUnsplash={handleShowUnsplash}
                                     onYoutube={handleShowYoutube}
                                     onFreesound={handleShowFreesound}
                                     styleComponent={"trueorfalse"} // Note: passing 'trueorfalse' although we use style2 from ludiquiz might need checking, but style2 seems generic enough here or we reuse it. Reusing ludiquiz styles for consistency.
                                 />
 
-                                {/* Input oculto para subir archivos */}
-                                <input type="file" id="file-input"
-                                    accept="image/*,video/*,audio/*" hidden />
-
-                                <div className="d-flex justify-content-center gap-4 mt-4 w-100 flex-wrap">
+                                <div className="d-flex justify-content-center gap-4 mt-4 w-100 flex-wrap" style={{ position: 'relative' }}>
+                                    {showErrors && !isAnswerSelected && (
+                                        <div style={{
+                                            position: 'absolute', top: '-35px', left: '50%', transform: 'translateX(-50%)',
+                                            background: 'rgba(50, 50, 50, 0.95)', color: 'white', padding: '6px 12px',
+                                            borderRadius: '6px', fontSize: '0.8rem', zIndex: 100, whiteSpace: 'nowrap',
+                                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                                        }}>
+                                            Marca si es Verdadero o Falso
+                                        </div>
+                                    )}
                                     <button
                                         onClick={() =>
                                             setNewQuestion({ ...newQuestion, correctAnswer: "true" })
@@ -341,7 +448,7 @@ export default function TrueOrFalse() {
                                             }
                                         }}
                                     >
-                                        🔷 Verdadero
+                                        Verdadero
                                     </button>
                                     <button
                                         onClick={() =>
@@ -377,15 +484,15 @@ export default function TrueOrFalse() {
                                             }
                                         }}
                                     >
-                                        ⚠️ Falso
+                                        Falso
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Tip del tema */}
-                        <div className="mt-4">
-                             <div className="alert alert-info border-0 shadow-sm d-inline-block" style={{ 
+                        {/* Tip del tema y atajos */}
+                        <div className="mt-4 d-flex flex-column gap-2 align-items-center">
+                             <div className="alert alert-info border-0 shadow-sm d-inline-block m-0" style={{ 
                                 borderRadius: '20px',
                                 background: 'rgba(255, 255, 255, 0.9)',
                                 color: '#0dcaf0',
@@ -393,7 +500,18 @@ export default function TrueOrFalse() {
                                 padding: '0.5rem 1.5rem'
                             }}>
                                 <small>
-                                    💡 <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
+                                    <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
+                                </small>
+                            </div>
+                            <div className="alert alert-secondary border-0 shadow-sm d-inline-block m-0" style={{ 
+                                borderRadius: '20px',
+                                background: 'rgba(0, 0, 0, 0.6)',
+                                color: '#e2e8f0',
+                                fontSize: '0.85rem',
+                                padding: '0.4rem 1.2rem'
+                            }}>
+                                <small>
+                                    <strong>Atajo de teclado:</strong> <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para Guardar Cambios
                                 </small>
                             </div>
                         </div>

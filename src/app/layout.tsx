@@ -2,7 +2,8 @@ import {NextIntlClientProvider} from 'next-intl';
 import {getMessages} from 'next-intl/server';
 import { ReduxProvider } from '@/components/ReduxProvider';
 import { SessionInitializer } from '@/components/SessionInitializer';
-import getSession from '@/lib/auth/getSession';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@/styles/globals.css";
 
 export default async function LocaleLayout({
   children,
