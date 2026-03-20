@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FaPlay, FaPenToSquare, FaShareNodes, FaGamepad, FaListCheck, FaBrain, FaCheck } from "react-icons/fa6";
+import { FaPlay, FaPenToSquare, FaShareNodes, FaGamepad, FaListCheck, FaBrain, FaCheck, FaRocket } from "react-icons/fa6";
 import styles from "@/styles/pages/my-activities.module.css";
 import { DeleteActivityButton } from "@/app/dashboard/my-activities/DeleteActivityButton";
+import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
 import CreatorCard from "./CreatorCard";
 
 interface ActivityCardProps {
@@ -17,6 +18,19 @@ interface ActivityCardProps {
 
 export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, sessionPicture, isAdmin }: ActivityCardProps) {
   const [copied, setCopied] = useState(false);
+  const [sessionPin, setSessionPin] = useState<string | null>(null);
+  const [isLaunching, setIsLaunching] = useState(false);
+
+  const handleLaunch = async () => {
+    setIsLaunching(true);
+    const result = await createGameSession(activity.activityId);
+    if (result.success) {
+        setSessionPin(result.pin || "");
+    } else {
+        alert(result.error);
+    }
+    setIsLaunching(false);
+  };
 
   const handleShare = async () => {
     // Generate the URL to copy
@@ -83,6 +97,12 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
       </div>
 
       <div className={styles.cardFooter}>
+        {sessionPin ? (
+            <div className="w-100 text-center p-2 bg-success text-white rounded mb-2 animate__animated animate__flipInX">
+                <small className="d-block">CÓDIGO PARA ALUMNOS:</small>
+                <strong style={{ fontSize: '1.5rem', letterSpacing: '4px' }}>{sessionPin}</strong>
+            </div>
+        ) : null}
         <div className={styles.actionGroup}>
           <button 
             className={`${styles.actionButtonIcon} ${styles.shareIcon}`} 
@@ -90,6 +110,19 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             title="Copiar enlace"
           >
             {copied ? <FaCheck size={18} /> : <FaShareNodes size={18} />}
+          </button>
+          <button 
+            className={`${styles.actionButtonIcon} ${styles.rocketIcon}`} 
+            onClick={handleLaunch}
+            disabled={isLaunching}
+            title="Lanzar Partida (Generar PIN)"
+            style={{ backgroundColor: '#ff9f43', color: 'white' }}
+          >
+            {isLaunching ? (
+                <span className="spinner-border spinner-border-sm" />
+            ) : (
+                <FaRocket size={18} />
+            )}
           </button>
           <Link 
             href={`/views/activity/${activity.activityId}`} 

@@ -14,29 +14,20 @@ export const SaveActivityButton = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      let result;
-
       // 1. Preparar datos para el Server Action
-      if (state.activityId) {
-        const updateData = {
-          activityId: state.activityId,
-          title: state.title,
-          type: state.activityType || "ludiquiz", // Fallback por seguridad
-          questions: state.questions,
-          config: state.config,
-          memoryImages: state.memoryImages
-        };
-        result = await updateActivity(updateData);
-      } else {
-        const createData = {
-          title: state.title,
-          type: state.activityType || "ludiquiz", // Fallback por seguridad
-          questions: state.questions,
-          config: state.config,
-          memoryImages: state.memoryImages
-        };
-        result = await saveActivity(createData);
-      }
+      const activityData = {
+        activityId: state.activityId || undefined,
+        title: state.title,
+        type: state.activityType || "ludiquiz",
+        questions: state.questions,
+        config: state.config,
+        backgroundImage: state.backgroundImage,
+        memoryImages: state.memoryImages
+      };
+
+      const result: any = state.activityId 
+        ? await updateActivity(activityData as any)
+        : await saveActivity(activityData as any);
 
       if (result.error) {
         alert(`Error: ${result.error}`);
@@ -72,7 +63,7 @@ export const SaveActivityButton = () => {
 
       // 3. Limpiar y Redirigir
       resetEditor();
-      router.push("/dashboard"); 
+      router.push("/dashboard/my-activities"); 
 
     } catch (error) {
       console.error("Error saving:", error);

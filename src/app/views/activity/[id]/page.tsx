@@ -7,6 +7,7 @@ import { FaArrowLeft, FaClock, FaStar, FaUser, FaCalendar, FaEdit, FaCheck, FaTi
 import UseTemplateButton from "./UseTemplateButton";
 import { ShareActivityButton } from "./ShareActivityButton";
 import { DeleteActivityViewButton } from "./DeleteActivityViewButton";
+import { LaunchSessionButton } from "./LaunchSessionButton";
 import styles from "@/styles/pages/view-activity.module.css";
 import MultimediaDisplay from "@/components/activity/MultimediaDisplay";
 
@@ -86,6 +87,7 @@ export default async function ActivityDetailView({ params }: PageProps) {
           <div className="d-flex gap-2">
             {isOwner && !isTemplate && (
               <>
+                <LaunchSessionButton activityId={activity.activityId} />
                 <ShareActivityButton activityId={activity.activityId} />
                 <Link 
                   href={editRoute} 
@@ -102,11 +104,14 @@ export default async function ActivityDetailView({ params }: PageProps) {
               </>
             )}
             {isTemplate && user && (
-              <UseTemplateButton 
-                templateActivityId={activity.activityId} 
-                tipoActividadId={activity.tipoActividadId} 
-                userId={user.id} 
-              />
+              <>
+                <LaunchSessionButton activityId={activity.activityId} />
+                <UseTemplateButton 
+                    templateActivityId={activity.activityId} 
+                    tipoActividadId={activity.tipoActividadId} 
+                    userId={user.id} 
+                />
+              </>
             )}
           </div>
         </div>
@@ -199,8 +204,8 @@ export default async function ActivityDetailView({ params }: PageProps) {
                       {pregunta.opciones.map((opcion) => {
                         const isTrueFalse = activity.tipoActividadId === 2;
                         const displayContent = isTrueFalse
-                          ? (opcion.esCorrecta ? "Verdadero" : "Falso")
-                          : opcion.texto;
+                          ? (opcion.indice === 1 ? "Verdadero" : "Falso")
+                          : (opcion.texto || (opcion.indice === 1 ? "Verdadero" : "Falso"));
 
                         return (
                           <div 

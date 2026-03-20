@@ -12,6 +12,7 @@ interface UpdateActivityData {
   type: "ludiquiz" | "ludimemory" | "trueorfalse";
   questions: (LudiQuizQuestion | TrueOrFalseQuestion)[];
   config: GamificationConfig;
+  backgroundImage?: string;
   memoryImages?: string[];
 }
 
@@ -46,16 +47,16 @@ export async function updateActivity(data: UpdateActivityData) {
         data: {
           activity_name: data.title,
           modified_date: new Date()
-        }
+        } as any
       });
 
       // 3. Update LudiActividad
       const ludiActivity = await tx.ludiActividad.update({
         where: { activityId: data.activityId },
         data: {
-          tipoActividadId: tipoActividadId,
-          gradoId: data.config.gradeId,
-          temaId: BigInt(temaId),
+          tipoActividad: { connect: { id: tipoActividadId } },
+          grado: data.config.gradeId ? { connect: { id: data.config.gradeId } } : undefined,
+          tema: { connect: { id: BigInt(temaId) } },
         }
       });
 
@@ -67,142 +68,157 @@ export async function updateActivity(data: UpdateActivityData) {
           tiempoPreguntaMs: data.config.timeLimit * 1000,
           ajustesJson: JSON.stringify({
             badges: data.config.selectedBadges,
-            missions: data.config.selectedMissions
+            missions: data.config.selectedMissions,
+            backgroundImage: data.backgroundImage
           })
         },
         create: {
-          activityId: data.activityId,
+          activity: { connect: { activityId: data.activityId } },
           puntajeBase: data.config.pointsPerCorrect,
           tiempoPreguntaMs: data.config.timeLimit * 1000,
           ajustesJson: JSON.stringify({
             badges: data.config.selectedBadges,
-            missions: data.config.selectedMissions
+            missions: data.config.selectedMissions,
+            backgroundImage: data.backgroundImage
           })
         }
       });
 
-      // 5. Clean up old content
-      // Due to referential integrity and cascading deletes, deleting Preguntas and Parejas 
-      // might automatically delete options and cards depending on Prisma schema setup.
-      // However, it's safer to explicitly delete them if cascade is not configured, 
-      // but assuming they are linked to ActivityId.
-      
-      if (existingActivity.tipoActividadId === 3 || data.type === 'ludimemory') {
-          // It was or is memory, clear memory stuff
-          await tx.ludiMemoriaPareja.deleteMany({
-              where: { activityId: data.activityId }
-          });
-      }
-      
-      if (existingActivity.tipoActividadId !== 3 || data.type !== 'ludimemory') {
-          // It was or is quiz/tf, clear questions
-          // Delete questions will ideally cascade to options and resources
-          // Let's check Prisma schema for cascades... actually we can just delete questions
-          await tx.ludiPregunta.deleteMany({
-             where: { activityId: data.activityId }
-          });
-      }
-
-      // 6. Create New Content
+      // 5. Smart Content Update
       if (data.type === 'ludimemory' && data.memoryImages) {
-        for (const imgUrl of data.memoryImages) {
-            const resourceId = await getOrCreateResource(tx, imgUrl, 'image');
-            
-            const pareja = await tx.ludiMemoriaPareja.create({
-                data: {
-                    activityId: ludiActivity.activityId,
-                    etiqueta: "Pareja"
-                }
-            });
-
-            await tx.ludiMemoriaTarjeta.createMany({
-                data: [
-                    { parejaId: pareja.id, recursoId: resourceId, lado: 'A' },
-                    { parejaId: pareja.id, recursoId: resourceId, lado: 'B' }
-                ]
-            });
-        }
+          await tx.ludiMemoriaPareja.deleteMany({ where: { activityId: data.activityId } });
+          for (const imgUrl of data.memoryImages) {
+              const resourceId = await getOrCreateResource(tx, imgUrl, 'image');
+              const pareja = await tx.ludiMemoriaPareja.create({
+                  data: {
+                      activity: { connect: { activityId: ludiActivity.activityId } },
+                      etiqueta: "Pareja"
+                  }
+              });
+              await tx.ludiMemoriaTarjeta.createMany({
+                  data: [
+                      { parejaId: pareja.id, recursoId: resourceId, lado: 'A' },
+                      { parejaId: pareja.id, recursoId: resourceId, lado: 'B' }
+                  ]
+              });
+          }
       } else {
-        let i = 1;
-        for (const q of data.questions) {
-          const newQuestion = await tx.ludiPregunta.create({
-            data: {
-              activityId: ludiActivity.activityId,
-              numero: i,
-              enunciado: q.text,
-              tipoActividadId: tipoActividadId,
-              puntaje: data.config.pointsPerCorrect,
-              tiempoLimiteMs: data.config.timeLimit * 1000
-            }
+          const incomingQuestionIds = data.questions.map(q => q.id).filter(id => id && id > 100);
+
+          await tx.ludiPregunta.deleteMany({
+              where: {
+                  activityId: data.activityId,
+                  id: { notIn: incomingQuestionIds as any }
+              }
           });
 
-          if (q.mediaUrl) {
-             const resourceId = await getOrCreateResource(tx, q.mediaUrl, q.mediaType || 'image');
-             await tx.ludiPreguntaRecurso.create({
-                data: {
-                    preguntaId: newQuestion.id,
-                    recursoId: resourceId,
-                    rol: 'principal'
-                }
-             });
-          }
+          let i = 1;
+          for (const q of data.questions) {
+              const isExisting = q.id && q.id > 100;
+              
+              if (isExisting) {
+                  const updatedQuestion = await tx.ludiPregunta.update({
+                      where: { id: BigInt(q.id!) },
+                      data: {
+                          numero: i,
+                          enunciado: q.text,
+                          puntaje: data.config.pointsPerCorrect,
+                          tiempoLimiteMs: data.config.timeLimit * 1000
+                      }
+                  });
 
-          if ('answers' in q) {
-             for (const ans of (q as LudiQuizQuestion).answers) {
-                await tx.ludiOpcion.create({
-                    data: {
-                        preguntaId: newQuestion.id,
-                        indice: ans.id,
-                        texto: ans.text,
-                        esCorrecta: ans.isCorrect
-                    }
-                });
-             }
-          } else {
-             const tfQ = q as TrueOrFalseQuestion;
-             await tx.ludiOpcion.createMany({
-                data: [
-                    { preguntaId: newQuestion.id, indice: 1, texto: "Verdadero", esCorrecta: tfQ.correctAnswer === "true" },
-                    { preguntaId: newQuestion.id, indice: 2, texto: "Falso", esCorrecta: tfQ.correctAnswer === "false" }
-                ]
-             });
+                  if ('answers' in q) {
+                      const quizQ = q as LudiQuizQuestion;
+                      const incomingOptionIds = quizQ.answers.map(a => a.id).filter(id => id && id > 100);
+
+                      await tx.ludiOpcion.deleteMany({
+                          where: { preguntaId: updatedQuestion.id, id: { notIn: incomingOptionIds as any } }
+                      });
+
+                      for (const ans of quizQ.answers) {
+                          if (ans.id && ans.id > 100) {
+                              await tx.ludiOpcion.update({
+                                  where: { id: BigInt(ans.id) },
+                                  data: { texto: ans.text, esCorrecta: ans.isCorrect }
+                              });
+                          } else {
+                              await tx.ludiOpcion.create({
+                                  data: { preguntaId: updatedQuestion.id, indice: ans.id, texto: ans.text, esCorrecta: ans.isCorrect }
+                              });
+                          }
+                      }
+                  } else {
+                      const tfQ = q as TrueOrFalseQuestion;
+                      const currentOptions = await tx.ludiOpcion.findMany({ where: { preguntaId: updatedQuestion.id } });
+                      for (const opt of currentOptions) {
+                          await tx.ludiOpcion.update({
+                              where: { id: opt.id },
+                              data: { esCorrecta: (opt.indice === 1 && tfQ.correctAnswer === "true") || (opt.indice === 2 && tfQ.correctAnswer === "false") }
+                          });
+                      }
+                  }
+
+                  await tx.ludiPreguntaRecurso.deleteMany({ where: { preguntaId: updatedQuestion.id } });
+                  if (q.mediaUrl) {
+                      const resourceId = await getOrCreateResource(tx, q.mediaUrl, q.mediaType || 'image');
+                      await tx.ludiPreguntaRecurso.create({
+                          data: {
+                              pregunta: { connect: { id: updatedQuestion.id } },
+                              recurso: { connect: { id: resourceId } },
+                              rol: 'principal'
+                          }
+                      });
+                  }
+              } else {
+                  const newQuestion = await tx.ludiPregunta.create({
+                      data: {
+                          activity: { connect: { activityId: ludiActivity.activityId } },
+                          numero: i,
+                          enunciado: q.text,
+                          tipoActividad: { connect: { id: tipoActividadId } },
+                          puntaje: data.config.pointsPerCorrect,
+                          tiempoLimiteMs: data.config.timeLimit * 1000
+                      }
+                  });
+
+                  if (q.mediaUrl) {
+                    const resourceId = await getOrCreateResource(tx, q.mediaUrl, q.mediaType || 'image');
+                    await tx.ludiPreguntaRecurso.create({
+                        data: {
+                            pregunta: { connect: { id: newQuestion.id } },
+                            recurso: { connect: { id: resourceId } },
+                            rol: 'principal'
+                        }
+                    });
+                  }
+
+                  if ('answers' in q) {
+                      for (const ans of (q as LudiQuizQuestion).answers) {
+                          await tx.ludiOpcion.create({
+                              data: { preguntaId: newQuestion.id, indice: ans.id, texto: ans.text, esCorrecta: ans.isCorrect }
+                          });
+                      }
+                  } else {
+                      const tfQ = q as TrueOrFalseQuestion;
+                      await tx.ludiOpcion.createMany({
+                          data: [
+                              { preguntaId: newQuestion.id, indice: 1, texto: "Verdadero", esCorrecta: tfQ.correctAnswer === "true" },
+                              { preguntaId: newQuestion.id, indice: 2, texto: "Falso", esCorrecta: tfQ.correctAnswer === "false" }
+                          ]
+                      });
+                  }
+              }
+              i++;
           }
-          i++;
-        }
       }
 
       return ludiActivity;
     });
 
-    const simulationPayload = {
-        activity: {
-          educadorId: user.id,
-          tipoActividad: data.type,
-          nombre: data.title,
-          publico: false,
-          createdAt: new Date().toISOString(),
-          activityId: result.activityId
-        },
-        config: {
-          puntajeBase: data.config.pointsPerCorrect,
-          tiempoPreguntaMs: data.config.timeLimit * 1000,
-          ajustesJson: {
-            badges: data.config.selectedBadges,
-            gradeId: data.config.gradeId,
-            missions: data.config.selectedMissions
-          }
-        },
-        content: {
-          questions: data.questions,
-          memoryImages: data.memoryImages || []
-        }
-    };
-
     return { 
         success: true, 
         message: "Actividad actualizada exitosamente", 
-        activityId: result.activityId,
-        data: simulationPayload
+        activityId: result.activityId
     };
 
   } catch (error: any) {

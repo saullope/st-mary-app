@@ -1673,16 +1673,21 @@ export async function GET() {
 
       await prisma.ludiActividad.create({
         data: {
-          activityId: act.id,
-          tipoActividadId: tpl.tipoActividadId,
-          userId: userId,
-          gradoId: grade.id,
-          temaId: temaIds[tpl.theme],
+          activity: { connect: { id: act.id } },
+          tipoActividad: { connect: { id: tpl.tipoActividadId } },
+          user: { connect: { id: userId } },
+          grado: { connect: { id: grade.id } },
+          tema: { connect: { id: temaIds[tpl.theme] } },
           publico: true,
           estatus: true,
           config: { create: tpl.config },
           preguntas: {
-            create: preguntasCreate
+            create: preguntasCreate.map(p => ({
+                numero: p.numero,
+                tipoActividad: { connect: { id: p.tipoActividadId } },
+                enunciado: p.enunciado,
+                opciones: p.opciones
+            }))
           }
         }
       });

@@ -10,6 +10,7 @@ import Memory from "@/images/memory.png"
 import TrueOrFalse from "@/images/verdadero-falso.png"
 import Reading from "@/lotties/reading.json"
 import { LottieCharge } from '@/components/LottieComponents/LottieCharge'
+import Link from "next/link"
 
 
 export const metadata: Metadata = {
@@ -34,9 +35,9 @@ export default function HomePage() {
 
         {/* <!-- Botones de acción en la sección principal --> */}
         <div className={styles['hero-buttons']}>
-          <button className={styles.buttonludi} style={{ backgroundColor: "#ffcd00" }}>Empieza a crear</button>
-          <button className={styles.buttonludi} style={{ backgroundColor: "white", color: "#333" }}>Ingresa el código
-            para jugar</button>
+          <Link href="/dashboard/create-activity" className={styles.buttonludi} style={{ backgroundColor: "#ffcd00" }}>Empieza a crear</Link>
+          <Link href="/play" target="_blank" className={styles.buttonludi} style={{ backgroundColor: "white", color: "#333" }}>Ingresa el código
+            para jugar</Link>
         </div>
       </div>
 

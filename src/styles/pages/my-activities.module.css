@@ -230,6 +230,7 @@
 .editIcon:hover { background-color: #3b82f6; border-color: #3b82f6; }
 .deleteIcon:hover { background-color: #ef4444; border-color: #ef4444; }
 
+.rocketIcon:hover { background-color: #ff9f43; border-color: #ff9f43; }
 .creatorWrapper {
   transform: scale(0.85);
   transform-origin: right center;

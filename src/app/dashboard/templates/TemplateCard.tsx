@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FaListCheck, FaGamepad, FaBrain, FaClone, FaPlay } from "react-icons/fa6";
+import { FaListCheck, FaGamepad, FaBrain, FaClone, FaPlay, FaRocket, FaCheck } from "react-icons/fa6";
 import styles from "@/styles/pages/my-activities.module.css";
 import { cloneTemplateActivity } from "./actions";
+import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
 
 interface TemplateCardProps {
   template: any;
@@ -13,6 +14,19 @@ interface TemplateCardProps {
 
 export default function TemplateCard({ template, userId }: TemplateCardProps) {
   const [cloning, setCloning] = useState(false);
+  const [sessionPin, setSessionPin] = useState<string | null>(null);
+  const [isLaunching, setIsLaunching] = useState(false);
+
+  const handleLaunch = async () => {
+    setIsLaunching(true);
+    const result = await createGameSession(template.activityId);
+    if (result.success) {
+        setSessionPin(result.pin || "");
+    } else {
+        alert(result.error);
+    }
+    setIsLaunching(false);
+  };
 
   const getIcon = (id: number) => {
     switch (id) {
@@ -125,60 +139,74 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
         </div>
       </div>
 
-      <div className={styles.cardFooter} style={{ padding: "1.25rem", borderTop: "1px solid rgba(0,0,0,0.05)", display: "flex", gap: "10px" }}>
-        <button 
-          onClick={handleClone} 
-          disabled={cloning}
-          className="btn flex-grow-1 d-flex justify-content-center align-items-center gap-2"
-          style={{
-            background: cloning ? '#e2e8f0' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            color: cloning ? '#94a3b8' : 'white',
-            fontWeight: 'bold',
-            borderRadius: '12px',
-            padding: '10px',
-            boxShadow: cloning ? 'none' : '0 4px 15px rgba(118, 75, 162, 0.3)',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          {cloning ? (
-            <>
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Preparando...
-            </>
-          ) : (
-            <>
-              <FaClone />
-              Usar plantilla
-            </>
-          )}
-        </button>
+      <div className={styles.cardFooter} style={{ padding: "1.25rem", borderTop: "1px solid rgba(0,0,0,0.05)", display: "flex", flexDirection: "column", gap: "10px" }}>
+        {sessionPin && (
+            <div className="w-100 text-center p-2 bg-success text-white rounded animate__animated animate__bounceIn" style={{ fontSize: '0.9rem' }}>
+                PIN PARA ALUMNOS: <strong>{sessionPin}</strong>
+            </div>
+        )}
+        <div className="d-flex w-100 gap-2">
+            <button 
+            onClick={handleClone} 
+            disabled={cloning}
+            className="btn flex-grow-1 d-flex justify-content-center align-items-center gap-2"
+            style={{
+                background: cloning ? '#e2e8f0' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: cloning ? '#94a3b8' : 'white',
+                fontWeight: 'bold',
+                borderRadius: '12px',
+                padding: '10px',
+                boxShadow: cloning ? 'none' : '0 4px 15px rgba(118, 75, 162, 0.3)',
+                transition: 'all 0.3s ease'
+            }}
+            >
+            {cloning ? (
+                <>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Preparando...
+                </>
+            ) : (
+                <>
+                <FaClone />
+                Usar plantilla
+                </>
+            )}
+            </button>
 
-        <a 
-          href={`/views/activity/${template.activityId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn d-flex justify-content-center align-items-center"
-          title="Previsualizar plantilla"
-          style={{
-            background: '#f1f5f9',
-            color: '#64748b',
-            border: '1px solid #e2e8f0',
-            fontWeight: 'bold',
-            borderRadius: '12px',
-            padding: '10px 15px',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = '#e2e8f0';
-            e.currentTarget.style.color = '#334155';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = '#f1f5f9';
-            e.currentTarget.style.color = '#64748b';
-          }}
-        >
-          <FaPlay />
-        </a>
+            <button 
+                onClick={handleLaunch}
+                disabled={isLaunching}
+                className="btn d-flex justify-content-center align-items-center"
+                title="Lanzar partida inmediata"
+                style={{
+                    background: '#ff9f43',
+                    color: 'white',
+                    borderRadius: '12px',
+                    padding: '10px 15px',
+                    border: 'none',
+                    boxShadow: '0 4px 10px rgba(255, 159, 67, 0.3)'
+                }}
+            >
+                {isLaunching ? <span className="spinner-border spinner-border-sm" /> : <FaRocket />}
+            </button>
+
+            <a 
+            href={`/views/activity/${template.activityId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn d-flex justify-content-center align-items-center"
+            title="Previsualizar"
+            style={{
+                background: '#f1f5f9',
+                color: '#64748b',
+                border: '1px solid #e2e8f0',
+                borderRadius: '12px',
+                padding: '10px 15px',
+            }}
+            >
+            <FaPlay />
+            </a>
+        </div>
       </div>
     </div>
   );

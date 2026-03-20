@@ -60,7 +60,6 @@ model LudiActividad {
   @@map("LUDI_ACTIVIDAD")
 }
 
-
 model LudiActividadConfig {
   activityId       Int                   @id(map: "PK__LUDI_ACT__482FBD630AF4F7DC") @map("activity_id")
   tiempoPreguntaMs Int?                  @map("tiempo_pregunta_ms")
@@ -88,7 +87,6 @@ model LudiComponenteLudico {
 }
 
 model LudiMemoriaPareja {
-
   id         BigInt               @id(map: "PK__LUDI_MEM__3213E83FE16E28DC") @default(autoincrement())
   activityId Int                  @map("activity_id")
   etiqueta   String?              @db.NVarChar(80)
@@ -118,6 +116,7 @@ model LudiOpcion {
   esCorrecta     Boolean             @default(false, map: "DF_LUDI_OPC_correcta") @map("es_correcta")
   pregunta       LudiPregunta        @relation(fields: [preguntaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_OPCI__pregu__5006DFF2")
   opcionRecursos LudiOpcionRecurso[]
+  respuestas     LudiRespuestaEstudiante[]
 
   @@unique([preguntaId, indice], map: "UQ_LUDI_OPC_pre_ind")
   @@map("LUDI_OPCION")
@@ -155,6 +154,7 @@ model LudiPregunta {
   activity         LudiActividad         @relation("PreguntaActivity", fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Pregunta_Activity")
   tipoActividad    LudiTipoActividad     @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_PREG__tipo___467D75B8")
   preguntaRecursos LudiPreguntaRecurso[]
+  respuestas       LudiRespuestaEstudiante[]
 
   @@unique([activityId, numero], map: "UQ_LUDI_PREG_act_num")
   @@map("LUDI_PREGUNTA")
@@ -242,7 +242,9 @@ model LUDI_SESION {
   activity_id              Int
   userId                   String                     @map("user_id")
   codigo                   String                     @unique(map: "UQ__LUDI_SES__40F9A2061D1921D8") @db.Char(6)
-  estado                   String                     @db.NVarChar(12)
+  estado                   String                     @default("ESPERANDO") @db.NVarChar(50)
+  modoJuego                String                     @default("ESTUDIANTE") @map("modoJuego") @db.NVarChar(50)
+  preguntaActualIndex      Int                        @default(0) @map("preguntaActualIndex")
   iniciada_en              DateTime?
   finalizada_en            DateTime?
   creada_en                DateTime                   @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_SES_creada")
@@ -251,14 +253,17 @@ model LUDI_SESION {
   LUDI_SESION_PARTICIPANTE LUDI_SESION_PARTICIPANTE[]
 }
 
-
 model LUDI_SESION_PARTICIPANTE {
   id            BigInt      @id(map: "PK__LUDI_SES__3213E83F49938736") @default(autoincrement())
   sesion_id     BigInt
   nombre        String      @db.NVarChar(80)
   unido_en      DateTime    @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_PART_unido")
   puntaje_total Int         @default(0, map: "DF_LUDI_PART_punt")
+  avatarId      Int?        @map("avatarId")
+  completado    Boolean     @default(false)
   LUDI_SESION   LUDI_SESION @relation(fields: [sesion_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_SESI__sesio__69C6B1F5")
+  avatar        LudiAvatar? @relation(fields: [avatarId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  respuestas    LudiRespuestaEstudiante[]
 
   @@unique([sesion_id, nombre], map: "UQ_LUDI_PART_ses_nom")
 }
@@ -289,3 +294,29 @@ model LudiUser {
   @@map("LUDI_USERS")
 }
 
+model LudiAvatar {
+  id        Int       @id @default(autoincrement())
+  nombre    String    @db.NVarChar(100)
+  urlImagen String    @db.NVarChar(600) @map("urlImagen")
+  activo    Boolean   @default(true)
+  participantes LUDI_SESION_PARTICIPANTE[]
+
+  @@map("LudiAvatar")
+}
+
+model LudiRespuestaEstudiante {
+  id                Int      @id @default(autoincrement())
+  participanteId    BigInt   @map("participanteId")
+  preguntaId        BigInt   @map("preguntaId")
+  opcionId          BigInt?  @map("opcionId")
+  respuestaBooleana Boolean? @map("respuestaBooleana")
+  esCorrecta        Boolean  @map("esCorrecta")
+  tiempoRespuestaMs Int      @map("tiempoRespuestaMs")
+  puntajeObtenido   Int      @map("puntajeObtenido")
+
+  participante      LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  pregunta          LudiPregunta             @relation(fields: [preguntaId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  opcion            LudiOpcion?              @relation(fields: [opcionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("LudiRespuestaEstudiante")
+}

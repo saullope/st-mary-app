@@ -106,7 +106,7 @@ export async function getActivityForEdit(id: number) {
         config,
         questions,
         memoryImages,
-        backgroundImage: activityData.tema?.imageUrl || "/images/theme/tema4.jpg",
+        backgroundImage: parsedAjustes.backgroundImage || activityData.tema?.imageUrl || "/images/theme/tema4.jpg",
       }
     };
   } catch (error: any) {

@@ -44,11 +44,21 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
       // Create new LudiActividad linked to the user
       await tx.ludiActividad.create({
         data: {
-          activityId: newActivityBase.id,
-          tipoActividadId: template.tipoActividadId,
-          userId: newUserId,
-          gradoId: template.gradoId,
-          temaId: template.temaId,
+          activity: {
+            connect: { id: newActivityBase.id }
+          },
+          tipoActividad: {
+            connect: { id: template.tipoActividadId }
+          },
+          user: {
+            connect: { id: newUserId }
+          },
+          grado: template.gradoId ? {
+            connect: { id: template.gradoId }
+          } : undefined,
+          tema: template.temaId ? {
+            connect: { id: template.temaId }
+          } : undefined,
           publico: false,
           estatus: true,
         }
@@ -58,9 +68,13 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
       if (template.config) {
         await tx.ludiActividadConfig.create({
           data: {
-            activityId: newActivityBase.id,
+            activity: {
+              connect: { activityId: newActivityBase.id }
+            },
             tiempoPreguntaMs: template.config.tiempoPreguntaMs,
-            tipoPuntuacionId: template.config.tipoPuntuacionId,
+            tipoPuntuacion: {
+                connect: { id: template.config.tipoPuntuacionId }
+            },
             puntajeBase: template.config.puntajeBase,
             feedbackId: template.config.feedbackId,
             ajustesJson: template.config.ajustesJson,
@@ -72,9 +86,13 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
       for (const tPregunta of template.preguntas) {
         const newPregunta = await tx.ludiPregunta.create({
           data: {
-            activityId: newActivityBase.id,
+            activity: {
+                connect: { activityId: newActivityBase.id }
+            },
             numero: tPregunta.numero,
-            tipoActividadId: tPregunta.tipoActividadId,
+            tipoActividad: {
+                connect: { id: tPregunta.tipoActividadId }
+            },
             enunciado: tPregunta.enunciado,
             tiempoLimiteMs: tPregunta.tiempoLimiteMs,
             puntaje: tPregunta.puntaje,
@@ -97,13 +115,10 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
         // Copy Resources linked to question (Images, Youtube)
         if (tPregunta.preguntaRecursos.length > 0) {
             for (const pRecurso of tPregunta.preguntaRecursos) {
-                // To keep it simple and avoid duplicating physical files or confusing externalIds,
-                // we just link to the SAME existing Resource ID. 
-                // A resource (LudiRecurso) is technically independent of the question.
                 await tx.ludiPreguntaRecurso.create({
                     data: {
-                        preguntaId: newPregunta.id,
-                        recursoId: pRecurso.recursoId,
+                        pregunta: { connect: { id: newPregunta.id } },
+                        recurso: { connect: { id: pRecurso.recursoId } },
                         rol: pRecurso.rol
                     }
                 });
@@ -115,7 +130,7 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
       for (const tPareja of template.memoriaParejas) {
         const newPareja = await tx.ludiMemoriaPareja.create({
             data: {
-                activityId: newActivityBase.id,
+                activity: { connect: { activityId: newActivityBase.id } },
                 etiqueta: tPareja.etiqueta,
             }
         });
@@ -124,8 +139,8 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
             for (const tTarjeta of tPareja.tarjetas) {
                 await tx.ludiMemoriaTarjeta.create({
                     data: {
-                        parejaId: newPareja.id,
-                        recursoId: tTarjeta.recursoId,
+                        pareja: { connect: { id: newPareja.id } },
+                        recurso: { connect: { id: tTarjeta.recursoId } },
                         lado: tTarjeta.lado
                     }
                 });
