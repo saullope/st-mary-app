@@ -152,6 +152,7 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                     <div className={styles['answer-image-container']}>
                                         {/* Use img for blob URLs, Image for external URLs */}
                                         {answer.imageUrl.startsWith('blob:') ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
                                             <img
                                                 src={answer.imageUrl}
                                                 alt={`Respuesta ${index + 1}`}
@@ -166,6 +167,7 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                                 width={120}
                                                 height={90}
                                                 style={{ objectFit: 'cover', borderRadius: '8px' }}
+                                                unoptimized
                                             />
                                         )}
                                         <button

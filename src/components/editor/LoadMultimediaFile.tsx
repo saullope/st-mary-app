@@ -117,6 +117,7 @@ export const LoadMultimediaFile = ({
             <div id="media-preview" className={styleComponent == "trueorfalse" ? style2["media-preview"] : style3["media-preview"]}>
               <div className={styleComponent == "trueorfalse" ? style2["media-item"] : style3["media-item"]}>
                 {(type === "image" || (url && (url.includes("firebasestorage") || url.includes("unsplash")) && type !== "video" && type !== "audio")) && url && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={url}
                     alt="Imagen seleccionada"

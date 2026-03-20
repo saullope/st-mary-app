@@ -116,6 +116,7 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
                                     width={120}
                                     height={80}
                                     style={{ objectFit: 'cover' }}
+                                    unoptimized
                                 />
                             </div>
                             <div className={style['theme-title']}>

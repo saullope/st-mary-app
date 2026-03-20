@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import styles from '@/styles/pages/bienvenida.module.css';
 import { Metadata } from "next";
 import getSession from '@/lib/auth/getSession'; 
@@ -57,12 +56,12 @@ export default async function BienvenidaEducador() {
                     <h1>{t('welcomeText')}</h1>
                 </div>
                 <div className="container">
-                    <div className="row">
+                    <div className="row justify-content-center mb-5 mt-4">
                       <SelectGrade grades={grades} />
-                        <div className={styles[`texto-grados`]}>
-                            <h1>{t('text1')}</h1>
-                            <h1>{t('text2')}</h1>
-                        </div>
+                    </div>
+                    <div className={styles[`texto-grados`]}>
+                        <h1>{t('text1')}</h1>
+                        <h1>{t('text2')}</h1>
                     </div>
                 </div>
             </main>

@@ -222,6 +222,7 @@ export default function LudiMemory() {
                                                         transition: 'transform 0.2s',
                                                         border: '2px solid white'
                                                     }}>
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                                         <img 
                                                             src={image} 
                                                             alt={`Memory card ${index + 1}`}

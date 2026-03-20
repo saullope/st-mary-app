@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useCallback, ChangeEvent, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface ActivityType {
@@ -22,20 +22,7 @@ export default function ActivityFilter({ types }: ActivityFilterProps) {
 
   const [searchTerm, setSearchTerm] = useState(initialSearch);
 
-  // Debounce effect for search
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      // Only update URL if the term changed from what's in URL (to avoid loop on mount if we didn't check, but params check handles it)
-      const currentUrlSearch = searchParams.get("search") || "";
-      if (searchTerm !== currentUrlSearch) {
-        updateParams("search", searchTerm);
-      }
-    }, 300);
-
-    return () => clearTimeout(handler);
-  }, [searchTerm, searchParams]);
-
-  const updateParams = (key: string, value: string) => {
+  const updateParams = useCallback((key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     
     if (value) {
@@ -48,7 +35,20 @@ export default function ActivityFilter({ types }: ActivityFilterProps) {
     // params.set('page', '1'); 
 
     router.push(`?${params.toString()}`);
-  };
+  }, [searchParams, router]);
+
+  // Debounce effect for search
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      // Only update URL if the term changed from what's in URL (to avoid loop on mount if we didn't check, but params check handles it)
+      const currentUrlSearch = searchParams.get("search") || "";
+      if (searchTerm !== currentUrlSearch) {
+        updateParams("search", searchTerm);
+      }
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm, searchParams, updateParams]);
 
   const handleFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
     updateParams("typeId", e.target.value);

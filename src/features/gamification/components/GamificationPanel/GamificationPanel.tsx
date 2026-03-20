@@ -283,7 +283,8 @@ export default function GamificationPanel({
                   onChange={() => handleBadgeToggle(badge.id, badge.phrase, badge.name)}
                 />
                 <div className={styles.insignia} style={{ "--color-bg": badge.color } as React.CSSProperties}>
-                  {/* Nota: Usamos <img> estándar porque las rutas son relativas a public/ */}
+                  {/* Nota: Usamos <img> estándar porque las rutas son relativas a public/ y pueden cambiar dinámicamente */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={badge.img} alt={badge.name} />
                   <span>{badge.name}</span>
                   <p className={styles.insigniaDescription}>{badge.desc}</p>

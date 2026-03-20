@@ -143,6 +143,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                                 width={40}
                                                 height={40}
                                                 priority={false}
+                                                unoptimized={true}
                                                 style={{ borderRadius: '50%', marginRight: '10px' }}
                                             />                                        
                                         {sessionData.name || sessionData.email}

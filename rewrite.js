@@ -1,14 +1,14 @@
-import { Metadata } from "next";
+const fs = require('fs');
+
+const content = `import { Metadata } from "next";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { getActivityById } from "@/services/activityService";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { FaArrowLeft, FaClock, FaStar, FaUser, FaCalendar, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
-import UseTemplateButton from "./UseTemplateButton";
-import { ShareActivityButton } from "./ShareActivityButton";
-import { DeleteActivityViewButton } from "./DeleteActivityViewButton";
+import { FaArrowLeft, FaClock, FaStar, FaUser, FaCalendar, FaEdit } from "react-icons/fa";
 import styles from "@/styles/pages/view-activity.module.css";
 import MultimediaDisplay from "@/components/activity/MultimediaDisplay";
+import UseTemplateButton from "./UseTemplateButton";
 
 interface PageProps {
   params: {
@@ -16,9 +16,9 @@ interface PageProps {
   };
 }
 
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const activityId = parseInt(params.id);
-  
   if (isNaN(activityId)) {
     return { title: "Actividad no encontrada | LudiGame" };
   }
@@ -30,31 +30,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${activity.activity.activity_name} | LudiGame`,
+    title: \`\${activity.activity.activity_name} | LudiGame\`,
   };
 }
 
 export default async function ActivityDetailView({ params }: PageProps) {
-  const user = await getCurrentUser();
-  
-
   const activityId = parseInt(params.id);
   if (isNaN(activityId)) return <div>ID inválido</div>;
 
   const activity = await getActivityById(activityId);
 
-  if (!activity) {
-    return (
-      <div className="container p-5 text-center">
-        <h1>Actividad no encontrada</h1>
-        <Link href="/dashboard/my-activities" className="btn btn-primary mt-3">Volver</Link>
-      </div>
-    );
-  }
+  const user = await getCurrentUser();
 
   const isTemplate = activity?.activity?.isTemplate;
   const isPublic = activity?.publico;
   const isOwner = user && activity?.userId === user.id;
+
+  if (!activity) {
+    return (
+      <div className="container p-5 text-center">
+        <h1>Actividad no encontrada</h1>
+        <Link href={user ? "/dashboard/my-activities" : "/"} className="btn btn-primary mt-3">Volver</Link>
+      </div>
+    );
+  }
 
   // Require login ONLY if it is a private non-template activity and the user is not the owner
   if (!isTemplate && !isPublic && !isOwner) {
@@ -71,42 +70,38 @@ export default async function ActivityDetailView({ params }: PageProps) {
   const isMemory = activity.tipoActividadId === 3;
 
   const editRoute = activity.tipoActividadId === 1 
-      ? `/create/ludiquiz?id=${activity.activityId}`
+      ? \`/create/ludiquiz?id=\${activity.activityId}\`
       : activity.tipoActividadId === 2 
-          ? `/create/trueorfalse?id=${activity.activityId}`
-          : `/create/ludimemory?id=${activity.activityId}`;
+          ? \`/create/trueorfalse?id=\${activity.activityId}\`
+          : \`/create/ludimemory?id=\${activity.activityId}\`;
 
   return (
     <div className={styles.pageContainer}>
       <div className="container">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-          <Link href={isTemplate ? "/dashboard/templates" : "/dashboard/my-activities"} className={`${styles.backButton} mb-0`}>
-            <FaArrowLeft /> {isTemplate ? "Volver a plantillas" : "Volver a mis actividades"}
-          </Link>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          {isTemplate ? (
+            <Link href="/dashboard/templates" className={styles.backButton} style={{ marginBottom: 0 }}>
+              <FaArrowLeft /> Volver a plantillas
+            </Link>
+          ) : (
+            <Link href="/dashboard/my-activities" className={styles.backButton} style={{ marginBottom: 0 }}>
+              <FaArrowLeft /> Volver a mis actividades
+            </Link>
+          )}
+
           <div className="d-flex gap-2">
-            {isOwner && !isTemplate && (
-              <>
-                <ShareActivityButton activityId={activity.activityId} />
-                <Link 
-                  href={editRoute} 
-                  className="btn btn-outline-primary d-flex align-items-center gap-2 shadow-sm"
-                  style={{ borderRadius: '12px', padding: '8px 16px', fontWeight: 'bold' }}
-                  title="Editar actividad"
-                >
-                  <FaEdit />
-                </Link>
-                <DeleteActivityViewButton 
-                  activityId={activity.activityId} 
-                  activityName={activity.activity.activity_name} 
-                />
-              </>
-            )}
             {isTemplate && user && (
               <UseTemplateButton 
                 templateActivityId={activity.activityId} 
-                tipoActividadId={activity.tipoActividadId} 
+                tipoActividadId={activity.tipoActividadId}
                 userId={user.id} 
               />
+            )}
+
+            {!isTemplate && isOwner && (
+              <Link href={editRoute} className="btn btn-warning d-flex align-items-center gap-2 shadow-sm" style={{ borderRadius: '12px', padding: '8px 16px', fontWeight: 'bold' }}>
+                <FaEdit /> Editar
+              </Link>
             )}
           </div>
         </div>
@@ -196,32 +191,14 @@ export default async function ActivityDetailView({ params }: PageProps) {
 
                     {/* Opciones */}
                     <div className={styles.optionsGrid}>
-                      {pregunta.opciones.map((opcion) => {
-                        const isTrueFalse = activity.tipoActividadId === 2;
-                        const displayContent = isTrueFalse
-                          ? (opcion.esCorrecta ? "Verdadero" : "Falso")
-                          : opcion.texto;
-
-                        return (
-                          <div 
-                            key={Number(opcion.id)} 
-                            className={`${styles.optionCard} ${opcion.esCorrecta ? styles.optionCorrect : styles.optionIncorrect}`}
-                          >
-                            <div className="d-flex align-items-center justify-content-center gap-2">
-                              {opcion.esCorrecta ? <FaCheck className="text-success" /> : <FaTimes className="text-danger" />}
-                              <span style={{ fontWeight: '500' }}>{displayContent}</span>
-                            </div>
+                      {pregunta.opciones.map((opcion) => (
+                        <div 
+                          key={Number(opcion.id)} 
+                          className={\`\${styles.optionCard} \${opcion.esCorrecta ? styles.optionCorrect : styles.optionIncorrect}\`}
+                        >
+                          <div>
+                            {opcion.esCorrecta && <span className="me-2">✅</span>}
+                            {opcion.texto}
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+                        </div>
+                   

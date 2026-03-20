@@ -18,15 +18,15 @@ export default function NewActivityButton() {
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="shadow border-0 rounded-3 mt-2" style={{ overflow: "hidden" }}>
-        <Dropdown.Item as={Link} href="/create/ludiquiz" className="py-2 px-3 fw-medium text-dark">
+        <Dropdown.Item as={Link} href="/create/ludiquiz" className="py-2 px-3 fw-medium text-dark" target="_blank" rel="noopener noreferrer">
           Ludi Quiz
         </Dropdown.Item>
         
-        <Dropdown.Item as={Link} href="/create/trueorfalse" className="py-2 px-3 fw-medium text-dark">
+        <Dropdown.Item as={Link} href="/create/trueorfalse" className="py-2 px-3 fw-medium text-dark" target="_blank" rel="noopener noreferrer">
           Verdadero o Falso
         </Dropdown.Item>
         
-        <Dropdown.Item as={Link} href="/create/ludimemory" className="py-2 px-3 fw-medium text-dark">
+        <Dropdown.Item as={Link} href="/create/ludimemory" className="py-2 px-3 fw-medium text-dark" >
           Ludi Memory
         </Dropdown.Item>
       </Dropdown.Menu>

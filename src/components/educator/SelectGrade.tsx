@@ -69,7 +69,7 @@ export const SelectGrade = ({ grades }: SelectGradeProps) => {
                     <div key={grade.id} className="col-12 col-sm-4 text-center">
                         <Link href={`/dashboard`} onClick={() => handleGradeSelected(grade.key_string || '')}>
                             <Image
-                                className={`${imageStyle} img-fluid`}
+                                className={`${imageStyle} img-fluid mx-auto d-block`}
                                 src={imagePath}
                                 alt={grade.grade_type_name}
                                 width={265}

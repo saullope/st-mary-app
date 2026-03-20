@@ -1,0 +1,34 @@
+--- src/app/views/activity/[id]/page.tsx
++++ src/app/views/activity/[id]/page.tsx
+@@ -58,9 +58,22 @@
+   return (
+     <div className={styles.pageContainer}>
+       <div className="container">
+-        <Link href="/dashboard/my-activities" className={styles.backButton}>
+-          <FaArrowLeft /> Volver a mis actividades
+-        </Link>
++        <div className="d-flex justify-content-between align-items-center mb-4">
++          <Link href="/dashboard/my-activities" className={`${styles.backButton} mb-0`}>
++            <FaArrowLeft /> Volver a mis actividades
++          </Link>
++          <div className="d-flex gap-2">
++            {isOwner && (
++              <Link 
++                href={editRoute} 
++                className="btn btn-outline-primary d-flex align-items-center gap-2 shadow-sm"
++                style={{ borderRadius: '12px', padding: '8px 16px', fontWeight: 'bold' }}
++              >
++                <FaEdit /> Editar
++              </Link>
++            )}
++            {isTemplate && user && (
++              <UseTemplateButton 
++                templateActivityId={activity.activityId} 
++                tipoActividadId={activity.tipoActividadId} 
++                userId={user.id} 
++              />
++            )}
++          </div>
++        </div>
+ 
+         {/* Header Card */}

@@ -57,6 +57,7 @@ export default function CreatorCard({ name, email, pictureUrl, role = "Educador"
                     alt={name}
                     fill
                     className="rounded-circle border border-1 border-secondary"
+                    unoptimized={true}
                     style={{ objectFit: "cover" }}
                 />
             </div>
@@ -108,6 +109,7 @@ export default function CreatorCard({ name, email, pictureUrl, role = "Educador"
                             height={64}
                             className="rounded-circle"
                             style={{ objectFit: "cover" }}
+                            unoptimized={true}
                         />
                     </div>
                 </div>

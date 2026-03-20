@@ -95,6 +95,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             href={`/views/activity/${activity.activityId}`} 
             className={`${styles.actionButtonIcon} ${styles.playIcon}`} 
             title="Jugar/Previsualizar"
+            target="_blank" rel="noopener noreferrer"
           >
             <FaPlay size={18} />
           </Link>

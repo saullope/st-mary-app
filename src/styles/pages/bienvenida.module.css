@@ -27,7 +27,8 @@
 
 .img-primero{
     width: 265px;
-    margin-left: 130px;
+    max-width: 100%;
+    transition: transform 0.3s ease;
 }
 
 .img-primero:hover {
@@ -36,7 +37,8 @@
 
 .img-segundo{
     width: 265px;
-    margin-left: 40px;
+    max-width: 100%;
+    transition: transform 0.3s ease;
 }
 
 .img-segundo:hover {
@@ -45,7 +47,8 @@
 
 .img-tercero{
     width: 270px;
-    margin-right: 60px;
+    max-width: 100%;
+    transition: transform 0.3s ease;
 }
 
 .img-tercero:hover {
