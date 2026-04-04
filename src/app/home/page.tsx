@@ -30,14 +30,13 @@ export default function HomePage() {
         <div id="lottie-trophy" className={styles['bg-icon']}></div>
         <div id="lottie-rocket" className={styles['bg-icon']}></div>
 
-        <h1 className={styles.h1ludi}>Crea actividades educativas</h1>
-        <p className={styles.pludi}>¡Incorpora la ludificación y transforma tu manera de enseñar!</p>
+        <h1 className={styles.h1ludi}>{t("landingTextLevel1")}</h1>
+        <p className={styles.pludi}>{t("landingTextLevel2")}</p>
 
         {/* <!-- Botones de acción en la sección principal --> */}
         <div className={styles['hero-buttons']}>
-          <Link href="/dashboard/create-activity" className={styles.buttonludi} style={{ backgroundColor: "#ffcd00" }}>Empieza a crear</Link>
-          <Link href="/play" target="_blank" className={styles.buttonludi} style={{ backgroundColor: "white", color: "#333" }}>Ingresa el código
-            para jugar</Link>
+          <Link href="/dashboard/create-activity" className={styles.buttonludi} style={{ backgroundColor: "#ffcd00" }}>{t("startCreate")}</Link>
+          <Link href="/play" target="_blank" className={styles.buttonludi} style={{ backgroundColor: "white", color: "#333" }}>{t("startPlay")}</Link>
         </div>
       </div>
 
@@ -46,33 +45,30 @@ export default function HomePage() {
           <LottieCharge
             animationData={Reading}/>
           <h2 className={`${styles['ludi-experiencias-title']} ${styles.h2ludi}`}>
-            Experiencias educativas enfocadas en 1º, 2º y 3º grado
+            {}{t("kidsExperience")}
           </h2>
         </div>
       </section>
 
       {/* <!-- Sección: Importancia de la ludificación --> */}
       <section className={styles['ludi-importance-section']}>
-        <h2 className={`${styles['ludi-importance-title']} ${styles.h2ludi}`}>¿Por qué usar ludificación en el
-          aula?</h2>
+        <h2 className={`${styles['ludi-importance-title']} ${styles.h2ludi}`}>{t("textWhy")}</h2>
         <div className={styles['ludi-importance-grid']}>
           {/* <!-- Card 1 --> */}
           <div className={styles['ludi-importance-card']}>
             <div className={styles['ludi-importance-icon']}>
               <Image className={styles.imgludi} src={fomentaInt} alt="Fomenta el interés" width={100} height={100} />
             </div>
-            <h3>Fomenta el interés</h3>
-            <p>Transforma tareas en retos que despiertan curiosidad y
-              entusiasmo.</p>
+            <h3>{t("card1Title")}</h3>
+            <p>{t("card1Desc")}</p>
           </div>
           {/* <!-- Card 2 --> */}
           <div className={styles['ludi-importance-card']}>
             <div className={styles['ludi-importance-icon']}>
               <Image src={mejoraAprendizaje} alt="Mejora el aprendizaje" width={100} height={100} />
             </div>
-            <h3>Mejora el aprendizaje</h3>
-            <p>Favorece la memoria, la atención y la comprensión a través del
-              juego.</p>
+            <h3>{t("card2Title")}</h3>
+            <p>{t("card2Desc")}</p>
           </div>
 
           {/* <!-- Card 3 --> */}
@@ -80,9 +76,8 @@ export default function HomePage() {
             <div className={styles['ludi-importance-icon']}>
               <Image src={facilitaParticipacion} alt="Facilita la participación" width={100} height={100} />
             </div>
-            <h3>Facilita la participación</h3>
-            <p>Involucra activamente a todo el grupo en dinámicas educativas
-              divertidas.</p>
+            <h3>{t("card3Title")}</h3>
+            <p>{t("card3Desc")}</p>
           </div>
         </div>
       </section>
@@ -92,8 +87,8 @@ export default function HomePage() {
         <div className={styles['stars-background-rocket']}></div>
         <div className={styles['rocket-content']}>
           <h2 className={styles['rocket-text']}>
-            ¡LudiGame potencia la creatividad de los
-            <span className={styles.highlight}>Educadores</span>!
+            {t("text1Educator")}
+            <span className={styles.highlight}>{t("educator:")}</span>!
           </h2>
 
           {/* <!-- Animación decorativa de cohete --> */}
@@ -104,7 +99,7 @@ export default function HomePage() {
 
       {/* <!-- Sección de tipos de juegos --> */}
       <section className={styles.section}>
-        <h2 className={styles.h2ludi}>Convierte ideas en juegos interactivos</h2>
+        <h2 className={styles.h2ludi}>{t("ideasText")}</h2>
         <div className={styles.cards}>
           <div className={styles.card}>
             <Image className={styles.imgcard} src={Ludiquiz}
@@ -120,7 +115,7 @@ export default function HomePage() {
 
       {/* <!-- Pie de página --> */}
       <footer className={styles.footer}>
-        <p>© 2025 LudiGame. Todos los derechos reservados.</p>
+        <p>{`© 2025 LudiGame. ${t("rigths")}.`}</p>
       </footer>
     </>
   )

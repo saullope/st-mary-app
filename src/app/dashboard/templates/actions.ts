@@ -38,8 +38,11 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
           activity_desc: "Clonado desde plantilla",
           image_url: template.activity.image_url,
           isTemplate: false, // The clone is NOT a template
-        } as any
+        }
       });
+
+      // Force isTemplate to 0 to bypass Prisma SQL Server BIT column issues
+      await tx.$executeRaw`UPDATE ACTIVITY SET isTemplate = 0 WHERE id = ${newActivityBase.id}`;
 
       // Create new LudiActividad linked to the user
       await tx.ludiActividad.create({
@@ -66,19 +69,20 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
 
       // Copy Configuration
       if (template.config) {
-        await tx.ludiActividadConfig.create({
-          data: {
-            activity: {
-              connect: { activityId: newActivityBase.id }
-            },
+        const configData: any = {
+            activity: { connect: { activityId: newActivityBase.id } },
             tiempoPreguntaMs: template.config.tiempoPreguntaMs,
-            tipoPuntuacion: {
-                connect: { id: template.config.tipoPuntuacionId }
-            },
+            tipoPuntuacion: { connect: { id: template.config.tipoPuntuacionId } },
             puntajeBase: template.config.puntajeBase,
-            feedbackId: template.config.feedbackId,
             ajustesJson: template.config.ajustesJson,
-          }
+        };
+
+        if (template.config.feedbackId) {
+            configData.feedback = { connect: { id: template.config.feedbackId } };
+        }
+
+        await tx.ludiActividadConfig.create({
+          data: configData
         });
       }
 
@@ -102,14 +106,16 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
 
         // Copy Options
         if (tPregunta.opciones.length > 0) {
-          await tx.ludiOpcion.createMany({
-            data: tPregunta.opciones.map((opt: any) => ({
-              preguntaId: newPregunta.id,
-              indice: opt.indice,
-              texto: opt.texto,
-              esCorrecta: opt.esCorrecta
-            }))
-          });
+          for (const opt of tPregunta.opciones) {
+              await tx.ludiOpcion.create({
+                  data: {
+                      pregunta: { connect: { id: newPregunta.id } },
+                      indice: opt.indice,
+                      texto: opt.texto,
+                      esCorrecta: opt.esCorrecta || opt.es_correcta
+                  }
+              });
+          }
         }
 
         // Copy Resources linked to question (Images, Youtube)

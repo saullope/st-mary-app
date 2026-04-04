@@ -39,7 +39,13 @@ export async function updateActivity(data: UpdateActivityData) {
       }
 
       const tipoActividadId = await getActivityTypeId(data.type);
-      const temaId = 1;
+      
+      // Obtener el tema por fondo. Fallback al primer activo si no existe.
+      let temaId = data.backgroundImage ? await getThemeIdByUrl(data.backgroundImage) : null;
+      if (!temaId) {
+         const firstActiveTheme = await tx.ludiTema.findFirst({ where: { activo: true } });
+         temaId = firstActiveTheme ? Number(firstActiveTheme.id) : 1;
+      }
 
       // 2. Update Legacy ACTIVITY
       await tx.aCTIVITY.update({
@@ -86,7 +92,14 @@ export async function updateActivity(data: UpdateActivityData) {
 
       // 5. Smart Content Update
       if (data.type === 'ludimemory' && data.memoryImages) {
+          // Explicitly delete tarjetas first to avoid FK constraints if CASCADE is not set in SQL Server
+          const oldParejas = await tx.ludiMemoriaPareja.findMany({ where: { activityId: data.activityId } });
+          const oldParejaIds = oldParejas.map(p => p.id);
+          if (oldParejaIds.length > 0) {
+              await tx.ludiMemoriaTarjeta.deleteMany({ where: { parejaId: { in: oldParejaIds } } });
+          }
           await tx.ludiMemoriaPareja.deleteMany({ where: { activityId: data.activityId } });
+
           for (const imgUrl of data.memoryImages) {
               const resourceId = await getOrCreateResource(tx, imgUrl, 'image');
               const pareja = await tx.ludiMemoriaPareja.create({
@@ -95,22 +108,49 @@ export async function updateActivity(data: UpdateActivityData) {
                       etiqueta: "Pareja"
                   }
               });
-              await tx.ludiMemoriaTarjeta.createMany({
-                  data: [
-                      { parejaId: pareja.id, recursoId: resourceId, lado: 'A' },
-                      { parejaId: pareja.id, recursoId: resourceId, lado: 'B' }
-                  ]
+              await tx.ludiMemoriaTarjeta.create({
+                  data: {
+                      pareja: { connect: { id: pareja.id } },
+                      recurso: { connect: { id: resourceId } },
+                      lado: 'A'
+                  }
+              });
+              await tx.ludiMemoriaTarjeta.create({
+                  data: {
+                      pareja: { connect: { id: pareja.id } },
+                      recurso: { connect: { id: resourceId } },
+                      lado: 'B'
+                  }
               });
           }
       } else {
           const incomingQuestionIds = data.questions.map(q => q.id).filter(id => id && id > 100);
 
-          await tx.ludiPregunta.deleteMany({
+          // Get questions to delete to safely clean their relationships first
+          const questionsToDelete = await tx.ludiPregunta.findMany({
               where: {
                   activityId: data.activityId,
                   id: { notIn: incomingQuestionIds as any }
               }
           });
+
+          if (questionsToDelete.length > 0) {
+              const qIds = questionsToDelete.map(q => q.id);
+              
+              // 1. Clear related Student Answers (if any missed the CASCADE)
+              await tx.ludiRespuestaEstudiante.deleteMany({ where: { preguntaId: { in: qIds } } });
+              
+              // 2. Clear related Resources
+              await tx.ludiPreguntaRecurso.deleteMany({ where: { preguntaId: { in: qIds } } });
+              
+              // 3. Clear Options
+              await tx.ludiOpcion.deleteMany({ where: { preguntaId: { in: qIds } } });
+              
+              // 4. Finally delete the questions themselves
+              await tx.ludiPregunta.deleteMany({
+                  where: { id: { in: qIds } }
+              });
+          }
 
           let i = 1;
           for (const q of data.questions) {
@@ -131,9 +171,18 @@ export async function updateActivity(data: UpdateActivityData) {
                       const quizQ = q as LudiQuizQuestion;
                       const incomingOptionIds = quizQ.answers.map(a => a.id).filter(id => id && id > 100);
 
-                      await tx.ludiOpcion.deleteMany({
+                      // Safely delete options by clearing related student answers first (in case CASCADE is missing)
+                      const optionsToDelete = await tx.ludiOpcion.findMany({
                           where: { preguntaId: updatedQuestion.id, id: { notIn: incomingOptionIds as any } }
                       });
+                      
+                      if (optionsToDelete.length > 0) {
+                          const optIds = optionsToDelete.map(o => o.id);
+                          await tx.ludiRespuestaEstudiante.deleteMany({ where: { opcionId: { in: optIds } } });
+                          await tx.ludiOpcion.deleteMany({
+                              where: { id: { in: optIds } }
+                          });
+                      }
 
                       for (const ans of quizQ.answers) {
                           if (ans.id && ans.id > 100) {
@@ -200,11 +249,11 @@ export async function updateActivity(data: UpdateActivityData) {
                       }
                   } else {
                       const tfQ = q as TrueOrFalseQuestion;
-                      await tx.ludiOpcion.createMany({
-                          data: [
-                              { preguntaId: newQuestion.id, indice: 1, texto: "Verdadero", esCorrecta: tfQ.correctAnswer === "true" },
-                              { preguntaId: newQuestion.id, indice: 2, texto: "Falso", esCorrecta: tfQ.correctAnswer === "false" }
-                          ]
+                      await tx.ludiOpcion.create({
+                          data: { pregunta: { connect: { id: newQuestion.id } }, indice: 1, texto: "Verdadero", esCorrecta: tfQ.correctAnswer === "true" }
+                      });
+                      await tx.ludiOpcion.create({
+                          data: { pregunta: { connect: { id: newQuestion.id } }, indice: 2, texto: "Falso", esCorrecta: tfQ.correctAnswer === "false" }
                       });
                   }
               }

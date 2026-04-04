@@ -16,7 +16,7 @@ export const SidebarDashboard = () => {
         { href: '/dashboard/create-activity', icon: FaPlus, text: t('createActivity') },
         { href: '/dashboard/my-activities', icon: FaListOl, text: t('myActivities') },
         { href: '/dashboard/reports', icon: FaFileAlt, text: t('reports') },
-        { href: '/dashboard/templates', icon: FaClone, text: 'Plantillas' }, // Temporarily hardcoded text, could add translation later
+        { href: '/dashboard/templates', icon: FaClone, text: t('templates') }, // Temporarily hardcoded text, could add translation later
     ];
 
     return (

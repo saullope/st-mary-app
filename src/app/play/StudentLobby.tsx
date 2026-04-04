@@ -23,6 +23,7 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
     const [isReady, setIsReady] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [joinedSessionId, setJoinedSessionId] = useState<string | null>(null);
 
     const isFormValid = gamePin.length === 6 && playerName.trim().length > 0 && selectedAvatarId !== null;
 
@@ -47,14 +48,16 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
             const data = await response.json();
 
             if (data.success) {
-                // Store participant info locally to handle refresh (optional, but good for UX)
-                localStorage.setItem('ludi_participant', JSON.stringify({
+                // Store participant info in sessionStorage to isolate it per tab
+                // and tie it to the specific session ID
+                sessionStorage.setItem(`ludi_participant_${data.sesionId}`, JSON.stringify({
                     id: data.participanteId,
                     name: playerName,
                     avatarId: selectedAvatarId,
                     sesionId: data.sesionId
                 }));
                 
+                setJoinedSessionId(data.sesionId);
                 setIsReady(true);
             } else {
                 setError(data.error || "Error al unirse al juego.");
@@ -68,10 +71,8 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
     };
 
     const handleStart = () => {
-        // Find the session ID from the join response or localStorage
-        const participantData = JSON.parse(localStorage.getItem('ludi_participant') || '{}');
-        if (participantData.sesionId) {
-            router.push(`/play/student/${participantData.sesionId}`);
+        if (joinedSessionId) {
+            router.push(`/play/student/${joinedSessionId}`);
         }
     };
 
@@ -110,6 +111,7 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
                         width={220} 
                         height={80} 
                         className={styles.logo}
+                        style={{ width: '100%', height: 'auto' }}
                     />
                 </div>
 

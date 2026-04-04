@@ -47,7 +47,7 @@ export default async function BienvenidaEducador() {
     
 
     return (
-        <div style={{ minHeight: '100vh' }} className={styles[`body-vistaeducador`]}>
+        <div className={styles[`body-vistaeducador`]}>
             <main>
                 <div className={styles[`texto-bienvenida`]}>
                     <br />
@@ -56,9 +56,10 @@ export default async function BienvenidaEducador() {
                     <h1>{t('welcomeText')}</h1>
                 </div>
                 <div className="container">
-                    <div className="row justify-content-center mb-5 mt-4">
-                      <SelectGrade grades={grades} />
-                    </div>
+                    <div className="d-flex flex-row flex-nowrap justify-content-center align-items-center mb-5 mt-4" 
+         style={{ gap: '20px', width: '100%' }}>
+        <SelectGrade grades={grades} />
+    </div>
                     <div className={styles[`texto-grados`]}>
                         <h1>{t('text1')}</h1>
                         <h1>{t('text2')}</h1>

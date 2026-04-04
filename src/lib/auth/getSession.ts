@@ -4,7 +4,8 @@ import { AUTH_COOKIE_NAME } from "./constants";
 
 // Returns decoded user from session cookie, or null if invalid/expired
 const getSession = async () => {
-    const session = cookies().get(AUTH_COOKIE_NAME)?.value;
+    const cookieStore = await cookies();
+    const session = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
     if (!session) {
         return null;

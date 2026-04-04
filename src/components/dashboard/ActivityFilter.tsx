@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, ChangeEvent, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 interface ActivityType {
   id: number;
@@ -16,6 +17,8 @@ interface ActivityFilterProps {
 export default function ActivityFilter({ types }: ActivityFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const t = useTranslations("myActivitiesContent");
   
   const initialType = searchParams.get("typeId") || "";
   const initialSearch = searchParams.get("search") || "";
@@ -66,7 +69,7 @@ export default function ActivityFilter({ types }: ActivityFilterProps) {
         <input 
           type="text" 
           className="form-control border-0 bg-light ps-5 py-2 rounded-pill shadow-sm"
-          placeholder="Buscar por nombre de actividad..."
+          placeholder={t("searchPlaceholder")}
           value={searchTerm}
           onChange={handleSearchChange}
           style={{ fontSize: "0.95rem" }}
@@ -76,7 +79,7 @@ export default function ActivityFilter({ types }: ActivityFilterProps) {
       {/* Type Filter */}
       <div className="d-flex align-items-center bg-light rounded-pill px-3 py-1 shadow-sm">
         <label htmlFor="activityType" className="me-2 fw-bold text-secondary text-nowrap small mb-0">
-          TIPO:
+          {`${t("typeActivitySearch")}:`}
         </label>
         <select
           id="activityType"
@@ -85,7 +88,7 @@ export default function ActivityFilter({ types }: ActivityFilterProps) {
           onChange={handleFilterChange}
           style={{ minWidth: "150px", cursor: "pointer", fontWeight: 500 }}
         >
-          <option value="">Todos</option>
+          <option value="">{t("all")}</option>
           {types.map((type) => (
             <option key={type.id} value={type.id}>
               {type.nombre}

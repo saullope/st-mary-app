@@ -29,7 +29,7 @@ import { useTranslations } from "next-intl";
 
 type GradeKey = 'firstGrade' | 'secondGrade' | 'thirdGrade';
 
-const renderGradeContent = (grade: GradeKey, t: any, t2: any, images: any, onCardClick: (grade: string) => void) => (
+const renderGradeContent = (grade: GradeKey, t: any, t2: any, images: any, onCardClick: (grade: string) => void, onGoToTemplates: (grade: string) => void) => (
   <>
     <div className={styles['container-card-activity']}>
       <CardGrade cardTitle={t('gradeName')} cardAlt={`Crear Actividades ${grade}`} srcImageGrade={images.gradeImage} />
@@ -42,9 +42,9 @@ const renderGradeContent = (grade: GradeKey, t: any, t2: any, images: any, onCar
       <br />
     </div>
     <div className={styles['container-card-activity']}>
-      <CardActivity cardTitle="Matemáticas" cardAlt="Matemáticas" srcImageGrade={images.matImage} typeButton="success" onClick={onCardClick} />
-      <CardActivity cardTitle="Lengua y Literatura" cardAlt="Lengua y Literatura" srcImageGrade={images.lenguaLitImage} typeButton="success" onClick={onCardClick} />
-      <CardActivity cardTitle="Tecnología" cardAlt="Tecnología" srcImageGrade={images.tecnoImage} typeButton="success" onClick={onCardClick} />
+      <CardActivity cardTitle="Matemáticas" cardAlt="Matemáticas" srcImageGrade={images.matImage} typeButton="success" onClick={onGoToTemplates} />
+      <CardActivity cardTitle="Lengua y Literatura" cardAlt="Lengua y Literatura" srcImageGrade={images.lenguaLitImage} typeButton="success" onClick={onGoToTemplates} />
+      <CardActivity cardTitle="Tecnología" cardAlt="Tecnología" srcImageGrade={images.tecnoImage} typeButton="success" onClick={onGoToTemplates} />
     </div>
   </>
 );
@@ -97,5 +97,10 @@ export const ActivityDasboard = () => {
     window.location.href = link;
   };
 
-  return renderGradeContent(grade, t, t2, gradeImages[grade], handleCardClick);
+  const handleGoToTemplates = (grade: string) => {
+    const link = `/dashboard/templates`;
+    window.location.href = link;
+  }
+
+  return renderGradeContent(grade, t, t2, gradeImages[grade], handleCardClick, handleGoToTemplates);
 };

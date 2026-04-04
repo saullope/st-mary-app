@@ -2,8 +2,9 @@ import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import { GameEngine } from "./GameEngine";
 
-export default async function StudentGamePage({ params }: { params: { id: string } }) {
-    const sesionId = BigInt(params.id);
+export default async function StudentGamePage({ params }: { params: Promise<{ id: string }> }) {
+    const resolvedParams = await params;
+    const sesionId = BigInt(resolvedParams.id);
 
     const sesion = await (prisma as any).lUDI_SESION.findUnique({
         where: { id: sesionId },

@@ -5,7 +5,8 @@ import prisma from "@/lib/db";
 
 // Returns fully populated user from SQL Server based on session cookie
 const getCurrentUser = async () => {
-    const session = cookies().get(AUTH_COOKIE_NAME)?.value;
+    const cookieStore = await cookies();
+    const session = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
     if (!session) {
         return null;

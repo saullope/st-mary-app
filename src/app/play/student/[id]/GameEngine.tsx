@@ -37,13 +37,13 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
 
     // 1. Initial Setup
     useEffect(() => {
-        const localData = localStorage.getItem('ludi_participant');
+        const localData = sessionStorage.getItem(`ludi_participant_${sesion.id}`);
         if (!localData) {
             router.push('/play');
             return;
         }
         setParticipantData(JSON.parse(localData));
-    }, [router]);
+    }, [router, sesion.id]);
 
     // 2. Countdown Logic
     useEffect(() => {
@@ -86,7 +86,7 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
 
         if (optionId) {
             const selectedOption = currentQuestion.opciones.find((o: any) => o.id.toString() === optionId);
-            isCorrect = selectedOption?.esCorrecta || false;
+            isCorrect = selectedOption?.esCorrecta || selectedOption?.es_correcta || false;
             
             if (isCorrect) {
                 // Calculate points based on time remaining
@@ -235,8 +235,8 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
                             className={`
                                 ${styles.optionBtn} 
                                 ${selectedOptionId === opcion.id.toString() ? styles.selected : ''}
-                                ${gameState === 'FEEDBACK' && opcion.esCorrecta ? styles.correct : ''}
-                                ${gameState === 'FEEDBACK' && selectedOptionId === opcion.id.toString() && !opcion.esCorrecta ? styles.incorrect : ''}
+                                ${gameState === 'FEEDBACK' && (opcion.esCorrecta || opcion.es_correcta) ? styles.correct : ''}
+                                ${gameState === 'FEEDBACK' && selectedOptionId === opcion.id.toString() && !(opcion.esCorrecta || opcion.es_correcta) ? styles.incorrect : ''}
                             `}
                             onClick={() => handleAnswer(opcion.id.toString())}
                             disabled={gameState === 'FEEDBACK'}

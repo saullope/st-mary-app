@@ -12,13 +12,14 @@ import styles from "@/styles/pages/view-activity.module.css";
 import MultimediaDisplay from "@/components/activity/MultimediaDisplay";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const activityId = parseInt(params.id);
+  const resolvedParams = await params;
+  const activityId = parseInt(resolvedParams.id);
   
   if (isNaN(activityId)) {
     return { title: "Actividad no encontrada | LudiGame" };
@@ -36,10 +37,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ActivityDetailView({ params }: PageProps) {
+  const resolvedParams = await params;
   const user = await getCurrentUser();
   
 
-  const activityId = parseInt(params.id);
+  const activityId = parseInt(resolvedParams.id);
   if (isNaN(activityId)) return <div>ID inválido</div>;
 
   const activity = await getActivityById(activityId);
@@ -210,10 +212,10 @@ export default async function ActivityDetailView({ params }: PageProps) {
                         return (
                           <div 
                             key={Number(opcion.id)} 
-                            className={`${styles.optionCard} ${opcion.esCorrecta ? styles.optionCorrect : styles.optionIncorrect}`}
+                            className={`${styles.optionCard} ${(opcion.esCorrecta || (opcion as any).es_correcta) ? styles.optionCorrect : styles.optionIncorrect}`}
                           >
                             <div className="d-flex align-items-center justify-content-center gap-2">
-                              {opcion.esCorrecta ? <FaCheck className="text-success" /> : <FaTimes className="text-danger" />}
+                              {((opcion.esCorrecta || (opcion as any).es_correcta)) ? <FaCheck className="text-success" /> : <FaTimes className="text-danger" />}
                               <span style={{ fontWeight: '500' }}>{displayContent}</span>
                             </div>
                           </div>

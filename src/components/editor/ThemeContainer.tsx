@@ -112,7 +112,7 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
                                 <Image
                                     className={style.actimg}
                                     src={theme.imageUrl}
-                                    alt={t(theme.nombre)}
+                                    alt={theme.nombre}
                                     width={120}
                                     height={80}
                                     style={{ objectFit: 'cover' }}

@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import {useTransition} from 'react';
+import {useRouter} from 'next/navigation';
 import {Locale} from '@/config';
 import {setUserLocale} from '@/services/locale';
 
@@ -16,12 +17,14 @@ export const LocaleSwitcherSelect = ({
   items,
   label
 }: Props) => {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  function onChange(value: string) {
+  async function onChange(value: string) {
     const locale = value as Locale;
+    await setUserLocale(locale);
     startTransition(() => {
-      setUserLocale(locale);
+      router.refresh();
     });
   }
 

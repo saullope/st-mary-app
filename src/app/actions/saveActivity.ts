@@ -26,7 +26,13 @@ export async function saveActivity(data: ActivityData) {
     const result = await prisma.$transaction(async (tx) => {
       // 1. Obtener ID del Tipo de Actividad
       const tipoActividadId = await getActivityTypeId(data.type);
-      const temaId = 1; 
+      
+      // Intentar obtener el tema por el fondo seleccionado. Si no existe, usamos el primer tema activo por defecto.
+      let temaId = data.backgroundImage ? await getThemeIdByUrl(data.backgroundImage) : null;
+      if (!temaId) {
+         const firstActiveTheme = await tx.ludiTema.findFirst({ where: { activo: true } });
+         temaId = firstActiveTheme ? Number(firstActiveTheme.id) : 1; // Fallback a 1 si no hay temas activos
+      }
 
       // 2. Crear Actividad Base
       const legacyActivity = await tx.aCTIVITY.create({
@@ -88,11 +94,19 @@ export async function saveActivity(data: ActivityData) {
                 }
             });
 
-            await tx.ludiMemoriaTarjeta.createMany({
-                data: [
-                    { parejaId: pareja.id, recursoId: resourceId, lado: 'A' },
-                    { parejaId: pareja.id, recursoId: resourceId, lado: 'B' }
-                ]
+            await tx.ludiMemoriaTarjeta.create({
+                data: {
+                    pareja: { connect: { id: pareja.id } },
+                    recurso: { connect: { id: resourceId } },
+                    lado: 'A'
+                }
+            });
+            await tx.ludiMemoriaTarjeta.create({
+                data: {
+                    pareja: { connect: { id: pareja.id } },
+                    recurso: { connect: { id: resourceId } },
+                    lado: 'B'
+                }
             });
         }
       } else {
@@ -133,11 +147,21 @@ export async function saveActivity(data: ActivityData) {
              }
           } else {
              const tfQ = q as TrueOrFalseQuestion;
-             await tx.ludiOpcion.createMany({
-                data: [
-                    { preguntaId: newQuestion.id, indice: 1, texto: "Verdadero", esCorrecta: tfQ.correctAnswer === "true" },
-                    { preguntaId: newQuestion.id, indice: 2, texto: "Falso", esCorrecta: tfQ.correctAnswer === "false" }
-                ]
+             await tx.ludiOpcion.create({
+                data: {
+                    pregunta: { connect: { id: newQuestion.id } },
+                    indice: 1,
+                    texto: "Verdadero",
+                    esCorrecta: tfQ.correctAnswer === "true"
+                }
+             });
+             await tx.ludiOpcion.create({
+                data: {
+                    pregunta: { connect: { id: newQuestion.id } },
+                    indice: 2,
+                    texto: "Falso",
+                    esCorrecta: tfQ.correctAnswer === "false"
+                }
              });
           }
           i++;

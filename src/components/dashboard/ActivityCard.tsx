@@ -7,6 +7,8 @@ import styles from "@/styles/pages/my-activities.module.css";
 import { DeleteActivityButton } from "@/app/dashboard/my-activities/DeleteActivityButton";
 import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
 import CreatorCard from "./CreatorCard";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 interface ActivityCardProps {
   activity: any;
@@ -17,19 +19,21 @@ interface ActivityCardProps {
 }
 
 export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, sessionPicture, isAdmin }: ActivityCardProps) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
-  const [sessionPin, setSessionPin] = useState<string | null>(null);
   const [isLaunching, setIsLaunching] = useState(false);
+  
+  const t = useTranslations("activityCard");
 
   const handleLaunch = async () => {
     setIsLaunching(true);
     const result = await createGameSession(activity.activityId);
     if (result.success) {
-        setSessionPin(result.pin || "");
+        router.push(`/dashboard/live/${result.sessionId}`);
     } else {
         alert(result.error);
+        setIsLaunching(false);
     }
-    setIsLaunching(false);
   };
 
   const handleShare = async () => {
@@ -79,7 +83,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
           {activity.activity.activity_name}
         </h3>
         <p className={styles.cardDate}>
-          Creado el {new Date(activity.activity.created_date).toLocaleDateString()}
+          {t('createdAt')} {new Date(activity.activity.created_date).toLocaleDateString()}
         </p>
         <div className="d-flex justify-content-between align-items-center w-100 mt-2">
           <span className={`${styles.badgeType} ${typeBadgeClass}`}>
@@ -97,17 +101,11 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
       </div>
 
       <div className={styles.cardFooter}>
-        {sessionPin ? (
-            <div className="w-100 text-center p-2 bg-success text-white rounded mb-2 animate__animated animate__flipInX">
-                <small className="d-block">CÓDIGO PARA ALUMNOS:</small>
-                <strong style={{ fontSize: '1.5rem', letterSpacing: '4px' }}>{sessionPin}</strong>
-            </div>
-        ) : null}
         <div className={styles.actionGroup}>
           <button 
             className={`${styles.actionButtonIcon} ${styles.shareIcon}`} 
             onClick={handleShare}
-            title="Copiar enlace"
+            title={t('shareButton')}
           >
             {copied ? <FaCheck size={18} /> : <FaShareNodes size={18} />}
           </button>
@@ -115,7 +113,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             className={`${styles.actionButtonIcon} ${styles.rocketIcon}`} 
             onClick={handleLaunch}
             disabled={isLaunching}
-            title="Lanzar Partida (Generar PIN)"
+            title="Lanzar Partida (Panel en Vivo)"
             style={{ backgroundColor: '#ff9f43', color: 'white' }}
           >
             {isLaunching ? (
@@ -127,7 +125,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
           <Link 
             href={`/views/activity/${activity.activityId}`} 
             className={`${styles.actionButtonIcon} ${styles.playIcon}`} 
-            title="Jugar/Previsualizar"
+            title={t('viewButton')}
             target="_blank" rel="noopener noreferrer"
           >
             <FaPlay size={18} />
@@ -135,13 +133,14 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
           <Link 
             href={getEditRoute(activity.tipoActividadId)} 
             className={`${styles.actionButtonIcon} ${styles.editIcon}`} 
-            title="Editar"
+            title={t('editButton')}
           >
             <FaPenToSquare size={18} />
           </Link>
           <DeleteActivityButton 
             activityId={activity.activityId} 
             activityName={activity.activity.activity_name} 
+            titleButton={t('deleteButton')}
           />
         </div>
       </div>

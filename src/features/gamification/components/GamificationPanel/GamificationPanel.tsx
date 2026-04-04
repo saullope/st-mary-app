@@ -122,18 +122,19 @@ export default function GamificationPanel({
     updateConfig({ selectedBadges: Array.from(currentBadges) });
   };
 
-  const handleMissionToggle = (text: string) => {
-     // Solo feedback auditivo/visual simple, no guardamos estado de misiones seleccionadas en este ejemplo básico
-     triggerConfetti();
-     if (config.voiceEnabled) speak(`Misión seleccionada: ${text}`);
+  const handleMissionToggle = (missionId: string, missionText: string) => {
+    // Feedback auditivo/visual simple
+    triggerConfetti();
+    if (config.voiceEnabled) speak(`Misión seleccionada: ${missionText}`);
      
-     // Si quisiéramos guardar las misiones:
-     /*
-     const currentMissions = new Set(config.selectedMissions);
-     if (currentMissions.has(text)) currentMissions.delete(text);
-     else currentMissions.add(text);
-     updateConfig({ selectedMissions: Array.from(currentMissions) });
-     */
+    // Guardar estado de misiones seleccionadas
+    const currentMissions = new Set(config.selectedMissions || []);
+    if (currentMissions.has(missionId)) {
+      currentMissions.delete(missionId);
+    } else {
+      currentMissions.add(missionId);
+    }
+    updateConfig({ selectedMissions: Array.from(currentMissions) });
   };
 
   const handleSave = () => {
@@ -301,12 +302,12 @@ export default function GamificationPanel({
             {MISIONES_POR_GRADO[config.gradeId]?.map((mision) => (
               <label key={mision.id} className={styles.checkboxLabel}>
                 <input 
-                    type="checkbox" 
-                    onChange={(e) => {
-                        if(e.target.checked) handleMissionToggle(mision.studentText);
-                    }}
+                    type="checkbox"
+                    id={`mision-${mision.id}`}
+                    checked={(config.selectedMissions || []).includes(mision.id)}
+                    onChange={() => handleMissionToggle(mision.id, mision.studentText)}
                 />
-                {mision.text}
+                <span style={{ marginLeft: "8px" }}>{mision.text}</span>
               </label>
             ))}
           </div>

@@ -34,7 +34,7 @@ model ACTIVITY {
   created_date    DateTime       @default(now())
   modified_date   DateTime       @default(now())
   image_url       String?        @db.VarChar(100)
-  isTemplate      Boolean        @default(false) @map("isTemplate")
+  isTemplate      Boolean?       @default(false) @map("isTemplate")
   ludiactividades LudiActividad?
 }
 
@@ -290,8 +290,21 @@ model LudiUser {
   rol          LudiRol         @relation(fields: [rolId], references: [id], onUpdate: NoAction, map: "FK_LUDI_USER_ROL")
   actividades  LudiActividad[]
   sesiones     LUDI_SESION[]
+  config       LudiUserConfig?
 
   @@map("LUDI_USERS")
+}
+
+model LudiUserConfig {
+  userId               String   @id @map("user_id")
+  defaultTimeLimitMs   Int      @default(30000) @map("default_time_limit_ms")
+  defaultPoints        Int      @default(100) @map("default_points")
+  defaultVoiceEnabled  Boolean  @default(true) @map("default_voice_enabled")
+  defaultIsPublic      Boolean  @default(false) @map("default_is_public")
+  
+  user                 LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("LUDI_USER_CONFIG")
 }
 
 model LudiAvatar {
@@ -306,17 +319,17 @@ model LudiAvatar {
 
 model LudiRespuestaEstudiante {
   id                Int      @id @default(autoincrement())
-  participanteId    BigInt   @map("participanteId")
-  preguntaId        BigInt   @map("preguntaId")
-  opcionId          BigInt?  @map("opcionId")
-  respuestaBooleana Boolean? @map("respuestaBooleana")
-  esCorrecta        Boolean  @map("esCorrecta")
-  tiempoRespuestaMs Int      @map("tiempoRespuestaMs")
-  puntajeObtenido   Int      @map("puntajeObtenido")
+  participanteId    BigInt
+  preguntaId        BigInt
+  opcionId          BigInt?
+  respuestaBooleana Boolean?
+  esCorrecta        Boolean
+  tiempoRespuestaMs Int
+  puntajeObtenido   Int
 
   participante      LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  pregunta          LudiPregunta             @relation(fields: [preguntaId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  opcion            LudiOpcion?              @relation(fields: [opcionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  pregunta          LudiPregunta             @relation(fields: [preguntaId], references: [id], onDelete: NoAction, onUpdate: NoAction) // THIS IS THE LINE TO FIX
+  opcion            LudiOpcion?              @relation(fields: [opcionId], references: [id], onDelete: NoAction, onUpdate: NoAction) // THIS IS THE LINE TO FIX
 
   @@map("LudiRespuestaEstudiante")
 }

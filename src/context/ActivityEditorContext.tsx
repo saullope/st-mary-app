@@ -70,7 +70,7 @@ const defaultState: ActivityEditorState = {
   memoryImages: [],
   config: {
     gradeId: 1,
-    timeLimit: 60,
+    timeLimit: 30,
     pointsPerCorrect: 10,
     selectedBadges: [],
     selectedMissions: [],

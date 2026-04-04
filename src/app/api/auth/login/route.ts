@@ -6,7 +6,7 @@ import prisma from "@/lib/db";
 
 export async function POST(request: NextRequest) {
     try {
-        const authorization = headers().get("Authorization");
+        const authorization = (await headers()).get("Authorization");
 
         if (!authorization?.startsWith("Bearer ")) {
             return NextResponse.json(
@@ -92,7 +92,8 @@ export async function POST(request: NextRequest) {
             expiresIn: AUTH_COOKIE_MAX_AGE_MS,
         });
 
-        cookies().set({
+        const cookieStore = await cookies();
+        cookieStore.set({
             name: AUTH_COOKIE_NAME,
             value: sessionCookie,
             maxAge: AUTH_COOKIE_MAX_AGE,

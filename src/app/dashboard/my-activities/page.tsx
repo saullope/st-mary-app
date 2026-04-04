@@ -9,19 +9,24 @@ import PaginationControls from "@/components/dashboard/PaginationControls";
 import { redirect } from "next/navigation";
 import styles from "@/styles/pages/my-activities.module.css";
 import ActivityCard from "@/components/dashboard/ActivityCard";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Mis Actividades | LudiGame",
-  description: "Gestión de actividades creadas por el docente",
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("myActivitiesContent");
+
+    return {
+        title: t('metaTitle'),
+        description: t('metaDescription')
+    };
+}
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     typeId?: string;
     search?: string;
     page?: string;
     limit?: string;
-  };
+  }>;
 }
 
 export default async function MyActivities({ searchParams }: PageProps) {
@@ -32,12 +37,19 @@ export default async function MyActivities({ searchParams }: PageProps) {
     redirect("/auth/login");
   }
 
+  // use Translations hook must be called inside the component, not before any async operations
+
+  const t = await getTranslations ("myActivitiesContent");
+
+
+  const resolvedSearchParams = await searchParams;
+
   // Fetch Data
   const types = await getActivityTypes();
-  const selectedTypeId = searchParams.typeId ? parseInt(searchParams.typeId) : undefined;
-  const searchQuery = searchParams.search;
-  const page = searchParams.page ? parseInt(searchParams.page) : 1;
-  const limit = searchParams.limit ? parseInt(searchParams.limit) : 6; // Changed to 6 for a nicer grid
+  const selectedTypeId = resolvedSearchParams.typeId ? parseInt(resolvedSearchParams.typeId) : undefined;
+  const searchQuery = resolvedSearchParams.search;
+  const page = resolvedSearchParams.page ? parseInt(resolvedSearchParams.page) : 1;
+  const limit = resolvedSearchParams.limit ? parseInt(resolvedSearchParams.limit) : 6; // Changed to 6 for a nicer grid
   
   const { activities, total } = await getUserActivities(user.id, selectedTypeId, searchQuery, page, limit);
 
@@ -64,8 +76,8 @@ export default async function MyActivities({ searchParams }: PageProps) {
     <div className={styles.pageContainer}>
       <div className={styles.headerContainer}>
         <div>
-          <h1 className={styles.headerTitle}>Mis Actividades</h1>
-          <p className="text-muted mb-0">Gestiona y organiza tus recursos educativos</p>
+          <h1 className={styles.headerTitle}>{t("titlePage")}</h1>
+          <p className="text-muted mb-0">{t("descPage")}</p>
         </div>
         <div className="d-flex gap-3">
           <ExportActivitiesButton activities={activities} />

@@ -1,12 +1,15 @@
-.body-vistaeducador{
+.body-vistaeducador {
     background-image: url('/images/bienvenida/Fondo-bienvenida.png');
-    width: 100%;
-    align-items: center;
-    justify-content: center;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    min-height: 85vh;
+    width: 100%;
+    min-height: 100vh; /* Usa 100vh para que cubra todo */
+    display: flex;
+    flex-direction: column; /* Esto mantiene Título -> Estrellas -> Texto en orden vertical */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .texto-bienvenida{

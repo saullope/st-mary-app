@@ -5,7 +5,7 @@ import { FaTrash } from "react-icons/fa6";
 import { softDeleteActivity } from "./actions";
 import styles from "@/styles/pages/my-activities.module.css";
 
-export function DeleteActivityButton({ activityId, activityName }: { activityId: number, activityName: string }) {
+export function DeleteActivityButton({ activityId, activityName, titleButton }: { activityId: number, activityName: string, titleButton: string }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -25,7 +25,7 @@ export function DeleteActivityButton({ activityId, activityName }: { activityId:
   return (
     <button 
         className={`${styles.actionButtonIcon} ${styles.deleteIcon}`} 
-        title="Eliminar"
+        title={titleButton}
         onClick={handleDelete}
         disabled={isDeleting}
         style={{ opacity: isDeleting ? 0.5 : 1, cursor: isDeleting ? 'not-allowed' : 'pointer' }}

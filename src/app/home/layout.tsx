@@ -14,21 +14,13 @@ export default function LandingLayout({
     children: React.ReactNode;
   }>) {
     return (
-      <html>
-        <head>
-            <meta charSet="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link rel="preconnect" href="https://fonts.gstatic.com" />
-        </head>
-        <body style={{ backgroundColor: "#e0f0ff", color: "#222", lineHeight: "1.6" }} className={poppins.className}>
+        <div style={{ backgroundColor: "#e0f0ff", color: "#222", lineHeight: "1.6", minHeight: "100vh" }} className={poppins.className}>
             <header>
                 <Sidebar/>
             </header>
             <main>
             {children}
             </main>
-        </body>
-      </html>
+        </div>
     );
   }

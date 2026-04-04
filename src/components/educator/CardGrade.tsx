@@ -19,8 +19,9 @@ export const CardGrade = ({cardTitle, cardAlt, srcImageGrade }: Props) => {
                         className="card-img-top" 
                         width={368}
                         height={216.38}
-                        alt={cardAlt} >
-                    </Image>
+                        alt={cardAlt}
+                        style={{ height: "auto" }}
+                    />
                         <div className={`${styles['card-body-activity']} p-3`}>
                             <h5 className="card-title text-center">{cardTitle}</h5>
                         </div>

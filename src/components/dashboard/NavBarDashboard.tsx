@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from "next/image";
 import { Dropdown, Spinner } from 'react-bootstrap';
 import { signOut } from "firebase/auth";
 import { useRouter } from 'next/navigation';
 import { auth } from "@/firebase/firebase";
 import { BsGlobe } from 'react-icons/bs';
+import { FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import { LanguageSelector } from "@/components";
 import { AUTH_API_ROUTES } from "@/lib/auth/constants";
 
@@ -35,6 +36,23 @@ interface FirebaseSession {
 interface NavbarDashboardProps {
     sessionData: FirebaseSession;
 }
+
+// Custom Toggle to fix React 19 ref warning
+const CustomToggle = React.forwardRef<HTMLDivElement, any>(
+  ({ children, onClick }, ref) => (
+    <div
+      ref={ref}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+      style={{ cursor: 'pointer' }}
+    >
+      {children}
+    </div>
+  )
+);
+CustomToggle.displayName = 'CustomToggle';
 
 export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData }) => {
     const router = useRouter();
@@ -135,7 +153,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                         </div>
                         <div className="dropdown">
                             <Dropdown>
-                                <Dropdown.Toggle as="div" id="dropdown-custom-components" style={{ cursor: 'pointer' }}>
+                                <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
                                     <span>
                                             <Image
                                                 src={ sessionData.picture || '/images/profile.png'}
@@ -150,14 +168,42 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                     </span>
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu>
-                                    <Dropdown.Header>{sessionData.name || sessionData.email}</Dropdown.Header>
+                                <Dropdown.Menu className="shadow border-0 rounded-3 mt-2" style={{ minWidth: '220px' }}>
+                                    <div className="px-3 py-2 text-center border-bottom mb-2">
+                                        <Image
+                                            src={sessionData.picture || '/images/profile.png'}
+                                            alt="User Profile"
+                                            width={60}
+                                            height={60}
+                                            priority={false}
+                                            unoptimized={true}
+                                            style={{ borderRadius: '50%', marginBottom: '10px' }}
+                                        />
+                                        <p className="mb-0 fw-bold">{sessionData.name || 'Usuario'}</p>
+                                        <p className="mb-0 text-muted small">{sessionData.email}</p>
+                                    </div>
+                                    
+                                    <Dropdown.Item 
+                                        as="button" 
+                                        onClick={() => router.push(`/view/profile/${sessionData.uid}`)}
+                                        className="py-2 px-3 fw-medium d-flex align-items-center"
+                                    >
+                                        <FaUserCircle className="me-2 text-primary" /> Mi Perfil
+                                    </Dropdown.Item>
+
+                                    <Dropdown.Item 
+                                        as="button" 
+                                        onClick={() => router.push('/settings')}
+                                        className="py-2 px-3 fw-medium d-flex align-items-center"
+                                    >
+                                        <FaCog className="me-2 text-secondary" /> Configuración
+                                    </Dropdown.Item>
+                                    
                                     <Dropdown.Divider />
-                                    <Dropdown.Item href="#/action-1">Cuenta</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-1">Configuracion</Dropdown.Item>
+                                    
                                     <Dropdown.Item 
                                         onClick={handleLogout} 
-                                        className="text-danger"
+                                        className="py-2 px-3 fw-medium text-danger d-flex align-items-center"
                                         disabled={isLoggingOut}
                                     >
                                         {isLoggingOut ? (
@@ -166,7 +212,9 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                                 Cerrando...
                                             </>
                                         ) : (
-                                            'Cerrar sesion'
+                                            <>
+                                                <FaSignOutAlt className="me-2" /> Cerrar sesión
+                                            </>
                                         )}
                                     </Dropdown.Item>
                                 </Dropdown.Menu>

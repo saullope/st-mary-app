@@ -6,7 +6,7 @@ import { AUTH_COOKIE_NAME, AUTH_COOKIE_MAX_AGE } from "@/lib/auth/constants";
 // POST: Refresh session with new ID token from client
 export async function POST(request: NextRequest) {
     try {
-        const authorization = headers().get("Authorization");
+        const authorization = (await headers()).get("Authorization");
 
         // If client sends a fresh ID token, use it to create new session
         if (authorization?.startsWith("Bearer ")) {
@@ -24,7 +24,8 @@ export async function POST(request: NextRequest) {
                 expiresIn: AUTH_COOKIE_MAX_AGE * 1000,
             });
 
-            cookies().set({
+            const cookieStore = await cookies();
+            cookieStore.set({
                 name: AUTH_COOKIE_NAME,
                 value: newSessionCookie,
                 maxAge: AUTH_COOKIE_MAX_AGE,
@@ -40,7 +41,8 @@ export async function POST(request: NextRequest) {
         }
 
         // If no token provided, check current session status
-        const sessionCookie = cookies().get(AUTH_COOKIE_NAME)?.value;
+        const cookieStore = await cookies();
+        const sessionCookie = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
         if (!sessionCookie) {
             return NextResponse.json(
@@ -76,7 +78,8 @@ export async function POST(request: NextRequest) {
         console.error("Error in refresh endpoint:", error);
 
         if (error?.errorInfo?.code === "auth/session-cookie-expired") {
-            cookies().set({
+            const cookieStore = await cookies();
+            cookieStore.set({
                 name: AUTH_COOKIE_NAME,
                 value: "",
                 maxAge: 0,
@@ -98,7 +101,8 @@ export async function POST(request: NextRequest) {
 // GET: Check if session needs refresh
 export async function GET() {
     try {
-        const sessionCookie = cookies().get(AUTH_COOKIE_NAME)?.value;
+        const cookieStore = await cookies();
+        const sessionCookie = cookieStore.get(AUTH_COOKIE_NAME)?.value;
 
         if (!sessionCookie) {
             return NextResponse.json({ needsRefresh: true, valid: false }, { status: 200 });

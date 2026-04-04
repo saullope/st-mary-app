@@ -22,8 +22,9 @@ export const CardActivity = ({ cardTitle, cardAlt, srcImageGrade, typeButton, on
             className="card-img-top"
             width={368}
             height={216.38}
-            alt={cardAlt}>
-          </Image>
+            alt={cardAlt}
+            style={{ height: "auto" }}
+          />
           <div className={`${styles['card-body-activity']} p-2`}>
             <button className={`${styles[`btn-${typeButton}-activity`]}`} onClick={() => onClick(cardTitle)}>{cardTitle}</button>
           </div>

@@ -5,11 +5,24 @@
     "institution": "Educational institution",
     "signIn": "Log In",
     "signUp": "Sign Up",
-    "landingTextLevel1": "Create Educational Activities",
-    "landingTextLevel2": "With a playful approach to energize the classroom",
+    "landingTextLevel1": "Create educational activities",
+    "landingTextLevel2": "Incorporate gamification and transform your way of teaching!",
     "landingTextLevel3": "Children learn by playing!",
     "landingTextLevel4": "Games adapted to the level of each grade",
-    "rigths": "All Rights Reserved 2024"
+    "rigths": "All Rights Reserved",
+    "startCreate": "Start Creating",
+    "startPlay":"Enter the code to play",
+    "kidsExperience": "Educational experiences focused on 1st, 2nd, and 3rd grade",
+    "textWhy": "Why use gamification in the classroom?",
+    "card1Title": "Fosters Interest",
+    "card1Desc": "Transform tasks into challenges that spark curiosity and enthusiasm.",
+    "card2Title": "Improves Learning",
+    "card2Desc": "Enhances memory, attention, and comprehension through play.",
+    "card3Title": "Facilitates Participation",
+    "card3Desc": "Actively involves the entire group in fun educational activities.",
+    "text1Educator": "LudiGame empowers the creativity of ",
+    "educator:": "Educators!",
+    "ideasText": "Turn ideas into interactive games"
   },
   "LocaleSwitcher": {
     "es": "Español",
@@ -96,7 +109,8 @@
     "home": "Home",
     "createActivity": "Create Activity",
     "myActivities": "My Activities",
-    "reports": "Reports"
+    "reports": "Reports",
+    "templates": "Templates"
   },
   "firstGradeItemDashboard": {
     "gradeName": "First Grade",
@@ -180,5 +194,28 @@
     "backToLogin": "Back to Login",
     "emailSentSuccess": "If the email exists, you will receive a recovery link.",
     "genericError": "An error occurred. Please try again."
+  },
+  "myActivitiesContent": {
+    "metaTitle": "My Activities",
+    "metaDescription": "Manage and organize your educational resources",
+    "titlePage": "My Activities",
+    "descPage":"Manage and organize your educational resources",
+    "noActivities": "You haven't created any activities yet. Start by creating your first activity!",
+    "createActivityButton": "New Activity",
+    "exportToExcel": "Export to Excel",
+    "typeActivitySearch": "Type of Activity",
+    "searchPlaceholder": "Search by activity name...",
+    "all": "All"
+  },
+   "activityCard": {
+    "viewButton": "View",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "sessionButton": "Session",
+    "shareButton": "Share",
+    "confirmDeleteTitle": "Are you sure you want to delete this activity?",
+    "confirmDeleteMessage": "This action cannot be undone.",
+    "cancelButton": "Cancel",
+    "createdAt": "Created at"
   }
 }

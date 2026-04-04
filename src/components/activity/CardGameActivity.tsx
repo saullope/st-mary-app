@@ -18,7 +18,6 @@ interface CardGameActivityProps {
 
 
 export const CardGameActivity  = ({imageAct, title, page_to, subtitle, description, buttonText}: CardGameActivityProps) => {
-
     return (
         <>
                     <div className="col-md-3">
@@ -35,7 +34,7 @@ export const CardGameActivity  = ({imageAct, title, page_to, subtitle, descripti
                         >
                             <div
                                 style={{ padding: "20px" }}
-                                className="text-center"
+                                className="justify-content-center align-items-center d-flex"
                             >
                                 <Image src={imageAct} alt="LudiQuiz" width={50} height={50} />
                             </div>

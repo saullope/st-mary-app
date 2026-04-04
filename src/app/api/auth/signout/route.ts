@@ -4,7 +4,8 @@ import { AUTH_COOKIE_NAME } from "@/lib/auth/constants";
 
 export async function POST() {
     try {
-        cookies().set({
+        const cookieStore = await cookies();
+        cookieStore.set({
             name: AUTH_COOKIE_NAME,
             value: "",
             maxAge: 0,

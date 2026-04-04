@@ -1,8 +1,10 @@
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server";
 import { CardGameActivity } from "@/components/activity";
-import Image from "next/image";
-import styles from "@/styles/pages/create-activity.module.css"; // Import styles
+import styles from "@/styles/pages/create-activity.module.css";
+import getCurrentUser from "@/lib/auth/getCurrentUser";
+import getSession from "@/lib/auth/getSession";
+import { redirect } from "next/navigation";
 
 // Import images from public/images via alias
 import LudiquizImg from "@/images/ludiquiz.png";
@@ -19,6 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CreateActivity() {
+    const user = await getCurrentUser();
+    const session = await getSession();
+
+    if (!user || !session) {
+        redirect("/auth/login");
+    }
+
     const t = await getTranslations("createActivityDashboard");
 
     // Static definition of supported game templates

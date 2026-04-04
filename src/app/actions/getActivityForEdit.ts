@@ -81,12 +81,12 @@ export async function getActivityForEdit(id: number) {
             answers: p.opciones.map((o: any) => ({
               id: o.indice,
               text: o.texto || "",
-              isCorrect: o.esCorrecta,
+              isCorrect: o.esCorrecta || o.es_correcta,
               imageUrl: null, 
             }))
           } as LudiQuizQuestion;
         } else {
-          const correctOption = p.opciones.find((o: any) => o.esCorrecta);
+          const correctOption = p.opciones.find((o: any) => o.esCorrecta || o.es_correcta);
           const isTrueCorrect = correctOption?.texto?.toLowerCase() === "verdadero";
           
           return {

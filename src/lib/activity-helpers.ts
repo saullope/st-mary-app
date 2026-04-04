@@ -44,7 +44,10 @@ export async function getThemeIdByUrl(url: string): Promise<number | null> {
   // Extract filename or unique part if possible, or search exact match
   // The frontend sends "/images/theme/tema4.jpg"
   const theme = await prisma.ludiTema.findFirst({
-    where: { imageUrl: { contains: url } }
+    where: { 
+      imageUrl: { contains: url },
+      activo: true
+    }
   });
   
   return theme ? Number(theme.id) : null;

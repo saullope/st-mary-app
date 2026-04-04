@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default async function TemplatesPage({
   searchParams,
 }: {
-  searchParams: { grade?: string; subject?: string };
+  searchParams: Promise<{ grade?: string; subject?: string }>;
 }) {
   const user = await getCurrentUser();
   const session = await getSession();
@@ -26,11 +26,13 @@ export default async function TemplatesPage({
     redirect("/auth/login");
   }
 
-  const cookieStore = cookies();
+  const resolvedSearchParams = await searchParams;
+
+  const cookieStore = await cookies();
   const defaultGrade = cookieStore.get("selectedGrade")?.value || "1ro";
 
-  const currentGradeFilter = searchParams.grade || defaultGrade;
-  const currentSubjectFilter = searchParams.subject || "All";
+  const currentGradeFilter = resolvedSearchParams.grade || defaultGrade;
+  const currentSubjectFilter = resolvedSearchParams.subject || "All";
 
   // Buscar el ID del grado basado en el string (ej. "1ro", "2do", "3ro")
   const gradoDb = await prisma.lUDI_COMMON_GRADE.findFirst({

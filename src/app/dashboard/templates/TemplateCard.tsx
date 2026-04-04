@@ -141,7 +141,7 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
 
       <div className={styles.cardFooter} style={{ padding: "1.25rem", borderTop: "1px solid rgba(0,0,0,0.05)", display: "flex", flexDirection: "column", gap: "10px" }}>
         {sessionPin && (
-            <div className="w-100 text-center p-2 bg-success text-white rounded animate__animated animate__bounceIn" style={{ fontSize: '0.9rem' }}>
+            <div className="w-100 text-center p-2 bg-success text-white rounded" style={{ fontSize: '0.9rem' }}>
                 PIN PARA ALUMNOS: <strong>{sessionPin}</strong>
             </div>
         )}

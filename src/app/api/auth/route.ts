@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { AUTH_COOKIE_NAME } from "@/lib/auth/constants";
 
 export async function GET(request: NextRequest) {
-    const session = cookies().get(AUTH_COOKIE_NAME)?.value || "";
+    const session = (await cookies()).get(AUTH_COOKIE_NAME)?.value || "";
 
     if (!session) {
         return NextResponse.json({ isLogged: false, uid: "", email: "" }, { status: 401 });
