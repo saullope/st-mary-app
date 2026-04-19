@@ -76,17 +76,10 @@ async function main() {
   ];
 
   for (const tema of temas) {
-    // Check if exists by ID first to avoid unique constraint issues if names change
-    const existing = await prisma.ludiTema.findFirst({ where: { id: BigInt(tema.id) } });
+    const existing = await prisma.ludiTema.findFirst({ where: { nombre: tema.nombre } });
     if (!existing) {
         await prisma.ludiTema.create({
             data: {
-                // id: is autoincrement, but we can force it if needed?
-                // Prisma doesn't easily support force ID on autoincrement in create unless allowed by DB.
-                // SQL Server IDENTITY_INSERT needs to be ON.
-                // Safer to just create without ID and rely on natural order or update by name?
-                // But data.sql used explicit IDs.
-                // Let's try to find by name.
                 nombre: tema.nombre,
                 imageUrl: tema.imageUrl,
                 descripcion: tema.descripcion,
@@ -126,7 +119,50 @@ async function main() {
     });
   }
 
-  console.log('Database seeded successfully (Roles, Types, Origins, Resources, Themes, Feedback, Scoring).')
+  // Grados Escolares (LUDI_COMMON_GRADE)
+  const grados = [
+    { id: 1, name: 'Primer Grado', desc: 'Actividades para 1er Grado', key: 'firstGrade' },
+    { id: 2, name: 'Segundo Grado', desc: 'Actividades para 2do Grado', key: 'secondGrade' },
+    { id: 3, name: 'Tercer Grado', desc: 'Actividades para 3er Grado', key: 'thirdGrade' },
+  ];
+
+  for (const grado of grados) {
+    const existing = await prisma.lUDI_COMMON_GRADE.findFirst({ where: { key_string: grado.key } });
+    if (!existing) {
+        await prisma.lUDI_COMMON_GRADE.create({
+            data: {
+                grade_type_name: grado.name,
+                grade_type_desc: grado.desc,
+                key_string: grado.key
+            }
+        });
+    }
+  }
+
+  // Avatares de Estudiantes (LudiAvatar)
+  const avatares = [
+    { nombre: 'Monstruo 1', url: '/images/avatars/avatar1.png' },
+    { nombre: 'Monstruo 2', url: '/images/avatars/avatar2.png' },
+    { nombre: 'Monstruo 3', url: '/images/avatars/avatar3.png' },
+    { nombre: 'Monstruo 4', url: '/images/avatars/avatar4.png' },
+    { nombre: 'Monstruo 5', url: '/images/avatars/avatar5.png' },
+    { nombre: 'Monstruo 6', url: '/images/avatars/avatar6.png' },
+  ];
+
+  for (const avatar of avatares) {
+    const existing = await prisma.ludiAvatar.findFirst({ where: { urlImagen: avatar.url } });
+    if (!existing) {
+        await prisma.ludiAvatar.create({
+            data: {
+                nombre: avatar.nombre,
+                urlImagen: avatar.url,
+                activo: true
+            }
+        });
+    }
+  }
+
+  console.log('Database seeded successfully: Roles, Types, Origins, Resources, Themes, Feedback, Scoring, Grades, and Avatars.')
 }
 
 main()
