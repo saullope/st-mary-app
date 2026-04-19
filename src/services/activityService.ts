@@ -48,7 +48,10 @@ export async function getUserActivities(userId: string, typeId?: number, searchQ
               email: true
             }
           },
-          activity: true
+          activity: true,
+          LUDI_SESION: {
+            select: { estado: true }
+          }
         },
         orderBy: {
           activity: {

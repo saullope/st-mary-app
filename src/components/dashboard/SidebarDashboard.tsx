@@ -3,13 +3,32 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/pages/sidebar.module.css';
-import { FaHome, FaPlus, FaListOl, FaFileAlt, FaClone } from 'react-icons/fa';
+import { FaHome, FaPlus, FaListOl, FaFileAlt, FaClone, FaChartPie } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from 'react';
 
 export const SidebarDashboard = () => {
     const t = useTranslations("SidebarTranslation");
     const pathname = usePathname(); // Hook para obtener la ruta actual
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const checkRole = async () => {
+            try {
+                const res = await fetch('/api/auth');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.role === 'ADMIN') {
+                        setIsAdmin(true);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching user role", error);
+            }
+        };
+        checkRole();
+    }, []);
 
     const links = [
         { href: `/dashboard`, icon: FaHome, text: t('home') },
@@ -17,6 +36,7 @@ export const SidebarDashboard = () => {
         { href: '/dashboard/my-activities', icon: FaListOl, text: t('myActivities') },
         { href: '/dashboard/reports', icon: FaFileAlt, text: t('reports') },
         { href: '/dashboard/templates', icon: FaClone, text: t('templates') }, // Temporarily hardcoded text, could add translation later
+        ...(isAdmin ? [{ href: '/admin/reports', icon: FaChartPie, text: 'Efectividad Global' }] : []),
     ];
 
     return (

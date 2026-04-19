@@ -1,9 +1,9 @@
 import { NavbarDashboard, SidebarDashboard } from "@/components/dashboard";
 import getSession from '@/lib/auth/getSession';
+import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import styles from '@/styles/pages/sidebar.module.css';
-
 
 interface FirebaseSession {
   s: string;
@@ -27,18 +27,19 @@ interface FirebaseSession {
   uid: string;
 }
 
-function mapDecodedIdTokenToFirebaseSession(token: DecodedIdToken): FirebaseSession {
+function mapDecodedIdTokenToFirebaseSession(token: DecodedIdToken, dbUser?: any): FirebaseSession {
+  // Use Firebase token data as fallback, prioritize DB user if exists
   return {
     s: "https://session.firebase.google.com/st-mary-firebase-dev",
-    name: token.name || '',
-    picture: token.picture,
+    name: dbUser?.nombre || token.name || '',
+    picture: token.picture, // Google profile pic URL
     aud: token.aud,
     auth_time: token.auth_time,
     user_id: token.user_id,
     sub: token.sub,
     iat: token.iat,
     exp: token.exp,
-    email: token.email || '',
+    email: dbUser?.email || token.email || '',
     email_verified: token.email_verified || false,
     firebase: {
       identities: {
@@ -64,10 +65,13 @@ export default async function DashboardLayout({
     redirect('/auth/login');
   }
 
-  const user: FirebaseSession = mapDecodedIdTokenToFirebaseSession(token);
+  // Get user from our SQL database (via Prisma) to fetch real name
+  const dbUser = await getCurrentUser();
+
+  const user: FirebaseSession = mapDecodedIdTokenToFirebaseSession(token, dbUser);
 
   return (
-<div className={styles['bodySidebar']}>
+    <div className={styles['bodySidebar']}>
         <SidebarDashboard />
         <div style={{ marginLeft: '80px' }}>
           <NavbarDashboard sessionData={user} />

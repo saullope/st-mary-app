@@ -66,6 +66,8 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
     }
   };
 
+  const isActivityFinalized = activity.LUDI_SESION?.some((s: any) => s.estado === 'FINALIZADA') || false;
+
   return (
     <div className={styles.activityCard}>
       <div className={styles.cardHeader}>
@@ -112,9 +114,9 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
           <button 
             className={`${styles.actionButtonIcon} ${styles.rocketIcon}`} 
             onClick={handleLaunch}
-            disabled={isLaunching}
-            title="Lanzar Partida (Panel en Vivo)"
-            style={{ backgroundColor: '#ff9f43', color: 'white' }}
+            disabled={isLaunching || isActivityFinalized}
+            title={isActivityFinalized ? "Actividad ya finalizada" : "Lanzar Partida (Panel en Vivo)"}
+            style={{ backgroundColor: isActivityFinalized ? '#ccc' : '#ff9f43', color: 'white', cursor: isActivityFinalized ? 'not-allowed' : 'pointer' }}
           >
             {isLaunching ? (
                 <span className="spinner-border spinner-border-sm" />

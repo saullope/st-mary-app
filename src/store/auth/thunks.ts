@@ -46,26 +46,17 @@ export const fetchUserSession = () => {
             if (response.status === 200) {
                 const data = await response.json();
                 const userUID = data?.uid;
-                const userEmail = data?.email;
                 
                 if (userUID && userUID !== "") {
-                    const userInfo = await getUserInfo(userUID);
-                    if (userInfo) {
-                        dispatch(updateSession({
-                            uid: userInfo.uid,
-                            email: userEmail || "",
-                            photoURL: userInfo.photoURL,
-                            displayName: userInfo.displayName
-                        }));
-                    } else {
-                        // User exists in session but no Firestore data
-                        dispatch(updateSession({
-                            uid: userUID,
-                            email: userEmail || "",
-                            photoURL: "",
-                            displayName: ""
-                        }));
-                    }
+                    // Ya no llamamos a getUserInfo() que consultaba Firestore y causaba 
+                    // errores offline "Failed to get document because the client is offline".
+                    // En su lugar, el endpoint /api/auth ahora devuelve todos los datos desde SQL Server.
+                    dispatch(updateSession({
+                        uid: userUID,
+                        email: data.email || "",
+                        photoURL: data.photoURL || "",
+                        displayName: data.displayName || ""
+                    }));
                 } else {
                     dispatch(clearSession());
                 }

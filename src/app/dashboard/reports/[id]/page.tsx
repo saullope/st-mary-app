@@ -30,6 +30,9 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
           }
         },
         orderBy: { puntaje_total: 'desc' }
+      },
+      user: {
+        include: { config: true }
       }
     }
   });
@@ -78,6 +81,7 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
     : 0;
 
   const avgClassTotalTimeMs = participantes.length > 0 ? totalTime / participantes.length : 0;
+  const enableTeacherEvaluation = session.user?.config?.enableTeacherEvaluation !== false;
 
   return (
     <ReportDetailClient 
@@ -88,6 +92,7 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
       hardestRate={hardestRate}
       avgClassScore={avgClassScore}
       avgClassTotalTimeMs={avgClassTotalTimeMs}
+      enableTeacherEvaluation={enableTeacherEvaluation}
     />
   );
 }

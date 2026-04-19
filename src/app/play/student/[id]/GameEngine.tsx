@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import confetti from 'canvas-confetti';
 import { FaClock, FaStar, FaTrophy } from 'react-icons/fa6';
 import MultimediaDisplay from "@/components/activity/MultimediaDisplay";
+import { ActivityRatingModal } from "@/components/activity/ActivityRatingModal";
 
 interface GameEngineProps {
     sesion: any;
@@ -70,6 +71,12 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
 
     const startQuestion = (index: number) => {
         const question = questions[index];
+        if (!question) {
+            console.error("Question not found at index:", index);
+            setGameState('SUMMARY');
+            finishGame();
+            return;
+        }
         const questionTime = question.tiempoLimiteMs ? question.tiempoLimiteMs / 1000 : (config.tiempoPreguntaMs / 1000 || 30);
         setTimeLeft(Math.floor(questionTime));
         setSelectedOptionId(null);
@@ -137,6 +144,8 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
         }, 3000);
     };
 
+    const [hasRated, setHasRated] = useState(false);
+
     const finishGame = async () => {
         try {
             await fetch('/api/play/finish', {
@@ -149,6 +158,28 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
             });
         } catch (err) {
             console.error("Failed to finish game:", err);
+        }
+    };
+
+    const handleRating = async (enjoyment: number, learning: number) => {
+        setHasRated(true);
+        // We'll pass both, but we can store them separately or average them into studentRating
+        // Let's average them for the legacy `rating` field, and pass them as new fields to API
+        const avgRating = (enjoyment + learning) / 2;
+
+        try {
+            await fetch('/api/play/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    participanteId: participantData.id,
+                    rating: avgRating,
+                    enjoyment,
+                    learning
+                })
+            });
+        } catch (err) {
+            console.error("Failed to submit rating:", err);
         }
     };
 
@@ -177,6 +208,8 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
     }
 
     if (gameState === 'SUMMARY') {
+        const showFeedback = sesion.user?.config?.enableStudentFeedback !== false;
+
         return (
             <div className={styles.gameWrapper} style={{ backgroundImage: `url(${backgroundImage})` }}>
                 <div className={styles.overlay}></div>
@@ -184,6 +217,16 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
                     <FaTrophy className={styles.trophyIcon} />
                     <h1 className={styles.summaryTitle}>¡Increíble trabajo!</h1>
                     <p className={styles.summaryScore}>Puntaje Final: <span>{score}</span></p>
+                    
+                    {showFeedback && !hasRated && (
+                        <div className="mt-4 mb-4">
+                            <ActivityRatingModal onRate={handleRating} />
+                        </div>
+                    )}
+                    {hasRated && (
+                        <p className="text-success bg-white bg-opacity-75 py-2 px-4 rounded-pill fw-bold shadow-sm my-4 d-inline-block">¡Gracias por tu retroalimentación!</p>
+                    )}
+
                     <button className={styles.backBtn} onClick={() => router.push('/play')}>
                         Volver al inicio
                     </button>
@@ -193,6 +236,17 @@ export const GameEngine = ({ sesion }: GameEngineProps) => {
     }
 
     const currentQuestion = questions[currentQuestionIndex];
+
+    if (!currentQuestion) {
+        return (
+            <div className={styles.gameWrapper} style={{ backgroundImage: `url(${backgroundImage})` }}>
+                <div className={styles.overlay}></div>
+                <div className={styles.centerCard}>
+                    <h1 className={styles.readyTitle}>Cargando...</h1>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.gameWrapper} style={{ backgroundImage: `url(${backgroundImage})` }}>

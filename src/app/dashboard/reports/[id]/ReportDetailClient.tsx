@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { FaTrophy, FaArrowUp, FaArrowDown, FaFilePdf, FaClock, FaExclamationTriangle, FaExternalLinkAlt } from "react-icons/fa";
+import { FaTrophy, FaArrowUp, FaArrowDown, FaFilePdf, FaClock, FaExclamationTriangle, FaExternalLinkAlt, FaStar } from "react-icons/fa";
 import StudentDetailSidebar from "@/components/dashboard/reports/StudentDetailSidebar";
+import TeacherEvaluationToast from "@/components/dashboard/reports/TeacherEvaluationToast";
 
 interface ReportDetailClientProps {
   session: any;
@@ -12,6 +13,7 @@ interface ReportDetailClientProps {
   hardestRate: number;
   avgClassScore: number;
   avgClassTotalTimeMs: number;
+  enableTeacherEvaluation: boolean;
 }
 
 export default function ReportDetailClient({ 
@@ -21,12 +23,31 @@ export default function ReportDetailClient({
   hardestQuestion, 
   hardestRate, 
   avgClassScore,
-  avgClassTotalTimeMs
+  avgClassTotalTimeMs,
+  enableTeacherEvaluation
 }: ReportDetailClientProps) {
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
+  const [teacherRating, setTeacherRating] = useState<number | null>(session.teacherRating || null);
+  const [submittingRating, setSubmittingRating] = useState(false);
 
   const handleExportPDF = () => {
     window.print();
+  };
+
+  const handleTeacherRating = async (rating: number) => {
+    setTeacherRating(rating);
+    setSubmittingRating(true);
+    try {
+      await fetch('/api/play/teacher-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sesionId: session.id.toString(), rating })
+      });
+    } catch (err) {
+      console.error("Error rating:", err);
+    } finally {
+      setSubmittingRating(false);
+    }
   };
 
   const openStudentDetail = (student: any) => {
@@ -41,7 +62,7 @@ export default function ReportDetailClient({
           <h2 className="fw-bold mb-1" style={{ color: '#2c3e50' }}>Reporte: {session.LUDI_ACTIVIDAD.activity.activity_name}</h2>
           <p className="text-muted mb-0">Sesión PIN: <span className="fw-bold text-primary">{session.codigo}</span> | {new Date(session.creada_en).toLocaleDateString()}</p>
         </div>
-        <div className="mt-3 mt-md-0 no-print">
+        <div className="mt-3 mt-md-0 no-print d-flex align-items-center gap-3">
           <button 
             className="btn btn-outline-danger shadow-sm d-flex align-items-center rounded-pill px-4"
             onClick={handleExportPDF}
@@ -63,7 +84,7 @@ export default function ReportDetailClient({
                 <h6 className="text-muted text-uppercase fw-bold mb-1">Pregunta Más Difícil</h6>
                 <h5 className="fw-bold mb-0 text-dark">
                   {hardestQuestion && hardestRate > 0 
-                    ? `"${hardestQuestion.text}" (${hardestRate}% de fallos)` 
+                    ? `"${hardestQuestion?.text}" (${hardestRate}% de fallos)` 
                     : "No hay datos suficientes"}
                 </h5>
               </div>
@@ -229,6 +250,15 @@ export default function ReportDetailClient({
           />
         )}
       </div>
+
+      {enableTeacherEvaluation && teacherRating === null && (
+        <TeacherEvaluationToast 
+          activityId={session.activity_id.toString()}
+          grade={session.LUDI_ACTIVIDAD?.grado?.grade_type_name || "su clase"}
+          initialRating={teacherRating}
+          onRate={handleTeacherRating}
+        />
+      )}
     </div>
   );
 }

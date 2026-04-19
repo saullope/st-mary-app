@@ -9,6 +9,7 @@ export default async function StudentGamePage({ params }: { params: Promise<{ id
     const sesion = await (prisma as any).lUDI_SESION.findUnique({
         where: { id: sesionId },
         include: {
+            user: { include: { config: true } },
             LUDI_ACTIVIDAD: {
                 include: {
                     activity: true,

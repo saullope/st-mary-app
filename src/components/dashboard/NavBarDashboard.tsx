@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react';
-import Image from "next/image";
 import { Dropdown, Spinner } from 'react-bootstrap';
 import { signOut } from "firebase/auth";
 import { useRouter } from 'next/navigation';
@@ -154,32 +153,43 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                         <div className="dropdown">
                             <Dropdown>
                                 <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                                    <span>
-                                            <Image
-                                                src={ sessionData.picture || '/images/profile.png'}
-                                                alt="User Profile"
-                                                width={40}
-                                                height={40}
-                                                priority={false}
-                                                unoptimized={true}
-                                                style={{ borderRadius: '50%', marginRight: '10px' }}
-                                            />                                        
-                                        {sessionData.name || sessionData.email}
+                                    <span className="d-flex align-items-center justify-content-center">
+                                        <img
+                                            src={sessionData.picture || '/images/profile.png'}
+                                            alt="User Profile"
+                                            className="rounded-circle shadow-sm"
+                                            style={{ 
+                                                width: '40px',
+                                                height: '40px',
+                                                objectFit: 'cover',
+                                                marginRight: '12px',
+                                                border: '2px solid #e9ecef'
+                                            }}
+                                            onError={(e) => {
+                                                e.currentTarget.src = '/images/profile.png';
+                                            }}
+                                        />                                        
+                                        <span className="fw-bold text-dark">{sessionData.name || sessionData.email}</span>
                                     </span>
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="shadow border-0 rounded-3 mt-2" style={{ minWidth: '220px' }}>
-                                    <div className="px-3 py-2 text-center border-bottom mb-2">
-                                        <Image
+                                    <div className="px-3 py-2 text-center border-bottom mb-2 d-flex flex-column align-items-center">
+                                        <img
                                             src={sessionData.picture || '/images/profile.png'}
                                             alt="User Profile"
-                                            width={60}
-                                            height={60}
-                                            priority={false}
-                                            unoptimized={true}
-                                            style={{ borderRadius: '50%', marginBottom: '10px' }}
+                                            className="rounded-circle shadow-sm mb-3"
+                                            style={{ 
+                                                width: '65px', 
+                                                height: '65px', 
+                                                objectFit: 'cover',
+                                                border: '3px solid #e9ecef' 
+                                            }}
+                                            onError={(e) => {
+                                                e.currentTarget.src = '/images/profile.png';
+                                            }}
                                         />
-                                        <p className="mb-0 fw-bold">{sessionData.name || 'Usuario'}</p>
+                                        <p className="mb-0 fw-bold text-dark">{sessionData.name || 'Usuario'}</p>
                                         <p className="mb-0 text-muted small">{sessionData.email}</p>
                                     </div>
                                     

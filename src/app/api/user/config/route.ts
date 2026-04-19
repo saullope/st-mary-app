@@ -18,7 +18,9 @@ export async function GET(request: NextRequest) {
         defaultTimeLimitMs: 30000,
         defaultPoints: 10,
         defaultVoiceEnabled: true,
-        defaultIsPublic: false
+        defaultIsPublic: false,
+        enableStudentFeedback: true,
+        enableTeacherEvaluation: true
       });
     }
 
@@ -37,22 +39,30 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { defaultTimeLimitMs, defaultPoints, defaultVoiceEnabled, defaultIsPublic } = body;
+    const { 
+        defaultTimeLimitMs, 
+        defaultPoints, 
+        defaultVoiceEnabled, 
+        defaultIsPublic,
+        enableStudentFeedback,
+        enableTeacherEvaluation
+    } = body;
+
+    const updateData = {
+        defaultTimeLimitMs: Number(defaultTimeLimitMs) || 30000,
+        defaultPoints: Number(defaultPoints) || 10,
+        defaultVoiceEnabled: Boolean(defaultVoiceEnabled),
+        defaultIsPublic: Boolean(defaultIsPublic),
+        enableStudentFeedback: enableStudentFeedback !== undefined ? Boolean(enableStudentFeedback) : true,
+        enableTeacherEvaluation: enableTeacherEvaluation !== undefined ? Boolean(enableTeacherEvaluation) : true,
+    };
 
     const config = await prisma.ludiUserConfig.upsert({
       where: { userId: user.id },
-      update: {
-        defaultTimeLimitMs: Number(defaultTimeLimitMs) || 30000,
-        defaultPoints: Number(defaultPoints) || 10,
-        defaultVoiceEnabled: Boolean(defaultVoiceEnabled),
-        defaultIsPublic: Boolean(defaultIsPublic)
-      },
+      update: updateData,
       create: {
         userId: user.id,
-        defaultTimeLimitMs: Number(defaultTimeLimitMs) || 30000,
-        defaultPoints: Number(defaultPoints) || 10,
-        defaultVoiceEnabled: Boolean(defaultVoiceEnabled),
-        defaultIsPublic: Boolean(defaultIsPublic)
+        ...updateData
       }
     });
 

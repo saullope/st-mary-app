@@ -245,6 +245,10 @@ model LUDI_SESION {
   estado                   String                     @default("ESPERANDO") @db.NVarChar(50)
   modoJuego                String                     @default("ESTUDIANTE") @map("modoJuego") @db.NVarChar(50)
   preguntaActualIndex      Int                        @default(0) @map("preguntaActualIndex")
+  teacherRating            Float?                     @map("teacher_rating")
+  templateDifficulty       String?                    @map("template_difficulty") @db.NVarChar(50)
+  classEngagement          Int?                       @map("class_engagement")
+  objectiveMet             Boolean?                   @map("objective_met")
   iniciada_en              DateTime?
   finalizada_en            DateTime?
   creada_en                DateTime                   @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_SES_creada")
@@ -261,6 +265,9 @@ model LUDI_SESION_PARTICIPANTE {
   puntaje_total Int         @default(0, map: "DF_LUDI_PART_punt")
   avatarId      Int?        @map("avatarId")
   completado    Boolean     @default(false)
+  studentRating Float?      @map("student_rating")
+  studentEnjoyment Float?   @map("student_enjoyment")
+  studentLearning  Float?   @map("student_learning")
   LUDI_SESION   LUDI_SESION @relation(fields: [sesion_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_SESI__sesio__69C6B1F5")
   avatar        LudiAvatar? @relation(fields: [avatarId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   respuestas    LudiRespuestaEstudiante[]
@@ -296,13 +303,15 @@ model LudiUser {
 }
 
 model LudiUserConfig {
-  userId               String   @id @map("user_id")
-  defaultTimeLimitMs   Int      @default(30000) @map("default_time_limit_ms")
-  defaultPoints        Int      @default(100) @map("default_points")
-  defaultVoiceEnabled  Boolean  @default(true) @map("default_voice_enabled")
-  defaultIsPublic      Boolean  @default(false) @map("default_is_public")
+  userId                  String   @id @map("user_id")
+  defaultTimeLimitMs      Int      @default(30000) @map("default_time_limit_ms")
+  defaultPoints           Int      @default(100) @map("default_points")
+  defaultVoiceEnabled     Boolean  @default(true) @map("default_voice_enabled")
+  defaultIsPublic         Boolean  @default(false) @map("default_is_public")
+  enableStudentFeedback   Boolean  @default(true) @map("enable_student_feedback")
+  enableTeacherEvaluation Boolean  @default(true) @map("enable_teacher_evaluation")
   
-  user                 LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                    LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("LUDI_USER_CONFIG")
 }

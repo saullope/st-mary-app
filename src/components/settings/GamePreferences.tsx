@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Form, Button, Alert, Card, Spinner } from 'react-bootstrap';
-import { FaGamepad } from 'react-icons/fa';
+import { FaGamepad, FaUsers } from 'react-icons/fa';
 import styles from './Settings.module.css';
 
 export const GamePreferences = () => {
@@ -14,6 +14,10 @@ export const GamePreferences = () => {
     const [defaultPoints, setDefaultPoints] = useState<number>(10);
     const [defaultVoiceEnabled, setDefaultVoiceEnabled] = useState<boolean>(true);
     const [defaultIsPublic, setDefaultIsPublic] = useState<boolean>(false);
+    
+    // New Settings
+    const [enableStudentFeedback, setEnableStudentFeedback] = useState<boolean>(true);
+    const [enableTeacherEvaluation, setEnableTeacherEvaluation] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchPreferences = async () => {
@@ -26,6 +30,13 @@ export const GamePreferences = () => {
                         setDefaultPoints(data.defaultPoints);
                         setDefaultVoiceEnabled(data.defaultVoiceEnabled);
                         setDefaultIsPublic(data.defaultIsPublic);
+                        
+                        if (data.enableStudentFeedback !== undefined) {
+                            setEnableStudentFeedback(data.enableStudentFeedback);
+                        }
+                        if (data.enableTeacherEvaluation !== undefined) {
+                            setEnableTeacherEvaluation(data.enableTeacherEvaluation);
+                        }
                     }
                 }
             } catch (error) {
@@ -55,12 +66,14 @@ export const GamePreferences = () => {
                     defaultTimeLimitMs,
                     defaultPoints,
                     defaultVoiceEnabled,
-                    defaultIsPublic
+                    defaultIsPublic,
+                    enableStudentFeedback,
+                    enableTeacherEvaluation
                 })
             });
 
             if (res.ok) {
-                showMessage('success', 'Preferencias de juego guardadas exitosamente.');
+                showMessage('success', 'Preferencias guardadas exitosamente.');
             } else {
                 showMessage('danger', 'Ocurrió un error al guardar tus preferencias.');
             }
@@ -82,8 +95,8 @@ export const GamePreferences = () => {
 
     return (
         <div className={styles.container}>
-            <h2 className={styles.title}>Preferencias de Juego</h2>
-            <p className={styles.subtitle}>Configura los valores por defecto al crear nuevas actividades.</p>
+            <h2 className={styles.title}>Preferencias de Juego y Evaluaciones</h2>
+            <p className={styles.subtitle}>Configura los valores por defecto al crear nuevas actividades y reportes.</p>
 
             {message && (
                 <Alert variant={message.type} className="mb-4">
@@ -91,12 +104,13 @@ export const GamePreferences = () => {
                 </Alert>
             )}
 
-            <div className="row">
-                <div className="col-lg-8 mb-4">
-                    <Card className={styles.card}>
-                        <Card.Body>
-                            <h5 className={styles.cardTitle}><FaGamepad className="me-2" /> Gamificación Predeterminada</h5>
-                            <Form onSubmit={handleSavePreferences}>
+            <Form onSubmit={handleSavePreferences}>
+                <div className="row g-4 mb-4">
+                    <div className="col-12 col-xl-6">
+                        <Card className={`${styles.card} h-100`}>
+                            <Card.Body>
+                                <h5 className={styles.cardTitle}><FaGamepad className="me-2" /> Gamificación Predeterminada</h5>
+                                
                                 <Form.Group className="mb-4">
                                     <Form.Label>Tiempo por pregunta por defecto (Segundos)</Form.Label>
                                     <Form.Control 
@@ -152,19 +166,54 @@ export const GamePreferences = () => {
                                         Si está activo, otros educadores podrán ver y usar tus actividades en la comunidad.
                                     </Form.Text>
                                 </Form.Group>
+                            </Card.Body>
+                        </Card>
+                    </div>
 
-                                <Button 
-                                    variant="primary" 
-                                    type="submit"
-                                    disabled={saving}
-                                >
-                                    {saving ? <Spinner size="sm" /> : 'Guardar Preferencias'}
-                                </Button>
-                            </Form>
-                        </Card.Body>
-                    </Card>
+                    <div className="col-12 col-xl-6">
+                        <Card className={`${styles.card} h-100`}>
+                            <Card.Body>
+                                <h5 className={styles.cardTitle}><FaUsers className="me-2" /> Evaluaciones y Feedback</h5>
+                                
+                                <Form.Group className="mb-4">
+                                    <Form.Check 
+                                        type="switch"
+                                        id="student-feedback-switch"
+                                        label="Habilitar retroalimentación del estudiante"
+                                        checked={enableStudentFeedback}
+                                        onChange={(e) => setEnableStudentFeedback(e.target.checked)}
+                                    />
+                                    <Form.Text className="text-muted">
+                                        Muestra una escala de 5 emojis al final del juego para que el estudiante evalúe la actividad.
+                                    </Form.Text>
+                                </Form.Group>
+
+                                <Form.Group className="mb-4">
+                                    <Form.Check 
+                                        type="switch"
+                                        id="teacher-evaluation-switch"
+                                        label="Habilitar evaluación docente (Reportes)"
+                                        checked={enableTeacherEvaluation}
+                                        onChange={(e) => setEnableTeacherEvaluation(e.target.checked)}
+                                    />
+                                    <Form.Text className="text-muted">
+                                        Muestra un selector de "Utilidad por Grado" en tus reportes para medir la efectividad de la sesión.
+                                    </Form.Text>
+                                </Form.Group>
+                            </Card.Body>
+                        </Card>
+                    </div>
                 </div>
-            </div>
+
+                <Button 
+                    variant="primary" 
+                    type="submit"
+                    disabled={saving}
+                    className="px-5 py-2 fw-bold"
+                >
+                    {saving ? <Spinner size="sm" /> : 'Guardar Preferencias'}
+                </Button>
+            </Form>
         </div>
     );
 };

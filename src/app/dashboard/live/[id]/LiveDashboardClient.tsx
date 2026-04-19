@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FaPlay, FaForward, FaFlagCheckered, FaUsers } from "react-icons/fa6";
+import { PostGameFeedbackModal } from "@/components/activity/PostGameFeedbackModal";
 
 interface Participant {
   id: string;
@@ -20,11 +21,14 @@ interface SessionState {
   estado: string;
   preguntaActualIndex: number;
   participantes: Participant[];
+  // isTemplate field check can be based on something we add to the API, but for now we'll guess based on a heuristic or just pass true/false.
+  // Actually, the API doesn't return `isTemplate`. We'll fetch it or default to false.
 }
 
 export default function LiveDashboardClient({ sessionId }: { sessionId: string }) {
   const [session, setSession] = useState<SessionState | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const fetchSession = async () => {
     try {
@@ -48,6 +52,11 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
   }, [sessionId]);
 
   const handleAction = async (action: 'start' | 'next' | 'end') => {
+    if (action === 'end' && session?.estado !== 'FINALIZADA' && session?.estado !== 'FINALIZADO') {
+      setShowFeedbackModal(true);
+      return;
+    }
+
     try {
       await fetch(`/api/live/${sessionId}`, {
         method: "PATCH",
@@ -58,6 +67,45 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
     } catch (error) {
       console.error(`Error performing action ${action}:`, error);
     }
+  };
+
+  const handleEndGameConfirmed = async () => {
+    try {
+      await fetch(`/api/live/${sessionId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: 'end' }),
+      });
+      fetchSession(); // Refresh state immediately
+    } catch (error) {
+      console.error(`Error performing action end:`, error);
+    }
+  };
+
+  const handleFeedbackSubmit = async (data: any) => {
+    setShowFeedbackModal(false);
+    // Enviar feedback al API (utilizamos el que ya existe /api/play/teacher-feedback)
+    try {
+        await fetch('/api/play/teacher-feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                sesionId: sessionId,
+                rating: data.utilityRating,
+                difficultyRating: data.difficultyRating,
+                objectiveMet: data.objectiveMet
+            })
+        });
+    } catch (e) {
+        console.error(e);
+    }
+    // Finalmente terminar juego
+    handleEndGameConfirmed();
+  };
+
+  const handleFeedbackSkip = () => {
+    setShowFeedbackModal(false);
+    handleEndGameConfirmed();
   };
 
   if (loading && !session) return <div className="p-5 text-center fs-4">⏳ Cargando panel en vivo...</div>;
@@ -310,6 +358,15 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
             </div>
           </div>
         </div>
+      )}
+
+      {showFeedbackModal && (
+        <PostGameFeedbackModal 
+          isOpen={showFeedbackModal} 
+          onClose={handleFeedbackSkip} 
+          onSubmit={handleFeedbackSubmit} 
+          isTemplate={false} 
+        />
       )}
     </div>
   );
