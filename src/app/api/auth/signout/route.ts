@@ -1,15 +1,20 @@
-// api/auth/signout/route.ts
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { AUTH_COOKIE_NAME } from "@/lib/auth/constants";
 
-export async function POST(request: NextRequest) {
-    //Remove the value and expire the cookie
-    const options = {
-        name: "session",
-        value: "",
-        maxAge: -1,
-    };
+export async function POST() {
+    try {
+        const cookieStore = await cookies();
+        cookieStore.set({
+            name: AUTH_COOKIE_NAME,
+            value: "",
+            maxAge: 0,
+            path: "/",
+        });
 
-    cookies().set(options);
-    return NextResponse.json({}, { status: 200 });
+        return NextResponse.json({ message: "Session closed successfully." }, { status: 200 });
+    } catch (error) {
+        console.error("Error closing session:", error);
+        return NextResponse.json({ error: "Failed to close session." }, { status: 500 });
+    }
 }

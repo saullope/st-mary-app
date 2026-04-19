@@ -1,29 +1,33 @@
 import {NextIntlClientProvider} from 'next-intl';
-import {getMessages} from 'next-intl/server';
-//import {AuthProvider} from '@/components';
-import SessionProvider from '../contexts/SessionContext';
-import getSession from '@/lib/auth/getSession';
+import {getLocale, getMessages} from 'next-intl/server';
+import { ReduxProvider } from '@/components/ReduxProvider';
+import { SessionInitializer } from '@/components/SessionInitializer';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@/styles/globals.css";
 
 export default async function LocaleLayout({
   children,
-  params: {locale}
+  params
 }: {
   children: React.ReactNode;
-  params: {locale: string};
+  params: Promise<any>;
 }) {
+  const locale = await getLocale();
   // Providing all messages to the client
   // side is the easiest way to get started
   const messages = await getMessages();
  
   return (
-    <SessionProvider >
-    <html lang={locale}>
-      <body>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      </body>
-    </html>
-    </SessionProvider>
+    <ReduxProvider>
+      <html lang={locale} data-scroll-behavior="smooth">
+        <head />
+        <body>
+          <NextIntlClientProvider messages={messages}>
+            <SessionInitializer />
+            {children}
+          </NextIntlClientProvider>
+        </body>
+      </html>
+    </ReduxProvider>
   );
 }

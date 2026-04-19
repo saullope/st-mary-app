@@ -1,0 +1,76 @@
+.body-vistaeducador {
+    background-image: url('/images/bienvenida/Fondo-bienvenida.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    min-height: 100vh; /* Usa 100vh para que cubra todo */
+    display: flex;
+    flex-direction: column; /* Esto mantiene Título -> Estrellas -> Texto en orden vertical */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.texto-bienvenida{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+}
+
+.texto-bienvenida:hover {
+    transform: scale(1.1);
+}
+
+.texto-bienvenida h1{
+    font-size: 40px;
+    color: #fff ;
+    font-weight: bolder;
+    font-style: oblique;
+}
+
+.img-primero{
+    width: 265px;
+    max-width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.img-primero:hover {
+    transform: scale(1.1);
+}
+
+.img-segundo{
+    width: 265px;
+    max-width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.img-segundo:hover {
+    transform: scale(1.1);
+}
+
+.img-tercero{
+    width: 270px;
+    max-width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.img-tercero:hover {
+    transform: scale(1.1);
+}
+
+.texto-grados{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+}
+
+.texto-grados h1{
+    font-weight: bolder;
+    font-size: 25px;
+    font-style: oblique;
+    color: #fff;
+}
+
+.texto-grados:hover {
+    transform: scale(1.1);
+}
+

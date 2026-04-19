@@ -1,0 +1,314 @@
+/* Variables CSS se importan globalmente en globals.css */
+
+/* ========== TARJETA BASE ========== */
+.card {
+  background-color: var(--bg-primary);
+  border: var(--border-width-thin) solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* ========== CABECERA DE TARJETA ========== */
+.cardHeader {
+  padding: var(--spacing-lg);
+  border-bottom: var(--border-width-thin) solid var(--gray-200);
+  background-color: var(--bg-secondary);
+}
+
+.cardTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.cardSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: var(--spacing-xs) 0 0 0;
+}
+
+/* ========== CUERPO DE TARJETA ========== */
+.cardBody {
+  padding: var(--spacing-lg);
+}
+
+.cardText {
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-md);
+}
+
+.cardText:last-child {
+  margin-bottom: 0;
+}
+
+/* ========== PIE DE TARJETA ========== */
+.cardFooter {
+  padding: var(--spacing-lg);
+  border-top: var(--border-width-thin) solid var(--gray-200);
+  background-color: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+/* ========== IMAGEN DE TARJETA ========== */
+.cardImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cardImageTop {
+  border-top-left-radius: var(--border-radius-lg);
+  border-top-right-radius: var(--border-radius-lg);
+}
+
+.cardImageBottom {
+  border-bottom-left-radius: var(--border-radius-lg);
+  border-bottom-right-radius: var(--border-radius-lg);
+}
+
+/* ========== VARIANTES DE TARJETA ========== */
+.card--elevated {
+  box-shadow: var(--shadow-lg);
+}
+
+.card--elevated:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+}
+
+.card--outlined {
+  border-width: var(--border-width-medium);
+  box-shadow: none;
+}
+
+.card--outlined:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.card--flat {
+  border: none;
+  box-shadow: none;
+}
+
+.card--flat:hover {
+  background-color: var(--bg-secondary);
+}
+
+/* ========== TARJETAS ESPECÍFICAS DE LUDIGAME ========== */
+.cardActivity {
+  background: var(--white);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cardActivity:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.cardGrade {
+  background: var(--white);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cardGrade:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== TARJETAS DE JUEGO ========== */
+.cardGame {
+  background-color: var(--ludi-blue);
+  border-radius: var(--border-radius-xl);
+  width: 180px;
+  height: 180px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: var(--font-weight-bold);
+  cursor: default;
+  transition: all var(--transition-normal);
+  padding: var(--spacing-lg);
+  opacity: 0;
+  animation: cardFadeIn 1s ease forwards;
+}
+
+.cardGame:hover,
+.cardGame .gameImage:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  transform: scale(1.1);
+}
+
+.cardGame:nth-child(2) {
+  background-color: #90c4ff;
+  color: #004080;
+}
+
+.cardGame:nth-child(3) {
+  background-color: #ffdd9a;
+  color: #7a5700;
+}
+
+.cardGame:nth-child(4) {
+  background-color: #a1ff93;
+  color: #2d6500;
+}
+
+.gameImage {
+  width: 100px;
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform var(--transition-normal);
+}
+
+/* ========== TARJETAS DE IMPORTANCIA ========== */
+.cardImportance {
+  background-color: var(--white);
+  border-radius: var(--border-radius-2xl);
+  padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-3xl);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  cursor: default;
+}
+
+.cardImportance::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  pointer-events: none;
+  animation: ludiImportanceShine 4s linear infinite;
+  opacity: 0.6;
+  border-radius: var(--border-radius-2xl);
+}
+
+.cardImportance:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 0 30px rgba(107, 33, 168, 0.25), 0 15px 35px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.importanceIcon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+  transition: transform var(--transition-normal);
+}
+
+.cardImportance:hover .importanceIcon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.importanceIcon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.importanceTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+  color: #4b2788;
+}
+
+.importanceText {
+  color: #4b4b4b;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-medium);
+  user-select: none;
+}
+
+/* ========== ANIMACIONES ========== */
+@keyframes cardFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ludiImportanceShine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .cardHeader,
+  .cardBody,
+  .cardFooter {
+    padding: var(--spacing-md);
+  }
+  
+  .cardGame {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    min-height: 150px;
+  }
+  
+  .cardImportance {
+    padding: var(--spacing-lg);
+  }
+  
+  .importanceIcon {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardHeader,
+  .cardBody,
+  .cardFooter {
+    padding: var(--spacing-sm);
+  }
+  
+  .cardTitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .cardSubtitle {
+    font-size: var(--font-size-xs);
+  }
+}

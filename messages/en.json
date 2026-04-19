@@ -5,11 +5,24 @@
     "institution": "Educational institution",
     "signIn": "Log In",
     "signUp": "Sign Up",
-    "landingTextLevel1": "Create Educational Activities",
-    "landingTextLevel2": "With a playful approach to energize the classroom",
+    "landingTextLevel1": "Create educational activities",
+    "landingTextLevel2": "Incorporate gamification and transform your way of teaching!",
     "landingTextLevel3": "Children learn by playing!",
     "landingTextLevel4": "Games adapted to the level of each grade",
-    "rigths": "All Rights Reserved 2024"
+    "rigths": "All Rights Reserved",
+    "startCreate": "Start Creating",
+    "startPlay":"Enter the code to play",
+    "kidsExperience": "Educational experiences focused on 1st, 2nd, and 3rd grade",
+    "textWhy": "Why use gamification in the classroom?",
+    "card1Title": "Fosters Interest",
+    "card1Desc": "Transform tasks into challenges that spark curiosity and enthusiasm.",
+    "card2Title": "Improves Learning",
+    "card2Desc": "Enhances memory, attention, and comprehension through play.",
+    "card3Title": "Facilitates Participation",
+    "card3Desc": "Actively involves the entire group in fun educational activities.",
+    "text1Educator": "LudiGame empowers the creativity of ",
+    "educator:": "Educators!",
+    "ideasText": "Turn ideas into interactive games"
   },
   "LocaleSwitcher": {
     "es": "Español",
@@ -29,7 +42,7 @@
     "password": "Password",
     "signInButton": "Sign In",
     "SignInWithGoogle": "Google",
-    "orSignIn": "Or Sign In with",
+    "orSignIn": "Or",
     "noAccount": "Don't have an account? ",
     "signUp": "Sign Up",
     "forgotPassword": "Forgot password?",
@@ -37,7 +50,20 @@
     "passwordInvalid": "Password is invalid",
     "emailRequired": "Email is required",
     "passwordRequired": "Password is required",
-    "clickHere": "Click here"
+    "clickHere": "Click here",
+    "welcome": "Welcome",
+    "errorLogionWithGoogle": "Error logging in with Google",
+    "errorLogionWithEmail": "Error logging in with email",
+    "errorNotFindUser": "User not found",
+    "genericError": "An error occurred, please try again later",
+    "errorInvalidCredentials": "Invalid email or password",
+    "errorUserNotFound": "User not found",
+    "errorWrongPassword": "Incorrect password",
+    "errorInvalidEmail": "Invalid email format",
+    "errorUserDisabled": "This account has been disabled",
+    "errorTooManyRequests": "Too many attempts. Please try again later",
+    "errorNetwork": "Network error. Check your internet connection",
+    "errorInternal": "Internal error. Please try again"
   },
   "SignUpForm": {
     "titleForm": "Sign Up",
@@ -62,7 +88,12 @@
     "passwordMin":"Password must be at least 8 characters long",
     "passwordNumber":"Password must have at least one number",
     "passwordLowercase":"Password must have at least one lowercase letter",
-    "passwordUppercase":"Password must have at least one uppercase letter"
+    "passwordUppercase":"Password must have at least one uppercase letter",
+    "errorEmailAlreadyInUse": "Email already in use",
+    "usercreate": "User created successfully",
+    "verifyEmailTitle": "Verify your email",
+    "verifyEmailDescription": "A verification email has been sent to your email address. Please check your inbox and click the link to verify your account."
+
   },
   "WelcomeTeacherView": {
     "metaTitle":"Welcome Teacher",
@@ -78,7 +109,8 @@
     "home": "Home",
     "createActivity": "Create Activity",
     "myActivities": "My Activities",
-    "reports": "Reports"
+    "reports": "Reports",
+    "templates": "Templates"
   },
   "firstGradeItemDashboard": {
     "gradeName": "First Grade",
@@ -138,11 +170,52 @@
   },
   "themeBackground": {
     "tema1": "Fruits",
+    "tema1_desc": "Colorful background with tropical fruits",
     "tema2": "Sun",
+    "tema2_desc": "Bright background with radiant sun",
     "tema3": "Animals",
+    "tema3_desc": "Background with nature animals",
     "tema4": "Classroom",
+    "tema4_desc": "School environment background",
     "tema5": "Space",
+    "tema5_desc": "Background with planets and stars",
     "tema6": "Ocean",
-    "tema7": "Animated Brains"
+    "tema6_desc": "Marine background with aquatic life",
+    "tema7": "Animated Brains",
+    "tema7_desc": "Background with animated brains for cognitive stimulation"
+  },
+  "ForgotPassword": {
+    "titleForgotPassword": "Recover Password",
+    "recoverDescription": "Enter your email address and we'll send you a link to reset your password.",
+    "emailPlaceholder": "name@example.com",
+    "emailInvalid": "Invalid email address",
+    "emailRequired": "Email is required",
+    "sendButton": "Send Email",
+    "backToLogin": "Back to Login",
+    "emailSentSuccess": "If the email exists, you will receive a recovery link.",
+    "genericError": "An error occurred. Please try again."
+  },
+  "myActivitiesContent": {
+    "metaTitle": "My Activities",
+    "metaDescription": "Manage and organize your educational resources",
+    "titlePage": "My Activities",
+    "descPage":"Manage and organize your educational resources",
+    "noActivities": "You haven't created any activities yet. Start by creating your first activity!",
+    "createActivityButton": "New Activity",
+    "exportToExcel": "Export to Excel",
+    "typeActivitySearch": "Type of Activity",
+    "searchPlaceholder": "Search by activity name...",
+    "all": "All"
+  },
+   "activityCard": {
+    "viewButton": "View",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "sessionButton": "Session",
+    "shareButton": "Share",
+    "confirmDeleteTitle": "Are you sure you want to delete this activity?",
+    "confirmDeleteMessage": "This action cannot be undone.",
+    "cancelButton": "Cancel",
+    "createdAt": "Created at"
   }
 }

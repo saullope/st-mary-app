@@ -1,11 +1,10 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import styles from '../../../public/css/bienvenida.module.css';
+import styles from '@/styles/pages/bienvenida.module.css';
 import { Metadata } from "next";
 import getSession from '@/lib/auth/getSession'; 
 import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { getTranslations } from "next-intl/server";
-import { SelectGrade } from "@/educator-components";
+import { SelectGrade } from "@/components/educator";
 import prisma from "@/lib/db";
 
 
@@ -36,17 +35,19 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BienvenidaEducador() {
 
     const token: DecodedIdToken | null = await getSession();
+    if (!token) {
+        redirect('/auth/login');
+      }
+    
     const t = await getTranslations("WelcomeTeacherView");
 
     const grades = await prisma.lUDI_COMMON_GRADE.findMany();
 
     // Si no hay un usuario autenticado, redirigir a la página de login
-    if (!token) {
-      redirect('/auth/login');
-    }
+    
 
     return (
-        <body className={styles[`body-vistaeducador`]}>
+        <div className={styles[`body-vistaeducador`]}>
             <main>
                 <div className={styles[`texto-bienvenida`]}>
                     <br />
@@ -55,15 +56,16 @@ export default async function BienvenidaEducador() {
                     <h1>{t('welcomeText')}</h1>
                 </div>
                 <div className="container">
-                    <div className="row">
-                      <SelectGrade grades={grades} />
-                        <div className={styles[`texto-grados`]}>
-                            <h1>{t('text1')}</h1>
-                            <h1>{t('text2')}</h1>
-                        </div>
+                    <div className="d-flex flex-row flex-nowrap justify-content-center align-items-center mb-5 mt-4" 
+         style={{ gap: '20px', width: '100%' }}>
+        <SelectGrade grades={grades} />
+    </div>
+                    <div className={styles[`texto-grados`]}>
+                        <h1>{t('text1')}</h1>
+                        <h1>{t('text2')}</h1>
                     </div>
                 </div>
             </main>
-        </body>
+        </div>
     )
 }

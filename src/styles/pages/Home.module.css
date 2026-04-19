@@ -1,0 +1,426 @@
+/* Variables CSS se importan globalmente en globals.css */
+
+/* ========== NAVEGACIÓN ========== */
+.navLudi {
+  background-color: #7bcfff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  gap: var(--spacing-xl);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+  flex-wrap: wrap;
+}
+
+.navLudi .imgLudi {
+  height: 70px;
+  transition: transform var(--transition-normal);
+}
+
+.navLudi .imgLudi:hover {
+  transform: scale(1.1);
+}
+
+.navLudi .buttonLudi {
+  background-color: var(--white);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: 0 var(--spacing-xs);
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.navLudi .buttonLudi:hover {
+  background-color: var(--ludi-yellow);
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(255, 212, 0, 0.5);
+}
+
+.navLudi .institucion {
+  background-color: #8860FF;
+  color: var(--white);
+}
+
+/* ========== HEADER PRINCIPAL ========== */
+.headerLudi {
+  background: var(--gradient-primary);
+  color: var(--white);
+  text-align: center;
+  padding: 6rem var(--spacing-xl) 4rem;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+.headerLudi .h1Ludi {
+  font-size: var(--font-size-5xl);
+  animation: floatText 3s ease-in-out infinite alternate;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.headerLudi .pLudi {
+  font-size: var(--font-size-xl);
+  margin: var(--spacing-md) 0 var(--spacing-xl);
+  animation: fadeInUp 2s ease forwards;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.heroButtons .buttonLudi {
+  margin: 0 var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-2xl);
+  border: none;
+  font-weight: var(--font-weight-extrabold);
+  cursor: pointer;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  box-shadow: 0 4px 12px rgba(255, 219, 0, 0.6);
+}
+
+.heroButtons .buttonLudi:nth-child(2) {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #444;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.8);
+}
+
+.heroButtons .buttonLudi:hover {
+  transform: scale(1.12);
+  box-shadow: 0 8px 18px rgba(255, 219, 0, 0.8);
+}
+
+/* ========== ICONOS DE FONDO ========== */
+.bgIcon {
+  position: absolute;
+  width: 120px !important;
+  height: 140px !important;
+  opacity: 0.45 !important;
+  animation: floatIcon 5s infinite ease-in-out;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.2));
+  z-index: 0;
+}
+
+.bgIcon:nth-child(1) { 
+  top: 15%; 
+  left: 3%;  
+  animation-delay: 0s; 
+}
+
+.bgIcon:nth-child(2) { 
+  top: 25%; 
+  right: 7%; 
+  animation-delay: 1.5s; 
+}
+
+.bgIcon:nth-child(3) { 
+  bottom: 15%; 
+  left: 15%; 
+  animation-delay: 3s; 
+}
+
+/* ========== SECCIONES ========== */
+.section {
+  max-width: 960px;
+  margin: 0 auto 5rem;
+  padding: 0 var(--spacing-md);
+  text-align: center;
+}
+
+.section .h2Ludi {
+  color: var(--ludi-purple);
+  font-size: var(--font-size-2xl);
+  margin: 40px 0 var(--spacing-xl);
+  text-shadow: 0 1px 4px rgba(123, 60, 255, 0.5);
+}
+
+/* ========== SECCIÓN LUDI ========== */
+.ludiSection {
+  padding: 60px var(--spacing-lg);
+  background: linear-gradient(135deg, #cce4f6, #f2d1f8, #ffd6e0);
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  animation: pulseColor 5s ease-in-out infinite alternate;
+}
+
+.ludiContenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ludiExperienciasTitle {
+  color: #6b21a8;
+  font-size: 13px;
+  margin-top: var(--spacing-lg);
+  max-width: 600px;
+  line-height: var(--line-height-relaxed);
+  animation: fadePulse 3s ease-in-out infinite alternate;
+}
+
+/* ========== SECCIÓN DE IMPORTANCIA ========== */
+.ludiImportanceSection {
+  padding: 4rem var(--spacing-md);
+  background: linear-gradient(to bottom right, #f3e8ff, #dbeafe);
+  text-align: center;
+  border-radius: var(--border-radius-xl);
+  max-width: 1200px;
+  margin: 3rem auto;
+  box-shadow: 0 8px 25px rgba(107, 33, 168, 0.15);
+}
+
+.ludiImportanceTitle {
+  font-size: 2.50rem;
+  font-weight: var(--font-weight-extrabold);
+  color: #6b21a8;
+  margin-bottom: 3rem;
+  text-shadow: 0 2px 5px rgba(107, 33, 168, 0.2);
+  animation: pulseText 3s ease-in-out infinite;
+}
+
+.ludiImportanceGrid {
+  display: grid;
+  gap: var(--spacing-xl);
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* ========== SECCIÓN ROCKET ========== */
+.rocketSection {
+  position: relative;
+  background: linear-gradient(to top, #78D0E4, #2C4B6E);
+  overflow: hidden;
+  padding: var(--spacing-md);
+  color: var(--white);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.rocketContent {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rocketText {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  margin-top: var(--spacing-md);
+  opacity: 0;
+  animation: slideZoomIn 1.6s ease-out 0.5s forwards;
+}
+
+.highlight {
+  color: #ffdd57;
+  text-shadow: 0 0 10px rgba(255, 221, 87, 0.6);
+}
+
+/* ========== FONDO DE ESTRELLAS ========== */
+.starsBackgroundRocket {
+  position: absolute;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  background-color: #0a0a2a;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.7) 0.5px, transparent 1px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.5) 0.3px, transparent 0.8px);
+  background-size: 120px 120px, 60px 60px;
+  background-repeat: repeat;
+  animation: starMove 30s linear infinite;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* ========== CARDS DE JUEGOS ========== */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.card {
+  background-color: #ff8a8a;
+  border-radius: var(--border-radius-xl);
+  width: 180px;
+  height: 180px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: var(--font-weight-bold);
+  cursor: default;
+  transition: all var(--transition-normal);
+  padding: var(--spacing-md);
+  opacity: 0;
+  animation: cardFadeIn 1s ease forwards;
+}
+
+.card:hover,
+.card .imgCard:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  transform: scale(1.1);
+}
+
+.card:nth-child(2) { 
+  background-color: #90c4ff; 
+  color: #004080; 
+}
+
+.card:nth-child(3) { 
+  background-color: #ffdd9a; 
+  color: #7a5700; 
+}
+
+.card:nth-child(4) { 
+  background-color: #a1ff93; 
+  color: #2d6500; 
+}
+
+.card .imgCard {
+  width: 100px;
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform var(--transition-normal);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  background-color: #305971;
+  color: var(--white);
+  text-align: center;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-weight: var(--font-weight-medium);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin-top: 3rem;
+}
+
+/* ========== ANIMACIONES ========== */
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes floatText {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideZoomIn {
+  0% { transform: translateY(30px) scale(0.9); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes cardFadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes fadePulse {
+  0% { opacity: 0.85; }
+  50% { opacity: 1; }
+  100% { opacity: 0.85; }
+}
+
+@keyframes pulseColor {
+  0% {
+    background: linear-gradient(135deg, #cce4f6, #f2d1f8, #ffd6e0);
+  }
+  50% {
+    background: linear-gradient(135deg, #d1e8fc, #e5ccf3, #ffe0e6);
+  }
+  100% {
+    background: linear-gradient(135deg, #cce4f6, #f2d1f8, #ffd6e0);
+  }
+}
+
+@keyframes pulseText {
+  0%, 100% {
+    text-shadow: 0 2px 5px rgba(107, 33, 168, 0.2);
+  }
+  50% {
+    text-shadow: 0 4px 15px rgba(107, 33, 168, 0.5);
+  }
+}
+
+@keyframes starMove {
+  0% { background-position: 0 0, 0 0; }
+  50% { background-position: 30px 30px, -30px -30px; }
+  100% { background-position: 0 0, 0 0; }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (min-width: 640px) {
+  .ludiImportanceGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .ludiSection {
+    gap: 40px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ludiExperienciasTitle {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .headerLudi h1 { 
+    font-size: var(--font-size-4xl); 
+  }
+
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navLudi {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .navLudi img { 
+    height: 50px; 
+  }
+}
+
+@media (min-width: 1024px) {
+  .ludiImportanceGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .headerLudi {
+    padding: 4rem var(--spacing-md) 3rem;
+  }
+
+  .headerLudi h1 { 
+    font-size: var(--font-size-3xl); 
+  }
+
+  .card {
+    width: 100%;
+    max-width: 300px;
+  }
+}

@@ -6,6 +6,9 @@
 .pnp.js
 .yarn/install-state.gz
 
+# cursor rules and files
+/.cursor/
+
 # testing
 /coverage
 
@@ -28,6 +31,8 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
+.envlocal
+.envproduction
 
 # vercel
 .vercel
@@ -35,3 +40,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# opencode .md files
+BACKEND_AUTH_USAGE.md
+PLAN_ACTIVIDADES_LUDICAS.md
+AGENTS.md
+
+# temporal files inside public directory
+/public/tmp/
