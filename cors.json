@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://localhost:3000", "https://localhost:3000"],
+    "origin": ["http://localhost:3000", "https://localhost:3000", "https://ludigame-f9gnfzegc4cncvd7.westus2-01.azurewebsites.net"],
     "method": ["GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS"],
     "responseHeader": ["Content-Type", "Authorization", "Content-Length", "User-Agent", "x-goog-resumable"],
     "maxAgeSeconds": 3600
