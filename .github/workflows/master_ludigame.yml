@@ -38,6 +38,7 @@ jobs:
         with:
           name: node-app
           path: .next/standalone # SÓLO subimos lo necesario para ejecutar
+          include-hidden-files: true
 
   deploy:
     runs-on: ubuntu-latest
