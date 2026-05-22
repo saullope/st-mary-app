@@ -110,7 +110,8 @@
     "createActivity": "Create Activity",
     "myActivities": "My Activities",
     "reports": "Reports",
-    "templates": "Templates"
+    "templates": "Templates",
+    "watching": "Activity Evaluation"
   },
   "firstGradeItemDashboard": {
     "gradeName": "First Grade",

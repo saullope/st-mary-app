@@ -144,7 +144,7 @@ export default async function AdminReportsPage({ searchParams }: PageProps) {
       <div className={styles.headerContainer} style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
         <div>
           <h1 className={designStyles.titleLudi} style={{ textAlign: 'left', marginBottom: '10px' }}>
-            <FaChartLine className="me-3" /> Efectividad Global
+            <FaChartLine className="me-3" /> Seguimiento de Actividades
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.7)' }}>Vista administrativa avanzada de actividades y métricas de desempeño.</p>
         </div>

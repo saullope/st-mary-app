@@ -289,3 +289,161 @@ th {
     font-size: var(--font-size-xl);
   }
 }
+
+/* ========== CUSTOM DRIVER.JS POPOVER STYLES FOR LUDI THEME ========== */
+.driver-popover.driverjs-theme {
+  background-color: #FDFBF7 !important; /* Blanco Hueso */
+  color: #1D153A !important; /* Morado Profundo */
+  border-radius: 1.2rem !important;
+  border: 1px solid rgba(29, 21, 58, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(29, 21, 58, 0.15) !important;
+  font-family: inherit !important;
+  padding: 1.5rem !important;
+  max-width: 350px !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+  color: #1D153A !important; /* Morado Profundo */
+  font-weight: 800 !important;
+  font-size: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-description {
+  color: #4a4266 !important; /* Morado Claro/Gris para legibilidad */
+  font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn {
+  color: #4a4266 !important;
+  transition: color 0.2s ease !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn:hover {
+  color: #dc3545 !important;
+}
+
+/* Custom buttons */
+.driver-popover.driverjs-theme .driver-popover-prev-btn,
+.driver-popover.driverjs-theme .driver-popover-next-btn {
+  border-radius: 2rem !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  padding: 0.4rem 1rem !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  text-shadow: none !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-prev-btn {
+  background-color: rgba(29, 21, 58, 0.05) !important;
+  color: #4a4266 !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-prev-btn:hover {
+  background-color: rgba(29, 21, 58, 0.1) !important;
+  color: #1D153A !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-next-btn {
+  background-color: #198754 !important; /* Verde Success */
+  color: #ffffff !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-next-btn:hover {
+  background-color: #146c43 !important;
+  box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3) !important;
+}
+
+.driver-popover.driverjs-theme .driver-popover-progress-text {
+  color: #4a4266 !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+}
+
+/* Customize arrow */
+.driver-popover.driverjs-theme .driver-popover-arrow-side-left { border-left-color: #FDFBF7 !important; }
+.driver-popover.driverjs-theme .driver-popover-arrow-side-right { border-right-color: #FDFBF7 !important; }
+.driver-popover.driverjs-theme .driver-popover-arrow-side-top { border-bottom-color: #FDFBF7 !important; }
+.driver-popover.driverjs-theme .driver-popover-arrow-side-bottom { border-top-color: #FDFBF7 !important; }
+
+/* ========== CUSTOM DRIVER.JS DASHBOARD THEME ========== */
+.driver-popover.driverjs-dashboard-theme {
+  background-color: #E8E5F7 !important; /* Lavanda */
+  color: #1D153A !important; /* Morado Profundo */
+  border-radius: 1.2rem !important;
+  border: 1px solid rgba(29, 21, 58, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(29, 21, 58, 0.15) !important;
+  font-family: inherit !important;
+  padding: 1.5rem !important;
+  max-width: 350px !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-title {
+  color: #1D153A !important; /* Morado Profundo */
+  font-weight: 800 !important;
+  font-size: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-description {
+  color: #4a4266 !important; /* Morado Claro/Gris para legibilidad */
+  font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-close-btn {
+  color: #4a4266 !important;
+  transition: color 0.2s ease !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-close-btn:hover {
+  color: #dc3545 !important;
+}
+
+/* Custom buttons */
+.driver-popover.driverjs-dashboard-theme .driver-popover-prev-btn,
+.driver-popover.driverjs-dashboard-theme .driver-popover-next-btn {
+  border-radius: 2rem !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  padding: 0.4rem 1rem !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  text-shadow: none !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-prev-btn {
+  background-color: rgba(29, 21, 58, 0.05) !important;
+  color: #4a4266 !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-prev-btn:hover {
+  background-color: rgba(29, 21, 58, 0.1) !important;
+  color: #1D153A !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-next-btn {
+  background-color: #198754 !important; /* Verde Success */
+  color: #ffffff !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-next-btn:hover {
+  background-color: #146c43 !important;
+  box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3) !important;
+}
+
+.driver-popover.driverjs-dashboard-theme .driver-popover-progress-text {
+  color: #4a4266 !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+}
+
+/* Customize arrow */
+.driver-popover.driverjs-dashboard-theme .driver-popover-arrow-side-left { border-left-color: #E8E5F7 !important; }
+.driver-popover.driverjs-dashboard-theme .driver-popover-arrow-side-right { border-right-color: #E8E5F7 !important; }
+.driver-popover.driverjs-dashboard-theme .driver-popover-arrow-side-top { border-bottom-color: #E8E5F7 !important; }
+.driver-popover.driverjs-dashboard-theme .driver-popover-arrow-side-bottom { border-top-color: #E8E5F7 !important; }

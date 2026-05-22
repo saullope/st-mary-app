@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { getTranslations } from "next-intl/server";
 import { SelectGrade } from "@/components/educator";
+import WelcomeTour from "./WelcomeTour";
 import prisma from "@/lib/db";
 
 
@@ -48,18 +49,19 @@ export default async function BienvenidaEducador() {
 
     return (
         <div className={styles[`body-vistaeducador`]}>
+            <WelcomeTour />
             <main>
                 <div className={styles[`texto-bienvenida`]}>
                     <br />
                     <br />
                     <br />
-                    <h1>{t('welcomeText')}</h1>
+                    <h1 id="welcome-title">{t('welcomeText')}</h1>
                 </div>
                 <div className="container">
-                    <div className="d-flex flex-row flex-nowrap justify-content-center align-items-center mb-5 mt-4" 
-         style={{ gap: '20px', width: '100%' }}>
-        <SelectGrade grades={grades} />
-    </div>
+                    <div id="grade-selection-container" className="d-flex flex-row flex-nowrap justify-content-center align-items-center mb-5 mt-4" 
+                         style={{ gap: '20px', width: '100%' }}>
+                        <SelectGrade grades={grades} />
+                    </div>
                     <div className={styles[`texto-grados`]}>
                         <h1>{t('text1')}</h1>
                         <h1>{t('text2')}</h1>
