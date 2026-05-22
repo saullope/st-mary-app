@@ -1,76 +1,67 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Node.js app to Azure Web App - ludigame
-
-on:
+'on':
   push:
     branches:
       - master
-  workflow_dispatch:
-
+  workflow_dispatch: null
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Node.js version
-        uses: actions/setup-node@v4 # Actualizado a v4
+        uses: actions/setup-node@v4
         with:
-          node-version: '22' # Cambiado a 22 para coincidir con tu local
-
+          node-version: '22'
       - name: npm install, build, and test
         run: |
           npm install --legacy-peer-deps
           npm run build
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }} # Necesario si haces chequeos en el build
-
-      # PASO CRÍTICO: Preparar la carpeta de salida
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
       - name: Prepare Standalone Bundle
         run: |
           cp -r public .next/standalone/public
           cp -r .next/static .next/standalone/.next/static
-
       - name: Prepare Standalone Bundle
         run: |
           cp -r public .next/standalone/public
           cp -r .next/static .next/standalone/.next/static
-        # Agrupamos y comprimimos los miles de archivos en un solo archivo ligero
-        tar -czf standalone-bundle.tar.gz -C .next/standalone .
-
+          tar -czf standalone-bundle.tar.gz -C .next/standalone .
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
           path: standalone-bundle.tar.gz
-          retention-days: 1 # Se borrará automáticamente en 24 horas liberando tu cuota
-
+          retention-days: 1
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
       id-token: write
       contents: read
-
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
-      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CDCDCD1028764C90828B5E8D5BC1CFE4 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E7977E312BC149FAB3CD1BA8C5F54BD7 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0BA936561A0F4EB69A7C7484CAECC0E2 }}
-
-      - name: 'Deploy to Azure Web App'
+          client-id: >-
+            ${{
+            secrets.AZUREAPPSERVICE_CLIENTID_CDCDCD1028764C90828B5E8D5BC1CFE4 }}
+          tenant-id: >-
+            ${{
+            secrets.AZUREAPPSERVICE_TENANTID_E7977E312BC149FAB3CD1BA8C5F54BD7 }}
+          subscription-id: >-
+            ${{
+            secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0BA936561A0F4EB69A7C7484CAECC0E2
+            }}
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'ludigame'
-          slot-name: 'Production'
-          package: . # Aquí se despliega sólo el contenido de standalone
+          app-name: ludigame
+          slot-name: Production
+          package: .
