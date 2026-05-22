@@ -24,7 +24,12 @@ export const CardGameActivity = ({ imageAct, title, page_to, subtitle, descripti
 
     return (
         <div className="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
-            <Link href={`/create/${page_to}`} className={`${designStyles.createCard} ${bgClass}`} style={{ textDecoration: 'none' }}>
+            <Link 
+                href={`/create/${page_to}`} 
+                className={`${designStyles.createCard} ${bgClass}`} 
+                style={{ textDecoration: 'none' }}
+                data-tour={typeId === 'ludiquiz' ? 'ludiquiz-card' : undefined}
+            >
                 {typeof imageAct === 'string' ? (
                     <img src={imageAct} className={designStyles.createImg} alt={title} />
                 ) : (

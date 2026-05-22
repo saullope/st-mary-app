@@ -207,6 +207,8 @@ export default function GamificationPanel({
 
       {/* Panel Lateral */}
       <div
+        id="sidebar-panel-ludico"
+        data-tour="panel-ludico"
         className={`${styles.gamificationPanel} ${isOpen ? styles.panelOpen : ""}`}
         role="region"
         aria-label="Panel de configuración lúdica"

@@ -87,7 +87,10 @@ export const LoadMultimediaFile = ({
       />
 
       {/* Selector de Medios */}
-      <div className={styleComponent == "trueorfalse" ? style2["media-selector"] : style3["media-selector"]}>
+      <div 
+        className={`${styleComponent == "trueorfalse" ? style2["media-selector"] : style3["media-selector"]} media-upload-zone`}
+        data-tour="media-dropzone"
+      >
         {/* Área de placeholder para mostrar o añadir medios */}
         <div
           className={styleComponent == "trueorfalse" ? style2["media-placeholder"] : style3["media-placeholder"]}

@@ -6,10 +6,6 @@ import "driver.js/dist/driver.css";
 
 export default function DashboardTour() {
   useEffect(() => {
-    // 1. Check persistence flag for the Dashboard tour to fire only once
-    const hasSeenDashboardTour = localStorage.getItem("hasSeenDashboardTour");
-    if (hasSeenDashboardTour === "true") return;
-
     // 2. Configure and instantiate driver.js with the Ludi Dashboard theme
     const driverObj = driver({
       showProgress: true,

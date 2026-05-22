@@ -6,10 +6,6 @@ import "driver.js/dist/driver.css";
 
 export default function WelcomeTour() {
   useEffect(() => {
-    // 1. Check persistence flag in LocalStorage to fire only on first login
-    const hasCompletedTour = localStorage.getItem("hasCompletedTour");
-    if (hasCompletedTour === "true") return;
-
     // 2. Configure and instantiate driver.js with the Ludi theme
     const driverObj = driver({
       showProgress: true,
@@ -44,11 +40,7 @@ export default function WelcomeTour() {
             description: "¡Excelente elección! Al seleccionar, entrarás directamente a tu dashboard personalizado. ¡A crear!",
           }
         }
-      ],
-      onDestroyed: () => {
-        // Set persistence flag when closed, skipped, or finished
-        localStorage.setItem("hasCompletedTour", "true");
-      }
+      ]
     });
 
     // Small delay to ensure all DOM elements are fully rendered in next.js client
