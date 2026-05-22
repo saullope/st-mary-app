@@ -1,18 +1,29 @@
-import prisma from "@/lib/db";
-import getCurrentUser from "@/lib/auth/getCurrentUser";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { FaCalendarAlt, FaUsers, FaChartBar } from "react-icons/fa";
 import "@/styles/pages/reports.css";
-import styles from "@/styles/pages/my-activities.module.css";
+import { FaCalendarAlt, FaUsers, FaChartBar } from "react-icons/fa";
+import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
+import getCurrentUser from "@/lib/auth/getCurrentUser";
+import Link from "next/link";
+import prisma from "@/lib/db";
 import ReportFilter from "@/components/dashboard/ReportFilter";
+import styles from "@/styles/pages/my-activities.module.css";
 
 interface PageProps {
   searchParams: Promise<{
     status?: string;
     search?: string;
   }>;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("SidebarTranslation");
+
+    return {
+        title: t('reports'),
+        description: ''
+    };
 }
 
 export default async function ReportsHubPage({ searchParams }: PageProps) {

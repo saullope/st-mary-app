@@ -6,6 +6,7 @@ import { FaPlusCircle, FaClone, FaListOl, FaHeadphones, FaVideo, FaImage, FaYout
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
+import DashboardTour from "./DashboardTour";
 
 type GradeKey = 'firstGrade' | 'secondGrade' | 'thirdGrade';
 
@@ -42,12 +43,13 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
 
   return (
     <div className="container-fluid py-5 px-md-5" style={{ minHeight: '100vh' }}>
+      <DashboardTour />
       {/* Sección principal con Padding superior aumentado */}
   <section className={`${designStyles.glassCardDark} mb-5 p-4 p-md-5`}>
     
     {/* Top Bar Context: Centrado vertical y mejor espaciado */}
     <div className=" flex-md-row mb-5 pb-4 border-bottom border-light border-opacity-10">
-      <h2 className={designStyles.titleLudi} style={{ marginBottom: 0, flex: 1, textAlign: 'center' }}>
+      <h2 id="dashboard-user-greeting" className={designStyles.titleLudi} style={{ marginBottom: 0, flex: 1, textAlign: 'center' }}>
         <span className={designStyles.star}>★</span> ¡Hola, <span style={{ color: '#00d4ff' }}>{getFirstName(userName)}</span>! ¿Qué deseas hacer?
       </h2>
     
@@ -56,6 +58,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
         <div className={designStyles.actionsContainer}>
           {/* Tarjeta: Crear */}
           <div
+            id="card-create-activity"
             className={`${designStyles.ludiCard} ${designStyles.cardDark}`}
             onClick={() => handleNavigation('/dashboard/create-activity')}
           >
@@ -70,6 +73,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
 
           {/* Tarjeta: Plantillas */}
           <div
+            id="card-templates"
             className={`${designStyles.ludiCard} ${designStyles.cardPurple}`}
             onClick={() => handleNavigation('/dashboard/templates')}
           >
@@ -84,6 +88,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
 
           {/* Tarjeta: Gestionar */}
           <div
+            id="card-my-activities"
             className={`${designStyles.ludiCard} ${designStyles.cardBlue}`}
             onClick={() => handleNavigation('/dashboard/my-activities')}
           >
@@ -98,10 +103,10 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
         </div>
       </section>
 
-      <div className="row g-4">
+      <div id="dashboard-drafts-section" className="row g-4">
         {/* Drafts Logic (Conditional) */}
         <div className="col-12 col-xl-8">
-          {drafts && drafts.length > 0 && (
+          {drafts && drafts.length > 0 ? (
             <div className="mb-4">
               <h5 className="fw-bold text-white mb-3 d-flex align-items-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                 <FaPen className="me-2" /> CONTINUAR TRABAJANDO
@@ -122,6 +127,15 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
                     Retomar <FaArrowRight className="ms-2" />
                   </button>
                 </div>
+              </div>
+            </div>
+          ) : (
+            <div className="mb-4">
+              <h5 className="fw-bold text-white mb-3 d-flex align-items-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                <FaPen className="me-2" /> CONTINUAR TRABAJANDO
+              </h5>
+              <div className={`${designStyles.glassCardDark} p-4 text-center`}>
+                <p className="text-white opacity-75 mb-0 small">No tienes borradores pendientes. ¡Crea una nueva actividad para comenzar!</p>
               </div>
             </div>
           )}

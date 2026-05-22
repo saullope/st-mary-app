@@ -36,11 +36,11 @@ export const SidebarDashboard = () => {
         { href: '/dashboard/my-activities', icon: FaListOl, text: t('myActivities'), target: '' },
         { href: '/dashboard/reports', icon: FaFileAlt, text: t('reports'), target: '' },
         { href: '/dashboard/templates', icon: FaClone, text: t('templates'), target: '' }, // Temporarily hardcoded text, could add translation later
-        ...(isAdmin ? [{ href: '/admin/reports', icon: FaChartPie, text: 'Efectividad Global', target: '' }] : []),
+        ...(isAdmin ? [{ href: '/admin/reports', icon: FaChartPie, text: t('watching'), target: '' }] : []),
     ];
 
     return (
-        <div className={designStyles.sidebarDark}>
+        <div id="sidebar-dashboard" className={designStyles.sidebarDark}>
             <div className="text-center mb-3">
                 <Image
                     src="/images/Logo-LudiGame.png"

@@ -9,6 +9,7 @@ import Ludiquiz from "@/images/ludiquiz.png"
 import Memory from "@/images/memory.png"
 import TrueOrFalse from "@/images/verdadero-falso.png"
 import Reading from "@/lotties/reading.json"
+import Rocket from "@/lotties/rocket.json"
 import { LottieCharge } from '@/components/LottieComponents/LottieCharge'
 import Link from "next/link"
 
@@ -93,7 +94,7 @@ export default function HomePage() {
 
           {/* <!-- Animación decorativa de cohete --> */}
           <LottieCharge
-            animationData={Reading}/>
+            animationData={Rocket}/>
         </div>
       </section>
 
