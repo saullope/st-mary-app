@@ -31,20 +31,20 @@ export default function TeacherEvaluationToast({ activityId, grade, onRate, init
     >
       <div 
         className="card shadow-lg border-0 rounded-4 overflow-hidden" 
-        style={{ width: '320px', background: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)' }}
+        style={{ width: '320px', background: '#E8E5F7', border: '1px solid rgba(29, 21, 58, 0.05)' }}
       >
         <div className="card-body p-4 position-relative">
           <button 
-            className="btn btn-sm btn-light rounded-circle position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center"
-            style={{ width: '28px', height: '28px', border: '1px solid #dee2e6' }}
+            className="btn btn-sm rounded-circle position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center shadow-sm"
+            style={{ width: '28px', height: '28px', background: 'white', border: '1px solid rgba(29, 21, 58, 0.1)', color: '#1D153A' }}
             onClick={() => setIsVisible(false)}
             aria-label="Cerrar"
           >
-            <X size={16} className="text-secondary" />
+            <X size={16} />
           </button>
           
-          <h6 className="fw-bold text-dark mb-1 pr-4">Evaluación Rápida</h6>
-          <p className="text-muted small mb-3">¿Qué tan efectiva fue esta actividad para <strong>{grade}</strong>?</p>
+          <h6 className="fw-bold mb-1 pr-4" style={{ color: '#1D153A' }}>Evaluación Rápida</h6>
+          <p className="small mb-3" style={{ color: '#4a4266' }}>¿Qué tan efectiva fue esta actividad para <strong>{grade}</strong>?</p>
           
           <div className="d-flex justify-content-center gap-2 mb-2">
             {[1, 2, 3, 4, 5].map((star) => (

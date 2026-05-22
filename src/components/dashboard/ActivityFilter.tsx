@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, ChangeEvent, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useTranslations } from "next-intl";
+import styles from "./ActivityFilter.module.css";
 
 interface ActivityType {
   id: number;
@@ -62,31 +63,29 @@ export default function ActivityFilter({ types }: ActivityFilterProps) {
   };
 
   return (
-    <div className="d-flex flex-wrap align-items-center gap-3">
+    <div className={styles.filterWrapper}>
       {/* Search Input */}
-      <div className="position-relative flex-grow-1" style={{ minWidth: "250px" }}>
-        <FaSearch className="position-absolute text-muted" style={{ top: "50%", left: "15px", transform: "translateY(-50%)" }} />
+      <div className={styles.searchContainer}>
+        <FaSearch className={styles.searchIcon} />
         <input 
           type="text" 
-          className="form-control border-0 bg-light ps-5 py-2 rounded-pill shadow-sm"
+          className={styles.searchInput}
           placeholder={t("searchPlaceholder")}
           value={searchTerm}
           onChange={handleSearchChange}
-          style={{ fontSize: "0.95rem" }}
         />
       </div>
 
       {/* Type Filter */}
-      <div className="d-flex align-items-center bg-light rounded-pill px-3 py-1 shadow-sm">
-        <label htmlFor="activityType" className="me-2 fw-bold text-secondary text-nowrap small mb-0">
+      <div className={styles.selectContainer}>
+        <label htmlFor="activityType" className={styles.selectLabel}>
           {`${t("typeActivitySearch")}:`}
         </label>
         <select
           id="activityType"
-          className="form-select border-0 bg-transparent py-1 shadow-none"
+          className={styles.typeSelect}
           value={initialType}
           onChange={handleFilterChange}
-          style={{ minWidth: "150px", cursor: "pointer", fontWeight: 500 }}
         >
           <option value="">{t("all")}</option>
           {types.map((type) => (

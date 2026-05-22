@@ -20,6 +20,8 @@
     "firebase": "10.12.5",
     "firebase-admin": "12.4.0",
     "formik": "2.4.6",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "lottie-react": "2.4.1",
     "lottie-web": "5.13.0",
     "lucide-react": "^1.7.0",

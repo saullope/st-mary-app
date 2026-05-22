@@ -1,0 +1,103 @@
+.paginationWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #E8E5F7; /* Lavanda suave a juego con filtros */
+  border-radius: 1.5rem;
+  border: 1px solid rgba(29, 21, 58, 0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  gap: 1rem;
+}
+
+.limitSelector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #4a4266;
+}
+
+.limitSelect {
+  border: 1px solid rgba(29, 21, 58, 0.2);
+  border-radius: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  background: white;
+  color: #1D153A;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.limitSelect option {
+  background: white;
+  color: #1D153A;
+}
+
+.limitSelect:focus {
+  border-color: #6a4bff;
+  box-shadow: 0 0 0 2px rgba(106, 75, 255, 0.2);
+}
+
+.infoText {
+  font-size: 0.9rem;
+  color: #4a4266;
+}
+
+.infoText span {
+  font-weight: 700;
+  color: #1D153A;
+}
+
+.navGroup {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(29, 21, 58, 0.2);
+  background: white;
+  color: #1D153A;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navBtn:not(:disabled):hover {
+  border-color: #1D153A;
+  color: white;
+  background: #1D153A;
+  box-shadow: 0 2px 8px rgba(29, 21, 58, 0.15);
+}
+
+.navBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: transparent;
+  border-color: rgba(29, 21, 58, 0.1);
+  color: rgba(29, 21, 58, 0.3);
+}
+
+.currentPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  border: 1px solid #1D153A;
+  background: #1D153A;
+  color: white;
+  border-radius: 0.8rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(29, 21, 58, 0.15);
+}

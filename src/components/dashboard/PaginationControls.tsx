@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import styles from "./PaginationControls.module.css";
 
 interface PaginationControlsProps {
   totalCount: number;
@@ -41,31 +42,30 @@ export default function PaginationControls({ totalCount, currentPage, pageSize }
   if (totalCount === 0) return null;
 
   return (
-    <div className="d-flex flex-wrap justify-content-between align-items-center py-3 px-2">
+    <div className={styles.paginationWrapper}>
       {/* Page Size Selector */}
-      <div className="d-flex align-items-center gap-2 mb-2 mb-md-0">
-        <span className="text-muted small">Mostrar</span>
+      <div className={styles.limitSelector}>
+        <span>Mostrar</span>
         <select 
-            className="form-select form-select-sm w-auto border-secondary-subtle"
+            className={styles.limitSelect}
             value={pageSize}
             onChange={handleLimitChange}
-            style={{ cursor: "pointer" }}
         >
             <option value="5">5</option>
             <option value="10">10</option>
         </select>
-        <span className="text-muted small">registros</span>
+        <span>registros</span>
       </div>
 
       {/* Info Text */}
-      <div className="text-muted small mb-2 mb-md-0">
-        Mostrando <span className="fw-bold">{startRecord}</span> - <span className="fw-bold">{endRecord}</span> de <span className="fw-bold">{totalCount}</span>
+      <div className={styles.infoText}>
+        Mostrando <span>{startRecord}</span> - <span>{endRecord}</span> de <span>{totalCount}</span>
       </div>
 
       {/* Navigation Buttons */}
-      <div className="btn-group">
+      <div className={styles.navGroup}>
         <button 
-            className="btn btn-outline-secondary btn-sm"
+            className={styles.navBtn}
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage <= 1}
             title="Anterior"
@@ -74,12 +74,12 @@ export default function PaginationControls({ totalCount, currentPage, pageSize }
         </button>
         
         {/* Simple Page Numbers logic (Current / Total) */}
-        <button className="btn btn-outline-secondary btn-sm disabled border-secondary-subtle text-dark fw-bold">
+        <div className={styles.currentPage}>
             {currentPage}
-        </button>
+        </div>
 
         <button 
-            className="btn btn-outline-secondary btn-sm"
+            className={styles.navBtn}
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage >= totalPages}
             title="Siguiente"

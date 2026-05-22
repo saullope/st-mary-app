@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FaPlay, FaPenToSquare, FaShareNodes, FaGamepad, FaListCheck, FaBrain, FaCheck, FaRocket } from "react-icons/fa6";
+import { FaEye, FaPenToSquare, FaShareNodes, FaGamepad, FaListCheck, FaBrain, FaCheck, FaRocket } from "react-icons/fa6";
 import styles from "@/styles/pages/my-activities.module.css";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
 import { DeleteActivityButton } from "@/app/dashboard/my-activities/DeleteActivityButton";
 import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
 import CreatorCard from "./CreatorCard";
@@ -116,7 +117,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             onClick={handleLaunch}
             disabled={isLaunching || isActivityFinalized}
             title={isActivityFinalized ? "Actividad ya finalizada" : "Lanzar Partida (Panel en Vivo)"}
-            style={{ backgroundColor: isActivityFinalized ? '#ccc' : '#ff9f43', color: 'white', cursor: isActivityFinalized ? 'not-allowed' : 'pointer' }}
+            style={isActivityFinalized ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
           >
             {isLaunching ? (
                 <span className="spinner-border spinner-border-sm" />
@@ -130,7 +131,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             title={t('viewButton')}
             target="_blank" rel="noopener noreferrer"
           >
-            <FaPlay size={18} />
+            <FaEye size={18} />
           </Link>
           <Link 
             href={getEditRoute(activity.tipoActividadId)} 

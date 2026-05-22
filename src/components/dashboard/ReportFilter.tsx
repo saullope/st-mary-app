@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, ChangeEvent, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import styles from "./ActivityFilter.module.css";
 
 export default function ReportFilter() {
   const router = useRouter();
@@ -46,31 +47,29 @@ export default function ReportFilter() {
   };
 
   return (
-    <div className="d-flex flex-wrap align-items-center gap-3">
+    <div className={styles.filterWrapper}>
       {/* Search Input */}
-      <div className="position-relative flex-grow-1" style={{ minWidth: "250px" }}>
-        <FaSearch className="position-absolute text-muted" style={{ top: "50%", left: "15px", transform: "translateY(-50%)" }} />
+      <div className={styles.searchContainer}>
+        <FaSearch className={styles.searchIcon} />
         <input 
           type="text" 
-          className="form-control border-0 bg-light ps-5 py-2 rounded-pill shadow-sm"
+          className={styles.searchInput}
           placeholder="Buscar actividad por nombre..."
           value={searchTerm}
           onChange={handleSearchChange}
-          style={{ fontSize: "0.95rem" }}
         />
       </div>
 
       {/* Status Filter */}
-      <div className="d-flex align-items-center bg-light rounded-pill px-3 py-1 shadow-sm">
-        <label htmlFor="reportStatus" className="me-2 fw-bold text-secondary text-nowrap small mb-0">
+      <div className={styles.selectContainer}>
+        <label htmlFor="reportStatus" className={styles.selectLabel}>
           Estado:
         </label>
         <select
           id="reportStatus"
-          className="form-select border-0 bg-transparent py-1 shadow-none"
+          className={styles.typeSelect}
           value={initialStatus}
           onChange={handleFilterChange}
-          style={{ minWidth: "150px", cursor: "pointer", fontWeight: 500 }}
         >
           <option value="">Todos</option>
           <option value="ESPERANDO">Esperando / Lobby</option>

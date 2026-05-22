@@ -1,0 +1,90 @@
+.filterWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.searchContainer {
+  position: relative;
+  flex-grow: 1;
+  min-width: 250px;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: #1D153A;
+  opacity: 0.6;
+  z-index: 2;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.7rem 1rem 0.7rem 2.5rem;
+  border: 1px solid rgba(29, 21, 58, 0.2);
+  border-radius: 2rem;
+  background-color: white;
+  color: #1D153A;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #6a4bff;
+  box-shadow: 0 0 0 3px rgba(106, 75, 255, 0.2);
+}
+
+.searchInput::placeholder {
+  color: rgba(29, 21, 58, 0.5);
+}
+
+.selectContainer {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid rgba(29, 21, 58, 0.2);
+  border-radius: 2rem;
+  padding: 0.4rem 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.selectContainer:focus-within {
+  border-color: #6a4bff;
+  box-shadow: 0 0 0 3px rgba(106, 75, 255, 0.2);
+}
+
+.selectLabel {
+  margin-right: 0.5rem;
+  font-weight: 700;
+  color: #1D153A;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.typeSelect {
+  border: none;
+  background: transparent;
+  color: #1D153A;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.3rem;
+  cursor: pointer;
+  outline: none;
+  min-width: 150px;
+}
+
+.typeSelect option {
+  background: white;
+  color: #1D153A;
+}
+
+.typeSelect:focus {
+  outline: none;
+}

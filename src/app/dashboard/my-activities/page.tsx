@@ -8,6 +8,7 @@ import NewActivityButton from "@/components/dashboard/NewActivityButton";
 import PaginationControls from "@/components/dashboard/PaginationControls";
 import { redirect } from "next/navigation";
 import styles from "@/styles/pages/my-activities.module.css";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
 import ActivityCard from "@/components/dashboard/ActivityCard";
 import { getTranslations } from "next-intl/server";
 
@@ -73,11 +74,13 @@ export default async function MyActivities({ searchParams }: PageProps) {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.headerContainer}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 0' }}>
+      <div className={styles.headerContainer} style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
         <div>
-          <h1 className={styles.headerTitle}>{t("titlePage")}</h1>
-          <p className="text-muted mb-0">{t("descPage")}</p>
+          <h1 className={designStyles.titleLudi} style={{ textAlign: 'left', marginBottom: '10px' }}>
+            <span className={designStyles.star}>★</span> {t("titlePage")}
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>{t("descPage")}</p>
         </div>
         <div className="d-flex gap-3">
           <ExportActivitiesButton activities={activities} />
@@ -107,14 +110,14 @@ export default async function MyActivities({ searchParams }: PageProps) {
       ) : (
         <div className={styles.emptyStateCard}>
           <div className={styles.emptyStateIcon}>🚀</div>
-          <h3>¡Tu aventura está a punto de comenzar!</h3>
+          <h3><span className={designStyles.star}>★</span> ¡Tu aventura está a punto de comenzar!</h3>
           <p>Aún no has creado ninguna actividad. Crea tu primer desafío y sorprende a tus estudiantes con una experiencia de aprendizaje inolvidable.</p>
         </div>
       )}
       
       {/* Paginación */}
       {activities.length > 0 && (
-        <div className={styles.paginationCard}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
           <PaginationControls 
             totalCount={total} 
             currentPage={page} 

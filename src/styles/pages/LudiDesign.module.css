@@ -1,0 +1,581 @@
+/* Estilo base para las tarjetas que contienen GIFs */
+.tag {
+    background: rgba(255,255,255,0.2);
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.actionCard {
+    width: 320px; /* Ajusta según tu diseño */
+    height: 200px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Capa de oscurecimiento para que el texto sea legible sobre el GIF animado */
+.actionCard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(20, 10, 46, 0.9), rgba(20, 10, 46, 0.3));
+    z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.actionCard:hover::before {
+    background: linear-gradient(to top, rgba(106, 75, 255, 0.6), rgba(20, 10, 46, 0.2));
+}
+
+/* Clases específicas para cada GIF */
+.bgCrear {
+    background-image: url('/images/crear.gif');
+}
+
+.bgPlantillas {
+    background-image: url('/images/plantillas.gif');
+}
+
+.bgActividades {
+    background-image: url('/images/actividades.gif');
+}
+
+/* Asegurar que el cuerpo de la tarjeta esté sobre el GIF */
+.actionBody {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Empuja el contenido hacia abajo */
+}
+
+.bgAnimation {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #1a1140, #2b1a5a);
+    background-size: 300% 300%;
+    animation: gradientMove 12s ease infinite;
+    z-index: -2;
+}
+
+.bgAnimation::before,
+.bgAnimation::after {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: rgba(106, 75, 255, 0.15);
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: float 12s infinite alternate;
+    z-index: -1;
+}
+
+.bgAnimation::after {
+    top: 60%;
+    left: 60%;
+    animation-direction: reverse;
+}
+
+.particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #8b73ff;
+    border-radius: 50%;
+    opacity: 0.25;
+    animation: particlesMove 14s linear infinite;
+    z-index: -1;
+}
+
+@keyframes float {
+    from { transform: translate(0,0); }
+    to { transform: translate(80px,-60px); }
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% }
+    50% { background-position: 100% }
+    100% { background-position: 0% }
+}
+
+@keyframes particlesMove {
+    0% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+    10% { opacity: 0.4; }
+    90% { opacity: 0.4; }
+    100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes starFloat {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.1) rotate(6deg); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+.titleLudi {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    position: relative;
+    animation: fadeInUp 0.8s ease;
+    color: white;
+}
+
+.titleLudi::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 3px;
+    margin: 10px auto 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    opacity: 0.6;
+}
+
+.star {
+    display: inline-block;
+    margin-right: 8px;
+    color: #6a4bff;
+    animation: starFloat 2.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(106,75,255,0.6));
+}
+
+.createCards {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.createCard {
+    width: 280px;
+    border-radius: 20px;
+    overflow: hidden;
+    color: white;
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+}
+
+.createCard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    z-index: 1;
+}
+
+.createCard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    box-shadow: inset 0 -40px 60px rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: 0.3s;
+    z-index: 1;
+}
+
+.createCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(106,75,255,0.4);
+}
+
+.createCard:hover::after {
+    opacity: 1;
+}
+
+.createBody {
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.cardQuiz {
+    background: linear-gradient(135deg, #7c5cff, #a18bff);
+}
+
+.cardMemory {
+    background: linear-gradient(135deg, #00d9b8, #00f2d1);
+}
+
+.cardTrueFalse {
+    background: linear-gradient(135deg, #ff8a5c, #ffc27a);
+}
+
+.createImg {
+    width: 80%;
+    height: 130px;
+    object-fit: contain;
+    margin: 15px auto 5px auto;
+    display: block;
+    position: relative;
+    z-index: 2;
+}
+
+.createBody h3 {
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    margin-bottom: 10px;
+    color: white;
+}
+
+.createBody p {
+    font-size: 15px;
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    opacity: 0.9;
+}
+
+.btnCreate {
+    margin-top: 15px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    background: white;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btnCreate:hover {
+    transform: scale(1.05);
+    background: #f8f9fa;
+    color: #1a1140;
+}
+
+/* NAVBAR DARK OVERRIDE */
+.darkNavbar {
+    background: rgba(20, 10, 46, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.darkNavbarText {
+    color: white !important;
+}
+
+/* Glass Card for Main Actions */
+.glassCardDark {
+    background: rgba(255, 255, 255, 0.03) !important; /* Más transparente */
+    backdrop-filter: blur(20px) !important; /* Más desenfoque */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 24px !important; /* Bordes más redondeados como las tarjetas */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.glassCardDark:hover {
+    box-shadow: 0 18px 35px rgba(106,75,255,0.18) !important;
+    transform: translateY(-2px) !important;
+}
+
+.glassCardDark h3 {
+    color: white !important;
+}
+
+.glassCardDark p, .glassCardDark label {
+    color: rgba(255,255,255,0.7) !important;
+}
+
+.btnLudi {
+    padding: 10px 20px;
+    border: none;
+    background: linear-gradient(135deg, #6a4bff, #8b73ff);
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.btnLudi:hover {
+    transform: translateY(-2px);
+    color: white;
+}
+
+
+.btnLudiSuccess {
+   padding: 10px 20px;
+    border: none;
+    background-color: #198754; /* Verde Success de Bootstrap */
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btnLudiSuccess:hover {
+    transform: translateY(-2px);
+    background-color: #157347; /* Verde más oscuro de Bootstrap para el hover */
+    color: white;
+}
+/* SIDEBAR DARK OVERRIDE */
+.sidebarDark {
+    height: 100vh;
+    background: linear-gradient(180deg, #140a2e, #1f1147) !important;
+    width: 250px; /* Ancho expandido para acomodar texto */
+    padding: 20px 15px;
+    position: fixed;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.5) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease; /* Transición suave para el ancho */
+}
+
+.sidebarDark .navLink {
+    font-size: 15px; /* Aumentar tamaño de fuente */
+    color: #cfcfff !important;
+    padding: 12px 20px; /* Más padding horizontal */
+    margin: 4px 0;
+    display: flex;
+    flex-direction: row; /* Icono y texto en fila */
+    align-items: center; /* Centrado vertical */
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebarDark .navLink .icon {
+    font-size: 22px; /* Tamaño de icono ajustado */
+    margin-right: 15px; /* Espacio entre icono y texto */
+    color: inherit;
+    transition: 0.3s;
+    flex-shrink: 0; /* Evita que el icono se encoja */
+}
+
+.sidebarDark .navLink:hover,
+.sidebarDark .navLink.active {
+    background: rgba(106,75,255,0.25) !important;
+    color: white !important;
+}
+
+.sidebarDark .navLink::after {
+    content: "";
+    position: absolute;
+    left: 0; /* Alineado a la izquierda */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px; /* Ancho de la línea lateral */
+    height: 0%;
+    border-radius: 0 3px 3px 0;
+    background: #00d4ff;
+    transition: 0.3s ease;
+}
+
+.sidebarDark .navLink:hover::after,
+.sidebarDark .navLink.active::after {
+    height: 70%; /* Altura de la línea al hacer hover/active */
+}
+
+.actionsContainer {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+/* Contenedor en Grid para margen perfecto */
+.ludiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+  width: 100%;
+  padding: 10px;
+}
+
+.ludiCard {
+  height: 250px; /* Altura fija para uniformidad */
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden; /* Mantiene el GIF dentro de los bordes redondeados */
+  padding: 30px;
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+.ludiContent {
+  position: relative;
+  z-index: 2;
+  width: 65%; /* Restringe el texto para que no choque con el GIF */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* GIF Redimensionado (Más grande y mejor posicionado) */
+.ludiGifLarge {
+  position: absolute;
+  right: -15px;  /* Sobresale un poco para verse más grande */
+  bottom: -15px; /* Sobresale un poco */
+  width: 200px;  /* Aumentado de 160px a 200px */
+  height: auto;
+  z-index: 1;
+  object-fit: contain;
+  pointer-events: none;
+  /* Suavizado de bordes para integrarse al fondo */
+  mask-image: linear-gradient(to top left, black 80%, transparent 100%);
+}
+
+.ludiBtnSmall {
+  cursor: pointer;
+  z-index: 3;
+  width: fit-content;
+  /* ... resto de tus estilos de botón */
+}
+/* Solo el botón tiene el puntero */
+.ludiBtnSmall {
+  cursor: pointer;
+  z-index: 5;
+  position: relative; /* Asegura que el click no sea bloqueado por el GIF */
+  border: none;
+  background: #7c5cff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.ludiBtnSmall:hover {
+  transform: scale(1.05);
+  background: #6a4bff;
+}
+
+/* Centrado del título de bienvenida */
+.titleLudi {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrado horizontal */
+  gap: 15px;
+}
+
+/* Ajuste del GIF para que no tape el botón */
+.ludiGif {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 160px;
+  z-index: 1; /* Por debajo del botón */
+  pointer-events: none; /* El GIF es "invisible" para el mouse */
+}
+
+/* Colores de fondo exactos a la imagen deseada */
+.cardDark { background: #0f0a1e; }
+.cardPurple { background: linear-gradient(135deg, #4c2bc7, #6a4bff); }
+.cardBlue { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+
+.ludiContent {
+  position: relative;
+  z-index: 2; /* Por encima del GIF */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 70%; /* Deja espacio a la derecha para que se vea el GIF */
+}
+
+.ludiTag {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: white;
+}
+
+.ludiContent h3 {
+  font-size: 1.4rem;
+  margin: 10px 0;
+  color: white;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ludiContent p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 15px;
+}
+
+.ludiBtnSmall {
+  background: #7c5cff;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  width: fit-content;
+  font-size: 14px;
+}
+
+/* Posicionamiento del GIF como en image_e8e77d.jpg */
+.ludiGif {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  width: 180px; /* Ajusta según el tamaño de tus GIFs */
+  height: auto;
+  z-index: 1;
+  opacity: 0.8;
+  pointer-events: none; /* Para que no interfiera con el click de la tarjeta */
+}

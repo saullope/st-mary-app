@@ -2,9 +2,10 @@ import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { FaCalendarAlt, FaUsers } from "react-icons/fa";
+import { FaCalendarAlt, FaUsers, FaChartBar } from "react-icons/fa";
 import "@/styles/pages/reports.css";
 import styles from "@/styles/pages/my-activities.module.css";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
 import ReportFilter from "@/components/dashboard/ReportFilter";
 
 interface PageProps {
@@ -64,11 +65,13 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
   });
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.headerContainer}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 0' }}>
+      <div className={styles.headerContainer} style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
         <div>
-          <h1 className={styles.headerTitle}>Reportes y Análisis</h1>
-          <p className="text-muted mb-0">Revisa el progreso, resultados y estadísticas detalladas de las sesiones de tus estudiantes.</p>
+          <h1 className={designStyles.titleLudi} style={{ textAlign: 'left', marginBottom: '10px' }}>
+            <FaChartBar className="me-3" /> Reportes y Análisis
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>Revisa el progreso, resultados y estadísticas detalladas de las sesiones de tus estudiantes.</p>
         </div>
       </div>
 
@@ -98,63 +101,76 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
 
           // Normalize badge logic
           let statusLabel = session.estado.toUpperCase();
-          let badgeClass = "bg-primary";
+          let badgeColor = "#4a4266";
+          let badgeBg = "rgba(29, 21, 58, 0.08)";
           if (["ESPERANDO", "LOBBY"].includes(statusLabel)) {
              statusLabel = "EN ESPERA";
-             badgeClass = "bg-warning text-dark";
+             badgeColor = "#e5b869"; // Gold
+             badgeBg = "rgba(220, 165, 80, 0.2)";
           } else if (["ACTIVA", "EN_CURSO"].includes(statusLabel)) {
              statusLabel = "EN CURSO";
-             badgeClass = "bg-info text-dark";
+             badgeColor = "#1D153A"; 
+             badgeBg = "rgba(29, 21, 58, 0.1)";
           } else if (statusLabel === "FINALIZADA") {
-             badgeClass = "bg-success";
+             badgeColor = "#198754"; // Success
+             badgeBg = "rgba(25, 135, 84, 0.15)";
           }
 
           return (
             <div key={session.id.toString()} className="col-12 col-md-6 col-lg-4">
-              <Link href={`/dashboard/reports/${session.id}`} className="text-decoration-none">
-                <div className={`card h-100 border-0 report-card border-act-${session.LUDI_ACTIVIDAD.tipoActividadId}`} style={{ borderRadius: '15px', cursor: 'pointer' }}>
-                  <div className="card-body p-4">
-                    <div className="d-flex justify-content-between align-items-start mb-3">
-                      <h5 className="card-title fw-bold text-dark mb-0 text-truncate" style={{ maxWidth: '70%' }} title={session.LUDI_ACTIVIDAD.activity.activity_name}>
-                        {session.LUDI_ACTIVIDAD.activity.activity_name}
-                      </h5>
-                      <span className={`badge ${badgeClass}`}>
-                        {statusLabel}
+              <Link href={`/dashboard/reports/${session.id}`} className="text-decoration-none h-100 d-block">
+                <div className={styles.activityCard}>
+                  <div className="d-flex justify-content-between align-items-start mb-3">
+                    <h5 className="fw-bold mb-0 text-truncate" style={{ maxWidth: '70%', color: '#1D153A' }} title={session.LUDI_ACTIVIDAD.activity.activity_name}>
+                      {session.LUDI_ACTIVIDAD.activity.activity_name}
+                    </h5>
+                    <span style={{ 
+                        background: badgeBg, 
+                        color: badgeColor, 
+                        padding: '0.3rem 0.8rem', 
+                        borderRadius: '1rem', 
+                        fontSize: '0.75rem', 
+                        fontWeight: 700, 
+                        border: `1px solid ${badgeColor}` 
+                    }}>
+                      {statusLabel}
+                    </span>
+                  </div>
+                  
+                  <p className="small mb-4" style={{ color: '#4a4266' }}>
+                    <FaCalendarAlt className="me-2" />
+                    {new Date(session.creada_en).toLocaleDateString()}
+                  </p>
+
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <p className="mb-0 small" style={{ color: '#4a4266' }}>Promedio de Clase</p>
+                      <h4 className="fw-bold mb-0" style={{ color: '#1D153A' }}>{averageScore} pts</h4>
+                    </div>
+                    <div className="text-end">
+                      <p className="mb-0 small" style={{ color: '#4a4266' }}>Participantes</p>
+                      <h4 className="fw-bold mb-0" style={{ color: '#1D153A' }}>
+                        <FaUsers className="me-2" size={16} style={{ color: 'rgba(29, 21, 58, 0.5)' }} />
+                        {totalParticipants}
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div className="pt-3" style={{ borderTop: '1px dashed rgba(29, 21, 58, 0.1)' }}>
+                    <div className="d-flex justify-content-between align-items-center mb-1">
+                      <span className="small fw-bold" style={{ color: '#4a4266' }}>Índice de Efectividad</span>
+                      <span className="small fw-bold" style={{ color: reliabilityScore >= 70 ? '#198754' : reliabilityScore >= 50 ? '#e5b869' : '#dc3545' }}>
+                        {reliabilityScore}%
                       </span>
                     </div>
-                    
-                    <p className="text-muted small mb-4">
-                      <FaCalendarAlt className="me-2" />
-                      {new Date(session.creada_en).toLocaleDateString()}
-                    </p>
-
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <div>
-                        <p className="mb-0 text-muted small">Promedio de Clase</p>
-                        <h4 className="fw-bold text-primary mb-0">{averageScore} pts</h4>
-                      </div>
-                      <div className="text-end">
-                        <p className="mb-0 text-muted small">Participantes</p>
-                        <h4 className="fw-bold text-dark mb-0">
-                          <FaUsers className="me-2 text-secondary" size={16} />
-                          {totalParticipants}
-                        </h4>
-                      </div>
-                    </div>
-
-                    <div className="pt-3 border-top">
-                      <div className="d-flex justify-content-between align-items-center mb-1">
-                        <span className="small text-muted fw-bold">Índice de Efectividad</span>
-                        <span className={`small fw-bold ${reliabilityScore >= 70 ? 'text-success' : reliabilityScore >= 50 ? 'text-warning' : 'text-danger'}`}>
-                          {reliabilityScore}%
-                        </span>
-                      </div>
-                      <div className="progress" style={{ height: '8px' }}>
-                        <div 
-                          className={`progress-bar ${reliabilityScore >= 70 ? 'bg-success' : reliabilityScore >= 50 ? 'bg-warning' : 'bg-danger'}`} 
-                          style={{ width: `${reliabilityScore}%` }}
-                        />
-                      </div>
+                    <div className="progress shadow-sm" style={{ height: '8px', backgroundColor: 'rgba(29, 21, 58, 0.1)' }}>
+                      <div 
+                        className="progress-bar" 
+                        style={{ 
+                            width: `${reliabilityScore}%`, 
+                            backgroundColor: reliabilityScore >= 70 ? '#198754' : reliabilityScore >= 50 ? '#e5b869' : '#dc3545' 
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -164,9 +180,10 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
         })}
 
         {sessions.length === 0 && (
-          <div className="col-12 text-center py-5">
-            <h3 className="text-muted">No se encontraron sesiones.</h3>
-            <p>Intenta ajustar los filtros o juega actividades con tus estudiantes.</p>
+          <div className={styles.emptyStateCard}>
+            <div className={styles.emptyStateIcon}>📊</div>
+            <h3><span className={designStyles.star}>★</span> No se encontraron sesiones</h3>
+            <p>Intenta ajustar los filtros o juega actividades con tus estudiantes para generar reportes.</p>
           </div>
         )}
       </div>
