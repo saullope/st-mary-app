@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FaListCheck, FaGamepad, FaBrain, FaClone, FaPlay, FaRocket, FaCheck } from "react-icons/fa6";
+import { FaListCheck, FaGamepad, FaBrain, FaClone, FaEye, FaRocket, FaCheck } from "react-icons/fa6";
 import styles from "@/styles/pages/my-activities.module.css";
 import { cloneTemplateActivity } from "./actions";
 import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
@@ -74,7 +74,7 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
   };
 
   return (
-    <div className={`${styles.activityCard} position-relative`} style={{ borderTop: "4px solid #667eea", overflow: "hidden" }}>
+    <div className={`${styles.activityCard} position-relative`}>
       <div 
         className={styles.cardHeader} 
         style={hasImage ? { 
@@ -129,7 +129,7 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
         <h3 className={styles.cardTitle} title={template.activity.activity_name}>
           {template.activity.activity_name}
         </h3>
-        <p className={styles.cardDate} style={{ fontSize: "0.9rem", color: "#64748b" }}>
+        <p className={styles.cardDate}>
           {template.activity.activity_desc || "Plantilla oficial de LudiGame."}
         </p>
         <div className="d-flex justify-content-between align-items-center w-100 mt-3">
@@ -139,7 +139,7 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
         </div>
       </div>
 
-      <div className={styles.cardFooter} style={{ padding: "1.25rem", borderTop: "1px solid rgba(0,0,0,0.05)", display: "flex", flexDirection: "column", gap: "10px" }}>
+      <div className={styles.cardFooter} style={{ padding: "1.25rem", borderTop: "1px dashed rgba(29, 21, 58, 0.1)", display: "flex", flexDirection: "column", gap: "10px" }}>
         {sessionPin && (
             <div className="w-100 text-center p-2 bg-success text-white rounded" style={{ fontSize: '0.9rem' }}>
                 PIN PARA ALUMNOS: <strong>{sessionPin}</strong>
@@ -151,12 +151,13 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
             disabled={cloning}
             className="btn flex-grow-1 d-flex justify-content-center align-items-center gap-2"
             style={{
-                background: cloning ? '#e2e8f0' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: cloning ? '#94a3b8' : 'white',
+                background: cloning ? 'rgba(29, 21, 58, 0.1)' : '#1D153A',
+                color: cloning ? 'rgba(29, 21, 58, 0.5)' : 'white',
                 fontWeight: 'bold',
                 borderRadius: '12px',
                 padding: '10px',
-                boxShadow: cloning ? 'none' : '0 4px 15px rgba(118, 75, 162, 0.3)',
+                border: 'none',
+                boxShadow: cloning ? 'none' : '0 4px 15px rgba(29, 21, 58, 0.2)',
                 transition: 'all 0.3s ease'
             }}
             >
@@ -179,13 +180,16 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
                 className="btn d-flex justify-content-center align-items-center"
                 title="Lanzar partida inmediata"
                 style={{
-                    background: '#ff9f43',
-                    color: 'white',
+                    background: 'white',
+                    color: '#ff9f43',
+                    border: '1px solid rgba(255, 159, 67, 0.5)',
                     borderRadius: '12px',
                     padding: '10px 15px',
-                    border: 'none',
-                    boxShadow: '0 4px 10px rgba(255, 159, 67, 0.3)'
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+                    transition: 'all 0.3s ease'
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#ff9f43'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'white'; e.currentTarget.style.color = '#ff9f43'; }}
             >
                 {isLaunching ? <span className="spinner-border spinner-border-sm" /> : <FaRocket />}
             </button>
@@ -197,14 +201,18 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
             className="btn d-flex justify-content-center align-items-center"
             title="Previsualizar"
             style={{
-                background: '#f1f5f9',
-                color: '#64748b',
-                border: '1px solid #e2e8f0',
+                background: 'white',
+                color: '#1D153A',
+                border: '1px solid rgba(29, 21, 58, 0.2)',
                 borderRadius: '12px',
                 padding: '10px 15px',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+                transition: 'all 0.3s ease'
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = '#1D153A'; e.currentTarget.style.color = 'white'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'white'; e.currentTarget.style.color = '#1D153A'; }}
             >
-            <FaPlay />
+            <FaEye />
             </a>
         </div>
       </div>

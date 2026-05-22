@@ -9,6 +9,7 @@ import { BsGlobe } from 'react-icons/bs';
 import { FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import { LanguageSelector } from "@/components";
 import { AUTH_API_ROUTES } from "@/lib/auth/constants";
+import designStyles from '@/styles/pages/LudiDesign.module.css';
 
 interface FirebaseSession {
     s: string;
@@ -137,7 +138,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                 </div>
             )}
 
-            <nav className={`fixed navbar navbar-expand-lg bg-body-tertiary`}>
+            <nav className={`fixed navbar navbar-expand-lg bg-body-tertiary ${designStyles.darkNavbar}`}>
                 <div className="container-fluid">
                     <div className="collapse navbar-collapse" id="navbarNav">
                     <div
@@ -146,14 +147,14 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                     ></div>
                     </div>
                     <div className="d-grid gap-2 d-md-flex justify-content-center justify-content-md-end align-items-center">
-                        <div className="d-flex align-items-center gap-2">
+                        <div className={`d-flex align-items-center gap-2 ${designStyles.darkNavbarText}`}>
                         <BsGlobe />
                         <LanguageSelector />
                         </div>
                         <div className="dropdown">
                             <Dropdown>
                                 <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                                    <span className="d-flex align-items-center justify-content-center">
+                                    <span className={`d-flex align-items-center justify-content-center ${designStyles.darkNavbarText}`}>
                                         <img
                                             src={sessionData.picture || '/images/profile.png'}
                                             alt="User Profile"
@@ -163,17 +164,17 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                                 height: '40px',
                                                 objectFit: 'cover',
                                                 marginRight: '12px',
-                                                border: '2px solid #e9ecef'
+                                                border: '2px solid rgba(255,255,255,0.2)'
                                             }}
                                             onError={(e) => {
                                                 e.currentTarget.src = '/images/profile.png';
                                             }}
                                         />                                        
-                                        <span className="fw-bold text-dark">{sessionData.name || sessionData.email}</span>
+                                        <span className="fw-bold">{sessionData.name || sessionData.email}</span>
                                     </span>
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu className="shadow border-0 rounded-3 mt-2" style={{ minWidth: '220px' }}>
+                                <Dropdown.Menu className="shadow border-0 rounded-3 mt-2" style={{ minWidth: '220px', zIndex: 1000 }}>
                                     <div className="px-3 py-2 text-center border-bottom mb-2 d-flex flex-column align-items-center">
                                         <img
                                             src={sessionData.picture || '/images/profile.png'}

@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import { Dropdown } from "react-bootstrap";
-import styles from "@/styles/pages/my-activities.module.css";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
@@ -34,7 +33,7 @@ export default function NewActivityButton() {
     <Dropdown>
       <Dropdown.Toggle 
         as={CustomToggle} 
-        className={styles.primaryButton}
+        className={designStyles.btnLudi}
         id="new-activity-dropdown"
       >
         <FaPlus /> {t("createActivityButton")}

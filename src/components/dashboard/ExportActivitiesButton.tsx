@@ -2,7 +2,7 @@
 
 import { FaFileExcel } from "react-icons/fa";
 import * as XLSX from "xlsx";
-import styles from "@/styles/pages/my-activities.module.css";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
 import { useTranslations } from "next-intl";
 
 interface ExportActivitiesButtonProps {
@@ -38,11 +38,17 @@ const t = useTranslations("myActivitiesContent");
   return (
     <button
       onClick={handleExport}
-      className={styles.secondaryButton}
+      className={designStyles.btnLudiSuccess}
       title="Exportar a Excel"
       disabled={activities.length === 0}
+      style={{
+        backgroundColor: '#10b981', // Verde esmeralda (combina con tonos oscuros y lavanda)
+        color: 'white',
+        borderColor: '#10b981',
+        opacity: activities.length === 0 ? 0.5 : 1
+      }}
     >
-      <FaFileExcel className="text-success" />
+      <FaFileExcel />
       {t("exportToExcel")}
     </button>
   );

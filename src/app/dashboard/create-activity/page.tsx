@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import { getTranslations } from "next-intl/server";
 import { CardGameActivity } from "@/components/activity";
-import styles from "@/styles/pages/create-activity.module.css";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import getSession from "@/lib/auth/getSession";
 import { redirect } from "next/navigation";
@@ -53,26 +53,29 @@ export default async function CreateActivity() {
     ];
 
     return (
-        <div className={styles.pageContainer}>
-            <div className="mb-5">
-                <h1 className={styles.headerTitle}>{t('titlePage')}</h1>
-            </div>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 0' }}>
+            <section className={designStyles.glassCardDark}>
+                <h2 className={designStyles.titleLudi}>
+                    <span className={designStyles.star}>★</span> {t('titlePage')}
+                </h2>
 
-            <div className="container my-4">
-                <div className="row g-4">
-                    {gameTemplates.map((game) => (
-                        <CardGameActivity 
-                            key={game.id}
-                            imageAct={game.image}
-                            title={t(`${game.translationKey}Title`)}
-                            page_to={game.route}
-                            subtitle={t(`${game.translationKey}SubTitle`)}
-                            description={t(`${game.translationKey}_desc`)}
-                            buttonText={t('createText')}
-                        />
-                    ))}
+                <div className="container mt-5">
+                    <div className={designStyles.createCards}>
+                        {gameTemplates.map((game) => (
+                            <CardGameActivity 
+                                key={game.id}
+                                imageAct={game.image}
+                                title={t(`${game.translationKey}Title`)}
+                                page_to={game.route}
+                                subtitle={t(`${game.translationKey}SubTitle`)}
+                                description={t(`${game.translationKey}_desc`)}
+                                buttonText={t('createText')}
+                                typeId={game.id}
+                            />
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
     )
 }

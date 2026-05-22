@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import TemplateCard from "./TemplateCard";
 import styles from "@/styles/pages/my-activities.module.css";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
 import { FaShapes } from "react-icons/fa6";
 import Link from "next/link";
 
@@ -47,17 +48,14 @@ export default async function TemplatesPage({
     estatus: true,
   };
 
-  // Filtro de grado (Si no hay grado en la URL ni cookie, cargamos todo? Mejor filtrar por el grado si existe)
   if (gradoId) {
     whereClause.gradoId = gradoId;
   }
 
-  // Filtro de materia
   if (currentSubjectFilter !== "All") {
     whereClause.tema = { nombre: { contains: currentSubjectFilter } };
   }
 
-  // Traer las plantillas
   const templates = await prisma.ludiActividad.findMany({
     where: whereClause,
     include: {
@@ -71,7 +69,6 @@ export default async function TemplatesPage({
     },
   });
 
-  // Títulos para los grados
   const getGradeTitle = (gradeStr: string) => {
     if (gradeStr === "firstGrade" || gradeStr === "1ro") return "1º Grado";
     if (gradeStr === "secondGrade" || gradeStr === "2do") return "2º Grado";
@@ -80,22 +77,33 @@ export default async function TemplatesPage({
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.headerContainer}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 0' }}>
+      <div className={styles.headerContainer} style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
         <div>
-          <h1 className={styles.headerTitle}>
-            <FaShapes className="me-3" color="#667eea" />
+          <h1 className={designStyles.titleLudi} style={{ textAlign: 'left', marginBottom: '10px' }}>
+            <FaShapes className="me-3" />
             Catálogo de Plantillas
           </h1>
-          <p className="text-muted mb-0">Explora y clona actividades listas para usar en clase.</p>
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>Explora y clona actividades listas para usar en clase.</p>
         </div>
       </div>
 
-      {/* Filtros super sencillos (SSR based via links/forms) */}
       <div className={`${styles.filterCard} mb-4 d-flex justify-content-between align-items-center`}>
         <div className="d-flex gap-3">
           <div className="dropdown">
-            <button className="btn btn-light dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown">
+            <button 
+              className="btn dropdown-toggle fw-bold" 
+              type="button" 
+              data-bs-toggle="dropdown"
+              style={{
+                backgroundColor: 'white',
+                color: '#1D153A',
+                border: '1px solid rgba(29, 21, 58, 0.2)',
+                borderRadius: '2rem',
+                padding: '0.4rem 1rem',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+              }}
+            >
               Grado: {getGradeTitle(currentGradeFilter)}
             </button>
             <ul className="dropdown-menu shadow-sm border-0">
@@ -108,7 +116,19 @@ export default async function TemplatesPage({
           </div>
           
           <div className="dropdown">
-            <button className="btn btn-light dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown">
+            <button 
+              className="btn dropdown-toggle fw-bold" 
+              type="button" 
+              data-bs-toggle="dropdown"
+              style={{
+                backgroundColor: 'white',
+                color: '#1D153A',
+                border: '1px solid rgba(29, 21, 58, 0.2)',
+                borderRadius: '2rem',
+                padding: '0.4rem 1rem',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+              }}
+            >
               Materia: {currentSubjectFilter === "All" ? "Todas" : currentSubjectFilter}
             </button>
             <ul className="dropdown-menu shadow-sm border-0">
@@ -122,7 +142,6 @@ export default async function TemplatesPage({
         </div>
       </div>
 
-      {/* Grid de Plantillas */}
       {templates.length > 0 ? (
         <div className={styles.activitiesGrid}>
           {templates.map((template: any) => (
@@ -132,7 +151,7 @@ export default async function TemplatesPage({
       ) : (
         <div className={styles.emptyStateCard}>
           <div className={styles.emptyStateIcon}>📚</div>
-          <h3>Aún no hay plantillas para este filtro</h3>
+          <h3><span className={designStyles.star}>★</span> Aún no hay plantillas para este filtro</h3>
           <p>Intenta seleccionar otro grado u otra materia.</p>
         </div>
       )}

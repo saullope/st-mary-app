@@ -4,6 +4,10 @@ import { redirect } from 'next/navigation';
 import prisma from "@/lib/db";
 import { FaChartLine, FaShieldAlt } from "react-icons/fa";
 import AdminReportsTable from "./AdminReportsTable";
+import AdminReportFilter from "./AdminReportFilter";
+import AdminInfoModal from "./AdminInfoModal";
+import styles from "@/styles/pages/my-activities.module.css";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -12,16 +16,65 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function AdminReportsPage() {
+interface PageProps {
+  searchParams: Promise<{
+    search?: string;
+    grade?: string;
+    dateRange?: string;
+  }>;
+}
+
+export default async function AdminReportsPage({ searchParams }: PageProps) {
   const user = await getCurrentUser();
   
   if (!user || user.rol.nombre !== 'ADMIN') {
     return redirect('/dashboard');
   }
 
-  // 1. DB Safety: ONLY use prisma.findMany.
-  // 2. Fetch: Join LudiUser, Activity, Session and Submission (respuestas).
+  const resolvedSearchParams = await searchParams;
+  const searchFilter = resolvedSearchParams.search?.toLowerCase();
+  const gradeFilter = resolvedSearchParams.grade;
+  const dateFilter = resolvedSearchParams.dateRange;
+
+  const whereCondition: any = { 
+    estado: { not: "ESPERANDO" } // Usually admins want to see in-progress or finished
+  };
+
+  if (searchFilter) {
+    whereCondition.OR = [
+      {
+        LUDI_ACTIVIDAD: {
+          activity: {
+            activity_name: { contains: searchFilter }
+          }
+        }
+      },
+      {
+        user: {
+          nombre: { contains: searchFilter }
+        }
+      }
+    ];
+  }
+
+  if (gradeFilter) {
+    // Assuming grade is the ID or we map it
+    whereCondition.LUDI_ACTIVIDAD = {
+      ...whereCondition.LUDI_ACTIVIDAD,
+      gradoId: parseInt(gradeFilter)
+    };
+  }
+
+  if (dateFilter) {
+    const days = parseInt(dateFilter);
+    const dateLimit = new Date();
+    dateLimit.setDate(dateLimit.getDate() - days);
+    whereCondition.creada_en = { gte: dateLimit };
+  }
+
+  // Fetch: Join LudiUser, Activity, Session and Submission
   const sessionsRaw = await prisma.lUDI_SESION.findMany({
+    where: whereCondition,
     orderBy: { finalizada_en: 'desc' },
     include: {
       user: true,
@@ -70,28 +123,38 @@ export default async function AdminReportsPage() {
         return { texto: q.texto, acierto, error };
     });
 
+    // Find hardest question
+    let hardestQuestion = null;
+    if (questionStats.length > 0) {
+      hardestQuestion = questionStats.reduce((prev, current) => 
+        (current.error > prev.error) ? current : prev
+      );
+    }
+
     return {
         ...session,
         avgStudentFun: funCount > 0 ? (sumFun / funCount) : null,
+        hardestQuestion: hardestQuestion && hardestQuestion.error > 0 ? hardestQuestion : null,
         questionStats
     };
   });
 
   return (
-    <div className="container-fluid py-5 px-md-5" style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 pb-4 border-bottom border-secondary border-opacity-25">
+    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 0' }}>
+      <div className={styles.headerContainer} style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
         <div>
-          <h2 className="fw-bold mb-1 text-dark d-flex align-items-center">
-            <FaChartLine className="me-3 text-primary" />
-            Efectividad Global & Analíticas
-          </h2>
-          <p className="text-muted mb-0">Vista administrativa avanzada de actividades y métricas de desempeño.</p>
+          <h1 className={designStyles.titleLudi} style={{ textAlign: 'left', marginBottom: '10px' }}>
+            <FaChartLine className="me-3" /> Efectividad Global
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>Vista administrativa avanzada de actividades y métricas de desempeño.</p>
         </div>
-        <div className="mt-3 mt-md-0">
-          <span className="badge bg-danger bg-opacity-10 text-danger border border-danger px-4 py-2 rounded-pill d-flex align-items-center shadow-sm">
-            <FaShieldAlt className="me-2" /> Admin Access Only
-          </span>
+        <div className="d-flex align-items-center gap-3 mt-3 mt-md-0">
+          <AdminInfoModal />
         </div>
+      </div>
+
+      <div className={styles.filterCard}>
+        <AdminReportFilter />
       </div>
 
       <div className="row">

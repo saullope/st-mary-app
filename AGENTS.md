@@ -1,108 +1,108 @@
 # AGENTS.md
 
-This file provides context and guidelines for AI agents working in this repository.
+This file provides crucial context, rules, and guidelines for AI coding agents operating within the `st-mary-app` repository. It is designed to ensure consistency, quality, and adherence to established architectural patterns.
 
 ## 1. Project Overview & Toolchain
 
 ### Tech Stack
-- **Framework:** Next.js 14 (App Router)
+- **Framework:** Next.js (App Router)
 - **Language:** TypeScript
 - **Database:** PostgreSQL (via Prisma ORM)
-- **Auth:** Firebase (Client SDK + Admin SDK for session cookies)
+- **Auth:** Firebase (Client SDK) + Firebase Admin SDK (Session Cookies for SSR/Middleware)
 - **State Management:** Redux Toolkit + React Context
-- **Styling:** CSS Modules (`*.module.css`) + Bootstrap 5 utility classes
-- **Forms:** Formik + Yup validation
+- **Styling:** React Bootstrap (Bootstrap 5) + CSS Modules (`*.module.css`) + `clsx` utility
+- **Forms/Validation:** Formik + Yup
+- **Animations:** Lottie, canvas-confetti
 - **Internationalization:** next-intl
+- **Testing:** Jest + React Testing Library
 
-### Build & Commands
-- **Dev Server:** `npm run dev` (starts on localhost:3000)
-- **Build:** `npm run build`
-- **Lint:** `npm run lint`
-- **Test:** `npm test` (Jest is configured)
-  - **Run single test file:** `npm test -- <path/to/file>`
-  - **Run specific test:** `npm test -- -t "test name"`
-  - **Watch mode:** `npm run test:watch`
+### Build, Lint & Test Commands
 
-## 2. Code Style & Conventions
+**Core Scripts:**
+- **Start Dev Server:** `npm run dev` (starts on localhost:3000)
+- **Build Production:** `npm run build`
+- **Start Production:** `npm start`
+- **Lint Code:** `npm run lint`
+
+**Testing Commands (Jest):**
+- **Run all tests:** `npm test`
+- **Run a single test file (CRITICAL FOR AGENTS):** `npm test -- <path/to/test.file.test.ts>`
+- **Run a specific test by name:** `npm test -- -t "test name"`
+- **Run in watch mode:** `npm run test:watch`
+
+When developing features, always execute the relevant tests individually using the single test command before submitting changes or claiming completion.
+
+## 2. Code Style & Architecture Guidelines
 
 ### Formatting & Structure
 - **Indentation:** 2 spaces.
-- **Semicolons:** Always use semicolons.
+- **Semicolons:** Always required.
 - **Quotes:** Double quotes preferred for strings and JSX attributes.
-- **Component Structure:**
-  - Use Functional Components.
-  - Place hooks at the top.
-  - Define helper functions outside the component if they don't depend on props/state.
-  - Use `export const ComponentName = () => { ... }` syntax (arrow functions) or `export default function ...`.
+- **Components:** Use functional components with arrow syntax: `export const ComponentName = () => { ... }`.
+- **Hooks:** Always place hooks at the very top of components. Avoid complex logic directly in the render path.
+- **Modularity:** Extract complex helper functions outside of components if they don't depend on React state or props.
+- **Component Props:** Always destructure props within the function signature.
 
 ### Imports
-- Use the `@/` alias for internal imports.
-  - **Note:** `@/*` maps to `./src/*`, `./public/*`, and `./components/*` in `tsconfig.json`.
-- **Order:**
-  1. Next.js / React built-ins (`next/*`, `react`)
-  2. Third-party libraries (`firebase`, `formik`, `yup`, `redux`, etc.)
-  3. Internal components (`@/components/...`)
-  4. Internal utilities/hooks/types (`@/lib/...`, `@/hooks/...`)
-  5. Styles (`@/styles/...` or CSS modules)
+- Use the `@/` alias for internal paths (mapped to `src/*`, `public/*`, `components/*` in `tsconfig.json`).
+- **Import Order:**
+  1. React and Next.js built-ins (`react`, `next/link`, `next/navigation`)
+  2. Third-party packages (`firebase`, `redux`, `react-bootstrap`, `formik`)
+  3. Internal features (`@/features/...`)
+  4. Internal shared components (`@/components/...`)
+  5. Internal utilities, hooks, and types (`@/lib/...`, `@/hooks/...`)
+  6. Stylesheets and CSS Modules (`@/styles/...` or `./styles.module.css`)
 
-### Naming
-- **Files:** Match existing directory style (often `PascalCase.tsx` for components, `kebab-case` for utils).
+### Types & Strictness
+- **Strict Mode:** TypeScript `strict: true` is strictly enforced.
+- **No `any`:** Avoid using `any` under any circumstance. Define robust interfaces or types.
+- **Props:** Define component props using an interface named `Props` defined locally above the component: `interface Props { ... }`.
+
+### Naming Conventions
+- **Files:** `PascalCase.tsx` for React components. `kebab-case.ts` for utilities, custom hooks, and configurations.
 - **Components:** `PascalCase`.
 - **Functions/Variables:** `camelCase`.
-- **Constants:** `UPPER_SNAKE_CASE`.
+- **Constants:** `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`).
+- **Interfaces/Types:** `PascalCase` (e.g., `UserProfile`, `ActivityConfig`).
 
-### Typing
-- **Strictness:** `strict: true` is enabled.
-- **No `any`:** Avoid `any` types. Define interfaces/types in `@/types` or colocated if specific to a file.
-- **Props:** Use `interface` for component props (e.g., `interface Props { ... }`).
+### Error Handling & API Routes
+- **API Routes:** Located in `src/app/api/...`. Use App Router syntax (`export async function GET(req: NextRequest) { ... }`).
+- **Validation:** Always use Yup for validating incoming request bodies or query parameters.
+- **Responses:** Wrap all server logic in `try/catch` blocks. Return consistent JSON error objects containing standard fields: `{ error: true, message: string, status: number }`.
+- **Database Operations:** Always use `await` for Prisma database calls. Centralize error handling for database failures.
 
-## 3. Implementation Details
+### Feature Implementations
+- **Auth (Firebase):** Use `signInWithEmailAndPassword` or `signInWithPopup` on the client. For protected routes, rely on `src/middleware.ts` which uses Firebase Admin to verify session cookies.
+- **Forms (Formik):** Use Formik for state management and submission, paired with Yup for schema validation. Integrate `next-intl` for localized error messages.
+- **UI Components:** Favor `react-bootstrap` components over raw HTML when a suitable component exists. Use `clsx` for dynamic class assignment.
 
-### API Routes (Next.js App Router)
-- Located in `src/app/api/...`.
-- Use `NextRequest` and `NextResponse`.
-- **Validation:** Use `Yup` for validating request bodies.
-- **Error Handling:** Wrap logic in `try/catch`. Return JSON with standard error fields (`error`, `message`, `status`).
+## 3. Cursor Rules & Agent Directives (MANDATORY)
 
-### Database (Prisma)
-- Client located at `@/lib/db` (or similar).
-- Always use `await` for database calls.
-- Handle connection errors gracefully.
+Agents must adhere to the project's Cursor rules (from `.cursor/rules/st-mary-rule.mdc`):
 
-### Authentication (Firebase)
-- Client-side: `signInWithEmailAndPassword`, `signInWithPopup`.
-- Server-side: Verify ID tokens via Firebase Admin SDK, create session cookies.
-- Middleware: `src/middleware.ts` handles route protection based on session cookies.
+**Role & Focus:**
+- Act as a Senior Full-Stack Expert specialized in Next.js & Educational Applications.
+- Prioritize accessibility (ARIA standards), gamification logic, and robust progress tracking structures.
+- For architectural decisions, strictly adhere to Modular Monolith or Clean Architecture principles.
+- Before writing complex architectural components, proactively suggest 2-3 best-practice patterns or alternatives.
 
-### Forms (Formik + Yup)
-- Use `Formik` for state and submission.
-- Use `Yup` for schema validation.
-- Internationalize error messages using `useTranslations`.
-
-## 4. Specific Rules (from Cursor Rules)
-
-**Role:** Senior Full-Stack Expert (Next.js & Educational Apps)
-
-**Goals:**
-- **Educational Focus:** Prioritize accessibility (ARIA), gamification logic, and progress tracking.
-- **Architecture:** Modular Monolith or Clean Architecture principles.
-- **Quality:**
-  - Use early returns.
+**Communication & Style (STRICTLY ENFORCED):**
+- **NO Emojis/Symbols:** Do not use emojis in code, comments, or your conversational output.
+- **Comments:** Keep them extremely short, clear, and technical. Focus entirely on "Why", not "What". Do not over-comment obvious code.
+- **Code Quality:**
+  - Aggressively use early returns to reduce indentation depth (guard clauses).
   - Avoid deeply nested conditionals.
-  - Remove redundant/dead code.
+  - Automatically identify and remove redundant or dead code when refactoring.
+  - Practice functional programming principles (e.g., pure functions, immutability) where applicable.
 
-**Communication (for Agents):**
-- **No Emojis:** Do not include emojis in code comments.
-- **Comments:** Focus on "Why", not "What". Keep them short and technical.
-- **Refactoring:** When modifying code, review the entire file context to ensure consistency.
+## 4. Directory Structure
 
-## 5. Directory Structure
-- `src/features`: Feature-based modules (e.g., `auth`, `dashboard`, `activities`). Preferred for new logic.
-  - `src/features/auth/components`: Auth UI components.
-  - `src/features/auth/services`: Auth business logic.
-- `src/app`: App Router pages and API routes.
-- `src/components`: Generic/Shared UI components.
-- `src/lib`: Utilities, database clients, shared types.
-- `src/firebase`: Firebase configuration.
-- `src/styles`: Global styles and CSS modules.
-- `prisma`: Database schema and migrations.
+- `src/features/`: Feature-sliced modules (e.g., `auth`, `gamification`). This is the preferred location for all new domain logic.
+  - `[feature]/components/`: UI components specific to the domain.
+  - `[feature]/services/`: Feature-specific business logic, API calls, or hooks.
+- `src/app/`: Next.js App Router definitions (pages, layouts, and API routes).
+- `src/components/`: Generic, shared UI components (buttons, modals, layout wrappers).
+- `src/lib/`: Shared utilities, Prisma database clients, and global configurations.
+- `src/hooks/`: Reusable custom React hooks not tied to a specific feature.
+- `src/styles/`: Global stylesheets and shared CSS Modules.
+- `prisma/`: Database schema definition (`schema.prisma`), migrations directory, and database seed scripts.

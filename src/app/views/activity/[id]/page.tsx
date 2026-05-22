@@ -3,13 +3,14 @@ import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { getActivityById } from "@/services/activityService";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { FaArrowLeft, FaClock, FaStar, FaUser, FaCalendar, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import { FaArrowLeft, FaClock, FaStar, FaUser, FaCalendar, FaEdit } from "react-icons/fa";
 import UseTemplateButton from "./UseTemplateButton";
 import { ShareActivityButton } from "./ShareActivityButton";
 import { DeleteActivityViewButton } from "./DeleteActivityViewButton";
 import { LaunchSessionButton } from "./LaunchSessionButton";
 import styles from "@/styles/pages/view-activity.module.css";
-import MultimediaDisplay from "@/components/activity/MultimediaDisplay";
+import designStyles from "@/styles/pages/LudiDesign.module.css";
+import ActivityContentViewer from "./ActivityContentViewer";
 
 interface PageProps {
   params: Promise<{
@@ -64,14 +65,12 @@ export default async function ActivityDetailView({ params }: PageProps) {
     if (!user) redirect("/auth/login");
     return (
       <div className="container p-5 text-center">
-        <h1>Acceso denegado</h1>
-        <p>No tienes permiso para ver esta actividad privada.</p>
+        <h1 style={{ color: 'white' }}>Acceso denegado</h1>
+        <p style={{ color: 'rgba(255,255,255,0.7)' }}>No tienes permiso para ver esta actividad privada.</p>
         <Link href="/dashboard/my-activities" className="btn btn-primary mt-3">Volver a mis actividades</Link>
       </div>
     );
   }
-
-  const isMemory = activity.tipoActividadId === 3;
 
   const editRoute = activity.tipoActividadId === 1 
       ? `/create/ludiquiz?id=${activity.activityId}`
@@ -80,12 +79,30 @@ export default async function ActivityDetailView({ params }: PageProps) {
           : `/create/ludimemory?id=${activity.activityId}`;
 
   return (
-    <div className={styles.pageContainer}>
-      <div className="container">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-          <Link href={isTemplate ? "/dashboard/templates" : "/dashboard/my-activities"} className={`${styles.backButton} mb-0`}>
-            <FaArrowLeft /> {isTemplate ? "Volver a plantillas" : "Volver a mis actividades"}
+    <div className={styles.pageContainer} style={{ position: 'relative', overflowX: 'hidden' }}>
+        {/* Animated Background from Main Layout */}
+        <div className={designStyles.bgAnimation}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span 
+              key={i} 
+              className={designStyles.particle} 
+              style={{ 
+                left: `${Math.random() * 100}%`, 
+                animationDuration: `${16 + Math.random() * 6}s`, 
+                animationDelay: `${Math.random() * 5}s` 
+              }} 
+            />
+          ))}
+        </div>
+
+      <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div className="mb-4">
+          <Link href={isTemplate ? "/dashboard/templates" : "/dashboard/my-activities"} className="badge d-inline-flex align-items-center shadow-sm" style={{ background: '#E8E5F7', color: '#1D153A', padding: '0.6rem 1.2rem', borderRadius: '2rem', fontSize: '0.9rem', textDecoration: 'none', border: '1px solid rgba(29, 21, 58, 0.1)', transition: 'all 0.2s ease' }}>
+            <FaArrowLeft className="me-2" /> 
+            {isTemplate ? "Plantillas" : "Mis Actividades"} <span className="mx-2" style={{ opacity: 0.5 }}>/</span> <span className="fw-bold">{activity.activity.activity_name}</span>
           </Link>
+        </div>
+        <div className="d-flex justify-content-end align-items-center mb-4">
           <div className="d-flex gap-2">
             {isOwner && !isTemplate && (
               <>
@@ -93,8 +110,8 @@ export default async function ActivityDetailView({ params }: PageProps) {
                 <ShareActivityButton activityId={activity.activityId} />
                 <Link 
                   href={editRoute} 
-                  className="btn btn-outline-primary d-flex align-items-center gap-2 shadow-sm"
-                  style={{ borderRadius: '12px', padding: '8px 16px', fontWeight: 'bold' }}
+                  className="btn d-flex align-items-center gap-2 shadow-sm"
+                  style={{ background: 'white', color: '#1D153A', borderRadius: '12px', padding: '8px 16px', fontWeight: 'bold', border: '1px solid rgba(29, 21, 58, 0.1)' }}
                   title="Editar actividad"
                 >
                   <FaEdit />
@@ -124,12 +141,16 @@ export default async function ActivityDetailView({ params }: PageProps) {
           <div className={styles.headerContent}>
             <div className="d-flex justify-content-between align-items-start flex-wrap">
               <div>
-                <span className="badge bg-primary mb-2">{activity.tipoActividad.nombre}</span>
+                <span className="badge mb-2" style={{ background: 'rgba(106, 75, 255, 0.1)', color: '#6a4bff', border: '1px solid rgba(106, 75, 255, 0.2)', padding: '0.4rem 1rem', borderRadius: '20px' }}>
+                    {activity.tipoActividad.nombre}
+                </span>
                 <h1 className={styles.title}>{activity.activity.activity_name}</h1>
-                <p className="text-muted">{activity.activity.activity_desc}</p>
+                <p style={{ color: '#4a4266' }}>{activity.activity.activity_desc}</p>
               </div>
               <div className="text-end">
-                <span className="badge bg-secondary">{activity.publico ? "Público" : "Privado"}</span>
+                <span className="badge" style={{ background: activity.publico ? 'rgba(25, 135, 84, 0.1)' : 'rgba(220, 53, 69, 0.1)', color: activity.publico ? '#198754' : '#dc3545', border: `1px solid ${activity.publico ? 'rgba(25, 135, 84, 0.2)' : 'rgba(220, 53, 69, 0.2)'}`, padding: '0.4rem 1rem', borderRadius: '20px' }}>
+                    {activity.publico ? "Público" : "Privado"}
+                </span>
               </div>
             </div>
 
@@ -143,7 +164,7 @@ export default async function ActivityDetailView({ params }: PageProps) {
                 <span>{activity.config?.tiempoPreguntaMs ? activity.config.tiempoPreguntaMs / 1000 + " seg" : "N/A"}</span>
               </div>
               <div className={styles.metaItem}>
-                <label><FaStar className="me-1" /> Puntos</label>
+                <label><FaStar className="me-1" style={{ color: '#e5b869' }} /> Puntos</label>
                 <span>{activity.config?.puntajeBase || 0}</span>
               </div>
               <div className={styles.metaItem}>
@@ -158,76 +179,9 @@ export default async function ActivityDetailView({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Content Section */}
-        <div>
-          <h2 className={styles.sectionTitle}>Contenido de la Actividad</h2>
-
-          {isMemory ? (
-            <div className={styles.memoryGrid}>
-              {activity.memoriaParejas.map((pareja, idx) => (
-                <div key={Number(pareja.id)} className={styles.memoryPair}>
-                  <h5 className="mb-3 text-muted">Pareja #{idx + 1}</h5>
-                  {pareja.tarjetas[0]?.recurso && (
-                    <MultimediaDisplay 
-                      url={pareja.tarjetas[0].recurso.url} 
-                      type="IMAGEN"
-                      width={150}
-                      height={150}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>
-              {activity.preguntas.map((pregunta, idx) => (
-                <div key={Number(pregunta.id)} className={styles.questionCard}>
-                  <div className={styles.questionHeader}>
-                    <span className={styles.questionNumber}>Pregunta {idx + 1}</span>
-                    <span className="badge bg-light text-dark">
-                      {pregunta.puntaje || activity.config?.puntajeBase} pts
-                    </span>
-                  </div>
-                  <div className={styles.questionBody}>
-                    <h3 className={styles.questionText}>{pregunta.enunciado}</h3>
-                    
-                    {/* Media de la pregunta */}
-                    {pregunta.preguntaRecursos.length > 0 && (
-                      <div className="mb-4">
-                        <MultimediaDisplay 
-                          url={pregunta.preguntaRecursos[0].recurso.url}
-                          type={pregunta.preguntaRecursos[0].recurso.tipo?.nombre || "IMAGEN"}
-                        />
-                      </div>
-                    )}
-
-                    {/* Opciones */}
-                    <div className={styles.optionsGrid}>
-                      {pregunta.opciones.map((opcion) => {
-                        const isTrueFalse = activity.tipoActividadId === 2;
-                        const displayContent = isTrueFalse
-                          ? (opcion.indice === 1 ? "Verdadero" : "Falso")
-                          : (opcion.texto || (opcion.indice === 1 ? "Verdadero" : "Falso"));
-
-                        return (
-                          <div 
-                            key={Number(opcion.id)} 
-                            className={`${styles.optionCard} ${(opcion.esCorrecta || (opcion as any).es_correcta) ? styles.optionCorrect : styles.optionIncorrect}`}
-                          >
-                            <div className="d-flex align-items-center justify-content-center gap-2">
-                              {((opcion.esCorrecta || (opcion as any).es_correcta)) ? <FaCheck className="text-success" /> : <FaTimes className="text-danger" />}
-                              <span style={{ fontWeight: '500' }}>{displayContent}</span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Content Section via Client Component */}
+        <ActivityContentViewer activity={activity} />
+        
       </div>
     </div>
   );

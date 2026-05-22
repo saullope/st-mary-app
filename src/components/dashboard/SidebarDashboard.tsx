@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import styles from '@/styles/pages/sidebar.module.css';
+import designStyles from '@/styles/pages/LudiDesign.module.css';
 import { FaHome, FaPlus, FaListOl, FaFileAlt, FaClone, FaChartPie } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from "next-intl";
@@ -31,35 +31,36 @@ export const SidebarDashboard = () => {
     }, []);
 
     const links = [
-        { href: `/dashboard`, icon: FaHome, text: t('home') },
-        { href: '/dashboard/create-activity', icon: FaPlus, text: t('createActivity') },
-        { href: '/dashboard/my-activities', icon: FaListOl, text: t('myActivities') },
-        { href: '/dashboard/reports', icon: FaFileAlt, text: t('reports') },
-        { href: '/dashboard/templates', icon: FaClone, text: t('templates') }, // Temporarily hardcoded text, could add translation later
-        ...(isAdmin ? [{ href: '/admin/reports', icon: FaChartPie, text: 'Efectividad Global' }] : []),
+        { href: `/dashboard`, icon: FaHome, text: t('home'), target: '' },
+        { href: '/dashboard/create-activity', icon: FaPlus, text: t('createActivity'), target: '' },
+        { href: '/dashboard/my-activities', icon: FaListOl, text: t('myActivities'), target: '' },
+        { href: '/dashboard/reports', icon: FaFileAlt, text: t('reports'), target: '' },
+        { href: '/dashboard/templates', icon: FaClone, text: t('templates'), target: '' }, // Temporarily hardcoded text, could add translation later
+        ...(isAdmin ? [{ href: '/admin/reports', icon: FaChartPie, text: 'Efectividad Global', target: '' }] : []),
     ];
 
     return (
-        <div className={styles.sidebar}>
-            <div className={styles.logo}>
+        <div className={designStyles.sidebarDark}>
+            <div className="text-center mb-3">
                 <Image
-                    src="/images/PartialLogo.png"
-                    className={styles.image}
+                    src="/images/Logo-LudiGame.png"
                     alt="logo"
-                    width={150}
-                    height={55}
+                    width={80}
+                    height={80}
+                    style={{ objectFit: 'contain' }}
                 />
             </div>
             <br />
-            <nav className="nav flex-column">
+            <nav className="nav flex-column w-100">
                 {links.map((link) => (
                     <Link
                         key={link.href}
                         href={link.href}
-                        className={`${styles['nav-link']} ${pathname === link.href ? styles.active : ''}`}
+                        target={link.target}
+                        className={`${designStyles.navLink} ${pathname === link.href ? designStyles.active : ''}`}
                     >
-                        <link.icon className={styles.icon} />
-                        <span className={styles['nav-text']}>{link.text}</span>
+                        <link.icon className={designStyles.icon} />
+                        <span>{link.text}</span>
                     </Link>
                 ))}
             </nav>

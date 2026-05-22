@@ -1,10 +1,9 @@
 'use client'
 
-import style from '@/styles/pages/activity-component.module.css';
+import React from 'react';
 import Image from "next/image";
-import { TbPencilStar } from "react-icons/tb";
 import Link from "next/link";
-
+import designStyles from '@/styles/pages/LudiDesign.module.css';
 import { StaticImageData } from "next/image";
 
 interface CardGameActivityProps {
@@ -14,50 +13,34 @@ interface CardGameActivityProps {
     subtitle: string;
     description: string;
     buttonText: string;
+    typeId?: string;
 }
 
+export const CardGameActivity = ({ imageAct, title, page_to, subtitle, description, buttonText, typeId }: CardGameActivityProps) => {
+    
+    let bgClass = designStyles.cardQuiz;
+    if (typeId === 'ludimemory') bgClass = designStyles.cardMemory;
+    if (typeId === 'trueorfalse') bgClass = designStyles.cardTrueFalse;
 
-export const CardGameActivity  = ({imageAct, title, page_to, subtitle, description, buttonText}: CardGameActivityProps) => {
     return (
-        <>
-                    <div className="col-md-3">
-                        <div
-                            className={`card h-100 ${style['card-style']}`}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = "translateY(-10px)";
-                                e.currentTarget.style.boxShadow = "0 12px 24px rgba(0, 0, 0, 0.2)";
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = "translateY(0)";
-                                e.currentTarget.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.1)";
-                            }}
-                        >
-                            <div
-                                style={{ padding: "20px" }}
-                                className="justify-content-center align-items-center d-flex"
-                            >
-                                <Image src={imageAct} alt="LudiQuiz" width={50} height={50} />
-                            </div>
-                            <div className={`card-body text-center ${style['card-body-ludi']}`}>
-                                <h5 className={`card-title ${style['title-activity']}`}>{title}</h5>
-                                <p className={`card-text ${style['description-activity']}`} >{`${subtitle}`}</p>
-                                <p className={`card-text ${style['description-activity']}`} >{`${description}`}</p>
-                                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <Link 
-                                        href={`/create/${page_to}`}
-                                        type="button"
-                                        className={style['btn-primary-activity-ludi']}
-                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        >
-                                            <TbPencilStar />
-                                            {buttonText}
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+        <div className="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+            <Link href={`/create/${page_to}`} className={`${designStyles.createCard} ${bgClass}`} style={{ textDecoration: 'none' }}>
+                {typeof imageAct === 'string' ? (
+                    <img src={imageAct} className={designStyles.createImg} alt={title} />
+                ) : (
+                    <Image src={imageAct} className={designStyles.createImg} alt={title} style={{ objectFit: 'contain' }} />
+                )}
+                
+                <div className={designStyles.createBody}>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                    <div style={{ marginTop: 'auto', textAlign: 'center' }}>
+                        <span className={designStyles.btnCreate}>
+                            {buttonText}
+                        </span>
                     </div>
-        </>
+                </div>
+            </Link>
+        </div>
     );
 }

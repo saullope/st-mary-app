@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Card, Badge, Container, Row, Col } from 'react-bootstrap';
-import { FaUserGraduate, FaCalendarAlt, FaEnvelope } from 'react-icons/fa';
+import { FaUserGraduate, FaCalendarAlt, FaEnvelope, FaArrowLeft } from 'react-icons/fa';
 import ActivityCard from '@/components/dashboard/ActivityCard';
 import PaginationControls from '@/components/dashboard/PaginationControls';
 import ActivityFilter from '@/components/dashboard/ActivityFilter';
@@ -63,7 +64,15 @@ export default function ProfileClient({
   };
 
   return (
-    <Container fluid className="py-4">
+    <Container fluid className="py-4" style={{ maxWidth: '1200px' }}>
+      {/* Breadcrumb Navigation */}
+      <div className="mb-4">
+        <Link href="/dashboard" className="text-decoration-none d-inline-flex align-items-center fw-bold" style={{ color: '#E8E5F7', transition: 'opacity 0.2s ease', opacity: 0.8 }} onMouseOver={(e) => e.currentTarget.style.opacity = '1'} onMouseOut={(e) => e.currentTarget.style.opacity = '0.8'}>
+          <FaArrowLeft className="me-2" /> 
+          Dashboard <span className="mx-2" style={{ opacity: 0.5 }}>/</span> <span style={{ color: '#fff' }}>Perfil</span>
+        </Link>
+      </div>
+
       {/* Tarjeta de Perfil Superior */}
       <Card className="border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
         <div style={{ height: '120px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}></div>
