@@ -33,12 +33,19 @@ jobs:
           cp -r public .next/standalone/public
           cp -r .next/static .next/standalone/.next/static
 
+      - name: Prepare Standalone Bundle
+        run: |
+          cp -r public .next/standalone/public
+          cp -r .next/static .next/standalone/.next/static
+        # Agrupamos y comprimimos los miles de archivos en un solo archivo ligero
+        tar -czf standalone-bundle.tar.gz -C .next/standalone .
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .next/standalone # SÓLO subimos lo necesario para ejecutar
-          include-hidden-files: true
+          path: standalone-bundle.tar.gz
+          retention-days: 1 # Se borrará automáticamente en 24 horas liberando tu cuota
 
   deploy:
     runs-on: ubuntu-latest
