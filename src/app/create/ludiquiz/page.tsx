@@ -8,6 +8,7 @@ import style2 from '@/styles/pages/ludiquiz.module.css';
 import { useTranslations } from 'next-intl';
 import { LudiQuizQuestion } from '@/lib/types/';
 import { useActivityEditor } from "@/context/ActivityEditorContext";
+import LudiQuizTour from "./LudiQuizTour";
 
 export default function LudiQuiz() {
     /** Traducciones */
@@ -328,6 +329,7 @@ export default function LudiQuiz() {
 
     return (
         <>
+            <LudiQuizTour />
             {/* El Navbar ahora está en layout.tsx */}
             
             <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}> 
@@ -491,7 +493,8 @@ export default function LudiQuiz() {
                                     )}
                                     <input 
                                         type="text" 
-                                        className={style2['question-input']}
+                                        className={`${style2['question-input']} textarea-question-input`}
+                                        data-tour="question-input"
                                         placeholder="Escribe tu pregunta aquí... (Presiona Enter para ir a las respuestas)" 
                                         aria-label="Pregunta"
                                         value={questionText}

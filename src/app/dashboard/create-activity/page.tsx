@@ -5,6 +5,7 @@ import designStyles from "@/styles/pages/LudiDesign.module.css";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import getSession from "@/lib/auth/getSession";
 import { redirect } from "next/navigation";
+import CreateActivityTour from "./CreateActivityTour";
 
 // Import images from public/images via alias
 import LudiquizImg from "@/images/ludiquiz.png";
@@ -54,6 +55,7 @@ export default async function CreateActivity() {
 
     return (
         <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 0' }}>
+            <CreateActivityTour />
             <section>
                 <h2 className={designStyles.titleLudi}>
                     <span className={designStyles.star}>★</span> {t('titlePage')}

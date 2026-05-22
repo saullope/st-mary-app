@@ -86,7 +86,7 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
     return (
         <>
             <div className={styles['quiz-container']}>
-                <div className={styles['answers-container']}>
+                <div id="answers-container" className={`${styles['answers-container']} answers-container-grid`} data-tour="answers-section">
                     {answers.map((answer, index) => (
                         <div
                             key={answer.id}

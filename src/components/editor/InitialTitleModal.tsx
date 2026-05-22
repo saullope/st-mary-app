@@ -54,11 +54,12 @@ const InitialTitleModalContent = () => {
                 
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="activity-title" className={styles.label}>
+                        <label htmlFor="input-activity-name" className={styles.label}>
                             ¿Cómo se llamará la actividad?
                         </label>
                         <input 
-                            id="activity-title"
+                            id="input-activity-name"
+                            data-tour="activity-name"
                             type="text" 
                             className={styles.input}
                             placeholder="Ej. Fracciones Divertidas..."
@@ -77,6 +78,7 @@ const InitialTitleModalContent = () => {
                             Omitir
                         </button>
                         <button 
+                            id="btn-accept-name"
                             type="submit" 
                             className={styles.startBtn}
                             disabled={!localTitle.trim()}
