@@ -40,3 +40,6 @@ next-env.d.ts
 
 # temporal files inside public directory
 /public/tmp/
+
+# graphify: grafo local, se regenera con los hooks de git
+graphify-out/
