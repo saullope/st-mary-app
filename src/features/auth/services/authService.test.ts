@@ -77,7 +77,8 @@ describe('authService', () => {
 
       const result = await loginWithEmail('test@example.com', 'password');
       expect(result.success).toBe(false);
-      expect(result.message).toBe('User not found');
+      // Sin mensaje propio: el formulario muestra el error genérico traducido.
+      expect(result.message).toBeUndefined();
     });
   });
 });

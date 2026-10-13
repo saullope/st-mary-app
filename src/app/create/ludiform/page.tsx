@@ -9,6 +9,7 @@ import { EditorSidebar, EditorCanvas, EditorPlaceholder, EditorGamificationColum
 import { FormQuestionList, FormQuestionPicker } from "@/features/form/components/FormQuestionList";
 import { FormQuestionEditor } from "@/features/form/components/FormQuestionEditor";
 import { createFormQuestion, isFormAvailableForGrade, type FormQuestion, type FormQuestionType } from "@/features/form/formQuestions";
+import { useTranslations } from "next-intl";
 
 export default function LudiForm() {
     const { state, setActivityType, setFormQuestions, setTitle, updateConfig, setActivityId, setBackgroundImage } = useActivityEditor();
@@ -16,6 +17,7 @@ export default function LudiForm() {
     const searchParams = useSearchParams();
     const selectedGrade = useSelectedGrade();
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const t = useTranslations("Editor.form");
 
     useEffect(() => {
         setActivityType("ludiform");
@@ -65,9 +67,8 @@ export default function LudiForm() {
         return (
             <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}>
                 <EditorCanvas title="LudiForm">
-                    <EditorPlaceholder title="Disponible para tercer grado">
-                        LudiForm está pensado para estudiantes de tercer grado. Cambia el grado en la pantalla de
-                        Bienvenida para crear un formulario.
+                    <EditorPlaceholder title={t("gradeBlockedTitle")}>
+                        {t("gradeBlockedBody")}
                     </EditorPlaceholder>
                 </EditorCanvas>
             </div>
@@ -78,7 +79,7 @@ export default function LudiForm() {
         <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}>
             {!fullScreen && (
                 <EditorSidebar
-                    title="Preguntas"
+                    title={t("sidebarTitle")}
                     count={questions.length}
                     actions={<FormQuestionPicker onAdd={addQuestion} />}
                 >
@@ -100,9 +101,8 @@ export default function LudiForm() {
                         onChange={(changes) => updateQuestion(selectedQuestion.id, changes)}
                     />
                 ) : (
-                    <EditorPlaceholder title="Arma tu formulario">
-                        Agrega preguntas de opción única, de selección múltiple o de respuesta larga. Tus estudiantes
-                        responderán sin límite de tiempo y tú revisarás las respuestas escritas en Reportes.
+                    <EditorPlaceholder title={t("placeholderTitle")}>
+                        {t("placeholderBody")}
                     </EditorPlaceholder>
                 )}
             </EditorCanvas>

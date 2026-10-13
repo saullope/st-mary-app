@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { SelectGrade } from "@/components/educator";
 import WelcomeTour from "./WelcomeTour";
 import prisma from "@/lib/db";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 
 interface Grade {
@@ -25,12 +26,8 @@ interface GradesPageProps {
   
 
 export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("WelcomeTeacherView");
-
-    return {
-        title: t('metaTitle'),
-        description: t('metaDescription')
-    };
+  const t = await getTranslations("WelcomeTeacherView");
+  return pageMetadata({ title: t("metaTitle"), description: t("metaDescription") });
 }
 
 export default async function BienvenidaEducador() {

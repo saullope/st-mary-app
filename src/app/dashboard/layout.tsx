@@ -66,7 +66,6 @@ export default async function DashboardLayout({
     redirect('/auth/login');
   }
 
-  // Get user from our SQL database (via Prisma) to fetch real name
   const dbUser = await getCurrentUser();
 
   const user: FirebaseSession = mapDecodedIdTokenToFirebaseSession(token, dbUser);
@@ -81,30 +80,30 @@ export default async function DashboardLayout({
 
   return (
     <div className={styles['bodySidebar']} style={{ minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
-        {/* Animated Background from new Design System */}
-        <div className={designStyles.bgAnimation}>
-          {particles.map((p) => (
-            <span 
-              key={p.id} 
-              className={designStyles.particle} 
-              style={{ 
-                left: p.left, 
-                animationDuration: p.duration, 
-                animationDelay: p.delay 
-              }} 
-            />
-          ))}
-        </div>
+      {/* Animated Background from new Design System */}
+      <div className={designStyles.bgAnimation}>
+        {particles.map((p) => (
+          <span
+            key={p.id}
+            className={designStyles.particle}
+            style={{
+              left: p.left,
+              animationDuration: p.duration,
+              animationDelay: p.delay
+            }}
+          />
+        ))}
+      </div>
 
-        <SidebarDashboard />
-        
-        <div style={{ marginLeft: '250px', position: 'relative', zIndex: 1 }}>
-          <NavbarDashboard sessionData={user} />
-          
-          <div style={{ marginLeft: '20px', padding: '20px' }}>
-            {children}
-          </div>
+      <SidebarDashboard />
+
+      <div style={{ marginLeft: '250px', position: 'relative', zIndex: 1 }}>
+        <NavbarDashboard sessionData={user} />
+
+        <div style={{ marginLeft: '20px', padding: '20px' }}>
+          {children}
         </div>
+      </div>
     </div>
   );
 }

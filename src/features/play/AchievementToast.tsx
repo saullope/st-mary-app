@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import styles from "./AchievementToast.module.css";
+import { useTranslations } from "next-intl";
 
 export interface AchievementItem {
   /** Identifica de forma única cada aparición, para que React no reutilice el nodo entre logros distintos */
@@ -25,6 +26,7 @@ interface AchievementToastProps {
  * de `queue` - este componente decide cuándo mostrar el siguiente.
  */
 export const AchievementToast = ({ queue }: AchievementToastProps) => {
+  const t = useTranslations("Play.achievements");
   const [index, setIndex] = useState(0);
   const current = index < queue.length ? queue[index] : null;
 
@@ -52,7 +54,7 @@ export const AchievementToast = ({ queue }: AchievementToastProps) => {
       )}
       <div className={styles.textGroup}>
         <span className={styles.kind}>
-          {current.kind === "badge" ? "¡Insignia desbloqueada!" : "¡Misión cumplida!"}
+          {current.kind === "badge" ? t("badgeUnlocked") : t("missionDone")}
         </span>
         <span className={styles.title}>{current.title}</span>
         <span className={styles.description}>{current.description}</span>

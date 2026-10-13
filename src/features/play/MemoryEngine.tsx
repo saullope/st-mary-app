@@ -11,6 +11,7 @@ import { postPlay } from "./playApi";
 import { PlayScreen, ReadyCard, AchievementsRecap, SummaryActions } from "./PlayScreens";
 import styles from "./game.module.css";
 import memoryStyles from "./memory.module.css";
+import { useTranslations } from "next-intl";
 
 interface MemoryEngineProps {
   sesion: any;
@@ -25,9 +26,10 @@ const MISS_REVEAL_MS = 900;
 /** Reproductor de LudiMemory: tablero de parejas sin límite de tiempo. */
 export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName }: MemoryEngineProps) => {
   const {
-    config, participant, backgroundImage, selectedBadges, selectedMissions, gradeId, speak,
+    config, participant, backgroundImage, selectedBadges, selectedMissions, speak,
     achievementQueue, awardedBadgesRef, awardedMissionsRef, recordBadges, announceMissions,
   } = usePlaySession({ sesion, previewMode, previewName });
+  const t = useTranslations("Play.memory");
 
   const pairs = useMemo(() => pairsFromSession(sesion.LUDI_ACTIVIDAD.memoriaParejas), [sesion.LUDI_ACTIVIDAD.memoriaParejas]);
   const pointsPerPair: number = config.puntajeBase || 10;
@@ -59,17 +61,21 @@ export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName 
 
     if (!previewMode) {
       try {
-        if (!participant) throw new Error("No se encontró tu sesión de juego. Vuelve a unirte con el PIN.");
-        const response = await postPlay("/api/play/submit-memory", participant);
-        const data = await response.json();
-        if (!response.ok || !data.success) throw new Error(data.error || "No se pudo guardar tu resultado.");
-        finalScore = data.puntaje;
+        if (!participant) {
+          notify.error(t("saveFailed"), t("sessionMissing"));
+        } else {
+          const response = await postPlay("/api/play/submit-memory", participant);
+          const data = await response.json();
+          if (!response.ok || !data.success) throw new Error(data.error);
+          finalScore = data.puntaje;
+        }
       } catch (error) {
-        notify.error("No se pudo guardar tu resultado", error instanceof Error ? error.message : "Inténtalo de nuevo.");
+        console.error("Error submitting memory result:", error);
+        notify.error(t("saveFailed"), t("tryAgain"));
       }
     }
 
-    announceMissions(evaluateMemoryMissions(selectedMissions, gradeId, awardedMissionsRef.current, finalStats));
+    announceMissions(evaluateMemoryMissions(selectedMissions, awardedMissionsRef.current, finalStats));
     recordBadges(evaluateMemoryBadges(selectedBadges, awardedBadgesRef.current, finalStats));
     setScore(finalScore);
     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
@@ -99,13 +105,13 @@ export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName 
       setMatched(nextMatched);
       setFlipped([]);
       setStreak(stats.streak);
-      setStatus(stats.isFinished ? "¡Encontraste todas las parejas!" : "¡Pareja encontrada!");
+      setStatus(stats.isFinished ? t("allFound") : t("pairFound"));
 
       if (stats.isFinished) {
         finish(stats);
         return;
       }
-      announceMissions(evaluateMemoryMissions(selectedMissions, gradeId, awardedMissionsRef.current, stats));
+      announceMissions(evaluateMemoryMissions(selectedMissions, awardedMissionsRef.current, stats));
       recordBadges(evaluateMemoryBadges(selectedBadges, awardedBadgesRef.current, stats));
       return;
     }
@@ -113,7 +119,7 @@ export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName 
     setFlipped([flipped[0], card.key]);
     setMisses((n) => n + 1);
     setStreak(0);
-    setStatus("No son pareja. Inténtalo de nuevo.");
+    setStatus(t("notPair"));
     hideTimer.current = setTimeout(() => setFlipped([]), MISS_REVEAL_MS);
   };
 
@@ -129,16 +135,15 @@ export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName 
     return (
       <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
         <div className={styles.centerCard}>
-          <FaTrophy className={styles.trophyIcon} />
-          <h1 className={styles.summaryTitle}>¡Tablero completo!</h1>
-          <p className={styles.summaryScore}>Puntaje: <span>{score}</span></p>
+          <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
+          <h1 className={styles.summaryTitle}>{t("boardComplete")}</h1>
+          <p className={styles.summaryScore}>{t.rich("score", { score, span: (chunks) => <span>{chunks}</span> })}</p>
           <p className={memoryStyles.summaryLine}>
-            Encontraste {pairs.length} parejas en {attempts} {attempts === 1 ? "intento" : "intentos"}.
+            {t("summaryLine", { pairs: pairs.length, attempts })}
           </p>
           <AchievementsRecap
             missionCodes={Array.from(awardedMissionsRef.current)}
             badgeCodes={Array.from(awardedBadgesRef.current)}
-            gradeId={gradeId}
             onReveal={speak}
           />
           <SummaryActions sesion={sesion} participant={participant} previewMode={previewMode} onExit={onExit} />
@@ -154,10 +159,10 @@ export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName 
     <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
       <div className={styles.hud}>
         <div className={styles.hudItem}>
-          <FaClone aria-hidden="true" /> {matched.size} / {pairs.length} parejas
+          <FaClone aria-hidden="true" /> {t("pairsProgress", { found: matched.size, total: pairs.length })}
         </div>
         <div className={styles.hudItem}>
-          <FaRotate aria-hidden="true" /> {attempts} {attempts === 1 ? "intento" : "intentos"}
+          <FaRotate aria-hidden="true" /> {t("attempts", { count: attempts })}
         </div>
       </div>
 
@@ -171,7 +176,7 @@ export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName 
           {deck.map((card, index) => {
             const isMatched = matched.has(card.pairId);
             const isFaceUp = isMatched || flipped.includes(card.key);
-            const state = isMatched ? "pareja encontrada" : isFaceUp ? "descubierta" : "boca abajo";
+            const state = isMatched ? t("cardMatched") : isFaceUp ? t("cardFaceUp") : t("cardFaceDown");
             return (
               <button
                 key={card.key}
@@ -181,7 +186,7 @@ export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName 
                 data-matched={isMatched}
                 onClick={() => flip(card)}
                 disabled={isMatched || stage !== "PLAYING"}
-                aria-label={`Carta ${index + 1}, ${state}`}
+                aria-label={t("cardLabel", { number: index + 1, state })}
               >
                 <span className={memoryStyles.cardInner}>
                   <span className={`${memoryStyles.cardFace} ${memoryStyles.cardBack}`} aria-hidden="true" />

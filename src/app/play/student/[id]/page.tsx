@@ -2,10 +2,25 @@ import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import { ActivityPlayer } from "@/features/play/ActivityPlayer";
 import { WaitingRoom } from "@/features/play/WaitingRoom";
+import { AchievementCatalogLoader } from "@/features/gamification/AchievementCatalogLoader";
 import { sessionPhase } from "@/lib/play/sessionState";
+import { ACTIVITY_ACHIEVEMENTS_INCLUDE } from "@/features/gamification/activityAchievements";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 // La fase de la sesión cambia en vivo cuando el docente inicia o termina.
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const t = await getTranslations("Metadata.studentPlay");
+  const { id } = await params;
+  const sesion = /^\d+$/.test(id)
+    ? await prisma.lUDI_SESION.findUnique({ where: { id: BigInt(id) }, select: { LUDI_ACTIVIDAD: { select: { activity: { select: { activity_name: true } } } } } })
+    : null;
+  const activity = sesion?.LUDI_ACTIVIDAD.activity.activity_name;
+  return pageMetadata({ title: activity ? t("title", { activity }) : t("fallbackTitle"), description: t("description") });
+}
 
 export default async function StudentGamePage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
@@ -39,7 +54,8 @@ export default async function StudentGamePage({ params }: { params: Promise<{ id
                         include: {
                             tarjetas: { include: { recurso: true } }
                         }
-                    }
+                    },
+                    ...ACTIVITY_ACHIEVEMENTS_INCLUDE
                 }
             }
         }
@@ -59,5 +75,9 @@ export default async function StudentGamePage({ params }: { params: Promise<{ id
         return <WaitingRoom sesion={serialized} phase={phase} />;
     }
 
-    return <ActivityPlayer sesion={serialized} />;
+    return (
+        <AchievementCatalogLoader>
+            <ActivityPlayer sesion={serialized} />
+        </AchievementCatalogLoader>
+    );
 }

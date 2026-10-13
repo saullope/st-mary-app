@@ -5,17 +5,19 @@ import { FaTrash } from "react-icons/fa6";
 import { softDeleteActivity } from "@/app/dashboard/my-activities/actions";
 import { notify } from "@/components/ui";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export function DeleteActivityViewButton({ activityId, activityName }: { activityId: number, activityName: string }) {
+  const t = useTranslations("ActivityView");
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
   const handleDelete = async () => {
-    if (window.confirm(`¿Estás seguro de que deseas dar de baja la actividad "${activityName}"?`)) {
+    if (window.confirm(t("confirmDelete", { name: activityName }))) {
       setIsDeleting(true);
       const result = await softDeleteActivity(activityId);
       if (!result.success) {
-        notify.error("No se pudo dar de baja la actividad", result.error || "Inténtalo de nuevo.");
+        notify.error(t("deleteFailed"), result.error || t("tryAgain"));
         setIsDeleting(false);
       } else {
         // Redirigir al dashboard tras eliminar exitosamente
@@ -27,7 +29,8 @@ export function DeleteActivityViewButton({ activityId, activityName }: { activit
   return (
     <button 
         className="btn btn-outline-danger d-flex align-items-center gap-2 shadow-sm"
-        title="Dar de baja actividad"
+        title={t("delete")}
+        aria-label={t("delete")}
         onClick={handleDelete}
         disabled={isDeleting}
         style={{ borderRadius: '12px', padding: '8px 16px', fontWeight: 'bold', opacity: isDeleting ? 0.7 : 1 }}
@@ -35,7 +38,7 @@ export function DeleteActivityViewButton({ activityId, activityName }: { activit
       {isDeleting ? (
           <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" style={{ width: '14px', height: '14px' }}></span>
       ) : (
-          <FaTrash />
+          <FaTrash aria-hidden="true" />
       )}
     </button>
   );

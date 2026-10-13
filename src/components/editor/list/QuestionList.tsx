@@ -3,6 +3,7 @@
 import type { MediaType } from "@/lib/types";
 import { EditorList, EditorListItem, type EditorListTagTone } from "./EditorListItem";
 import { MediaThumb } from "./MediaThumb";
+import { useTranslations } from "next-intl";
 
 export interface QuestionListEntry {
   id: number;
@@ -24,20 +25,21 @@ interface QuestionListProps {
   onDelete: (id: number) => void;
 }
 
-const SLIDE_TAG = { text: "Diapositiva", tone: "cyan" as const };
-
 /** Lista de preguntas y diapositivas de LudiQuiz y Verdadero/Falso. */
-export const QuestionList = ({ items, draft, selectedId, onSelect, onMove, onDelete }: QuestionListProps) => (
-  <EditorList label="Preguntas de la actividad">
+export const QuestionList = ({ items, draft, selectedId, onSelect, onMove, onDelete }: QuestionListProps) => {
+  const t = useTranslations("Editor.list");
+  const slideTag = { text: t("slideTag"), tone: "cyan" as const };
+  return (
+  <EditorList label={t("questionsLabel")}>
     {items.map((item, index) => (
       <EditorListItem
         key={item.id}
         position={index + 1}
         label={item.text}
-        placeholder={item.isSlide ? "Presentación de Canva" : "Pregunta sin título"}
+        placeholder={item.isSlide ? t("slidePlaceholder") : t("untitledQuestion")}
         leading={<MediaThumb mediaType={item.mediaType} mediaUrl={item.mediaUrl} />}
-        itemName={item.isSlide ? "diapositiva" : "pregunta"}
-        tag={item.isSlide ? SLIDE_TAG : item.tag}
+        itemName={item.isSlide ? t("slideItem") : t("questionItem")}
+        tag={item.isSlide ? slideTag : item.tag}
         selected={selectedId === item.id}
         isFirst={index === 0}
         isLast={index === items.length - 1}
@@ -50,13 +52,14 @@ export const QuestionList = ({ items, draft, selectedId, onSelect, onMove, onDel
       <EditorListItem
         position={items.length + 1}
         label={draft.text}
-        placeholder="Nueva pregunta..."
+        placeholder={t("newQuestion")}
         leading={<MediaThumb mediaType={draft.mediaType} mediaUrl={draft.mediaUrl} />}
-        itemName="pregunta"
+        itemName={t("questionItem")}
         tag={draft.tag}
         selected
         draft
       />
     )}
   </EditorList>
-);
+  );
+};

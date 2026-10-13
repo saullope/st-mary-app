@@ -5,7 +5,6 @@ import confetti from "canvas-confetti";
 import { FaTrophy, FaListCheck, FaStar, FaPaperPlane } from "react-icons/fa6";
 import { notify } from "@/components/ui";
 import {
-  FORM_QUESTION_LABELS,
   LONG_ANSWER_MAX_CHARS,
   countWords,
   gradeFormAnswer,
@@ -21,6 +20,7 @@ import { postPlay } from "./playApi";
 import { PlayScreen, ReadyCard, AchievementsRecap, SummaryActions } from "./PlayScreens";
 import styles from "./game.module.css";
 import formStyles from "./form.module.css";
+import { useTranslations } from "next-intl";
 
 interface FormEngineProps {
   sesion: any;
@@ -41,9 +41,11 @@ type AnswerMap = Record<string, FormAnswer>;
 /** Reproductor de LudiForm: todas las preguntas en una página, sin tiempo, entrega única. */
 export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }: FormEngineProps) => {
   const {
-    config, participant, backgroundImage, selectedBadges, selectedMissions, gradeId, speak,
+    config, participant, backgroundImage, selectedBadges, selectedMissions, speak,
     achievementQueue, awardedBadgesRef, awardedMissionsRef, recordBadges, announceMissions,
   } = usePlaySession({ sesion, previewMode, previewName });
+  const t = useTranslations("Play.form");
+  const tTypes = useTranslations("Editor.form.types");
 
   const [stage, setStage] = useState<"READY" | "FILLING" | "SUBMITTING" | "SUMMARY">("READY");
   const [answers, setAnswers] = useState<AnswerMap>({});
@@ -103,7 +105,7 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
     const next = { ...answers, [questionId]: { ...answers[questionId], preguntaId: questionId, ...changes } };
     setAnswers(next);
     saveDraft(next);
-    announceMissions(evaluateFormMissions(selectedMissions, gradeId, awardedMissionsRef.current, progressStats(next)));
+    announceMissions(evaluateFormMissions(selectedMissions, awardedMissionsRef.current, progressStats(next)));
   };
 
   const toggleOption = (questionId: string, optionId: string, single: boolean) => {
@@ -116,7 +118,7 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
 
   const submit = async () => {
     if (remaining > 0) {
-      notify.warning("Faltan respuestas", `Te ${remaining === 1 ? "falta 1 pregunta" : `faltan ${remaining} preguntas`} por responder.`);
+      notify.warning(t("missingAnswers"), t("missingAnswersDescription", { count: remaining }));
       return;
     }
     setStage("SUBMITTING");
@@ -131,15 +133,16 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
       score = graded.reduce((sum, g) => sum + g.result.points, 0);
     } else {
       try {
-        if (!participant) throw new Error("No se encontró tu sesión de juego. Vuelve a unirte con el PIN.");
+        if (!participant) throw new Error("participant missing");
         const response = await postPlay("/api/play/submit-form", participant, { answers: Object.values(answers) });
         const data = await response.json();
-        if (!response.ok || !data.success) throw new Error(data.error || "No se pudo entregar el formulario.");
+        if (!response.ok || !data.success) throw new Error(data.error);
         results = data.results;
         score = data.puntaje;
         sessionStorage.removeItem(draftKey);
       } catch (error) {
-        notify.error("No se pudo entregar", error instanceof Error ? error.message : "Inténtalo de nuevo.");
+        console.error("Error submitting form:", error);
+        notify.error(t("submitFailed"), participant ? t("tryAgain") : t("sessionMissing"));
         setStage("FILLING");
         return;
       }
@@ -147,7 +150,7 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
 
     const closedCorrect = results.filter((r) => r.status === "correct").length;
     const finalStats = progressStats(answers, { closedCorrect, submitted: true });
-    announceMissions(evaluateFormMissions(selectedMissions, gradeId, awardedMissionsRef.current, finalStats));
+    announceMissions(evaluateFormMissions(selectedMissions, awardedMissionsRef.current, finalStats));
     recordBadges(evaluateFormBadges(selectedBadges, awardedBadgesRef.current, finalStats));
 
     setSummary({
@@ -172,25 +175,22 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
     return (
       <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
         <div className={styles.centerCard}>
-          <FaTrophy className={styles.trophyIcon} />
-          <h1 className={styles.summaryTitle}>¡Formulario entregado!</h1>
-          <p className={styles.summaryScore}>Puntaje: <span>{summary.score}</span></p>
+          <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
+          <h1 className={styles.summaryTitle}>{t("submitted")}</h1>
+          <p className={styles.summaryScore}>{t.rich("score", { score: summary.score, span: (chunks) => <span>{chunks}</span> })}</p>
           {summary.closedTotal > 0 && (
             <p className={formStyles.summaryLine}>
-              Acertaste {summary.closedCorrect} de {summary.closedTotal} preguntas de opción.
+              {t("closedSummary", { correct: summary.closedCorrect, total: summary.closedTotal })}
             </p>
           )}
           {summary.pending > 0 && (
             <p className={formStyles.summaryLine}>
-              {summary.pending === 1
-                ? "Tu respuesta escrita espera la revisión de tu docente."
-                : `Tus ${summary.pending} respuestas escritas esperan la revisión de tu docente.`}
+              {t("pendingReview", { count: summary.pending })}
             </p>
           )}
           <AchievementsRecap
             missionCodes={Array.from(awardedMissionsRef.current)}
             badgeCodes={Array.from(awardedBadgesRef.current)}
-            gradeId={gradeId}
             onReveal={speak}
           />
           <SummaryActions sesion={sesion} participant={participant} previewMode={previewMode} onExit={onExit} />
@@ -203,10 +203,10 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
     <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
       <div className={styles.hud}>
         <div className={styles.hudItem}>
-          <FaListCheck aria-hidden="true" /> {answeredCount} / {questions.length} respondidas
+          <FaListCheck aria-hidden="true" /> {t("answered", { answered: answeredCount, total: questions.length })}
         </div>
         <div className={styles.hudItem}>
-          <FaStar aria-hidden="true" /> Sin límite de tiempo
+          <FaStar aria-hidden="true" /> {t("noTimeLimit")}
         </div>
       </div>
 
@@ -226,7 +226,7 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
                 <span className={formStyles.questionText}>{question.text}</span>
               </legend>
               <span className={formStyles.questionType}>
-                {question.type === "multiple" ? "Marca todas las correctas" : FORM_QUESTION_LABELS[question.type]}
+                {question.type === "multiple" ? t("markAll") : tTypes(question.type)}
               </span>
 
               {question.type === "long" ? (
@@ -235,13 +235,13 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
                     className={formStyles.longAnswer}
                     rows={5}
                     maxLength={LONG_ANSWER_MAX_CHARS}
-                    placeholder="Escribe tu respuesta aquí..."
-                    aria-label={`Respuesta a la pregunta ${index + 1}`}
+                    placeholder={t("answerPlaceholder")}
+                    aria-label={t("answerLabel", { number: index + 1 })}
                     value={answer?.text ?? ""}
                     onChange={(e) => updateAnswer(question.id, { text: e.target.value })}
                   />
                   <span className={formStyles.wordCount} aria-live="polite">
-                    {countWords(answer?.text ?? "")} palabras
+                    {t("words", { count: countWords(answer?.text ?? "") })}
                   </span>
                 </>
               ) : (
@@ -269,11 +269,11 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
         <div className={formStyles.submitRow}>
           {remaining > 0 && (
             <span className={formStyles.remaining} aria-live="polite">
-              {remaining === 1 ? "Falta 1 pregunta" : `Faltan ${remaining} preguntas`}
+              {t("remaining", { count: remaining })}
             </span>
           )}
           <button type="submit" className={styles.bigStartBtn} disabled={stage === "SUBMITTING"}>
-            <FaPaperPlane aria-hidden="true" /> {stage === "SUBMITTING" ? "Entregando..." : "Entregar formulario"}
+            <FaPaperPlane aria-hidden="true" /> {stage === "SUBMITTING" ? t("submitting") : t("submit")}
           </button>
         </div>
       </form>

@@ -6,8 +6,10 @@ import { auth } from '@/firebase/firebase';
 import { updateProfile, sendEmailVerification, User } from 'firebase/auth';
 import { FaUser } from 'react-icons/fa';
 import styles from './Settings.module.css';
+import { useTranslations } from 'next-intl';
 
 export const PersonalInfo = () => {
+    const t = useTranslations('PersonalInfo');
     const [user, setUser] = useState<User | null>(null);
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
@@ -42,10 +44,10 @@ export const PersonalInfo = () => {
         try {
             setUpdatingProfile(true);
             await updateProfile(user, { displayName });
-            showMessage('success', 'Perfil actualizado exitosamente.');
-        } catch (error: any) {
+            showMessage('success', t('updated'));
+        } catch (error) {
             console.error(error);
-            showMessage('danger', `Error al actualizar perfil: ${error.message}`);
+            showMessage('danger', t('updateFailed'));
         } finally {
             setUpdatingProfile(false);
         }
@@ -56,10 +58,10 @@ export const PersonalInfo = () => {
         try {
             setSendingEmail(true);
             await sendEmailVerification(user);
-            showMessage('success', 'Correo de verificación enviado. Por favor revisa tu bandeja de entrada.');
-        } catch (error: any) {
+            showMessage('success', t('verificationSent'));
+        } catch (error) {
             console.error(error);
-            showMessage('danger', `Error al enviar correo: ${error.message}`);
+            showMessage('danger', t('emailFailed'));
         } finally {
             setSendingEmail(false);
         }
@@ -79,11 +81,11 @@ export const PersonalInfo = () => {
 
     return (
         <div className={styles.container}>
-            <h2 className={styles.title}>Información Personal</h2>
-            <p className={styles.subtitle}>Administra tus datos personales.</p>
+            <h2 className={styles.title}>{t('title')}</h2>
+            <p className={styles.subtitle}>{t('subtitle')}</p>
 
             {message && (
-                <Alert variant={message.type} className="mb-4">
+                <Alert variant={message.type} className="mb-4" role={message.type === 'danger' ? 'alert' : 'status'}>
                     {message.text}
                 </Alert>
             )}
@@ -92,21 +94,21 @@ export const PersonalInfo = () => {
                 <div className="col-lg-8 mb-4">
                     <Card className={styles.card}>
                         <Card.Body>
-                            <h5 className={styles.cardTitle}><FaUser className="me-2" /> Datos del Perfil</h5>
+                            <h5 className={styles.cardTitle}><FaUser className="me-2" aria-hidden="true" /> {t('profileTitle')}</h5>
                             <Form onSubmit={handleUpdateProfile}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Nombre Completo</Form.Label>
+                                <Form.Group className="mb-3" controlId="profile-name">
+                                    <Form.Label>{t('name')}</Form.Label>
                                     <Form.Control 
                                         type="text" 
                                         value={displayName} 
                                         onChange={(e) => setDisplayName(e.target.value)}
-                                        placeholder="Ej. Juan Pérez"
+                                        placeholder={t('namePlaceholder')}
                                         required
                                     />
                                 </Form.Group>
                                 
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Correo Electrónico</Form.Label>
+                                <Form.Group className="mb-3" controlId="profile-email">
+                                    <Form.Label>{t('email')}</Form.Label>
                                     <Form.Control 
                                         type="email" 
                                         value={email} 
@@ -114,14 +116,14 @@ export const PersonalInfo = () => {
                                         className="bg-light"
                                     />
                                     <Form.Text className="text-muted">
-                                        El correo electrónico está vinculado a tu cuenta y no puede cambiarse desde aquí.
+                                        {t('emailHint')}
                                     </Form.Text>
                                 </Form.Group>
 
                                 {!user.emailVerified && (
                                     <div className="mb-3 p-3 bg-warning bg-opacity-10 border border-warning rounded">
                                         <p className="mb-2 text-warning-emphasis fw-bold">
-                                            Tu correo electrónico no está verificado.
+                                            {t('notVerified')}
                                         </p>
                                         <Button 
                                             variant="outline-warning" 
@@ -129,7 +131,7 @@ export const PersonalInfo = () => {
                                             onClick={handleSendVerification}
                                             disabled={sendingEmail}
                                         >
-                                            {sendingEmail ? 'Enviando...' : 'Enviar correo de verificación'}
+                                            {sendingEmail ? t('sending') : t('sendVerification')}
                                         </Button>
                                     </div>
                                 )}
@@ -140,7 +142,7 @@ export const PersonalInfo = () => {
                                     disabled={updatingProfile || displayName === user.displayName}
                                     className="mt-3"
                                 >
-                                    {updatingProfile ? <Spinner size="sm" /> : 'Guardar Cambios'}
+                                    {updatingProfile ? <Spinner size="sm" aria-label={t('saving')} /> : t('save')}
                                 </Button>
                             </Form>
                         </Card.Body>

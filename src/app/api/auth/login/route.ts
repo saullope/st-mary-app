@@ -3,14 +3,17 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { isRecentSignIn, issueSessionCookie } from "@/lib/auth/session";
+import { getTranslations } from "next-intl/server";
 
 export async function POST() {
+    // El mensaje de error lo muestra el formulario de inicio de sesión.
+    const t = await getTranslations("AuthErrors");
     try {
         const authorization = (await headers()).get("Authorization");
 
         if (!authorization?.startsWith("Bearer ")) {
             return NextResponse.json(
-                { error: "No valid token provided." },
+                { error: t("noToken") },
                 { status: 401 }
             );
         }
@@ -20,7 +23,7 @@ export async function POST() {
         const decodedToken = await adminAuth.verifyIdToken(idToken);
         if (!decodedToken) {
             return NextResponse.json(
-                { error: "Invalid ID token." },
+                { error: t("invalidToken") },
                 { status: 401 }
             );
         }
@@ -28,7 +31,7 @@ export async function POST() {
         // Solo un inicio de sesión recién hecho (credenciales o Google) crea una sesión.
         if (!isRecentSignIn(decodedToken.auth_time)) {
             return NextResponse.json(
-                { error: "Vuelve a iniciar sesión.", reason: "stale" },
+                { error: t("stale"), reason: "stale" },
                 { status: 401 }
             );
         }
@@ -71,7 +74,7 @@ export async function POST() {
             if (!educadorRole) {
                 console.error("Rol 'EDUCADOR' not found in DB. Please run seed.");
                 return NextResponse.json(
-                    { error: "System configuration error." },
+                    { error: t("configuration") },
                     { status: 500 }
                 );
             }
@@ -89,7 +92,7 @@ export async function POST() {
             } catch (dbError) {
                 console.error("Error creating user in DB:", dbError);
                 return NextResponse.json(
-                    { error: "Failed to register user data." },
+                    { error: t("registerFailed") },
                     { status: 500 }
                 );
             }
@@ -105,7 +108,7 @@ export async function POST() {
     } catch (error: any) {
         console.error("Error creating session cookie:", error);
         return NextResponse.json(
-            { error: "Failed to create session." },
+            { error: t("sessionFailed") },
             { status: 500 }
         );
     }

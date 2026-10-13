@@ -1,4 +1,5 @@
-import { render, screen, act, fireEvent } from "@testing-library/react";
+import { screen, act, fireEvent } from "@testing-library/react";
+import { renderWithAchievements as render } from "@/features/gamification/testing/renderWithAchievements";
 import { GameEngine } from "../GameEngine";
 
 // Referencia estable, como el router real de Next: GameEngine lo usa como dependencia de un efecto.

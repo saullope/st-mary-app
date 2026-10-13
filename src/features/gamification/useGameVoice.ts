@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { useLocale } from "next-intl";
 
 /**
  * Síntesis de voz compartida por el panel de configuración (preview de
@@ -9,22 +10,26 @@ import { useCallback, useEffect, useRef } from "react";
  */
 export function useGameVoice(enabled: boolean) {
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+  // Las frases salen de messages en el idioma activo: la voz debe hablar ese idioma.
+  const locale = useLocale();
+  const lang = locale === "en" ? "en-US" : "es-MX";
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
 
     const loadVoice = () => {
       const voices = window.speechSynthesis.getVoices();
+      const sameLanguage = voices.filter((v) => v.lang.toLowerCase().startsWith(locale === "en" ? "en" : "es"));
       voiceRef.current =
-        voices.find((v) => v.name.includes("Sofía") || v.name.includes("Sofia")) ||
-        voices.find((v) => /es(-|_)US|es(-|_)MX/.test(v.lang)) ||
-        voices[0] ||
+        (locale === "en" ? null : sameLanguage.find((v) => v.name.includes("Sofía") || v.name.includes("Sofia"))) ||
+        sameLanguage.find((v) => v.lang.replace("_", "-") === lang) ||
+        sameLanguage[0] ||
         null;
     };
 
     loadVoice();
     window.speechSynthesis.onvoiceschanged = loadVoice;
-  }, []);
+  }, [locale, lang]);
 
   const speak = useCallback(
     (text: string) => {
@@ -34,6 +39,7 @@ export function useGameVoice(enabled: boolean) {
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
       if (voiceRef.current) {
         utterance.voice = voiceRef.current;
         utterance.rate = 1.2;
@@ -41,7 +47,7 @@ export function useGameVoice(enabled: boolean) {
       }
       window.speechSynthesis.speak(utterance);
     },
-    [enabled]
+    [enabled, lang]
   );
 
   return { speak };

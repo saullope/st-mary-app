@@ -24,7 +24,7 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
     const t = useTranslations('themeBackground');
     const [themes, setThemes] = useState<Theme[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState(false);
 
     // ESC key handler
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -50,10 +50,10 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
                 
                 const data = await response.json();
                 setThemes(data);
-                setError(null);
+                setError(false);
             } catch (err) {
                 console.error('Error fetching themes:', err);
-                setError('Error loading themes');
+                setError(true);
             } finally {
                 setIsLoading(false);
             }
@@ -77,13 +77,13 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
                 id="themeContainer"
                 role="dialog"
                 aria-modal="true"
-                aria-label="Theme selector"
+                aria-label={t('selectTheme')}
             >
                 {/* Close button */}
                 <button
                     className={style['theme-close-btn']}
                     onClick={onClose}
-                    aria-label="Close theme panel"
+                    aria-label={t('close')}
                     type="button"
                 >
                     <IoClose />
@@ -99,7 +99,7 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
 
                     {error && (
                         <div className="alert alert-danger text-center w-100">
-                            {error}
+                            {t('loadError')}
                         </div>
                     )}
 
@@ -107,12 +107,21 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
                         <div key={theme.id} className={style['theme-item']}>
                             <div
                                 className={style['theme-card']}
+                                role="button"
+                                tabIndex={0}
+                                aria-label={t(theme.nombre)}
                                 onClick={() => onThemeChange(theme.imageUrl)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        onThemeChange(theme.imageUrl);
+                                    }
+                                }}
                             >
                                 <Image
                                     className={style.actimg}
                                     src={theme.imageUrl}
-                                    alt={theme.nombre}
+                                    alt=""
                                     width={120}
                                     height={80}
                                     style={{ objectFit: 'cover' }}

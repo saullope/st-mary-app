@@ -1,45 +1,26 @@
-"use server";
-
 import prisma from "@/lib/db";
-import getCurrentUser from "@/lib/auth/getCurrentUser";
-import { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
-import { GamificationConfig } from "@/context/ActivityEditorContext";
+import type { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
+import type { ActivityWriteResult, ActivityWriter, ActivityData } from "./types";
 import { getActivityTypeId, getThemeIdByUrl, getOrCreateResource, setOptionImage, replaceLessonBlocks, validateLessonForSave, replaceFormQuestions, validateFormForSave } from "@/lib/activity-helpers";
 import { validateMemoryForSave } from "@/features/memory/memoryCards";
-import type { LessonBlock } from "@/features/lesson/lessonBlocks";
-import type { FormQuestion } from "@/features/form/formQuestions";
+import { translateMessage } from "@/lib/i18n/translateMessage";
+import { replaceActivityAchievements } from "@/features/gamification/activityAchievements";
+import { message } from "@/lib/i18n/message";
 
-interface ActivityData {
-  title: string;
-  type: "ludiquiz" | "ludimemory" | "trueorfalse" | "ludileccion" | "ludiform";
-  questions: (LudiQuizQuestion | TrueOrFalseQuestion)[];
-  config: GamificationConfig;
-  backgroundImage?: string;
-  memoryImages?: string[];
-  lessonBlocks?: LessonBlock[];
-  formQuestions?: FormQuestion[];
-}
-
-export async function saveActivity(data: ActivityData) {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return { error: "No autorizado. Debes iniciar sesión." };
-  }
-
+export async function createActivityForUser(user: ActivityWriter, data: ActivityData): Promise<ActivityWriteResult> {
   if (data.type === "ludileccion") {
     const problem = validateLessonForSave(data.lessonBlocks, data.config.gradeId);
-    if (problem) return { error: problem };
+    if (problem) return { error: await translateMessage(problem), status: 400 };
   }
 
   if (data.type === "ludiform") {
     const problem = validateFormForSave(data.formQuestions, data.config.gradeId);
-    if (problem) return { error: problem };
+    if (problem) return { error: await translateMessage(problem), status: 400 };
   }
 
   if (data.type === "ludimemory") {
     const problem = validateMemoryForSave(data.memoryImages);
-    if (problem) return { error: problem };
+    if (problem) return { error: await translateMessage(problem), status: 400 };
   }
 
   try {
@@ -96,13 +77,12 @@ export async function saveActivity(data: ActivityData) {
           puntajeBase: data.config.pointsPerCorrect,
           tiempoPreguntaMs: data.config.timeLimit * 1000,
           ajustesJson: JSON.stringify({
-            badges: data.config.selectedBadges,
-            missions: data.config.selectedMissions,
             voiceEnabled: data.config.voiceEnabled,
             backgroundImage: data.backgroundImage
           })
         }
       });
+      await replaceActivityAchievements(tx, ludiActivity.activityId, data.config.selectedBadges, data.config.selectedMissions);
 
       // 5. Crear Contenido (Preguntas, Memory o bloques de lección)
       if (data.type === 'ludileccion') {
@@ -209,8 +189,9 @@ export async function saveActivity(data: ActivityData) {
         activityId: result.activityId
     };
 
-  } catch (error: any) {
+  } catch (error) {
+    // El detalle de la BD queda en el log; al usuario no se le muestra.
     console.error("Error saving activity:", error);
-    return { error: "Error al guardar en base de datos: " + error.message };
+    return { error: await translateMessage(message("Errors.saveFailed")), status: 500 };
   }
 }

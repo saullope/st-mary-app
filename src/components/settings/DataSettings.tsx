@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { Button, Alert, Card, Spinner } from 'react-bootstrap';
 import { FaDatabase, FaDownload } from 'react-icons/fa';
 import styles from './Settings.module.css';
+import { useTranslations } from 'next-intl';
 
 export const DataSettings = () => {
+    const t = useTranslations('DataSettings');
     const [exporting, setExporting] = useState(false);
     const [message, setMessage] = useState<{type: 'success' | 'danger', text: string} | null>(null);
 
@@ -19,9 +21,7 @@ export const DataSettings = () => {
             setExporting(true);
             const res = await fetch('/api/user/export-data');
             
-            if (!res.ok) {
-                throw new Error("No se pudo exportar la información.");
-            }
+            if (!res.ok) throw new Error(`export-data ${res.status}`);
 
             const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
@@ -32,10 +32,10 @@ export const DataSettings = () => {
             a.click();
             a.remove();
             
-            showMessage('success', 'Tus datos se han exportado y descargado exitosamente.');
-        } catch (error: any) {
+            showMessage('success', t('exported'));
+        } catch (error) {
             console.error(error);
-            showMessage('danger', `Error: ${error.message}`);
+            showMessage('danger', t('exportFailed'));
         } finally {
             setExporting(false);
         }
@@ -43,11 +43,11 @@ export const DataSettings = () => {
 
     return (
         <div className={styles.container}>
-            <h2 className={styles.title}>Gestión de Datos</h2>
-            <p className={styles.subtitle}>Controla, descarga y gestiona tu información almacenada en LudiGame.</p>
+            <h2 className={styles.title}>{t('title')}</h2>
+            <p className={styles.subtitle}>{t('subtitle')}</p>
 
             {message && (
-                <Alert variant={message.type} className="mb-4">
+                <Alert variant={message.type} className="mb-4" role={message.type === 'danger' ? 'alert' : 'status'}>
                     {message.text}
                 </Alert>
             )}
@@ -56,10 +56,9 @@ export const DataSettings = () => {
                 <div className="col-lg-8 mb-4">
                     <Card className={styles.card}>
                         <Card.Body>
-                            <h5 className={styles.cardTitle}><FaDatabase className="me-2" /> Exportar Mi Información</h5>
+                            <h5 className={styles.cardTitle}><FaDatabase className="me-2" aria-hidden="true" /> {t('exportTitle')}</h5>
                             <p className="text-muted mb-4">
-                                Descarga una copia de todos los juegos que has creado, incluyendo preguntas, opciones y la configuración. 
-                                La información se descargará en formato JSON, el cual es compatible con la mayoría de sistemas.
+                                {t('exportHint')}
                             </p>
 
                             <Button 
@@ -69,9 +68,9 @@ export const DataSettings = () => {
                                 className="d-flex align-items-center"
                             >
                                 {exporting ? (
-                                    <><Spinner size="sm" className="me-2" /> Procesando y descargando...</>
+                                    <><Spinner size="sm" className="me-2" aria-hidden="true" /> {t('exporting')}</>
                                 ) : (
-                                    <><FaDownload className="me-2" /> Descargar Datos (JSON)</>
+                                    <><FaDownload className="me-2" aria-hidden="true" /> {t('download')}</>
                                 )}
                             </Button>
                         </Card.Body>

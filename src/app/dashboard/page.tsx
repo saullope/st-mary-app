@@ -5,13 +5,13 @@ import DashboardHub from "@/components/dashboard/DashboardHub";
 import getCurrentUser from '@/lib/auth/getCurrentUser';
 import getSession from '@/lib/auth/getSession'; 
 import prisma from "@/lib/db";
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `Dashboard | LudiGame`,
-    description: 'Centro de creación educativa'
-  };
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("dashboard.title"), description: t("dashboard.description") });
 }
 
 export default async function Dashboard() {

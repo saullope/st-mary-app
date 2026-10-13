@@ -11,7 +11,7 @@ import { notify } from "@/components/ui";
 import { getEditorRoute } from "@/lib/editorTab";
 import { sessionPhase } from "@/lib/play/sessionState";
 import CreatorCard from "./CreatorCard";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 interface ActivityCardProps {
@@ -28,6 +28,8 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
   const [isLaunching, setIsLaunching] = useState(false);
   
   const t = useTranslations("activityCard");
+  const tCommon = useTranslations("Common");
+  const format = useFormatter();
 
   const handleLaunch = async () => {
     setIsLaunching(true);
@@ -35,7 +37,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
     if (result.success) {
         router.push(`/dashboard/live/${result.sessionId}`);
     } else {
-        notify.error("No se pudo lanzar la partida", result.error || "Inténtalo de nuevo.");
+        notify.error(t("launchFailed"), result.error || t("tryAgain"));
         setIsLaunching(false);
     }
   };
@@ -82,11 +84,11 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
           {activity.activity.activity_name}
         </h3>
         <p className={styles.cardDate}>
-          {t('createdAt')} {new Date(activity.activity.created_date).toLocaleDateString()}
+          {t('createdAt')} {format.dateTime(new Date(activity.activity.created_date), { dateStyle: 'medium' })}
         </p>
         <div className="d-flex justify-content-between align-items-center w-100 mt-2">
           <span className={`${styles.badgeType} ${typeBadgeClass}`}>
-            {activity.tipoActividad.nombre}
+            {tCommon(`activityTypes.${activity.tipoActividadId as 1 | 2 | 3 | 4 | 5}`)}
           </span>
           <div className={styles.creatorWrapper}>
             <CreatorCard 
@@ -105,6 +107,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             className={`${styles.actionButtonIcon} ${styles.shareIcon}`} 
             onClick={handleShare}
             title={t('shareButton')}
+            aria-label={t('shareButton')}
           >
             {copied ? <FaCheck size={18} /> : <FaShareNodes size={18} />}
           </button>
@@ -112,7 +115,8 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             className={`${styles.actionButtonIcon} ${styles.rocketIcon}`} 
             onClick={handleLaunch}
             disabled={isLaunching || isActivityFinalized}
-            title={isActivityFinalized ? "Actividad ya finalizada" : "Lanzar Partida (Panel en Vivo)"}
+            title={isActivityFinalized ? t("finalized") : t("launch")}
+            aria-label={isActivityFinalized ? t("finalized") : t("launch")}
             style={isActivityFinalized ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
           >
             {isLaunching ? (
@@ -125,6 +129,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             href={`/views/activity/${activity.activityId}`} 
             className={`${styles.actionButtonIcon} ${styles.playIcon}`} 
             title={t('viewButton')}
+            aria-label={t('viewButton')}
             target="_blank" rel="noopener noreferrer"
           >
             <FaEye size={18} />
@@ -133,6 +138,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             href={getEditorRoute(activity.tipoActividadId, activity.activityId)} 
             className={`${styles.actionButtonIcon} ${styles.editIcon}`} 
             title={t('editButton')}
+            aria-label={t('editButton')}
             target="_blank" rel="noopener noreferrer"
           >
             <FaPenToSquare size={18} />

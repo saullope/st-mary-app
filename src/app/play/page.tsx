@@ -1,11 +1,13 @@
 import { StudentLobby } from "./StudentLobby";
 import prisma from "@/lib/db";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-    title: "¡Únete al Juego! | LudiGame",
-    description: "Ingresa el PIN para comenzar tu aventura.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("play.title"), description: t("play.description"), path: "/play", index: true });
+}
 
 export default async function PlayLobbyPage() {
     // Fetch avatars from DB

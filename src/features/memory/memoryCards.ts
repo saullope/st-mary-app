@@ -1,6 +1,8 @@
 // LudiMemory: cada imagen forma una pareja (lados A y B en LUDI_MEMORIA_TARJETA).
 // Vive sin dependencias de servidor para usarse en el editor, el reproductor y la API.
 
+import { message, type MessageDescriptor } from "@/lib/i18n/message";
+
 export const MEMORY_MIN_PAIRS = 2;
 // 12 parejas = 24 cartas, el máximo que cabe legible en una pantalla de aula.
 export const MEMORY_MAX_PAIRS = 12;
@@ -53,10 +55,10 @@ export function memoryScore(totalPairs: number, pointsPerPair: number): number {
 }
 
 /** Mensaje para el docente si el tablero no se puede guardar; null si está bien. */
-export function validateMemoryForSave(images: string[] | undefined): string | null {
+export function validateMemoryForSave(images: string[] | undefined): MessageDescriptor | null {
   const valid = (images ?? []).filter((url) => url.trim().length > 0);
-  if (valid.length < MEMORY_MIN_PAIRS) return `Agrega al menos ${MEMORY_MIN_PAIRS} imágenes para la actividad LudiMemory.`;
-  if (valid.length > MEMORY_MAX_PAIRS) return `LudiMemory admite hasta ${MEMORY_MAX_PAIRS} imágenes.`;
-  if (new Set(valid).size !== valid.length) return "Hay imágenes repetidas en el tablero.";
+  if (valid.length < MEMORY_MIN_PAIRS) return message("Validation.memory.tooFew", { min: MEMORY_MIN_PAIRS });
+  if (valid.length > MEMORY_MAX_PAIRS) return message("Validation.memory.tooMany", { max: MEMORY_MAX_PAIRS });
+  if (new Set(valid).size !== valid.length) return message("Validation.memory.duplicates");
   return null;
 }

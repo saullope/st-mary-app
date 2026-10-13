@@ -1,8 +1,6 @@
 "use client";
 
 import { useActivityEditor } from "@/context/ActivityEditorContext";
-import { saveActivity } from "@/app/actions/saveActivity";
-import { updateActivity } from "@/app/actions/updateActivity";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
@@ -10,16 +8,20 @@ import { notify } from "@/components/ui";
 import { validateLessonForSave } from "@/features/lesson/lessonBlocks";
 import { validateFormForSave } from "@/features/form/formQuestions";
 import { validateMemoryForSave } from "@/features/memory/memoryCards";
+import { useTranslations } from "next-intl";
+import { useMessage } from "@/lib/i18n/useMessage";
 
 export const SaveActivityButton = () => {
   const { state, resetEditor } = useActivityEditor();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const t = useTranslations("Editor.save");
+  const translate = useMessage();
 
   const handleSave = async () => {
     // 1. Validar Título
     if (!state.title || !state.title.trim()) {
-      notify.warning("Falta el título", "Ingresa un título para la actividad.");
+      notify.warning(t("missingTitle"), t("missingTitleDescription"));
       return;
     }
 
@@ -31,25 +33,25 @@ export const SaveActivityButton = () => {
     if (type === "ludiform") {
       const problem = validateFormForSave(state.formQuestions, state.config.gradeId);
       if (problem) {
-        notify.warning("No se puede guardar", problem);
+        notify.warning(t("cannotSave"), translate(problem));
         return;
       }
     } else if (type === "ludileccion") {
       const problem = validateLessonForSave(state.lessonBlocks, state.config.gradeId);
       if (problem) {
-        notify.warning("No se puede guardar", problem);
+        notify.warning(t("cannotSave"), translate(problem));
         return;
       }
     } else if (type === "ludimemory") {
       const problem = validateMemoryForSave(state.memoryImages);
       if (problem) {
-        notify.warning("No se puede guardar", problem);
+        notify.warning(t("cannotSave"), translate(problem));
         return;
       }
     } else if (type === "ludiquiz") {
       const questions = (state.questions as LudiQuizQuestion[]) || [];
       if (questions.length === 0) {
-        notify.warning("No se puede guardar", "Agrega al menos una pregunta a la actividad.");
+        notify.warning(t("cannotSave"), t("quizEmpty"));
         return;
       }
 
@@ -62,18 +64,18 @@ export const SaveActivityButton = () => {
 
       const validQuestions = questions.filter((q) => !isQuizQuestionEmpty(q));
       if (validQuestions.length === 0) {
-        notify.warning("No se puede guardar", "No hay preguntas válidas. Ingresa el texto de la pregunta y sus respuestas.");
+        notify.warning(t("cannotSave"), t("quizNoValid"));
         return;
       }
       if (validQuestions.every((q) => q.isSlide)) {
-        notify.warning("No se puede guardar", "Agrega al menos una pregunta además de las diapositivas.");
+        notify.warning(t("cannotSave"), t("quizOnlySlides"));
         return;
       }
       finalQuestions = validQuestions;
     } else if (type === "trueorfalse") {
       const questions = (state.questions as TrueOrFalseQuestion[]) || [];
       if (questions.length === 0) {
-        notify.warning("No se puede guardar", "Agrega al menos una afirmación a la actividad.");
+        notify.warning(t("cannotSave"), t("tfEmpty"));
         return;
       }
 
@@ -86,11 +88,11 @@ export const SaveActivityButton = () => {
 
       const validQuestions = questions.filter((q) => !isTfQuestionEmpty(q));
       if (validQuestions.length === 0) {
-        notify.warning("No se puede guardar", "No hay afirmaciones válidas. Ingresa el texto y selecciona si es Verdadero o Falso.");
+        notify.warning(t("cannotSave"), t("tfNoValid"));
         return;
       }
       if (validQuestions.every((q) => q.isSlide)) {
-        notify.warning("No se puede guardar", "Agrega al menos una afirmación además de las diapositivas.");
+        notify.warning(t("cannotSave"), t("tfOnlySlides"));
         return;
       }
       finalQuestions = validQuestions;
@@ -98,7 +100,7 @@ export const SaveActivityButton = () => {
 
     setLoading(true);
     try {
-      // 3. Preparar datos para el Server Action
+      // 3. Preparar datos para /api/activities
       const activityData = {
         activityId: state.activityId || undefined,
         title: state.title,
@@ -111,12 +113,15 @@ export const SaveActivityButton = () => {
         formQuestions: state.formQuestions,
       };
 
-      const result: any = state.activityId 
-        ? await updateActivity(activityData as any)
-        : await saveActivity(activityData as any);
+      const response = await fetch(state.activityId ? `/api/activities/${state.activityId}` : "/api/activities", {
+        method: state.activityId ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(activityData),
+      });
+      const result: any = await response.json();
 
       if (result.error) {
-        notify.error("Error al guardar", result.error);
+        notify.error(t("saveError"), result.error);
         return;
       }
 
@@ -135,15 +140,15 @@ export const SaveActivityButton = () => {
         URL.revokeObjectURL(url);
         
         if (state.activityId) {
-          notify.success("¡Actividad actualizada!", "Respaldo JSON descargado.");
+          notify.success(t("updated"), t("backupDownloaded"));
         } else {
-          notify.success("¡Actividad guardada!", "Respaldo JSON descargado.");
+          notify.success(t("saved"), t("backupDownloaded"));
         }
       } else {
         if (state.activityId) {
-          notify.success("Actividad actualizada exitosamente.");
+          notify.success(t("updatedSuccess"));
         } else {
-          notify.success("Actividad guardada exitosamente.");
+          notify.success(t("savedSuccess"));
         }
       }
 
@@ -153,7 +158,7 @@ export const SaveActivityButton = () => {
 
     } catch (error) {
       console.error("Error saving:", error);
-      notify.error("Ocurrió un error inesperado al guardar.");
+      notify.error(t("unexpectedError"));
     } finally {
       setLoading(false);
     }
@@ -196,11 +201,11 @@ export const SaveActivityButton = () => {
       {loading ? (
         <>
           <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Guardando...
+          {t("saving")}
         </>
       ) : (
         <>
-           {state.activityId ? "Actualizar" : "Guardar"}
+           {state.activityId ? t("update") : t("save")}
         </>
       )}
     </button>

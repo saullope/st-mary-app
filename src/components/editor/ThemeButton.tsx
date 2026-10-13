@@ -2,12 +2,14 @@
 
 import style from '@/styles/pages/editor-activity.module.css';
 import { IoIosColorPalette } from "react-icons/io";
+import { useTranslations } from "next-intl";
 
 interface ThemeButtonProps {
     onClick: () => void;
 }
 
 export const ThemeButton = ({onClick}: ThemeButtonProps) => {
+    const t = useTranslations('themeBackground');
     return (
         <button
             className="btn"
@@ -42,7 +44,7 @@ export const ThemeButton = ({onClick}: ThemeButtonProps) => {
             }}
         >
             <IoIosColorPalette style={{ fontSize: '1.2rem', color: '#ff8a5c' }} />
-            Tema
+            {t('button')}
         </button>
     )
 }

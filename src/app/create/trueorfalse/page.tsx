@@ -9,15 +9,19 @@ import { notify } from "@/components/ui";
 import style2 from '@/styles/pages/ludiquiz.module.css'; // Using the same style as LudiQuiz for consistency
 import { TrueOrFalseQuestion, MediaType, createContentSlide } from '@/lib/types/';
 import { useActivityEditor } from "@/context/ActivityEditorContext";
+import { useTranslations } from "next-intl";
 
 // Distintivo de la respuesta correcta en la lista lateral.
-const answerTag = (answer: TrueOrFalseQuestion["correctAnswer"]): { text: string; tone: EditorListTagTone } | undefined =>
-    answer === "true" ? { text: "Verdadero", tone: "success" } : answer === "false" ? { text: "Falso", tone: "danger" } : undefined;
+const answerTag = (answer: TrueOrFalseQuestion["correctAnswer"], labels: { true: string; false: string }): { text: string; tone: EditorListTagTone } | undefined =>
+    answer === "true" ? { text: labels.true, tone: "success" } : answer === "false" ? { text: labels.false, tone: "danger" } : undefined;
 
 export default function TrueOrFalse() {
     // Contexto Global
     const { state, setActivityType, setQuestions, setTitle, updateConfig, setActivityId, setBackgroundImage } = useActivityEditor();
     const searchParams = useSearchParams();
+    const t = useTranslations("Editor.trueOrFalse");
+    const tq = useTranslations("Editor.quiz");
+    const answerLabels = { true: t("true"), false: t("false") };
     const [isLoading, setIsLoading] = useState(false);
     const { backgroundImage, fullScreen } = state;
 
@@ -145,9 +149,9 @@ export default function TrueOrFalse() {
         setTimeout(() => setShowErrors(false), 3000);
 
         const reason = !isQuestionTextValid
-            ? "Falta escribir la afirmación."
-            : "Marca si es Verdadero o Falso.";
-        notify.warning("No se pudo guardar la pregunta", reason);
+            ? t("missingStatement")
+            : t("markTrueOrFalse");
+        notify.warning(tq("questionNotSaved"), reason);
     };
 
     const handleQuestionKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -254,29 +258,29 @@ export default function TrueOrFalse() {
              <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}>
                 {!fullScreen && (
                     <EditorSidebar
-                        title="Preguntas"
+                        title={tq("sidebarTitle")}
                         count={localQuestions.filter(q => !q.isSlide).length}
                         actions={
-                            <EditorAddButton icon={<SiCanva />} onClick={slides.openNewSlide} title="Presentación de Canva que se muestra antes de las preguntas, sin tiempo ni puntaje">
-                                Agregar diapositiva
+                            <EditorAddButton icon={<SiCanva />} onClick={slides.openNewSlide} title={tq("addSlideHint")}>
+                                {tq("addSlide")}
                             </EditorAddButton>
                         }
                         footer={
                             <>
                                 <EditorFooterButton variant="primary" onClick={editingId !== null ? handleUpdateQuestion : handleAddQuestion}>
-                                    {editingId !== null ? "Guardar cambios" : "Agregar pregunta"}
+                                    {editingId !== null ? tq("saveChanges") : t("addStatement")}
                                 </EditorFooterButton>
                                 {editingId !== null && (
                                     <EditorFooterButton variant="secondary" onClick={handleCancelEdit}>
-                                        Cancelar edición
+                                        {tq("cancelEdit")}
                                     </EditorFooterButton>
                                 )}
                             </>
                         }
                     >
                         <QuestionList
-                            items={localQuestions.map(q => ({ ...q, tag: q.isSlide ? undefined : answerTag(q.correctAnswer) }))}
-                            draft={editingId === null ? { ...newQuestion, text: newQuestion.text, tag: answerTag(newQuestion.correctAnswer) } : null}
+                            items={localQuestions.map(q => ({ ...q, tag: q.isSlide ? undefined : answerTag(q.correctAnswer, answerLabels) }))}
+                            draft={editingId === null ? { ...newQuestion, text: newQuestion.text, tag: answerTag(newQuestion.correctAnswer, answerLabels) } : null}
                             selectedId={editingId}
                             onSelect={(q) => (q.isSlide ? slides.openEditSlide(q.id) : handleEditQuestion(q.id))}
                             onMove={handleMoveQuestion}
@@ -323,7 +327,7 @@ export default function TrueOrFalse() {
                                     textShadow: '0 1px 3px rgba(0,0,0,0.25)',
                                     color: '#ffffff',
                                     marginBottom: '0.5rem'
-                                }}>Verdadero o Falso</h1>
+                                }}>{t("canvasTitle")}</h1>
 
                                 {/* Indicador de autoguardado */}
                                 <div style={{
@@ -344,14 +348,14 @@ export default function TrueOrFalse() {
                                             {saveStatus === 'saving' ? (
                                                 <>
                                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" style={{ width: '12px', height: '12px', borderWidth: '0.15em', marginRight: '4px' }}></span>
-                                                    Guardando...
+                                                    {tq("savingDraft")}
                                                 </>
                                             ) : (
                                                 <>
                                                     <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '2px' }}>
                                                         <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                                                     </svg>
-                                                    Borrador guardado
+                                                    {tq("draftSaved")}
                                                 </>
                                             )}
                                 </div>
@@ -366,13 +370,14 @@ export default function TrueOrFalse() {
                                             borderRadius: '6px', fontSize: '0.8rem', zIndex: 100, whiteSpace: 'nowrap',
                                             boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                                         }}>
-                                            Falta escribir la afirmación
+                                            {t("missingStatement")}
                                         </div>
                                     )}
                                     <input
                                         type="text"
                                         className={style2["question-input"]}
-                                        placeholder="Escribe tu afirmación aquí..."
+                                        placeholder={t("statementPlaceholder")}
+                                        aria-label={t("statementLabel")}
                                         value={newQuestion.text}
                                         onChange={(e) =>
                                             setNewQuestion({ ...newQuestion, text: e.target.value })
@@ -402,10 +407,12 @@ export default function TrueOrFalse() {
                                             borderRadius: '6px', fontSize: '0.8rem', zIndex: 100, whiteSpace: 'nowrap',
                                             boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                                         }}>
-                                            Marca si es Verdadero o Falso
+                                            {t("markTrueOrFalse")}
                                         </div>
                                     )}
                                     <button
+                                        type="button"
+                                        aria-pressed={newQuestion.correctAnswer === "true"}
                                         onClick={() =>
                                             setNewQuestion({ ...newQuestion, correctAnswer: "true" })
                                         }
@@ -439,9 +446,11 @@ export default function TrueOrFalse() {
                                             }
                                         }}
                                     >
-                                        Verdadero
+                                        {t("true")}
                                     </button>
                                     <button
+                                        type="button"
+                                        aria-pressed={newQuestion.correctAnswer === "false"}
                                         onClick={() =>
                                             setNewQuestion({ ...newQuestion, correctAnswer: "false" })
                                         }
@@ -475,7 +484,7 @@ export default function TrueOrFalse() {
                                             }
                                         }}
                                     >
-                                        Falso
+                                        {t("false")}
                                     </button>
                                 </div>
                             </div>
@@ -491,7 +500,7 @@ export default function TrueOrFalse() {
                                 padding: '0.5rem 1.5rem'
                             }}>
                                 <small>
-                                    <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
+                                    {tq.rich("themeTip", { strong: (chunks) => <strong>{chunks}</strong> })}
                                 </small>
                             </div>
                             <div className="alert alert-secondary border-0 shadow-sm d-inline-block m-0" style={{
@@ -502,7 +511,7 @@ export default function TrueOrFalse() {
                                 padding: '0.4rem 1.2rem'
                             }}>
                                 <small>
-                                    <strong>Atajo de teclado:</strong> <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para Guardar Cambios
+                                    {t.rich("shortcut", { strong: (chunks) => <strong>{chunks}</strong>, kbd: (chunks) => <kbd>{chunks}</kbd> })}
                                 </small>
                             </div>
                         </div>

@@ -1,12 +1,7 @@
 import { buildDeck, memoryScore, pairsFromSession, validateMemoryForSave, MEMORY_MAX_PAIRS } from "../memoryCards";
-import {
-  evaluateMemoryBadges,
-  evaluateMemoryMissions,
-  badgeCatalogFor,
-  missionCatalogFor,
-  findBadge,
-  type MemoryProgressStats,
-} from "@/features/gamification/achievementRules";
+import { evaluateMemoryBadges, evaluateMemoryMissions, type MemoryProgressStats } from "@/features/gamification/achievementRules";
+import { badgesFor, catalogKeyForActivity, missionsFor } from "@/features/gamification/catalog";
+import { badgeDefs, missionDefs, testCatalog } from "@/features/gamification/testing/catalogFixture";
 
 const stats = (overrides: Partial<MemoryProgressStats> = {}): MemoryProgressStats => ({
   totalPairs: 6,
@@ -38,36 +33,36 @@ describe("tablero de LudiMemory", () => {
   });
 
   it("valida mínimo, máximo y repetidas al guardar", () => {
-    expect(validateMemoryForSave(["a.png"])).toMatch(/al menos 2/);
-    expect(validateMemoryForSave(Array.from({ length: MEMORY_MAX_PAIRS + 1 }, (_, i) => `${i}.png`))).toMatch(/hasta/);
-    expect(validateMemoryForSave(["a.png", "a.png"])).toMatch(/repetidas/);
+    expect(validateMemoryForSave(["a.png"])).toEqual({ key: "Validation.memory.tooFew", values: { min: 2 } });
+    expect(validateMemoryForSave(Array.from({ length: MEMORY_MAX_PAIRS + 1 }, (_, i) => `${i}.png`))?.key).toBe("Validation.memory.tooMany");
+    expect(validateMemoryForSave(["a.png", "a.png"])?.key).toBe("Validation.memory.duplicates");
     expect(validateMemoryForSave(["a.png", "b.png"])).toBeNull();
   });
 });
 
 describe("logros de LudiMemory", () => {
   it("tiene catálogo propio de insignias y misiones", () => {
-    expect(badgeCatalogFor("ludimemory").map((b) => b.id)).toEqual(["coleccionista", "buena-memoria", "imparable"]);
-    expect(missionCatalogFor("ludimemory")[1].every((m) => m.id.startsWith("M1-"))).toBe(true);
-    expect(findBadge("imparable")?.name).toBe("Imparable");
+    const key = catalogKeyForActivity("ludimemory");
+    expect(badgesFor(testCatalog, key).map((b) => b.code)).toEqual(["coleccionista", "buena-memoria", "imparable"]);
+    expect(missionsFor(testCatalog, key, 1).map((m) => m.code)).toEqual(["M1-2-parejas", "M1-2-seguidas", "M1-completo"]);
   });
 
   it("imparable se gana en vivo con 3 parejas seguidas", () => {
-    expect(evaluateMemoryBadges(["imparable"], new Set(), stats({ streak: 2 }))).toEqual([]);
-    expect(evaluateMemoryBadges(["imparable"], new Set(), stats({ streak: 3 }))).toEqual(["imparable"]);
+    expect(evaluateMemoryBadges(badgeDefs("imparable"), new Set(), stats({ streak: 2 }))).toEqual([]);
+    expect(evaluateMemoryBadges(badgeDefs("imparable"), new Set(), stats({ streak: 3 }))).toEqual(["imparable"]);
   });
 
   it("al terminar: coleccionista siempre, buena memoria solo con pocos fallos", () => {
-    const selected = ["coleccionista", "buena-memoria"];
-    expect(evaluateMemoryBadges(selected, new Set(), stats({ pairsFound: 6, misses: 3, isFinished: true }))).toEqual(selected);
+    const selected = badgeDefs("coleccionista", "buena-memoria");
+    expect(evaluateMemoryBadges(selected, new Set(), stats({ pairsFound: 6, misses: 3, isFinished: true }))).toEqual(["coleccionista", "buena-memoria"]);
     expect(evaluateMemoryBadges(selected, new Set(), stats({ pairsFound: 6, misses: 4, isFinished: true }))).toEqual(["coleccionista"]);
     expect(evaluateMemoryBadges(selected, new Set(), stats({ pairsFound: 3 }))).toEqual([]);
   });
 
   it("misiones por parejas, racha y tablero completo", () => {
-    const selected = ["M3-4-parejas", "M3-3-seguidas", "M3-completo"];
-    expect(evaluateMemoryMissions(selected, 3, new Set(), stats({ pairsFound: 4, streak: 1 }))).toEqual(["M3-4-parejas"]);
-    expect(evaluateMemoryMissions(selected, 3, new Set(["M3-4-parejas"]), stats({ pairsFound: 5, streak: 3 }))).toEqual(["M3-3-seguidas"]);
-    expect(evaluateMemoryMissions(["M3-completo"], 3, new Set(), stats({ pairsFound: 6, isFinished: true }))).toEqual(["M3-completo"]);
+    const selected = missionDefs("M3-4-parejas", "M3-3-seguidas", "M3-completo");
+    expect(evaluateMemoryMissions(selected, new Set(), stats({ pairsFound: 4, streak: 1 }))).toEqual(["M3-4-parejas"]);
+    expect(evaluateMemoryMissions(selected, new Set(["M3-4-parejas"]), stats({ pairsFound: 5, streak: 3 }))).toEqual(["M3-3-seguidas"]);
+    expect(evaluateMemoryMissions(missionDefs("M3-completo"), new Set(), stats({ pairsFound: 6, isFinished: true }))).toEqual(["M3-completo"]);
   });
 });

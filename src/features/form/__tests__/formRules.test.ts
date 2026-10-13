@@ -1,5 +1,7 @@
 import { createFormQuestion, gradeFormAnswer, isAnswered, validateFormForSave, type FormQuestion, type GradableQuestion } from "../formQuestions";
 import { evaluateFormBadges, evaluateFormMissions, type FormProgressStats } from "@/features/gamification/achievementRules";
+import { missionsFor } from "@/features/gamification/catalog";
+import { badgeDefs, missionDefs, testCatalog } from "@/features/gamification/testing/catalogFixture";
 
 const single: FormQuestion = {
   id: 1,
@@ -13,22 +15,22 @@ const single: FormQuestion = {
 
 describe("validación del formulario", () => {
   it("solo se puede guardar en tercer grado", () => {
-    expect(validateFormForSave([single], 2)).toMatch(/tercer grado/);
+    expect(validateFormForSave([single], 2)).toEqual({ key: "Validation.form.gradeNotAvailable", values: undefined });
     expect(validateFormForSave([single], 3)).toBeNull();
   });
 
   it("opción única exige exactamente una correcta", () => {
     const twoCorrect = { ...single, options: single.options.map((o) => ({ ...o, isCorrect: true })) };
-    expect(validateFormForSave([twoCorrect], 3)).toMatch(/Solo una opción/);
+    expect(validateFormForSave([twoCorrect], 3)).toEqual({ key: "Validation.form.manyCorrect", values: { index: 1 } });
     const none = { ...single, options: single.options.map((o) => ({ ...o, isCorrect: false })) };
-    expect(validateFormForSave([none], 3)).toMatch(/Marca la opción correcta/);
+    expect(validateFormForSave([none], 3)).toEqual({ key: "Validation.form.noCorrectSingle", values: { index: 1 } });
   });
 
   it("la respuesta larga solo exige enunciado", () => {
     const long = { ...createFormQuestion(2, "long"), text: "Explica la fotosíntesis" };
     expect(long.options).toEqual([]);
     expect(validateFormForSave([long], 3)).toBeNull();
-    expect(validateFormForSave([{ ...long, text: " " }], 3)).toMatch(/Pregunta 1: Escribe el enunciado/);
+    expect(validateFormForSave([{ ...long, text: " " }], 3)).toEqual({ key: "Validation.form.noText", values: { index: 1 } });
   });
 });
 
@@ -71,20 +73,21 @@ describe("logros de formulario", () => {
     closedCorrect: 0,
     submitted: false,
   };
-  const missions = ["F3-3-respuestas", "F3-escritor", "F3-entrega"];
+  const missions = missionDefs("F3-3-respuestas", "F3-escritor", "F3-entrega");
 
   it("las misiones avanzan mientras se responde", () => {
-    expect(evaluateFormMissions(missions, 3, new Set(), { ...base, answeredCount: 3 })).toEqual(["F3-3-respuestas"]);
-    expect(evaluateFormMissions(missions, 3, new Set(), { ...base, maxLongAnswerWords: 25 })).toEqual(["F3-escritor"]);
-    expect(evaluateFormMissions(missions, 3, new Set(), { ...base, submitted: true })).toEqual(["F3-entrega"]);
+    expect(evaluateFormMissions(missions, new Set(), { ...base, answeredCount: 3 })).toEqual(["F3-3-respuestas"]);
+    expect(evaluateFormMissions(missions, new Set(), { ...base, maxLongAnswerWords: 25 })).toEqual(["F3-escritor"]);
+    expect(evaluateFormMissions(missions, new Set(), { ...base, submitted: true })).toEqual(["F3-entrega"]);
   });
 
   it("no hay misiones de formulario fuera de tercer grado", () => {
-    expect(evaluateFormMissions(missions, 1, new Set(), { ...base, answeredCount: 5, submitted: true })).toEqual([]);
+    expect(missionsFor(testCatalog, "form", 1)).toEqual([]);
+    expect(missionsFor(testCatalog, "form", 2)).toEqual([]);
   });
 
   it("las insignias se otorgan al entregar según el resultado", () => {
-    const badges = ["dedicado", "certero", "pensador"];
+    const badges = badgeDefs("dedicado", "certero", "pensador");
     expect(evaluateFormBadges(badges, new Set(), base)).toEqual([]);
     const submitted = { ...base, submitted: true, closedCorrect: 2, minLongAnswerWords: 22 };
     expect(evaluateFormBadges(badges, new Set(), submitted)).toEqual(["dedicado", "certero", "pensador"]);

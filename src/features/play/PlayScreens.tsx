@@ -2,9 +2,14 @@
 
 import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { ActivityRatingModal } from "@/components/activity/ActivityRatingModal";
+import { useTranslations } from "next-intl";
+import { StudentFeedbackForm } from "@/features/followUp/components/StudentFeedbackForm";
+import followUpStyles from "@/features/followUp/components/followUp.module.css";
+import type { Rating } from "@/features/followUp/followUp";
 import { FaCircleCheck } from "react-icons/fa6";
-import { findMission } from "@/features/gamification/achievementRules";
+import { findMission, type MissionDef } from "@/features/gamification/catalog";
+import { useAchievementCatalog } from "@/features/gamification/AchievementCatalogContext";
+import { useAchievementText } from "@/features/gamification/useAchievementText";
 import { AchievementToast, type AchievementItem } from "./AchievementToast";
 import { BadgeRevealSequence } from "./BadgeRevealSequence";
 import styles from "./game.module.css";
@@ -25,36 +30,41 @@ export const PlayScreen = ({ backgroundImage, achievementQueue, children }: Play
   </div>
 );
 
-export const ReadyCard = ({ name, onStart }: { name?: string; onStart: () => void }) => (
-  <div className={styles.centerCard}>
-    <h1 className={styles.readyTitle}>¿Estás listo, {name}?</h1>
-    <button className={styles.bigStartBtn} onClick={onStart}>
-      ¡SÍ, VAMOS!
-    </button>
-  </div>
-);
+export const ReadyCard = ({ name, onStart }: { name?: string; onStart: () => void }) => {
+  const t = useTranslations("Play.screens");
+  return (
+    <div className={styles.centerCard}>
+      <h1 className={styles.readyTitle}>{name ? t("readyName", { name }) : t("ready")}</h1>
+      <button type="button" className={styles.bigStartBtn} onClick={onStart}>
+        {t("start")}
+      </button>
+    </div>
+  );
+};
 
 interface AchievementsRecapProps {
   missionCodes: string[];
   badgeCodes: string[];
-  gradeId: number;
   onReveal: (text: string) => void;
 }
 
 /** Misiones cumplidas y caja sorpresa de insignias del resumen final. */
-export const AchievementsRecap = ({ missionCodes, badgeCodes, gradeId, onReveal }: AchievementsRecapProps) => {
+export const AchievementsRecap = ({ missionCodes, badgeCodes, onReveal }: AchievementsRecapProps) => {
+  const catalog = useAchievementCatalog();
+  const achievementText = useAchievementText();
+  const t = useTranslations("Play.screens");
   const missions = missionCodes
-    .map((code) => findMission(code, gradeId))
-    .filter((m): m is NonNullable<typeof m> => Boolean(m));
+    .map((code) => findMission(catalog, code))
+    .filter((m): m is MissionDef => Boolean(m));
 
   return (
     <>
       {missions.length > 0 && (
         <div className={styles.missionsRecap}>
-          <h5 className={styles.missionsRecapTitle}>Misiones cumplidas</h5>
+          <h5 className={styles.missionsRecapTitle}>{t("missionsDone")}</h5>
           <div className={styles.missionsChips}>
             {missions.map((m) => (
-              <span key={m.id} className={styles.missionChip}><FaCircleCheck aria-hidden="true" /> {m.text}</span>
+              <span key={m.code} className={styles.missionChip}><FaCircleCheck aria-hidden="true" /> {achievementText.mission(m).text}</span>
             ))}
           </div>
         </div>
@@ -74,32 +84,35 @@ interface SummaryActionsProps {
 /** Valoración opcional del estudiante y botón de salida del resumen final. */
 export const SummaryActions = ({ sesion, participant, previewMode, onExit }: SummaryActionsProps) => {
   const router = useRouter();
-  const [hasRated, setHasRated] = useState(false);
-  const showFeedback = sesion.user?.config?.enableStudentFeedback !== false;
+  const t = useTranslations("Play.screens");
+  const tFeedback = useTranslations("FollowUp.student");
+  const [feedback, setFeedback] = useState<"asking" | "sent" | "skipped">("asking");
+  // En vista previa no hay participante real; además el docente puede desactivarla.
+  const askFeedback = !previewMode && Boolean(participant) && sesion.user?.config?.enableStudentFeedback !== false;
 
-  const handleRating = async (enjoyment: number, learning: number) => {
-    setHasRated(true);
-    if (previewMode || !participant) return;
+  const sendFeedback = async (enjoyment: Rating, learning: Rating) => {
+    if (!participant) return false;
     try {
-      // rating conserva el promedio para el campo heredado.
-      await postPlay("/api/play/feedback", participant, { rating: (enjoyment + learning) / 2, enjoyment, learning });
+      const response = await postPlay("/api/play/feedback", participant, { enjoyment, learning });
+      if (!response.ok) return false;
+      setFeedback("sent");
+      return true;
     } catch (err) {
       console.error("Failed to submit rating:", err);
+      return false;
     }
   };
 
   return (
     <>
-      {showFeedback && !hasRated && (
-        <div className="mt-4 mb-4">
-          <ActivityRatingModal onRate={handleRating} />
-        </div>
+      {askFeedback && feedback === "asking" && (
+        <StudentFeedbackForm onSubmit={sendFeedback} onSkip={() => setFeedback("skipped")} />
       )}
-      {hasRated && (
-        <p className="text-success bg-white bg-opacity-75 py-2 px-4 rounded-pill fw-bold shadow-sm my-4 d-inline-block">¡Gracias por tu retroalimentación!</p>
+      {feedback === "sent" && (
+        <p className={followUpStyles.thanks} role="status">{tFeedback("thanks")}</p>
       )}
       <button className={styles.backBtn} onClick={() => (previewMode ? onExit?.() : router.push("/play"))}>
-        {previewMode ? "Cerrar Vista Previa" : "Volver al inicio"}
+        {previewMode ? t("closePreview") : t("backHome")}
       </button>
     </>
   );

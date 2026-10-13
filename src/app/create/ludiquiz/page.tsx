@@ -14,7 +14,7 @@ import LudiQuizTour from "./LudiQuizTour";
 
 export default function LudiQuiz() {
     /** Traducciones */
-    const t = useTranslations("createActivityDashboard");
+    const t = useTranslations("Editor.quiz");
 
     // Usar Contexto Global
     const { state, setActivityType, setQuestions, setTitle, updateConfig, setActivityId, setBackgroundImage } = useActivityEditor();
@@ -263,13 +263,13 @@ export default function LudiQuiz() {
         setTimeout(() => setShowErrors(false), 3000); // Ocultar después de 3 segundos
 
         const reason = !isQuestionTextValid
-            ? "Falta escribir la pregunta."
+            ? t("missingQuestion")
             : !hasEnoughAnswers
-                ? "Agrega al menos 2 respuestas."
+                ? t("needTwoAnswers")
                 : !areAllAnswersFilled
-                    ? "Completa el texto en todas las respuestas."
-                    : "Marca cuál es la respuesta correcta.";
-        notify.warning("No se pudo guardar la pregunta", reason);
+                    ? t("fillAllAnswers")
+                    : t("markCorrect");
+        notify.warning(t("questionNotSaved"), reason);
     };
 
     const handleAddQuestion = () => {
@@ -366,21 +366,21 @@ export default function LudiQuiz() {
             <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}>
                 {!fullScreen && (
                     <EditorSidebar
-                        title="Preguntas"
+                        title={t("sidebarTitle")}
                         count={localQuestions.filter(q => !q.isSlide).length}
                         actions={
-                            <EditorAddButton icon={<SiCanva />} onClick={slides.openNewSlide} title="Presentación de Canva que se muestra antes de las preguntas, sin tiempo ni puntaje">
-                                Agregar diapositiva
+                            <EditorAddButton icon={<SiCanva />} onClick={slides.openNewSlide} title={t("addSlideHint")}>
+                                {t("addSlide")}
                             </EditorAddButton>
                         }
                         footer={
                             <>
                                 <EditorFooterButton variant="primary" onClick={editingId !== null ? handleUpdateQuestion : handleAddQuestion}>
-                                    {editingId !== null ? "Guardar cambios" : "Agregar pregunta"}
+                                    {editingId !== null ? t("saveChanges") : t("addQuestion")}
                                 </EditorFooterButton>
                                 {editingId !== null && (
                                     <EditorFooterButton variant="secondary" onClick={handleCancelEdit}>
-                                        Cancelar edición
+                                        {t("cancelEdit")}
                                     </EditorFooterButton>
                                 )}
                             </>
@@ -457,14 +457,14 @@ export default function LudiQuiz() {
                                             {saveStatus === 'saving' ? (
                                                 <>
                                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" style={{ width: '12px', height: '12px', borderWidth: '0.15em', marginRight: '4px' }}></span>
-                                                    Guardando...
+                                                    {t("savingDraft")}
                                                 </>
                                             ) : (
                                                 <>
                                                     <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '2px' }}>
                                                         <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                                                     </svg>
-                                                    Borrador guardado
+                                                    {t("draftSaved")}
                                                 </>
                                             )}
                                 </div>
@@ -481,15 +481,15 @@ export default function LudiQuiz() {
                                             borderRadius: '6px', fontSize: '0.8rem', zIndex: 100, whiteSpace: 'nowrap',
                                             boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                                         }}>
-                                            Falta escribir la pregunta
+                                            {t("missingQuestion")}
                                         </div>
                                     )}
                                     <input
                                         type="text"
                                         className={`${style2['question-input']} textarea-question-input`}
                                         data-tour="question-input"
-                                        placeholder="Escribe tu pregunta aquí... (Presiona Enter para ir a las respuestas)"
-                                        aria-label="Pregunta"
+                                        placeholder={t("questionPlaceholder")}
+                                        aria-label={t("questionLabel")}
                                         value={questionText}
                                         onChange={handleInputNewQuestion}
                                         onKeyDown={handleQuestionKeyDown}
@@ -517,9 +517,9 @@ export default function LudiQuiz() {
                                             borderRadius: '6px', fontSize: '0.8rem', zIndex: 100, whiteSpace: 'nowrap',
                                             boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                                         }}>
-                                            {!hasEnoughAnswers ? "Agrega al menos 2 respuestas" :
-                                             !areAllAnswersFilled ? "Completa el texto en todas las respuestas" :
-                                             "Marca la respuesta correcta"}
+                                            {!hasEnoughAnswers ? t("needTwoAnswers") :
+                                             !areAllAnswersFilled ? t("fillAllAnswers") :
+                                             t("markCorrect")}
                                         </div>
                                     )}
                                     <AnswerContainer
@@ -547,7 +547,7 @@ export default function LudiQuiz() {
                                 padding: '0.5rem 1.5rem'
                             }}>
                                 <small>
-                                    <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
+                                    {t.rich("themeTip", { strong: (chunks) => <strong>{chunks}</strong> })}
                                 </small>
                             </div>
                             <div className="alert alert-secondary border-0 shadow-sm d-inline-block m-0" style={{
@@ -558,7 +558,7 @@ export default function LudiQuiz() {
                                 padding: '0.4rem 1.2rem'
                             }}>
                                 <small>
-                                    <strong>Atajos de teclado:</strong> <kbd>Enter</kbd> para avanzar | <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para marcar correcta
+                                    {t.rich("shortcuts", { strong: (chunks) => <strong>{chunks}</strong>, kbd: (chunks) => <kbd>{chunks}</kbd> })}
                                 </small>
                             </div>
                         </div>

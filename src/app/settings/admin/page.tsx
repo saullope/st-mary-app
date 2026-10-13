@@ -4,12 +4,12 @@ import getSession from '@/lib/auth/getSession';
 import getCurrentUser from '@/lib/auth/getCurrentUser';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { redirect } from 'next/navigation';
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `Administración | LudiGame`,
-    description: 'Gestión de usuarios y sistema'
-  };
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("settings.admin.title"), description: t("settings.admin.description") });
 }
 
 export default async function AdminPage() {

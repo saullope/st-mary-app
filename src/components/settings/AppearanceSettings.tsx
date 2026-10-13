@@ -9,22 +9,22 @@ import styles from './Settings.module.css';
 export const AppearanceSettings = () => {
     const t = useTranslations('LocaleSwitcher');
     const locale = useLocale();
+    const ta = useTranslations('AppearanceSettings');
 
     return (
         <div className={styles.container}>
-            <h2 className={styles.title}>Apariencia e Idioma</h2>
-            <p className={styles.subtitle}>Personaliza tu experiencia de usuario en LudiGame.</p>
+            <h2 className={styles.title}>{ta('title')}</h2>
+            <p className={styles.subtitle}>{ta('subtitle')}</p>
 
             <div className="row">
                 <div className="col-lg-8 mb-4">
                     <Card className={styles.card}>
                         <Card.Body>
                             <h5 className={styles.cardTitle}>
-                                <FaGlobe className="me-2" /> Preferencia de Idioma
+                                <FaGlobe className="me-2" aria-hidden="true" /> {ta('languageTitle')}
                             </h5>
                             <p className="text-muted mb-3">
-                                Selecciona el idioma en el que deseas visualizar la interfaz de LudiGame. 
-                                Esta preferencia se guardará automáticamente.
+                                {ta('languageHint')}
                             </p>
                             
                             <div style={{ maxWidth: '250px' }}>
@@ -45,10 +45,10 @@ export const AppearanceSettings = () => {
                     <Card className={styles.card}>
                         <Card.Body>
                             <h5 className={styles.cardTitle}>
-                                <FaPalette className="me-2" /> Tema de la Interfaz
+                                <FaPalette className="me-2" aria-hidden="true" /> {ta('themeTitle')}
                             </h5>
                             <p className="text-muted mb-3">
-                                Configura los colores de la plataforma para mejorar tu visibilidad.
+                                {ta('themeHint')}
                             </p>
                             
                             <Form>
@@ -56,13 +56,13 @@ export const AppearanceSettings = () => {
                                     <Form.Check 
                                         type="radio" 
                                         id="theme-light" 
-                                        label="Modo Claro" 
+                                        label={ta('light')} 
                                         name="theme-options"
                                         checked
                                         readOnly
                                     />
                                     <Form.Text className="text-muted ms-4 d-block">
-                                        Tema claro estándar. Activo actualmente.
+                                        {ta('lightHint')}
                                     </Form.Text>
                                 </Form.Group>
                                 
@@ -70,7 +70,7 @@ export const AppearanceSettings = () => {
                                     <Form.Check 
                                         type="radio" 
                                         id="theme-dark" 
-                                        label="Modo Oscuro (Próximamente)" 
+                                        label={ta('darkSoon')} 
                                         name="theme-options"
                                         disabled
                                     />

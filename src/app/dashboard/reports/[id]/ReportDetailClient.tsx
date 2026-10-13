@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FaTrophy, FaArrowUp, FaArrowDown, FaFilePdf, FaClock, FaExclamationTriangle, FaExternalLinkAlt, FaArrowLeft } from "react-icons/fa";
 import StudentDetailSidebar from "@/components/dashboard/reports/StudentDetailSidebar";
 import { isPendingReview } from "@/features/form/formQuestions";
-import TeacherEvaluationToast from "@/components/dashboard/reports/TeacherEvaluationToast";
+import { FollowUpSummary } from "@/features/followUp/components/FollowUpSummary";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -30,28 +30,10 @@ export default function ReportDetailClient({
   enableTeacherEvaluation
 }: ReportDetailClientProps) {
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
-  const [teacherRating, setTeacherRating] = useState<number | null>(session.teacherRating || null);
-  const [submittingRating, setSubmittingRating] = useState(false);
   const t = useTranslations("reportsDetails");
 
   const handleExportPDF = () => {
     window.print();
-  };
-
-  const handleTeacherRating = async (rating: number) => {
-    setTeacherRating(rating);
-    setSubmittingRating(true);
-    try {
-      await fetch('/api/play/teacher-feedback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sesionId: session.id.toString(), rating })
-      });
-    } catch (err) {
-      console.error("Error rating:", err);
-    } finally {
-      setSubmittingRating(false);
-    }
   };
 
   const openStudentDetail = (student: any) => {
@@ -97,8 +79,8 @@ export default function ReportDetailClient({
                 <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266' }}>{t("hardQuestions")}</h6>
                 <h5 className="fw-bold mb-0" style={{ color: '#1D153A' }}>
                   {hardestQuestion && hardestRate > 0 
-                    ? `"${hardestQuestion?.text}" (${hardestRate}% de fallos)` 
-                    : "No hay datos suficientes"}
+                    ? t("hardestValue", { text: hardestQuestion.text, rate: hardestRate })
+                    : t("notEnoughData")}
                 </h5>
               </div>
             </div>
@@ -119,6 +101,19 @@ export default function ReportDetailClient({
         </div>
       </div>
 
+      <FollowUpSummary
+        sessionId={session.id.toString()}
+        gradeId={session.LUDI_ACTIVIDAD.gradoId ?? null}
+        fromTemplate={session.LUDI_ACTIVIDAD.plantillaOrigenId != null}
+        initialEvaluation={{
+          teacherRating: session.teacherRating ?? null,
+          objectiveLevel: session.objectiveLevel ?? null,
+          templateDifficulty: session.templateDifficulty ?? null,
+        }}
+        participants={participantes}
+        remindTeacher={enableTeacherEvaluation}
+      />
+
       {/* Podium - Lavender Theme */}
       <div className="mb-5 p-4 rounded-4 shadow-lg position-relative" style={{ background: '#E8E5F7', border: '1px solid rgba(29, 21, 58, 0.05)' }}>
         <h3 className="text-center fw-bold mb-5 flex-row align-items-center justify-content-center d-flex" style={{ color: '#1D153A' }}>
@@ -131,7 +126,7 @@ export default function ReportDetailClient({
             {participantes[1] && (
               <div className="d-flex flex-column align-items-center p-2">
                 {participantes[1].avatar && (
-                  <img src={participantes[1].avatar.urlImagen} alt="Avatar" className="rounded-circle shadow-lg mb-2" style={{ width: '70px', height: '70px', objectFit: 'cover', border: '3px solid #cbd5e1' }} />
+                  <img src={participantes[1].avatar.urlImagen} alt="" className="rounded-circle shadow-lg mb-2" style={{ width: '70px', height: '70px', objectFit: 'cover', border: '3px solid #cbd5e1' }} />
                 )}
                 <span className="fw-bold text-truncate w-100" style={{ color: '#1D153A' }}>{participantes[1].nombre}</span>
                 <div className="badge bg-secondary rounded-pill my-1 fs-6">2º {t("place")}</div>
@@ -149,7 +144,7 @@ export default function ReportDetailClient({
               <div className="d-flex flex-column align-items-center p-2">
                 <span className="fs-1 mb-2 d-block">👑</span>
                 {participantes[0].avatar && (
-                  <img src={participantes[0].avatar.urlImagen} alt="Avatar" className="rounded-circle shadow-lg mb-2" style={{ width: '90px', height: '90px', objectFit: 'cover', border: '4px solid #fbbf24' }} />
+                  <img src={participantes[0].avatar.urlImagen} alt="" className="rounded-circle shadow-lg mb-2" style={{ width: '90px', height: '90px', objectFit: 'cover', border: '4px solid #fbbf24' }} />
                 )}
                 <span className="fw-bold fs-5 text-truncate w-100" style={{ color: '#1D153A' }}>{participantes[0].nombre}</span>
                 <div className="badge bg-warning text-dark rounded-pill my-1 fs-5 shadow-sm">1º {t("place")}</div>
@@ -166,7 +161,7 @@ export default function ReportDetailClient({
             {participantes[2] && (
               <div className="d-flex flex-column align-items-center p-2">
                 {participantes[2].avatar && (
-                  <img src={participantes[2].avatar.urlImagen} alt="Avatar" className="rounded-circle shadow-lg mb-2" style={{ width: '60px', height: '60px', objectFit: 'cover', border: '3px solid #fca5a5' }} />
+                  <img src={participantes[2].avatar.urlImagen} alt="" className="rounded-circle shadow-lg mb-2" style={{ width: '60px', height: '60px', objectFit: 'cover', border: '3px solid #fca5a5' }} />
                 )}
                 <span className="fw-bold text-truncate w-100" style={{ color: '#1D153A' }}>{participantes[2].nombre}</span>
                 <div className="badge rounded-pill my-1" style={{ backgroundColor: '#cd7f32', color: 'white' }}>3º {t("place")}</div>
@@ -210,7 +205,7 @@ export default function ReportDetailClient({
                   <tr key={p.id.toString()} className="clickable-row" onClick={() => openStudentDetail(p)} style={{ borderBottom: '1px solid rgba(29, 21, 58, 0.05)', cursor: 'pointer' }}>
                     <td className="px-4 py-3 d-flex align-items-center border-0" style={{ background: 'transparent' }}>
                       {p.avatar ? (
-                        <img src={p.avatar.urlImagen} alt="Avatar" className="rounded-circle shadow-sm me-3" style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
+                        <img src={p.avatar.urlImagen} alt="" className="rounded-circle shadow-sm me-3" style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
                       ) : (
                         <div className="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style={{ width: '40px', height: '40px' }}>
                           {p.nombre.charAt(0).toUpperCase()}
@@ -218,7 +213,7 @@ export default function ReportDetailClient({
                       )}
                       <span className="fw-bold" style={{ color: '#1D153A' }}>{p.nombre}</span>
                     </td>
-                    <td className="py-3 fw-bold border-0" style={{ background: 'transparent', color: '#1D153A' }}>{p.puntaje_total} pts</td>
+                    <td className="py-3 fw-bold border-0" style={{ background: 'transparent', color: '#1D153A' }}>{t("points", { score: p.puntaje_total })}</td>
                     <td className="py-3 border-0" style={{ background: 'transparent' }}>
                       <div className="d-flex align-items-center">
                         <span className="me-2 fw-bold" style={{ color: effectiveness >= 70 ? '#198754' : effectiveness >= 50 ? '#e5b869' : '#dc3545' }}>
@@ -265,20 +260,10 @@ export default function ReportDetailClient({
             student={selectedStudent}
             avgClassScore={avgClassScore}
             avgClassTotalTimeMs={avgClassTotalTimeMs}
-            gradeId={session.LUDI_ACTIVIDAD.gradoId || 1}
             onClose={() => setSelectedStudent(null)}
           />
         )}
       </div>
-
-      {enableTeacherEvaluation && teacherRating === null && (
-        <TeacherEvaluationToast 
-          activityId={session.activity_id.toString()}
-          grade={session.LUDI_ACTIVIDAD?.grado?.grade_type_name || "su clase"}
-          initialRating={teacherRating}
-          onRate={handleTeacherRating}
-        />
-      )}
     </div>
   );
 }

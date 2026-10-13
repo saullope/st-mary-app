@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { SessionWarning } from '@/hooks/useSessionTimeout';
 import styles from './SessionTimeoutDialog.module.css';
+import { useTranslations } from 'next-intl';
 
 interface SessionTimeoutDialogProps {
     warning: SessionWarning;
@@ -19,6 +20,7 @@ const formatRemaining = (ms: number) => {
 export const SessionTimeoutDialog = ({ warning, onStay, onLogout }: SessionTimeoutDialogProps) => {
     const [now, setNow] = useState(() => Date.now());
     const primaryRef = useRef<HTMLButtonElement>(null);
+    const t = useTranslations('SessionTimeout');
     const isIdle = warning.reason === 'idle';
 
     useEffect(() => {
@@ -37,23 +39,21 @@ export const SessionTimeoutDialog = ({ warning, onStay, onLogout }: SessionTimeo
                 aria-describedby="session-timeout-desc"
             >
                 <h2 id="session-timeout-title" className={styles.title}>
-                    {isIdle ? '¿Sigues ahí?' : 'Tu sesión está por terminar'}
+                    {isIdle ? t('idleTitle') : t('expiringTitle')}
                 </h2>
                 <p id="session-timeout-desc" className={styles.text}>
-                    {isIdle
-                        ? 'Por seguridad cerraremos tu sesión por inactividad.'
-                        : 'Alcanzaste la duración máxima de una sesión. Guarda tu trabajo; tendrás que volver a iniciar sesión.'}
+                    {isIdle ? t('idleBody') : t('expiringBody')}
                 </p>
                 <p className={styles.countdown} aria-live="polite">
                     {formatRemaining(warning.endsAt - now)}
                 </p>
                 <div className={styles.actions}>
                     <button type="button" className={styles.secondary} onClick={onLogout}>
-                        Cerrar sesión
+                        {t('logout')}
                     </button>
                     {isIdle && (
                         <button ref={primaryRef} type="button" className={styles.primary} onClick={onStay}>
-                            Seguir conectado
+                            {t('stay')}
                         </button>
                     )}
                 </div>

@@ -5,6 +5,7 @@ import { FaSearch, FaImages } from "react-icons/fa";
 import { SiPixabay } from "react-icons/si";
 import quizStyles from "@/styles/pages/ludiquiz.module.css";
 import styles from "./AnswerImageSearch.module.css";
+import { useTranslations } from "next-intl";
 
 export type ImageSearchSource = "unsplash" | "pixabay";
 
@@ -17,6 +18,7 @@ interface AnswerImageSearchProps {
 export const AnswerImageSearch = ({ answerNumber, onPick }: AnswerImageSearchProps) => {
   const [open, setOpen] = useState(false);
   const menuId = useId();
+  const t = useTranslations("Editor.answers");
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,8 +49,8 @@ export const AnswerImageSearch = ({ answerNumber, onPick }: AnswerImageSearchPro
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
         aria-controls={menuId}
-        aria-label={`Buscar imagen para la respuesta ${answerNumber}`}
-        title="Buscar imagen"
+        aria-label={t("searchImageFor", { number: answerNumber })}
+        title={t("searchImage")}
       >
         <FaSearch aria-hidden="true" />
       </button>

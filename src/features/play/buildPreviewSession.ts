@@ -12,11 +12,11 @@ const TIPO_ACTIVIDAD_ID: Record<string, number> = {
   ludiform: 5,
 };
 
-function formQuestionToPregunta(question: FormQuestion, index: number, points: number) {
+function formQuestionToPregunta(question: FormQuestion, index: number, points: number, untitled: string) {
   return {
     id: `preview-q-${index}`,
     numero: index + 1,
-    enunciado: question.text || "Pregunta sin título",
+    enunciado: question.text || untitled,
     tipoPregunta: question.type,
     esContenido: false,
     tiempoLimiteMs: null,
@@ -53,13 +53,14 @@ function lessonBlockToPregunta(block: LessonBlock, index: number) {
  * (ActivityEditorContext). Permite reutilizar GameEngine para la Vista
  * Previa del docente sin persistir nada en la base de datos.
  */
-export function buildPreviewSession(state: ActivityEditorState) {
+/** untitled: texto para preguntas sin enunciado, en el idioma del docente. */
+export function buildPreviewSession(state: ActivityEditorState, untitled = "") {
   const { activityType, questions, config, backgroundImage } = state;
 
   const preguntas = activityType === "ludileccion"
     ? state.lessonBlocks.map(lessonBlockToPregunta)
     : activityType === "ludiform"
-      ? state.formQuestions.map((q, index) => formQuestionToPregunta(q, index, config.pointsPerCorrect))
+      ? state.formQuestions.map((q, index) => formQuestionToPregunta(q, index, config.pointsPerCorrect, untitled))
       : questions.map((q, index) => {
     const opciones = q.isSlide
       ? []
@@ -74,6 +75,7 @@ export function buildPreviewSession(state: ActivityEditorState) {
         : (() => {
             const tf = q as TrueOrFalseQuestion;
             return [
+              // Mismo texto que guarda el servidor; el juego lo muestra por posición en el idioma activo.
               { id: `preview-opt-${index}-1`, indice: 1, texto: "Verdadero", esCorrecta: tf.correctAnswer === "true" },
               { id: `preview-opt-${index}-2`, indice: 2, texto: "Falso", esCorrecta: tf.correctAnswer === "false" },
             ];
@@ -82,7 +84,7 @@ export function buildPreviewSession(state: ActivityEditorState) {
     return {
       id: `preview-q-${index}`,
       numero: index + 1,
-      enunciado: q.isSlide ? q.text : q.text || "Pregunta sin título",
+      enunciado: q.isSlide ? q.text : q.text || untitled,
       esContenido: Boolean(q.isSlide),
       tiempoLimiteMs: q.isSlide ? null : config.timeLimit * 1000,
       puntaje: q.isSlide ? null : config.pointsPerCorrect,
@@ -96,7 +98,7 @@ export function buildPreviewSession(state: ActivityEditorState) {
   return {
     id: "preview",
     // Sin retroalimentación del estudiante: reutiliza el gate que ya
-    // tiene GameEngine para ocultar el ActivityRatingModal en el resumen.
+    // tiene GameEngine para ocultar la valoración del estudiante en el resumen.
     user: { config: { enableStudentFeedback: false } },
     LUDI_ACTIVIDAD: {
       tipoActividadId: TIPO_ACTIVIDAD_ID[activityType || "ludiquiz"],
@@ -105,12 +107,13 @@ export function buildPreviewSession(state: ActivityEditorState) {
         tiempoPreguntaMs: config.timeLimit * 1000,
         puntajeBase: config.pointsPerCorrect,
         ajustesJson: JSON.stringify({
-          badges: config.selectedBadges,
-          missions: config.selectedMissions,
           voiceEnabled: config.voiceEnabled,
           backgroundImage,
         }),
       },
+      // Misma forma que ACTIVITY_ACHIEVEMENTS_INCLUDE.
+      insignias: config.selectedBadges.map((codigo) => ({ insignia: { codigo } })),
+      misiones: config.selectedMissions.map((codigo) => ({ mision: { codigo } })),
       preguntas,
       // Misma forma que LUDI_MEMORIA_PAREJA con sus tarjetas.
       memoriaParejas: activityType === "ludimemory"

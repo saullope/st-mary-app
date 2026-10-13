@@ -5,12 +5,13 @@ import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { canAccessActivity } from "@/lib/auth/guards";
 import { SESSION_STATE } from "@/lib/play/sessionState";
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 
 export async function createGameSession(activityId: number) {
     try {
         const user = await getCurrentUser();
-        if (!user) throw new Error("No autorizado");
-        if (!(await canAccessActivity(user, activityId, "play"))) throw new Error("No tienes permiso para lanzar esta actividad.");
+        if (!user) throw new Error("unauthorized");
+        if (!(await canAccessActivity(user, activityId, "play"))) throw new Error("forbidden");
 
         // 1. Generar un PIN de 6 dígitos único y aleatorio
         let pin = "";
@@ -50,6 +51,6 @@ export async function createGameSession(activityId: number) {
 
     } catch (error: any) {
         console.error("Error creating session:", error);
-        return { success: false, error: "No se pudo iniciar la sesión de juego." };
+        return { success: false, error: (await getTranslations("Errors"))("launchFailed") };
     }
 }

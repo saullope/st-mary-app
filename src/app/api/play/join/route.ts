@@ -2,18 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { issueParticipantToken } from "@/lib/play/participantToken";
 import { SESSION_STATE } from "@/lib/play/sessionState";
+import { getTranslations } from "next-intl/server";
 
 export async function POST(req: NextRequest) {
+    const t = await getTranslations("Errors");
     try {
         const { pin, nombre, avatarId } = await req.json();
 
         if (!pin || !nombre || !avatarId) {
-            return NextResponse.json({ success: false, error: "Datos incompletos." }, { status: 400 });
+            return NextResponse.json({ success: false, error: t("missingData") }, { status: 400 });
         }
 
         const nombreTrimmed = String(nombre).trim();
         if (!/^\d{6}$/.test(String(pin)) || nombreTrimmed.length === 0 || nombreTrimmed.length > 20) {
-            return NextResponse.json({ success: false, error: "Datos inválidos." }, { status: 400 });
+            return NextResponse.json({ success: false, error: t("invalidJoin") }, { status: 400 });
         }
 
         // 1. Buscar la sesión por el PIN
@@ -32,12 +34,12 @@ export async function POST(req: NextRequest) {
         });
 
         if (!sesion) {
-            return NextResponse.json({ success: false, error: "Código de juego no válido o sesión terminada." }, { status: 404 });
+            return NextResponse.json({ success: false, error: t("invalidPin") }, { status: 404 });
         }
 
         // Validar que no sea una plantilla
         if (sesion.LUDI_ACTIVIDAD.activity.isTemplate) {
-            return NextResponse.json({ success: false, error: "No se puede jugar una plantilla directamente." }, { status: 400 });
+            return NextResponse.json({ success: false, error: t("templateNotPlayable") }, { status: 400 });
         }
 
         // 2. Registrar al participante. Volver a unirse con el mismo nombre genera un
@@ -81,6 +83,6 @@ export async function POST(req: NextRequest) {
 
     } catch (error: any) {
         console.error("Error join API:", error);
-        return NextResponse.json({ success: false, error: "Error interno del servidor." }, { status: 500 });
+        return NextResponse.json({ success: false, error: t("server") }, { status: 500 });
     }
 }

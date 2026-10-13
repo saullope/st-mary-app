@@ -16,14 +16,11 @@ import LudiFormImg from "@/images/fomenta-interes.png";
 import { cookies } from "next/headers";
 import { GRADE_COOKIE_NAME, gradeIdFromKey } from "@/lib/grades";
 import { isFormAvailableForGrade } from "@/features/form/formQuestions";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("createActivityDashboard");
-
-    return {
-        title: t('metaTitle'),
-        description: t('metaDescription')
-    };
+  const t = await getTranslations("createActivityDashboard");
+  return pageMetadata({ title: t("metaTitle"), description: t("metaDescription") });
 }
 
 export default async function CreateActivity() {

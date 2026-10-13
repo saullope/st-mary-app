@@ -1,5 +1,7 @@
 // Modelo y reglas de los bloques de LudiLección. Sin dependencias de React ni
-// de Prisma: lo usan el editor, el motor de juego y las Server Actions.
+// de Prisma: lo usan el editor, el motor de juego y el servicio de guardado.
+
+import { message, type MessageDescriptor } from "@/lib/i18n/message";
 
 export type LessonBlockKind =
   | "canva"
@@ -35,17 +37,6 @@ export const LESSON_BLOCK_KINDS: LessonBlockKind[] = [
   "word",
   "powerpoint",
 ];
-
-export const LESSON_BLOCK_LABELS: Record<LessonBlockKind, string> = {
-  canva: "Canva",
-  youtube: "YouTube",
-  image: "Imagen",
-  reading: "Lectura",
-  audio: "Audio",
-  pdf: "PDF",
-  word: "Word",
-  powerpoint: "PowerPoint",
-};
 
 export function isBlockAllowedForGrade(kind: LessonBlockKind, gradeId: number): boolean {
   return BASIC_KINDS.includes(kind) || gradeId >= ADVANCED_MIN_GRADE;
@@ -90,23 +81,22 @@ export function officeViewerUrl(fileUrl: string): string {
   return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
 }
 
-export function validateLessonBlock(block: LessonBlock): string | null {
-  if (block.kind === "reading") {
-    return block.body && block.body.trim() ? null : "Escribe el texto de la lectura.";
-  }
-  return block.url ? null : "Agrega el contenido del bloque.";
+/** Clave del problema del bloque dentro de Validation.lesson, o null si está completo. */
+function lessonBlockProblem(block: LessonBlock): "emptyReading" | "emptyContent" | null {
+  if (block.kind === "reading") return block.body && block.body.trim() ? null : "emptyReading";
+  return block.url ? null : "emptyContent";
 }
 
 /** Devuelve el primer problema de una lección, o null si se puede guardar. */
-export function validateLessonForSave(blocks: LessonBlock[] | undefined, gradeId: number): string | null {
-  if (!blocks || blocks.length === 0) return "Agrega al menos un bloque a la lección.";
+export function validateLessonForSave(blocks: LessonBlock[] | undefined, gradeId: number): MessageDescriptor | null {
+  if (!blocks || blocks.length === 0) return message("Validation.lesson.empty");
   for (const [index, block] of blocks.entries()) {
     // El editor ya oculta estos bloques; se revalida aquí porque el grado es una regla del producto.
     if (!isBlockAllowedForGrade(block.kind, gradeId)) {
-      return `El bloque ${index + 1} (${LESSON_BLOCK_LABELS[block.kind]}) no está disponible para este grado.`;
+      return message("Validation.lesson.notAllowed", { index: index + 1, kind: block.kind });
     }
-    const problem = validateLessonBlock(block);
-    if (problem) return `Bloque ${index + 1}: ${problem}`;
+    const problem = lessonBlockProblem(block);
+    if (problem) return message(`Validation.lesson.${problem}`, { index: index + 1 });
   }
   return null;
 }

@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { screen, fireEvent, act } from "@testing-library/react";
+import { renderWithAchievements as render } from "@/features/gamification/testing/renderWithAchievements";
 import { ActivityPlayer } from "../ActivityPlayer";
 
 // Referencia estable, como el router real de Next: se usa como dependencia de un efecto.
@@ -14,9 +15,11 @@ const sesion = {
   LUDI_ACTIVIDAD: {
     tipoActividadId: 5,
     gradoId: 3,
+    insignias: ["dedicado", "certero"].map((codigo) => ({ insignia: { codigo } })),
+    misiones: ["F3-entrega"].map((codigo) => ({ mision: { codigo } })),
     config: {
       puntajeBase: 10,
-      ajustesJson: JSON.stringify({ badges: ["dedicado", "certero"], missions: ["F3-entrega"], voiceEnabled: false }),
+      ajustesJson: JSON.stringify({ voiceEnabled: false }),
     },
     preguntas: [
       {

@@ -1,16 +1,24 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { FORM_QUESTION_LABELS, toFormQuestionType } from "@/features/form/formQuestions";
+import { toFormQuestionType } from "@/features/form/formQuestions";
 import styles from "@/styles/pages/view-activity.module.css";
 import MultimediaDisplay from "@/components/activity/MultimediaDisplay";
 import { FaCheck, FaTimes, FaDownload } from "react-icons/fa";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { useTranslations } from "next-intl";
 
 export default function ActivityContentViewer({ activity }: { activity: any }) {
   const [activeQuestion, setActiveQuestion] = useState<number>(0);
   const questionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const t = useTranslations("ActivityContent");
+  const tCommon = useTranslations("Common");
+  const tTypes = useTranslations("Editor.form.types");
+  const typeName = tCommon(`activityTypes.${activity.tipoActividadId as 1 | 2 | 3 | 4 | 5}`);
+  const gradeName = activity.gradoId ? tCommon(`grades.${activity.gradoId as 1 | 2 | 3}`) : tCommon("noGrade");
+  // Verdadero/Falso se guardan en español: se muestran por posición en el idioma activo.
+  const trueFalseLabel = (indice: number) => (indice === 1 ? t("true") : t("false"));
 
   const isMemory = activity.tipoActividadId === 3;
 
@@ -44,45 +52,45 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
     const doc = new jsPDF();
 
     doc.setFontSize(18);
-    doc.text(`Actividad: ${activity.activity.activity_name}`, 14, 20);
+    doc.text(t("pdfActivity", { name: activity.activity.activity_name }), 14, 20);
 
     doc.setFontSize(11);
     doc.setTextColor(100);
-    doc.text(`Tipo: ${activity.tipoActividad.nombre}`, 14, 28);
-    doc.text(`Grado: ${activity.grado?.grade_type_name || "N/A"}`, 14, 34);
+    doc.text(t("pdfType", { type: typeName }), 14, 28);
+    doc.text(t("pdfGrade", { grade: gradeName }), 14, 34);
 
     doc.setTextColor(0);
 
     if (isMemory) {
       doc.setFontSize(14);
-      doc.text("Parejas (LudiMemory)", 14, 45);
+      doc.text(t("pdfPairs"), 14, 45);
 
       const pairsData = activity.memoriaParejas.map((p: any, idx: number) => [
-        `Pareja #${idx + 1}`,
-        p.etiqueta || "Sin texto"
+        t("pair", { number: idx + 1 }),
+        p.etiqueta || t("noText")
       ]);
 
       autoTable(doc, {
         startY: 50,
-        head: [['ID', 'Contenido']],
+        head: [[t("pdfId"), t("pdfContent")]],
         body: pairsData,
         theme: 'striped',
         headStyles: { fillColor: [106, 75, 255] }
       });
     } else {
       doc.setFontSize(14);
-      doc.text("Preguntas y Respuestas Correctas", 14, 45);
+      doc.text(t("pdfAnswers"), 14, 45);
 
       // Las diapositivas no tienen respuesta correcta: no van en la hoja de respuestas.
       const qData = activity.preguntas.filter((q: any) => !q.esContenido).map((q: any, idx: number) => {
         const correctOptions = q.opciones.filter((o: any) => o.esCorrecta || o.es_correcta);
-        let correctText = "N/A";
+        let correctText = t("notApplicable");
 
         if (q.tipoPregunta === "long") {
-            correctText = "Respuesta abierta (la revisa el docente)";
+            correctText = t("openAnswer");
         } else if (correctOptions.length > 0) {
             correctText = correctOptions
-              .map((o: any) => activity.tipoActividadId === 2 ? (o.indice === 1 ? "Verdadero" : "Falso") : (o.texto || "Opción Correcta"))
+              .map((o: any) => activity.tipoActividadId === 2 ? trueFalseLabel(o.indice) : (o.texto || t("correctOption")))
               .join(", ");
         }
 
@@ -95,7 +103,7 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
 
       autoTable(doc, {
         startY: 50,
-        head: [['#', 'Pregunta', 'Respuesta Correcta']],
+        head: [['#', t("pdfQuestion"), t("pdfCorrect")]],
         body: qData,
         theme: 'striped',
         headStyles: { fillColor: [106, 75, 255] }
@@ -110,19 +118,19 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
   let questionCounter = 0;
   const isLesson = activity.tipoActividadId === 4;
   (activity.preguntas || []).forEach((p: any, idx: number) => {
-    questionLabels.push(isLesson ? `Bloque ${idx + 1}` : p.esContenido ? "Diapositiva" : `Pregunta ${++questionCounter}`);
+    questionLabels.push(isLesson ? t("block", { number: idx + 1 }) : p.esContenido ? t("slide") : t("question", { number: ++questionCounter }));
   });
 
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className={styles.sectionTitle} style={{ marginBottom: 0 }}>Contenido de la Actividad</h2>
+        <h2 className={styles.sectionTitle} style={{ marginBottom: 0 }}>{t("title")}</h2>
         <button
             className="btn shadow-sm d-flex align-items-center"
             style={{ background: '#1D153A', color: 'white', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.2)' }}
             onClick={handleExportPDF}
         >
-            <FaDownload className="me-2" style={{ color: '#00d4ff' }} /> Exportar Pdf
+            <FaDownload className="me-2" style={{ color: '#00d4ff' }} aria-hidden="true" /> {t("exportPdf")}
         </button>
       </div>
 
@@ -130,7 +138,7 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
         <div className={styles.memoryGrid}>
           {activity.memoriaParejas.map((pareja: any, idx: number) => (
             <div key={Number(pareja.id)} className={styles.memoryPair}>
-              <h5 className="mb-3 text-muted">Pareja #{idx + 1}</h5>
+              <h5 className="mb-3 text-muted">{t("pair", { number: idx + 1 })}</h5>
               {pareja.tarjetas[0]?.recurso && (
                 <MultimediaDisplay
                   url={pareja.tarjetas[0].recurso.url}
@@ -155,11 +163,11 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
                 <div className={styles.questionHeader}>
                   <span className={styles.questionNumber}>
                     {questionLabels[idx]}
-                    {pregunta.tipoPregunta && <span className="ms-2 fw-normal" style={{ color: '#6a4bff' }}>· {FORM_QUESTION_LABELS[toFormQuestionType(pregunta.tipoPregunta)]}</span>}
+                    {pregunta.tipoPregunta && <span className="ms-2 fw-normal" style={{ color: '#6a4bff' }}>· {tTypes(toFormQuestionType(pregunta.tipoPregunta))}</span>}
                   </span>
                   {!pregunta.esContenido && (
                     <span className="badge" style={{ background: '#1D153A', color: 'white' }}>
-                      {pregunta.puntaje || activity.config?.puntajeBase} pts
+                      {t("points", { points: pregunta.puntaje || activity.config?.puntajeBase || 0 })}
                     </span>
                   )}
                 </div>
@@ -181,7 +189,7 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
 
                   {pregunta.tipoPregunta === "long" && (
                     <p className="mb-0 fst-italic" style={{ color: '#4a4266' }}>
-                      El estudiante escribe su respuesta; la calificas desde Reportes.
+                      {t("longHint")}
                     </p>
                   )}
 
@@ -189,9 +197,7 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
                   <div className={styles.optionsGrid}>
                     {pregunta.opciones.map((opcion: any) => {
                       const isTrueFalse = activity.tipoActividadId === 2;
-                      const displayContent = isTrueFalse
-                        ? (opcion.indice === 1 ? "Verdadero" : "Falso")
-                        : (opcion.texto || (opcion.indice === 1 ? "Verdadero" : "Falso"));
+                      const displayContent = isTrueFalse ? trueFalseLabel(opcion.indice) : (opcion.texto || trueFalseLabel(opcion.indice));
 
                       return (
                         <div
@@ -208,7 +214,7 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
                             />
                           )}
                           <div className="d-flex align-items-center justify-content-center gap-2">
-                            {((opcion.esCorrecta || opcion.es_correcta)) ? <FaCheck style={{ color: '#198754' }} /> : <FaTimes style={{ color: '#dc3545' }} />}
+                            {((opcion.esCorrecta || opcion.es_correcta)) ? <FaCheck style={{ color: '#198754' }} aria-label={t("correct")} role="img" /> : <FaTimes style={{ color: '#dc3545' }} aria-label={t("incorrect")} role="img" />}
                             <span style={{ fontWeight: '600' }}>{displayContent}</span>
                           </div>
                         </div>
@@ -222,13 +228,22 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
 
           <div className="col-12 col-lg-3 d-none d-lg-block">
             <div className={styles.scrollSpySidebar}>
-              <h6 className="fw-bold mb-3 text-uppercase" style={{ color: '#1D153A' }}>Índice de Preguntas</h6>
+              <h6 className="fw-bold mb-3 text-uppercase" style={{ color: '#1D153A' }}>{t("index")}</h6>
               <ul className={styles.scrollSpyList}>
                 {activity.preguntas.map((pregunta: any, idx: number) => (
                   <li
                     key={idx}
                     className={`${styles.scrollSpyItem} ${activeQuestion === idx ? styles.scrollSpyItemActive : ''}`}
                     onClick={() => scrollToQuestion(idx)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        scrollToQuestion(idx);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-current={activeQuestion === idx ? 'true' : undefined}
                   >
                     <span className="text-truncate d-inline-block w-100" title={pregunta.enunciado}>
                         {questionLabels[idx]}{pregunta.enunciado ? `: ${pregunta.enunciado}` : ""}

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { REVIEW_STATUS } from "@/features/form/formQuestions";
+import { getTranslations } from "next-intl/server";
 
 const DEFAULT_BASE_POINTS = 10;
 
@@ -12,10 +13,11 @@ const DEFAULT_BASE_POINTS = 10;
  * participante por la diferencia, así que cambiar la calificación es idempotente.
  */
 export async function reviewWrittenAnswer(respuestaId: number, approved: boolean) {
+  const t = await getTranslations("Errors");
   const user = await getCurrentUser();
-  if (!user) return { error: "No autorizado. Debes iniciar sesión." };
+  if (!user) return { error: t("unauthorized") };
   if (!Number.isInteger(respuestaId) || respuestaId <= 0 || typeof approved !== "boolean") {
-    return { error: "Datos inválidos." };
+    return { error: t("invalidData") };
   }
 
   const respuesta = await prisma.ludiRespuestaEstudiante.findUnique({
@@ -27,10 +29,10 @@ export async function reviewWrittenAnswer(respuestaId: number, approved: boolean
   });
 
   if (!respuesta || respuesta.pregunta.tipoPregunta !== "long") {
-    return { error: "Respuesta no encontrada." };
+    return { error: t("answerNotFound") };
   }
   if (respuesta.participante.LUDI_SESION.userId !== user.id) {
-    return { error: "No tienes permiso para calificar esta respuesta." };
+    return { error: t("reviewForbidden") };
   }
 
   const points = respuesta.pregunta.puntaje ?? respuesta.pregunta.activity.config?.puntajeBase ?? DEFAULT_BASE_POINTS;

@@ -17,6 +17,7 @@ model LUDI_COMMON_GRADE {
   key_string      String?
   ludiactividades LudiActividad[]
   images          LUDI_COMMON_GRADE_IMAGES[]
+  misiones        LudiMision[]
 }
 
 model LUDI_COMMON_GRADE_IMAGES {
@@ -39,23 +40,30 @@ model ACTIVITY {
 }
 
 model LudiActividad {
-  activityId      Int                  @id(map: "PK__LUDI_ACT__482FBD6332AE6D54") @map("activity_id")
-  tipoActividadId Int                  @map("tipo_actividad_id") @db.TinyInt
-  userId          String               @map("user_id")
-  gradoId         Int?                 @map("grado_id")
-  temaId          BigInt?              @map("tema_id")
-  publico         Boolean              @default(false, map: "DF_LUDI_ACT_publico")
-  estatus         Boolean              @default(true) @map("estatus")
+  activityId        Int     @id(map: "PK__LUDI_ACT__482FBD6332AE6D54") @map("activity_id")
+  tipoActividadId   Int     @map("tipo_actividad_id") @db.TinyInt
+  userId            String  @map("user_id")
+  gradoId           Int?    @map("grado_id")
+  temaId            BigInt? @map("tema_id")
+  publico           Boolean @default(false, map: "DF_LUDI_ACT_publico")
+  estatus           Boolean @default(true) @map("estatus")
+  // Plantilla de la que se copió; agrupa en el reporte admin las copias de distintos docentes.
+  plantillaOrigenId Int?    @map("plantilla_origen_id")
 
-  activity        ACTIVITY             @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_ACTI__activ__32767D0B")
-  user            LudiUser             @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_LudiActividad_User")
-  grado           LUDI_COMMON_GRADE?   @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__grado__3552E9B6")
-  tema            LudiTema?            @relation(fields: [temaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__tema___36470DEF")
-  tipoActividad   LudiTipoActividad    @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_ACTI__tipo___336AA144")
-  config          LudiActividadConfig?
-  memoriaParejas  LudiMemoriaPareja[]  @relation("MemoriaParejaActivity")
-  preguntas       LudiPregunta[]       @relation("PreguntaActivity")
-  LUDI_SESION     LUDI_SESION[]
+  activity       ACTIVITY                @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_ACTI__activ__32767D0B")
+  user           LudiUser                @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_LudiActividad_User")
+  grado          LUDI_COMMON_GRADE?      @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__grado__3552E9B6")
+  tema           LudiTema?               @relation(fields: [temaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__LUDI_ACTI__tema___36470DEF")
+  tipoActividad  LudiTipoActividad       @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_ACTI__tipo___336AA144")
+  config         LudiActividadConfig?
+  memoriaParejas LudiMemoriaPareja[]     @relation("MemoriaParejaActivity")
+  preguntas      LudiPregunta[]          @relation("PreguntaActivity")
+  LUDI_SESION    LUDI_SESION[]
+  insignias      LudiActividadInsignia[]
+  misiones       LudiActividadMision[]
+
+  plantillaOrigen LudiActividad?  @relation("PlantillaOrigen", fields: [plantillaOrigenId], references: [activityId], onDelete: NoAction, onUpdate: NoAction)
+  copias          LudiActividad[] @relation("PlantillaOrigen")
 
   @@map("LUDI_ACTIVIDAD")
 }
@@ -109,12 +117,12 @@ model LudiMemoriaTarjeta {
 }
 
 model LudiOpcion {
-  id             BigInt              @id(map: "PK__LUDI_OPC__3213E83F58810239") @default(autoincrement())
-  preguntaId     BigInt              @map("pregunta_id")
-  indice         Int                 @db.TinyInt
-  texto          String?             @db.NVarChar(400)
-  esCorrecta     Boolean             @default(false, map: "DF_LUDI_OPC_correcta") @map("es_correcta")
-  pregunta       LudiPregunta        @relation(fields: [preguntaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_OPCI__pregu__5006DFF2")
+  id             BigInt                    @id(map: "PK__LUDI_OPC__3213E83F58810239") @default(autoincrement())
+  preguntaId     BigInt                    @map("pregunta_id")
+  indice         Int                       @db.TinyInt
+  texto          String?                   @db.NVarChar(400)
+  esCorrecta     Boolean                   @default(false, map: "DF_LUDI_OPC_correcta") @map("es_correcta")
+  pregunta       LudiPregunta              @relation(fields: [preguntaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_OPCI__pregu__5006DFF2")
   opcionRecursos LudiOpcionRecurso[]
   respuestas     LudiRespuestaEstudiante[]
 
@@ -142,23 +150,23 @@ model LudiOrigenRecurso {
 }
 
 model LudiPregunta {
-  id               BigInt                @id(map: "PK__LUDI_PRE__3213E83F7B9AA76F") @default(autoincrement())
-  activityId       Int                   @map("activity_id")
-  numero           Int                   @db.SmallInt
-  tipoActividadId  Int                   @map("tipo_actividad_id") @db.TinyInt
-  enunciado        String                @db.NVarChar(Max)
-  tiempoLimiteMs   Int?                  @map("tiempo_limite_ms")
+  id               BigInt                    @id(map: "PK__LUDI_PRE__3213E83F7B9AA76F") @default(autoincrement())
+  activityId       Int                       @map("activity_id")
+  numero           Int                       @db.SmallInt
+  tipoActividadId  Int                       @map("tipo_actividad_id") @db.TinyInt
+  enunciado        String                    @db.NVarChar(Max)
+  tiempoLimiteMs   Int?                      @map("tiempo_limite_ms")
   puntaje          Int?
-  activo           Boolean               @default(true, map: "DF_LUDI_PREG_activo")
+  activo           Boolean                   @default(true, map: "DF_LUDI_PREG_activo")
   // Diapositiva de contenido (p. ej. Canva): sin opciones, sin tiempo y sin puntaje.
-  esContenido      Boolean               @default(false, map: "DF_LUDI_PREG_contenido") @map("es_contenido")
+  esContenido      Boolean                   @default(false, map: "DF_LUDI_PREG_contenido") @map("es_contenido")
   // Cuerpo de los bloques de lectura de LudiLección (el título va en enunciado).
-  contenidoTexto   String?               @map("contenido_texto") @db.NVarChar(Max)
+  contenidoTexto   String?                   @map("contenido_texto") @db.NVarChar(Max)
   // LudiForm: "single" | "multiple" | "long". Null en el resto de actividades (opción única).
-  tipoPregunta     String?               @map("tipo_pregunta") @db.NVarChar(20)
+  tipoPregunta     String?                   @map("tipo_pregunta") @db.NVarChar(20)
   opciones         LudiOpcion[]
-  activity         LudiActividad         @relation("PreguntaActivity", fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Pregunta_Activity")
-  tipoActividad    LudiTipoActividad     @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_PREG__tipo___467D75B8")
+  activity         LudiActividad             @relation("PreguntaActivity", fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Pregunta_Activity")
+  tipoActividad    LudiTipoActividad         @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_PREG__tipo___467D75B8")
   preguntaRecursos LudiPreguntaRecurso[]
   respuestas       LudiRespuestaEstudiante[]
 
@@ -251,10 +259,15 @@ model LUDI_SESION {
   estado                   String                     @default("ESPERANDO") @db.NVarChar(50)
   modoJuego                String                     @default("ESTUDIANTE") @map("modoJuego") @db.NVarChar(50)
   preguntaActualIndex      Int                        @default(0) @map("preguntaActualIndex")
+  // Evaluación del docente (src/features/followUp): efectividad 1-5, objetivo y, en copias de plantilla, dificultad.
   teacherRating            Float?                     @map("teacher_rating")
   templateDifficulty       String?                    @map("template_difficulty") @db.NVarChar(50)
+  // Obsoleto: ya no se pregunta. Se conserva por compatibilidad.
   classEngagement          Int?                       @map("class_engagement")
+  // Obsoleto: reemplazado por objectiveLevel, que admite "Parcialmente".
   objectiveMet             Boolean?                   @map("objective_met")
+  // 0 = No, 1 = Parcialmente, 2 = Sí (ver OBJECTIVE_LEVELS).
+  objectiveLevel           Int?                       @map("objective_level") @db.TinyInt
   iniciada_en              DateTime?
   finalizada_en            DateTime?
   creada_en                DateTime                   @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_SES_creada")
@@ -264,37 +277,112 @@ model LUDI_SESION {
 }
 
 model LUDI_SESION_PARTICIPANTE {
-  id            BigInt      @id(map: "PK__LUDI_SES__3213E83F49938736") @default(autoincrement())
-  sesion_id     BigInt
-  nombre        String      @db.NVarChar(80)
-  unido_en      DateTime    @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_PART_unido")
-  puntaje_total Int         @default(0, map: "DF_LUDI_PART_punt")
-  avatarId      Int?        @map("avatarId")
-  completado    Boolean     @default(false)
-  studentRating Float?      @map("student_rating")
-  studentEnjoyment Float?   @map("student_enjoyment")
-  studentLearning  Float?   @map("student_learning")
+  id               BigInt                     @id(map: "PK__LUDI_SES__3213E83F49938736") @default(autoincrement())
+  sesion_id        BigInt
+  nombre           String                     @db.NVarChar(80)
+  unido_en         DateTime                   @default(dbgenerated("sysdatetime()"), map: "DF_LUDI_PART_unido")
+  puntaje_total    Int                        @default(0, map: "DF_LUDI_PART_punt")
+  avatarId         Int?                       @map("avatarId")
+  completado       Boolean                    @default(false)
+  // Obsoleto: promedio heredado de gusto y aprendizaje; ya no se escribe.
+  studentRating    Float?                     @map("student_rating")
+  studentEnjoyment Float?                     @map("student_enjoyment")
+  studentLearning  Float?                     @map("student_learning")
   // SHA-256 del código secreto entregado al unirse; null en participantes previos a este control.
-  token_hash       String?  @db.Char(64)
-  LUDI_SESION   LUDI_SESION @relation(fields: [sesion_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_SESI__sesio__69C6B1F5")
-  avatar        LudiAvatar? @relation(fields: [avatarId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  respuestas    LudiRespuestaEstudiante[]
-  logros        LudiLogroParticipante[]
+  token_hash       String?                    @db.Char(64)
+  LUDI_SESION      LUDI_SESION                @relation(fields: [sesion_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_SESI__sesio__69C6B1F5")
+  avatar           LudiAvatar?                @relation(fields: [avatarId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  respuestas       LudiRespuestaEstudiante[]
+  insignias        LudiParticipanteInsignia[]
+  misiones         LudiParticipanteMision[]
 
   @@unique([sesion_id, nombre], map: "UQ_LUDI_PART_ses_nom")
 }
 
-model LudiLogroParticipante {
-  id             BigInt   @id @default(autoincrement())
-  participanteId BigInt   @map("participante_id")
-  tipo           String   @db.NVarChar(20) // "INSIGNIA" | "MISION"
-  codigo         String   @db.NVarChar(50) // id del catálogo en achievementRules.ts (p.ej. "sabio", "1-3-en-raya")
-  otorgadoEn     DateTime @default(dbgenerated("sysdatetime()")) @map("otorgado_en")
+// Catálogo de logros. Los textos visibles se traducen en messages/{es,en}.json
+// (Achievements.badges.<codigo> y Achievements.missions.<catalogo>.<regla>);
+// aquí solo vive lo que define cómo se gana cada uno.
+// catalogo: quiz | lesson | form | memory (ver src/features/gamification/catalog.ts)
+model LudiInsignia {
+  id       Int     @id @default(autoincrement())
+  codigo   String  @unique(map: "UQ_LUDI_INSIGNIA_codigo") @db.NVarChar(50)
+  catalogo String  @db.NVarChar(20)
+  regla    String  @db.NVarChar(40)
+  // Parámetro de la regla: segundos, palabras o porcentaje según la regla.
+  umbral   Int?
+  imagen   String  @db.NVarChar(200)
+  color    String  @db.NVarChar(9)
+  orden    Int     @default(0)
+  // Retirar una insignia es activo = false: las FK impiden borrarla mientras esté en uso.
+  activo   Boolean @default(true)
 
-  participante   LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade)
+  actividades   LudiActividadInsignia[]
+  participantes LudiParticipanteInsignia[]
 
-  @@unique([participanteId, tipo, codigo], map: "UQ_LUDI_LOGRO_part_tipo_cod")
-  @@map("LUDI_LOGRO_PARTICIPANTE")
+  @@index([catalogo, activo], map: "IX_LUDI_INSIGNIA_catalogo")
+  @@map("LUDI_INSIGNIA")
+}
+
+model LudiMision {
+  id       Int               @id @default(autoincrement())
+  codigo   String            @unique(map: "UQ_LUDI_MISION_codigo") @db.NVarChar(50)
+  catalogo String            @db.NVarChar(20)
+  gradoId  Int               @map("grado_id")
+  regla    String            @db.NVarChar(40)
+  umbral   Int?
+  orden    Int               @default(0)
+  activo   Boolean           @default(true)
+  grado    LUDI_COMMON_GRADE @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  actividades   LudiActividadMision[]
+  participantes LudiParticipanteMision[]
+
+  @@index([catalogo, gradoId, activo], map: "IX_LUDI_MISION_catalogo_grado")
+  @@map("LUDI_MISION")
+}
+
+// Insignias y misiones que el docente eligió para una actividad.
+model LudiActividadInsignia {
+  activityId Int           @map("activity_id")
+  insigniaId Int           @map("insignia_id")
+  activity   LudiActividad @relation(fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction)
+  insignia   LudiInsignia  @relation(fields: [insigniaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([activityId, insigniaId])
+  @@map("LUDI_ACTIVIDAD_INSIGNIA")
+}
+
+model LudiActividadMision {
+  activityId Int           @map("activity_id")
+  misionId   Int           @map("mision_id")
+  activity   LudiActividad @relation(fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction)
+  mision     LudiMision    @relation(fields: [misionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([activityId, misionId])
+  @@map("LUDI_ACTIVIDAD_MISION")
+}
+
+// Insignias y misiones que ganó cada estudiante; la PK evita otorgar dos veces.
+model LudiParticipanteInsignia {
+  participanteId BigInt                   @map("participante_id")
+  insigniaId     Int                      @map("insignia_id")
+  otorgadoEn     DateTime                 @default(dbgenerated("sysdatetime()")) @map("otorgado_en")
+  participante   LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  insignia       LudiInsignia             @relation(fields: [insigniaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([participanteId, insigniaId])
+  @@map("LUDI_PARTICIPANTE_INSIGNIA")
+}
+
+model LudiParticipanteMision {
+  participanteId BigInt                   @map("participante_id")
+  misionId       Int                      @map("mision_id")
+  otorgadoEn     DateTime                 @default(dbgenerated("sysdatetime()")) @map("otorgado_en")
+  participante   LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  mision         LudiMision               @relation(fields: [misionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([participanteId, misionId])
+  @@map("LUDI_PARTICIPANTE_MISION")
 }
 
 model LudiRol {
@@ -325,27 +413,27 @@ model LudiUser {
 }
 
 model LudiUserConfig {
-  userId                  String   @id @map("user_id")
-  defaultTimeLimitMs      Int      @default(30000) @map("default_time_limit_ms")
-  defaultPoints           Int      @default(100) @map("default_points")
-  defaultVoiceEnabled     Boolean  @default(true) @map("default_voice_enabled")
-  defaultIsPublic         Boolean  @default(false) @map("default_is_public")
-  enableStudentFeedback   Boolean  @default(true) @map("enable_student_feedback")
-  enableTeacherEvaluation Boolean  @default(true) @map("enable_teacher_evaluation")
-  toursEnabled            Boolean  @default(true) @map("tours_enabled")
-  tourMode                String   @default("full") @map("tour_mode") @db.NVarChar(20)
-  completedTours          String   @default("[]") @map("completed_tours") @db.NVarChar(Max)
-  
-  user                    LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                  String  @id @map("user_id")
+  defaultTimeLimitMs      Int     @default(30000) @map("default_time_limit_ms")
+  defaultPoints           Int     @default(100) @map("default_points")
+  defaultVoiceEnabled     Boolean @default(true) @map("default_voice_enabled")
+  defaultIsPublic         Boolean @default(false) @map("default_is_public")
+  enableStudentFeedback   Boolean @default(true) @map("enable_student_feedback")
+  enableTeacherEvaluation Boolean @default(true) @map("enable_teacher_evaluation")
+  toursEnabled            Boolean @default(true) @map("tours_enabled")
+  tourMode                String  @default("full") @map("tour_mode") @db.NVarChar(20)
+  completedTours          String  @default("[]") @map("completed_tours") @db.NVarChar(Max)
+
+  user LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("LUDI_USER_CONFIG")
 }
 
 model LudiAvatar {
-  id        Int       @id @default(autoincrement())
-  nombre    String    @db.NVarChar(100)
-  urlImagen String    @db.NVarChar(600) @map("urlImagen")
-  activo    Boolean   @default(true)
+  id            Int                        @id @default(autoincrement())
+  nombre        String                     @db.NVarChar(100)
+  urlImagen     String                     @map("urlImagen") @db.NVarChar(600)
+  activo        Boolean                    @default(true)
   participantes LUDI_SESION_PARTICIPANTE[]
 
   @@map("LudiAvatar")
@@ -366,9 +454,9 @@ model LudiRespuestaEstudiante {
   // "PENDIENTE" mientras el docente no califica una respuesta escrita; "REVISADA" después.
   estadoRevision    String?  @db.NVarChar(20)
 
-  participante      LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  pregunta          LudiPregunta             @relation(fields: [preguntaId], references: [id], onDelete: NoAction, onUpdate: NoAction) // THIS IS THE LINE TO FIX
-  opcion            LudiOpcion?              @relation(fields: [opcionId], references: [id], onDelete: NoAction, onUpdate: NoAction) // THIS IS THE LINE TO FIX
+  participante LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  pregunta     LudiPregunta             @relation(fields: [preguntaId], references: [id], onDelete: NoAction, onUpdate: NoAction) // THIS IS THE LINE TO FIX
+  opcion       LudiOpcion?              @relation(fields: [opcionId], references: [id], onDelete: NoAction, onUpdate: NoAction) // THIS IS THE LINE TO FIX
 
   @@map("LudiRespuestaEstudiante")
 }

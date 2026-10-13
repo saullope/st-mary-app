@@ -71,7 +71,8 @@ interface ActivityEditorContextType {
 
 const defaultState: ActivityEditorState = {
   activityId: null,
-  title: "Nueva Actividad",
+  // Vacío hasta que el docente lo escribe; InitialTitleModal pone el título por defecto en su idioma.
+  title: "",
   activityType: null,
   backgroundImage: "/images/theme/tema4.jpg",
   themeModalOpen: false,

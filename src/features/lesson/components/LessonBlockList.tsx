@@ -4,27 +4,28 @@ import { EditorList, EditorListItem, EditorListEmpty, EditorTypePicker, type Edi
 import {
   allowedBlockKinds,
   isBlockAllowedForGrade,
-  LESSON_BLOCK_LABELS,
   type LessonBlock,
   type LessonBlockKind,
 } from "@/features/lesson/lessonBlocks";
 import { BLOCK_ICONS, BLOCK_COLORS } from "./blockIcons";
+import { useTranslations } from "next-intl";
 
 /** "Agregar bloque" con los tipos permitidos para el grado. */
 export const LessonBlockPicker = ({ gradeId, onAdd }: { gradeId: number; onAdd: (kind: LessonBlockKind) => void }) => {
+  const t = useTranslations("Editor.lesson");
   const options: EditorTypeOption<LessonBlockKind>[] = allowedBlockKinds(gradeId).map((kind) => ({
     value: kind,
-    label: LESSON_BLOCK_LABELS[kind],
+    label: t(`kinds.${kind}`),
     icon: BLOCK_ICONS[kind],
     color: BLOCK_COLORS[kind],
   }));
 
   return (
     <EditorTypePicker
-      label="Agregar bloque"
-      groupLabel="Tipos de bloque disponibles"
+      label={t("addBlock")}
+      groupLabel={t("blockTypes")}
       options={options}
-      hint={gradeId < 3 ? "Lectura, audio y documentos se habilitan desde tercer grado." : undefined}
+      hint={gradeId < 3 ? t("gradeHint") : undefined}
       onPick={onAdd}
     />
   );
@@ -40,12 +41,13 @@ interface LessonBlockListProps {
 }
 
 export const LessonBlockList = ({ blocks, selectedId, gradeId, onSelect, onMove, onDelete }: LessonBlockListProps) => {
+  const t = useTranslations("Editor.lesson");
   if (blocks.length === 0) {
-    return <EditorListEmpty>Agrega el primer bloque: una presentación, un video, una imagen o una lectura.</EditorListEmpty>;
+    return <EditorListEmpty>{t("emptyList")}</EditorListEmpty>;
   }
 
   return (
-    <EditorList label="Bloques de la lección">
+    <EditorList label={t("listLabel")}>
       {blocks.map((block, index) => {
         const Icon = BLOCK_ICONS[block.kind];
         return (
@@ -53,11 +55,11 @@ export const LessonBlockList = ({ blocks, selectedId, gradeId, onSelect, onMove,
             key={block.id}
             position={index + 1}
             label={block.title}
-            placeholder={LESSON_BLOCK_LABELS[block.kind]}
+            placeholder={t(`kinds.${block.kind}`)}
             leading={<Icon style={{ color: BLOCK_COLORS[block.kind] }} aria-hidden="true" />}
-            itemName="bloque"
+            itemName={t("blockItem")}
             selected={selectedId === block.id}
-            warning={isBlockAllowedForGrade(block.kind, gradeId) ? undefined : "No disponible para este grado"}
+            warning={isBlockAllowedForGrade(block.kind, gradeId) ? undefined : t("notAllowedWarning")}
             isFirst={index === 0}
             isLast={index === blocks.length - 1}
             onSelect={() => onSelect(block.id)}

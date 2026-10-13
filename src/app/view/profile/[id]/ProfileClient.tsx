@@ -9,6 +9,7 @@ import ActivityCard from '@/components/dashboard/ActivityCard';
 import PaginationControls from '@/components/dashboard/PaginationControls';
 import ActivityFilter from '@/components/dashboard/ActivityFilter';
 import styles from '@/styles/pages/my-activities.module.css';
+import { useFormatter, useTranslations } from "next-intl";
 
 interface ProfileClientProps {
   targetUser: {
@@ -43,16 +44,14 @@ export default function ProfileClient({
   isAdmin
 }: ProfileClientProps) {
 
+  const t = useTranslations("Profile");
+  const tCommon = useTranslations("Common");
+  const tRoles = useTranslations("AdminUsers.roles");
+  const format = useFormatter();
   const totalPages = Math.ceil(totalActivities / searchParams.limit);
 
-  const getGradeLabel = (gradeName?: string) => {
-    if (!gradeName) return "N/A";
-    const lower = gradeName.toLowerCase();
-    if (lower.includes("first") || lower.includes("1")) return "Primero";
-    if (lower.includes("second") || lower.includes("2")) return "Segundo";
-    if (lower.includes("third") || lower.includes("3")) return "Tercero";
-    return gradeName;
-  };
+  const getGradeLabel = (gradoId: number | null) =>
+    gradoId === 1 || gradoId === 2 || gradoId === 3 ? tCommon(`grades.${gradoId}`) : tCommon("noGrade");
 
   const getTypeBadgeClass = (id: number) => {
     switch (id) {
@@ -69,7 +68,7 @@ export default function ProfileClient({
       <div className="mb-4">
         <Link href="/dashboard" className="text-decoration-none d-inline-flex align-items-center fw-bold" style={{ color: '#E8E5F7', transition: 'opacity 0.2s ease', opacity: 0.8 }} onMouseOver={(e) => e.currentTarget.style.opacity = '1'} onMouseOut={(e) => e.currentTarget.style.opacity = '0.8'}>
           <FaArrowLeft className="me-2" /> 
-          Dashboard <span className="mx-2" style={{ opacity: 0.5 }}>/</span> <span style={{ color: '#fff' }}>Perfil</span>
+          {t("dashboard")} <span className="mx-2" style={{ opacity: 0.5 }}>/</span> <span style={{ color: '#fff' }}>{t("profile")}</span>
         </Link>
       </div>
 
@@ -91,7 +90,7 @@ export default function ProfileClient({
               >
                 <Image
                   src={profilePicture}
-                  alt={targetUser.nombre}
+                  alt=""
                   width={120}
                   height={120}
                   style={{ borderRadius: '50%', objectFit: 'cover' }}
@@ -108,16 +107,16 @@ export default function ProfileClient({
                   </h2>
                   <div className="d-flex flex-wrap gap-3 mt-2 text-muted">
                     <span className="d-flex align-items-center">
-                      <FaUserGraduate className="me-2 text-primary" />
-                      {targetUser.rol}
+                      <FaUserGraduate className="me-2 text-primary" aria-hidden="true" />
+                      {tRoles.has(targetUser.rol) ? tRoles(targetUser.rol) : targetUser.rol}
                     </span>
                     <span className="d-flex align-items-center">
-                      <FaCalendarAlt className="me-2 text-success" />
-                      Miembro desde {new Date(targetUser.createdAt).toLocaleDateString()}
+                      <FaCalendarAlt className="me-2 text-success" aria-hidden="true" />
+                      {t("memberSince", { date: format.dateTime(new Date(targetUser.createdAt), { dateStyle: "medium" }) })}
                     </span>
                     {isOwnProfile && (
                       <span className="d-flex align-items-center">
-                        <FaEnvelope className="me-2 text-warning" />
+                        <FaEnvelope className="me-2 text-warning" aria-hidden="true" />
                         {targetUser.email}
                       </span>
                     )}
@@ -137,12 +136,10 @@ export default function ProfileClient({
       {/* Título de Sección */}
       <div className="mb-4">
         <h4 className="fw-bold" style={{ color: '#34495e' }}>
-          {isOwnProfile ? 'Mis Actividades' : `Actividades de ${targetUser.nombre}`}
+          {isOwnProfile ? t("myActivities") : t("activitiesOf", { name: targetUser.nombre })}
         </h4>
         <p className="text-muted">
-          {isOwnProfile 
-            ? 'Explora, edita y comparte las experiencias de aprendizaje que has creado.'
-            : 'Explora las actividades públicas creadas por este educador.'}
+          {isOwnProfile ? t("ownHint") : t("otherHint")}
         </p>
       </div>
 
@@ -158,7 +155,7 @@ export default function ProfileClient({
             <ActivityCard 
               key={act.activityId}
               activity={act}
-              gradeLabel={getGradeLabel(act.grado?.grade_type_name)}
+              gradeLabel={getGradeLabel(act.gradoId)}
               typeBadgeClass={getTypeBadgeClass(act.tipoActividadId)}
               sessionPicture={profilePicture}
               isAdmin={isAdmin || isOwnProfile} 
@@ -167,12 +164,10 @@ export default function ProfileClient({
         </div>
       ) : (
         <div className={styles.emptyStateCard}>
-          <div className={styles.emptyStateIcon}>🌱</div>
-          <h3>Aún no hay actividades aquí</h3>
+          <div className={styles.emptyStateIcon} aria-hidden="true">🌱</div>
+          <h3>{t("emptyTitle")}</h3>
           <p>
-            {isOwnProfile 
-              ? 'Crea tu primera actividad desde el dashboard para empezar a llenar este espacio.'
-              : 'Este usuario aún no ha publicado actividades en la plataforma.'}
+            {isOwnProfile ? t("emptyOwn") : t("emptyOther")}
           </p>
         </div>
       )}

@@ -5,10 +5,11 @@ import { getTranslations } from "next-intl/server";
 import { FaArrowLeft, FaGamepad, FaQuestion } from "react-icons/fa6";
 import getSession from "@/lib/auth/getSession";
 import styles from "./not-found.module.css";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("NotFound");
-  return { title: `${t("metaTitle")} | LudiGame` };
+  return pageMetadata({ title: t("metaTitle"), description: t("description") });
 }
 
 /** 404 de toda la app: el docente vuelve a su panel; un visitante o estudiante, al inicio o a unirse con PIN. */

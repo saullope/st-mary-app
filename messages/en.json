@@ -31,9 +31,9 @@
   },
   "AuthenticationMeta": {
     "metaTitleSignIn": "Sign In",
-    "metaSignInDescription": "Sign In to your account",
+    "metaSignInDescription": "Sign in to LudiGame to create game-based activities and follow your students' progress.",
     "metaTitleSignUp": "Sign Up",
-    "metaSignUpDescription": "Sign up for an account"
+    "metaSignUpDescription": "Create your teacher account and start designing game-based activities for your students."
   },
   "SignInForm": {
     "titleForm": "Sign In",
@@ -146,7 +146,8 @@
     "continueJob": "CONTINUE YOUR WORK",
     "lastEdition": "Last edited a short while ago",
     "resume": "Resume",
-    "noDrafts": "You have no pending drafts. Create a new activity to get started!"
+    "noDrafts": "You have no pending drafts. Create a new activity to get started!",
+    "untitledActivity": "Untitled activity"
   },
   "createActivityDashboard": {
     "metaTitle": "Create activity",
@@ -213,7 +214,10 @@
     "canvaPreview": "Canva presentation preview",
     "canvaInsert": "Add slide",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "searchContent": "Search content",
+    "unsplashImage": "Unsplash image",
+    "closeModal": "Close"
   },
   "themeBackground": {
     "selectTheme": "Select a background theme",
@@ -230,7 +234,10 @@
     "tema6": "Ocean",
     "tema6_desc": "Marine background with aquatic life",
     "tema7": "Animated Brains",
-    "tema7_desc": "Background with animated brains for cognitive stimulation"
+    "tema7_desc": "Background with animated brains for cognitive stimulation",
+    "button": "Theme",
+    "close": "Close theme panel",
+    "loadError": "The themes could not be loaded."
   },
   "ForgotPassword": {
     "titleForgotPassword": "Recover Password",
@@ -253,7 +260,9 @@
     "exportToExcel": "Export to Excel",
     "typeActivitySearch": "Type of Activity",
     "searchPlaceholder": "Search by activity name...",
-    "all": "All"
+    "all": "All",
+    "emptyTitle": "Your adventure is about to begin!",
+    "emptyBody": "You have not created any activities yet. Create your first challenge and surprise your students with an unforgettable learning experience."
   },
    "activityCard": {
     "viewButton": "View",
@@ -264,7 +273,16 @@
     "confirmDeleteTitle": "Are you sure you want to delete this activity?",
     "confirmDeleteMessage": "This action cannot be undone.",
     "cancelButton": "Cancel",
-    "createdAt": "Created at"
+    "createdAt": "Created at",
+    "launchFailed": "The game could not be launched",
+    "tryAgain": "Please try again.",
+    "finalized": "Activity already finished",
+    "launch": "Launch game (live panel)",
+    "copyCode": "Copy code",
+    "copied": "Copied!",
+    "teacherRole": "Teacher",
+    "noEmail": "No email",
+    "viewProfile": "View profile"
   },
   "reports": {
     "metaTitle": "Reports",
@@ -300,7 +318,11 @@
     "actions": "Actions",
     "overAverage": "Over Average",
     "belowAverage": "Below Average",
-    "noStudentsInSession": "No students in this session."
+    "noStudentsInSession": "No students in this session.",
+    "hardestValue": "\"{text}\" ({rate}% wrong)",
+    "notEnoughData": "Not enough data",
+    "points": "{score} pts",
+    "question": "Question"
   },
   "NotFound": {
     "metaTitle": "Page not found",
@@ -311,5 +333,1377 @@
     "goHome": "Go to home",
     "joinWithPin": "Join with a PIN",
     "hiddenCard": "Face-down card"
+  },
+  "Achievements": {
+    "badges": {
+      "sabio": {
+        "name": "Wise",
+        "phrase": "Amazing! You answered really well",
+        "description": "For students who answer their first question correctly."
+      },
+      "veloz": {
+        "name": "Speedy",
+        "phrase": "That was super fast! You are so quick",
+        "description": "For students who answer correctly using at most {value}% of the question time."
+      },
+      "valiente": {
+        "name": "Brave",
+        "phrase": "You did not give up and kept trying",
+        "description": "For students who finish the activity even after a mistake."
+      },
+      "mente-creativa": {
+        "name": "Creative Mind",
+        "phrase": "So creative! Your ideas are very special",
+        "description": "For students who bring original and creative ideas."
+      },
+      "agil": {
+        "name": "Nimble",
+        "phrase": "You found the answer quickly and cleverly",
+        "description": "For students who get at least {value}% of the questions right at a good pace."
+      },
+      "detective": {
+        "name": "Detective",
+        "phrase": "You are a real detective! You found the right answer",
+        "description": "For students who answer a question with an image, video or audio correctly."
+      },
+      "explorador": {
+        "name": "Explorer",
+        "phrase": "You went through the whole lesson!",
+        "description": "For students who finish every block of the lesson."
+      },
+      "atento": {
+        "name": "Attentive",
+        "phrase": "You took your time on every part of the lesson",
+        "description": "For students who spend at least {value} seconds on each block."
+      },
+      "lector": {
+        "name": "Reader",
+        "phrase": "What a good reader! You read calmly",
+        "description": "For students who spend at least {value} seconds on each reading or document."
+      },
+      "dedicado": {
+        "name": "Dedicated",
+        "phrase": "You answered the whole form!",
+        "description": "For students who hand in the complete form."
+      },
+      "certero": {
+        "name": "Sharpshooter",
+        "phrase": "You got every choice question right!",
+        "description": "For students who get every single and multiple choice question right."
+      },
+      "pensador": {
+        "name": "Thinker",
+        "phrase": "You explained your ideas in detail",
+        "description": "For students who write at least {value} words in every long answer."
+      },
+      "coleccionista": {
+        "name": "Collector",
+        "phrase": "You found all the pairs!",
+        "description": "For students who find every pair on the board."
+      },
+      "buena-memoria": {
+        "name": "Great Memory",
+        "phrase": "What a memory! You barely missed",
+        "description": "For students who finish the board missing at most {value}% of the pairs."
+      },
+      "imparable": {
+        "name": "Unstoppable",
+        "phrase": "You found {value} pairs in a row!",
+        "description": "For students who find {value} pairs in a row without a miss."
+      }
+    },
+    "missions": {
+      "quiz": {
+        "racha": {
+          "text": "Answer {value} questions correctly in a row",
+          "studentText": "Congratulations! You answered {value} questions in a row correctly."
+        },
+        "rapidez": {
+          "text": "Answer correctly in less than {value} seconds",
+          "studentText": "Great! You answered correctly in less than {value} seconds."
+        },
+        "puntos": {
+          "text": "Earn {value} points in total",
+          "studentText": "Amazing! You earned {value} points."
+        }
+      },
+      "lesson": {
+        "bloques": {
+          "text": "Go through {value} blocks of the lesson",
+          "studentText": "Well done! You went through {value} blocks."
+        },
+        "mitad": {
+          "text": "Reach the middle of the lesson",
+          "studentText": "You are halfway through the lesson!"
+        },
+        "completa": {
+          "text": "Finish the whole lesson",
+          "studentText": "Congratulations! You finished the lesson."
+        }
+      },
+      "form": {
+        "respuestas": {
+          "text": "Answer {value} questions",
+          "studentText": "Well done! You answered {value} questions."
+        },
+        "escritor": {
+          "text": "Write an answer of at least {value} words",
+          "studentText": "Excellent! You wrote a very complete answer."
+        },
+        "entrega": {
+          "text": "Hand in the complete form",
+          "studentText": "Congratulations! You handed in the form."
+        }
+      },
+      "memory": {
+        "parejas": {
+          "text": "Find {value} pairs",
+          "studentText": "Well done! You found {value} pairs."
+        },
+        "seguidas": {
+          "text": "Find {value} pairs in a row",
+          "studentText": "Great! You found {value} pairs in a row."
+        },
+        "completo": {
+          "text": "Complete the whole board",
+          "studentText": "Congratulations! You completed the board."
+        }
+      }
+    },
+    "voice": {
+      "badgeUnlocked": "Badge unlocked: {name}. {phrase}",
+      "badgeSelected": "You selected the badge {name}. {phrase}",
+      "missionSelected": "Mission selected: {text}"
+    }
+  },
+  "FollowUp": {
+    "student": {
+      "title": "Tell us how it went!",
+      "enjoyment": "Did you like the activity?",
+      "learning": "Do you feel you learned with it?",
+      "enjoymentScale": {
+        "1": "I didn't like it",
+        "2": "A little",
+        "3": "So-so",
+        "4": "I liked it",
+        "5": "I loved it!"
+      },
+      "learningScale": {
+        "1": "Nothing",
+        "2": "A little",
+        "3": "Some",
+        "4": "Quite a lot",
+        "5": "A lot!"
+      },
+      "optionLabel": "{value} of 5: {label}",
+      "send": "Send",
+      "skip": "Not now",
+      "thanks": "Thanks for telling us!",
+      "error": "We couldn't save your answer. You can keep going."
+    },
+    "teacher": {
+      "title": "Activity follow-up",
+      "intro": "Your evaluation shows which activities best help meet each grade's objectives.",
+      "effectiveness": "How effective or useful was this activity in meeting your {grade} class objective?",
+      "effectivenessScale": {
+        "1": "Not useful",
+        "2": "Slightly useful",
+        "3": "Useful",
+        "4": "Very useful",
+        "5": "Extremely useful"
+      },
+      "objective": "Did the activity help you meet the class learning objective?",
+      "objectiveOptions": {
+        "2": "Yes",
+        "1": "Partially",
+        "0": "No"
+      },
+      "difficulty": "Was the template's difficulty right for the grade?",
+      "difficultyOptions": {
+        "BAJA": "Low",
+        "ADECUADA": "Appropriate",
+        "ALTA": "High"
+      },
+      "ratingLabel": "{value} of 5: {label}",
+      "submit": "Save evaluation",
+      "submitAndFinish": "Save and finish",
+      "skip": "Not now",
+      "skipAndFinish": "Finish without evaluating",
+      "saving": "Saving...",
+      "error": "The evaluation could not be saved. Please try again.",
+      "close": "Close"
+    },
+    "grades": {
+      "1": "first grade",
+      "2": "second grade",
+      "3": "third grade",
+      "unknown": "your grade"
+    },
+    "summary": {
+      "title": "Follow-up",
+      "teacherHeading": "Your evaluation",
+      "studentsHeading": "What your students said",
+      "effectiveness": "Effectiveness",
+      "objective": "Objective met",
+      "difficulty": "Difficulty",
+      "enjoyment": "Enjoyment",
+      "learning": "Perceived learning",
+      "responses": "{responses} of {participants} students answered",
+      "noStudentResponses": "No student has answered yet.",
+      "pending": "You haven't evaluated this activity yet.",
+      "evaluate": "Evaluate now",
+      "edit": "Edit evaluation",
+      "outOfFive": "{value} / 5"
+    },
+    "admin": {
+      "viewLabel": "Report view",
+      "viewActivities": "By activity and grade",
+      "viewSessions": "By session",
+      "caption": "Follow-up consolidated by activity and grade. Copies of a template are grouped with it.",
+      "activity": "Activity",
+      "grade": "Grade",
+      "evaluatedSessions": "Evaluated sessions",
+      "effectiveness": "Effectiveness (teachers)",
+      "objectiveMet": "Objective met",
+      "enjoyment": "Enjoyment (students)",
+      "learning": "Learning (students)",
+      "studentResponses": "Student responses",
+      "sortBy": "Sort by {column}",
+      "fromTemplate": "Template",
+      "teachers": "{count, plural, one {# teacher} other {# teachers}}",
+      "sessionsOf": "{evaluated} of {total}",
+      "partial": "{value}% partial",
+      "noGrade": "No grade",
+      "empty": "No sessions match the selected filters.",
+      "typeTemplateCopy": "Template copy",
+      "typeOwn": "Own"
+    }
+  },
+  "Metadata": {
+    "site": {
+      "description": "Game-based learning platform for first, second and third grade: create quizzes, memory games, lessons and forms, and follow your students' learning.",
+      "keywords": "gamification, game-based learning, primary education, educational activities, quiz, memory games, first grade, second grade, third grade"
+    },
+    "home": {
+      "title": "Game-based activities for primary school",
+      "description": "Create gamified learning activities for first, second and third grade. Your students learn by playing and you follow their progress."
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "description": "Learn how to create, launch and evaluate game-based activities with LudiGame."
+    },
+    "institution": {
+      "title": "For schools",
+      "description": "LudiGame for schools and educational institutions."
+    },
+    "play": {
+      "title": "Join the game",
+      "description": "Enter the PIN your teacher gave you and start playing."
+    },
+    "forgotPassword": {
+      "title": "Reset password",
+      "description": "Get a link to reset your LudiGame account password."
+    },
+    "dashboard": {
+      "title": "Teacher dashboard",
+      "description": "Your learning creation hub: activities, templates and reports."
+    },
+    "templates": {
+      "title": "Templates",
+      "description": "Ready-to-use activities you can adapt to your class."
+    },
+    "live": {
+      "title": "Live panel",
+      "description": "Follow the students playing your activity in real time."
+    },
+    "reportDetail": {
+      "title": "Report: {activity}",
+      "description": "Results, evaluation and follow-up of the {activity} session."
+    },
+    "reportNotFound": {
+      "title": "Report not found",
+      "description": "The session you are looking for does not exist."
+    },
+    "adminReports": {
+      "title": "Activity follow-up",
+      "description": "Activity effectiveness by grade according to teachers and students."
+    },
+    "settings": {
+      "personal": {
+        "title": "Personal information",
+        "description": "Your LudiGame profile settings."
+      },
+      "appearance": {
+        "title": "Appearance and language",
+        "description": "LudiGame display and language settings."
+      },
+      "data": {
+        "title": "Data management",
+        "description": "Export your information and manage your account data."
+      },
+      "preferences": {
+        "title": "Game preferences",
+        "description": "Defaults for creating and playing activities."
+      },
+      "security": {
+        "title": "Security",
+        "description": "Your account password and security."
+      },
+      "tours": {
+        "title": "Guided tours",
+        "description": "Set up LudiGame's interactive guided tours."
+      },
+      "admin": {
+        "title": "Administration",
+        "description": "User and system management."
+      }
+    },
+    "editor": {
+      "description": "LudiGame activity editor.",
+      "ludiquiz": "Create LudiQuiz",
+      "trueorfalse": "Create True or False",
+      "ludimemory": "Create LudiMemory",
+      "ludileccion": "Create LudiLesson",
+      "ludiform": "Create LudiForm"
+    },
+    "studentPlay": {
+      "title": "{activity}",
+      "fallbackTitle": "Play",
+      "description": "LudiGame activity."
+    },
+    "profile": {
+      "title": "{name}'s profile",
+      "description": "{name}'s public activities on LudiGame."
+    },
+    "profileNotFound": {
+      "title": "Profile not found",
+      "description": "The profile you are looking for does not exist."
+    },
+    "activityView": {
+      "title": "{activity}",
+      "description": "Preview of the {activity} activity on LudiGame."
+    },
+    "activityNotFound": {
+      "title": "Activity not found",
+      "description": "The activity you are looking for does not exist."
+    },
+    "activityPrivate": {
+      "title": "Private activity",
+      "description": "This activity is private."
+    }
+  },
+  "Validation": {
+    "lesson": {
+      "empty": "Add at least one block to the lesson.",
+      "notAllowed": "Block {index} ({kind, select, canva {Canva} youtube {YouTube} image {Image} reading {Reading} audio {Audio} pdf {PDF} word {Word} powerpoint {PowerPoint} other {}}) is not available for this grade.",
+      "emptyReading": "Block {index}: write the reading text.",
+      "emptyContent": "Block {index}: add the block content."
+    },
+    "form": {
+      "gradeNotAvailable": "LudiForm is only available for third grade.",
+      "empty": "Add at least one question to the form.",
+      "noText": "Question {index}: write the question.",
+      "fewOptions": "Question {index}: add at least 2 options.",
+      "emptyOption": "Question {index}: fill in the text of every option.",
+      "noCorrectSingle": "Question {index}: mark the correct option.",
+      "noCorrectMultiple": "Question {index}: mark at least one correct option.",
+      "manyCorrect": "Question {index}: only one option can be correct."
+    },
+    "memory": {
+      "tooFew": "Add at least {min} images for the LudiMemory activity.",
+      "tooMany": "LudiMemory supports up to {max} images.",
+      "duplicates": "The board has repeated images."
+    }
+  },
+  "Editor": {
+    "save": {
+      "missingTitle": "Missing title",
+      "missingTitleDescription": "Enter a title for the activity.",
+      "cannotSave": "Cannot save",
+      "quizEmpty": "Add at least one question to the activity.",
+      "quizNoValid": "There are no valid questions. Enter the question text and its answers.",
+      "quizOnlySlides": "Add at least one question besides the slides.",
+      "tfEmpty": "Add at least one statement to the activity.",
+      "tfNoValid": "There are no valid statements. Enter the text and choose True or False.",
+      "tfOnlySlides": "Add at least one statement besides the slides.",
+      "saveError": "Save failed",
+      "updated": "Activity updated!",
+      "saved": "Activity saved!",
+      "backupDownloaded": "JSON backup downloaded.",
+      "updatedSuccess": "Activity updated successfully.",
+      "savedSuccess": "Activity saved successfully.",
+      "unexpectedError": "An unexpected error occurred while saving.",
+      "saving": "Saving...",
+      "update": "Update",
+      "save": "Save"
+    },
+    "list": {
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "delete": "Delete",
+      "moveUpItem": "Move {item} {position} up",
+      "moveDownItem": "Move {item} {position} down",
+      "deleteItem": "Delete {item} {position}",
+      "close": "Close",
+      "questionsLabel": "Activity questions",
+      "slideTag": "Slide",
+      "slidePlaceholder": "Canva presentation",
+      "untitledQuestion": "Untitled question",
+      "slideItem": "slide",
+      "questionItem": "question",
+      "newQuestion": "New question..."
+    },
+    "titleModal": {
+      "defaultTitle": "New activity",
+      "heading": "Let's create something amazing!",
+      "label": "What will the activity be called?",
+      "placeholder": "E.g. Fun fractions...",
+      "skip": "Skip",
+      "start": "Start"
+    },
+    "answers": {
+      "searchImage": "Search image",
+      "searchImageFor": "Search an image for answer {number}",
+      "uploadFailed": "The image could not be uploaded",
+      "checkConnection": "Check your connection and try again.",
+      "answerPlaceholder": "Answer {number}",
+      "markCorrect": "Mark as correct",
+      "markCorrectFor": "Mark answer {number} as correct",
+      "uploadImage": "Upload image",
+      "uploadImageFor": "Upload an image for answer {number}",
+      "imageOf": "Image for answer {number}",
+      "removeImage": "Remove image",
+      "deleteAnswer": "Delete answer",
+      "deleteAnswerFor": "Delete answer {number}"
+    },
+    "preview": {
+      "close": "Close preview"
+    },
+    "navbar": {
+      "previewNeedsImages": "Add at least {min} images to preview",
+      "previewNeedsBlock": "Add at least one block to preview",
+      "previewNeedsQuestion": "Add at least one question to preview",
+      "aiAssistant": "AI assistant",
+      "preview": "Preview",
+      "fullScreen": "Full screen",
+      "exitFullScreen": "Exit full screen"
+    },
+    "media": {
+      "upload": "Upload file",
+      "uploading": "Uploading file...",
+      "selectedImage": "Selected image",
+      "selectedVideo": "Selected YouTube video",
+      "remove": "Remove media file",
+      "adjustSize": "Adjust size",
+      "closeOptions": "Close options",
+      "replace": "Replace",
+      "emptyTitle": "Add an image, video or audio",
+      "chooseSource": "Choose where to get it from",
+      "pressPlus": "Press + to see the options",
+      "hideOptions": "Hide media options",
+      "showOptions": "Show media options",
+      "uploadFailed": "The file could not be uploaded. Check your connection and try again."
+    },
+    "lesson": {
+      "kinds": {
+        "canva": "Canva",
+        "youtube": "YouTube",
+        "image": "Image",
+        "reading": "Reading",
+        "audio": "Audio",
+        "pdf": "PDF",
+        "word": "Word",
+        "powerpoint": "PowerPoint"
+      },
+      "upload": {
+        "image": "Upload image",
+        "audio": "Upload audio",
+        "pdf": "Upload PDF",
+        "word": "Upload Word document",
+        "powerpoint": "Upload PowerPoint presentation"
+      },
+      "fileTooLarge": "File too large",
+      "fileTooLargeDescription": "The document must be 20 MB or smaller.",
+      "uploadFailed": "The file could not be uploaded",
+      "checkConnection": "Check your connection and try again.",
+      "changeVideo": "Change video",
+      "searchVideo": "Search video",
+      "changePresentation": "Change presentation",
+      "addPresentation": "Add presentation",
+      "notAllowedNotice": "This block type is only available from third grade. Delete it to be able to save the lesson.",
+      "blockTitle": "Block title",
+      "readingTitlePlaceholder": "E.g. The water cycle",
+      "optional": "Optional",
+      "readingText": "Reading text",
+      "readingPlaceholder": "Write the reading. Leave a blank line between paragraphs.",
+      "uploading": "Uploading...",
+      "pdfHint": "Students will see the PDF inside the lesson.",
+      "officeHint": "It will be shown with the Microsoft Office viewer. 20 MB maximum.",
+      "removeContent": "Remove content",
+      "emptyContent": "This block has no content yet.",
+      "addBlock": "Add block",
+      "blockTypes": "Available block types",
+      "gradeHint": "Reading, audio and documents are available from third grade.",
+      "emptyList": "Add the first block: a presentation, a video, an image or a reading.",
+      "listLabel": "Lesson blocks",
+      "blockItem": "block",
+      "notAllowedWarning": "Not available for this grade",
+      "sidebarTitle": "Blocks",
+      "canvasTitle": "LudiLesson",
+      "placeholderTitle": "Build your lesson",
+      "placeholderBody": "Add blocks from the left column. Your students will go through them in order and earn the badges and missions you choose when they finish."
+    },
+    "form": {
+      "types": {
+        "single": "Single choice",
+        "multiple": "Multiple choice",
+        "long": "Long answer"
+      },
+      "gradeBlockedTitle": "Available for third grade",
+      "gradeBlockedBody": "LudiForm is designed for third-grade students. Change the grade on the Welcome screen to create a form.",
+      "sidebarTitle": "Questions",
+      "placeholderTitle": "Build your form",
+      "placeholderBody": "Add single-choice, multiple-choice or long-answer questions. Your students answer with no time limit and you review the written answers in Reports.",
+      "questionText": "Question",
+      "questionPlaceholder": "Write the question...",
+      "longInfo": "The student will write the answer in their own words. You will review it in Reports and, if you approve it, it earns the points set in the Game Panel.",
+      "options": "Options",
+      "markOneHint": "(mark the correct one)",
+      "markAllHint": "(mark every correct one)",
+      "markCorrect": "Mark option {number} as correct",
+      "optionPlaceholder": "Option {number}",
+      "optionText": "Text of option {number}",
+      "deleteOption": "Delete option",
+      "deleteOptionFor": "Delete option {number}",
+      "addOption": "Add option",
+      "addQuestion": "Add question",
+      "questionTypes": "Question types",
+      "emptyList": "Add the first question: single choice, multiple choice or long answer.",
+      "listLabel": "Form questions",
+      "questionItem": "question",
+      "incomplete": "Incomplete question"
+    },
+    "memory": {
+      "duplicate": "Repeated image",
+      "duplicateDescription": "That image is already on the board.",
+      "tooMany": "Too many images",
+      "tooManyDescription": "Only {remaining} more images fit on the board.",
+      "cardLabel": "Board pairs",
+      "hint": "Each image becomes a pair of cards. Add between {min} and {max} images; the board is shuffled every time a student plays.",
+      "addImages": "Add images",
+      "uploading": "Uploading...",
+      "uploadFromDevice": "Upload from your device",
+      "empty": "There are no images yet. Use the buttons above to add the first one.",
+      "gridLabel": "Board images",
+      "imageAlt": "Board image {number}",
+      "deleteImage": "Delete image {number}",
+      "delete": "Delete",
+      "counter": "{count} of {max} pairs",
+      "missing": "{count, plural, one {# more needed to play} other {# more needed to play}}"
+    },
+    "quiz": {
+      "missingQuestion": "The question is missing.",
+      "needTwoAnswers": "Add at least 2 answers.",
+      "fillAllAnswers": "Fill in the text of every answer.",
+      "markCorrect": "Mark the correct answer.",
+      "questionNotSaved": "The question could not be saved",
+      "sidebarTitle": "Questions",
+      "addSlideHint": "Canva presentation shown before the questions, untimed and unscored",
+      "addSlide": "Add slide",
+      "saveChanges": "Save changes",
+      "addQuestion": "Add question",
+      "cancelEdit": "Cancel editing",
+      "savingDraft": "Saving...",
+      "draftSaved": "Draft saved",
+      "questionPlaceholder": "Write your question here... (Press Enter to go to the answers)",
+      "questionLabel": "Question",
+      "themeTip": "<strong>Tip:</strong> the background theme is applied to the activity automatically.",
+      "shortcuts": "<strong>Keyboard shortcuts:</strong> <kbd>Enter</kbd> to move on | <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to mark the correct one"
+    },
+    "trueOrFalse": {
+      "true": "True",
+      "false": "False",
+      "missingStatement": "The statement is missing.",
+      "markTrueOrFalse": "Choose whether it is True or False.",
+      "addStatement": "Add statement",
+      "canvasTitle": "True or False",
+      "statementPlaceholder": "Write your statement here...",
+      "statementLabel": "Statement",
+      "shortcut": "<strong>Keyboard shortcut:</strong> <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to save changes"
+    }
+  },
+  "GamificationPanel": {
+    "copy": {
+      "ludileccion": {
+        "points": "",
+        "badges": "Choose the badges your students can earn by completing the lesson.",
+        "grade": "it sets the available blocks and missions."
+      },
+      "ludiform": {
+        "points": "Points for each correct choice question or written answer you approve.",
+        "badges": "Choose the badges your students can earn by submitting the form.",
+        "grade": "it sets the available missions."
+      },
+      "ludimemory": {
+        "points": "Points the student earns for each pair found.",
+        "badges": "Choose the badges your students can earn while finding pairs.",
+        "grade": "it sets the available missions."
+      },
+      "default": {
+        "points": "Set the points the student earns for each correct answer.",
+        "badges": "Choose the badges your students can earn.",
+        "grade": "it sets the available missions."
+      }
+    },
+    "invalidTime": "Please enter a valid time.",
+    "invalidPoints": "Please enter a valid number of points.",
+    "selectBadge": "Please choose at least one badge.",
+    "saved": "Settings saved!",
+    "savedVoice": "Settings saved successfully!",
+    "regionLabel": "Game settings panel",
+    "title": "Game Settings",
+    "general": "General settings",
+    "grade": "Grade:",
+    "grades": {
+      "1": "First grade",
+      "2": "Second grade",
+      "3": "Third grade"
+    },
+    "gradeUndefined": "Not set",
+    "gradeFromWelcome": "Taken from the grade you chose on the Welcome screen; {reason}",
+    "gradeMissing": "No grade was selected. Go to the Welcome screen to choose one.",
+    "timeLabel": "Time per question (seconds):",
+    "timePlaceholder": "Enter the time",
+    "timeHint": "Set how long the student has to answer.",
+    "pointsPerPair": "Points per pair found:",
+    "pointsPerAnswer": "Points per correct answer:",
+    "pointsPlaceholder": "Enter the points",
+    "badgesTitle": "Reward badges",
+    "badgeLabel": "Badge {name}: {description}",
+    "missionsTitle": "Missions and challenges",
+    "missionsHint": "Turn on the optional challenges students can complete.",
+    "missionLabel": "Mission: {text}",
+    "accessibility": "Accessibility options",
+    "voiceLabel": "Feedback voice",
+    "voiceOn": "Voice on",
+    "voiceOff": "Voice off",
+    "save": "Save settings"
+  },
+  "Tours": {
+    "dashboard": {
+      "buttons": {
+        "next": "Next",
+        "previous": "Previous",
+        "done": "Got it!"
+      },
+      "command": {
+        "title": "Your command center",
+        "description": "From here you can quickly move between your activities, reports and templates."
+      },
+      "personal": {
+        "title": "Your personal space",
+        "description": "Here you will always see a quick summary of what you can do."
+      },
+      "create": {
+        "title": "Design learning experiences",
+        "description": "This is where the magic happens! Create interactive activities such as quizzes or memory games in a few clicks."
+      },
+      "templates": {
+        "title": "Resources and templates",
+        "description": "Save time with our templates or easily manage what you created before."
+      },
+      "drafts": {
+        "title": "Keep working",
+        "description": "Never lose your progress. Pick up your drafts right where you left them."
+      }
+    },
+    "welcome": {
+      "buttons": {
+        "next": "Next",
+        "previous": "Previous",
+        "done": "Let's create!"
+      },
+      "hello": {
+        "title": "Welcome, teacher!",
+        "description": "Hi! We are happy to have you here. Let's set up your workspace."
+      },
+      "grade": {
+        "title": "Choose your grade",
+        "description": "Select the grade you will work with, so we can show you resources designed for your students."
+      },
+      "done": {
+        "title": "Great choice!",
+        "description": "Once you choose, you will go straight to your personalized dashboard. Let's create!"
+      }
+    },
+    "createActivity": {
+      "ludiquiz": {
+        "title": "LudiQuiz!",
+        "description": "Welcome to the activity creator! To start designing your interactive quiz, click LudiQuiz here."
+      }
+    },
+    "ludiquiz": {
+      "buttons": {
+        "next": "Next",
+        "previous": "Previous",
+        "done": "Finish"
+      },
+      "name": {
+        "title": "Activity name",
+        "description": "The first step is giving your game an identity. Write a clear, descriptive name for your LudiQuiz here."
+      },
+      "question": {
+        "title": "Question",
+        "description": "You are now in the main editor. Use this space to write the question your students will answer."
+      },
+      "media": {
+        "title": "Media files",
+        "description": "Make your questions more engaging: add images, videos or audio to go with the question."
+      },
+      "answers": {
+        "title": "Answers",
+        "description": "Write the possible answers and use the circle to mark the correct one before moving on."
+      },
+      "panel": {
+        "title": "Game Panel",
+        "description": "The Game Panel is in the right column: set the time and points per question and choose the badges and missions your students can earn."
+      }
+    },
+    "registry": {
+      "welcome_tour": {
+        "name": "Teacher welcome",
+        "description": "First tour through the welcome page and grade selection."
+      },
+      "dashboard_tour": {
+        "name": "Main dashboard",
+        "description": "Get to know your command center: navigation, creating activities and drafts."
+      },
+      "create_activity_tour": {
+        "name": "Creating activities",
+        "description": "Learn to create your first interactive activity from scratch."
+      },
+      "ludiquiz_tour": {
+        "name": "LudiQuiz editor",
+        "description": "Full guide to the quiz editor: questions, answers and the Game Panel."
+      }
+    }
+  },
+  "TourSettings": {
+    "title": "Guided tours",
+    "subtitle": "Choose how and when you want interactive help in the app.",
+    "resetDone": "All guided tours were reset. They will show automatically the next time you visit each page.",
+    "starting": "Starting \"{name}\"... We will take you to the right page.",
+    "general": "General settings",
+    "enable": "Enable automatic guided tours",
+    "enableHint": "When off, tours will not show automatically when you visit new pages.",
+    "mode": "Help type",
+    "modeFull": "Full tour",
+    "modeHints": "Hints only",
+    "modeFullHint": "Step-by-step tour that dims the rest of the screen.",
+    "modeHintsHint": "Only highlights elements, without blocking interaction.",
+    "resetAll": "Reset all guided tours",
+    "resetAllHint": "Every tour will show again.",
+    "available": "Available tours",
+    "availableHint": "You can replay any tour whenever you want, even if you already completed it.",
+    "completed": "Completed",
+    "play": "Play",
+    "confirmTitle": "Reset all guided tours?",
+    "confirmBody": "Every tour will show automatically the next time you visit each page.",
+    "cancel": "Cancel",
+    "reset": "Reset"
+  },
+  "SettingsNav": {
+    "personal": "Personal information",
+    "security": "Security",
+    "appearance": "Appearance and language",
+    "gamification": "Gamification",
+    "tours": "Guided tours",
+    "data": "Data management",
+    "users": "User management",
+    "back": "Back to dashboard",
+    "title": "Settings"
+  },
+  "AppearanceSettings": {
+    "title": "Appearance and language",
+    "subtitle": "Personalize your LudiGame experience.",
+    "languageTitle": "Language",
+    "languageHint": "Choose the language of the LudiGame interface. Your choice is saved automatically.",
+    "themeTitle": "Interface theme",
+    "themeHint": "Set the platform colors to improve visibility.",
+    "light": "Light mode",
+    "lightHint": "Standard light theme. Currently active.",
+    "darkSoon": "Dark mode (coming soon)"
+  },
+  "DataSettings": {
+    "title": "Data management",
+    "subtitle": "Control, download and manage the information you keep in LudiGame.",
+    "exported": "Your data was exported and downloaded successfully.",
+    "exportFailed": "The information could not be exported. Please try again.",
+    "exportTitle": "Export my information",
+    "exportHint": "Download a copy of every activity you created, with its questions, options and settings, as JSON.",
+    "exporting": "Processing and downloading...",
+    "download": "Download data (JSON)"
+  },
+  "GamePreferences": {
+    "saved": "Preferences saved successfully.",
+    "saveFailed": "Your preferences could not be saved.",
+    "title": "Game and evaluation preferences",
+    "subtitle": "Defaults for your new activities and reports.",
+    "gamificationTitle": "Default gamification",
+    "timeLabel": "Default time per question (seconds)",
+    "timeHint": "Initial time limit every time you create an activity.",
+    "pointsLabel": "Points per correct answer",
+    "pointsHint": "Default points for each correct answer.",
+    "voiceLabel": "Turn on voice narration by default",
+    "voiceHint": "When on, games read the questions aloud.",
+    "publicLabel": "Make my activities public by default",
+    "publicHint": "When on, other teachers can see and use your activities.",
+    "evaluationTitle": "Activity follow-up",
+    "studentLabel": "Ask students for their rating",
+    "studentHint": "After each activity, students say whether they liked it and whether they feel they learned, on a 1 to 5 scale with faces.",
+    "teacherLabel": "Ask for my teacher evaluation",
+    "teacherHint": "When you close a live session, and later from the report, we will ask how effective the activity was for your class objective.",
+    "saving": "Saving",
+    "save": "Save preferences"
+  },
+  "PersonalInfo": {
+    "updated": "Profile updated successfully.",
+    "updateFailed": "Your profile could not be updated. Please try again.",
+    "verificationSent": "We sent you a verification email. Check your inbox.",
+    "emailFailed": "The email could not be sent. Please try again.",
+    "title": "Personal information",
+    "subtitle": "Manage your personal details.",
+    "profileTitle": "Profile details",
+    "name": "Full name",
+    "namePlaceholder": "E.g. Jane Smith",
+    "email": "Email",
+    "emailHint": "Your email is linked to your account and cannot be changed here.",
+    "notVerified": "Your email is not verified.",
+    "sending": "Sending...",
+    "sendVerification": "Send verification email",
+    "saving": "Saving",
+    "save": "Save changes"
+  },
+  "SecuritySettings": {
+    "mismatch": "The passwords do not match.",
+    "tooShort": "The password must be at least {min} characters long.",
+    "updated": "Password updated successfully.",
+    "recentLogin": "For your security, sign out and sign in again to change your password.",
+    "updateFailed": "The password could not be updated. Please try again.",
+    "resetSent": "We sent you an email to reset your password.",
+    "emailFailed": "The email could not be sent. Please try again.",
+    "title": "Account security",
+    "subtitle": "Update your credentials and protect your account.",
+    "changeTitle": "Change password",
+    "newPassword": "New password",
+    "minPlaceholder": "At least {min} characters",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "confirmPassword": "Confirm password",
+    "confirmPlaceholder": "Repeat the new password",
+    "saving": "Saving",
+    "changeButton": "Change password",
+    "recoveryTitle": "Recovery",
+    "recoveryHint": "Forgot your password or want to reset it securely? We will email <strong>{email}</strong> with instructions.",
+    "sending": "Sending...",
+    "sendRecovery": "Send recovery email"
+  },
+  "AdminUsers": {
+    "forbidden": "You do not have administrator permissions.",
+    "loadFailed": "The user list could not be loaded.",
+    "deleted": "User {name} was deleted successfully.",
+    "deleteFailed": "The user could not be deleted.",
+    "title": "User administration",
+    "subtitle": "Manage the accounts of the teachers registered on the platform.",
+    "listTitle": "Teachers",
+    "count": "{count, plural, one {# user} other {# users}}",
+    "empty": "There are no registered teachers.",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "createdAt": "Registered on",
+    "actions": "Actions",
+    "noEmail": "No email",
+    "roles": {
+      "ADMIN": "Administrator",
+      "EDUCADOR": "Teacher"
+    },
+    "delete": "Delete user",
+    "deleteUser": "Delete {name}",
+    "confirmTitle": "Confirm deletion",
+    "close": "Close",
+    "irreversible": "Warning! This action cannot be undone.",
+    "confirmBody": "Are you sure you want to permanently delete <strong>{name}</strong>?",
+    "confirmDetail": "All their data will be deleted, including the activities they created and their students' reports.",
+    "cancel": "Cancel",
+    "deleting": "Deleting",
+    "confirm": "Yes, delete permanently"
+  },
+  "Play": {
+    "game": {
+      "go": "GO!",
+      "lessonCompleted": "Lesson completed!",
+      "greatJob": "Amazing work!",
+      "finalScore": "Final score: <span>{score}</span>",
+      "loading": "Loading...",
+      "blockProgress": "Block {current} / {total}",
+      "slide": "Slide",
+      "points": "{score} pts",
+      "finishLesson": "Finish lesson",
+      "continue": "Continue",
+      "timeLeft": "{seconds} seconds left",
+      "questionProgress": "Question {current} of {total}",
+      "true": "True",
+      "false": "False",
+      "correct": "Correct! +{points} pts",
+      "incorrect": "Oh no! Keep trying"
+    },
+    "screens": {
+      "ready": "Are you ready?",
+      "readyName": "Are you ready, {name}?",
+      "start": "YES, LET'S GO!",
+      "missionsDone": "Missions completed",
+      "closePreview": "Close preview",
+      "backHome": "Back to start"
+    },
+    "waiting": {
+      "finishedTitle": "The activity is over",
+      "finishedBody": "Your teacher already closed this session. Ask for a new PIN to play again.",
+      "backHome": "Back to start",
+      "hello": "Hi",
+      "helloName": "Hi, {name}",
+      "waitingBody": "You are in. The activity will start when your teacher begins it.",
+      "waitingTeacher": "Waiting for the teacher"
+    },
+    "achievements": {
+      "badgeUnlocked": "Badge unlocked!",
+      "missionDone": "Mission complete!",
+      "badgesEarned": "Badges earned ({opened}/{total})",
+      "openBox": "Open surprise badge {number} of {total}",
+      "tapToOpen": "Tap to open",
+      "nextBadge": "Next badge",
+      "allRevealed": "All your badges are revealed!"
+    },
+    "memory": {
+      "saveFailed": "Your result could not be saved",
+      "sessionMissing": "Your game session was not found. Join again with the PIN.",
+      "tryAgain": "Please try again.",
+      "allFound": "You found all the pairs!",
+      "pairFound": "Pair found!",
+      "notPair": "Not a pair. Try again.",
+      "boardComplete": "Board complete!",
+      "score": "Score: <span>{score}</span>",
+      "summaryLine": "You found {pairs} pairs in {attempts, plural, one {# try} other {# tries}}.",
+      "pairsProgress": "{found} / {total} pairs",
+      "attempts": "{count, plural, one {# try} other {# tries}}",
+      "cardMatched": "pair found",
+      "cardFaceUp": "face up",
+      "cardFaceDown": "face down",
+      "cardLabel": "Card {number}, {state}"
+    },
+    "form": {
+      "missingAnswers": "Missing answers",
+      "missingAnswersDescription": "{count, plural, one {You still have # question to answer.} other {You still have # questions to answer.}}",
+      "submitFailed": "Could not submit",
+      "tryAgain": "Please try again.",
+      "sessionMissing": "Your game session was not found. Join again with the PIN.",
+      "submitted": "Form submitted!",
+      "score": "Score: <span>{score}</span>",
+      "closedSummary": "You got {correct} of {total} choice questions right.",
+      "pendingReview": "{count, plural, one {Your written answer is waiting for your teacher's review.} other {Your # written answers are waiting for your teacher's review.}}",
+      "answered": "{answered} / {total} answered",
+      "noTimeLimit": "No time limit",
+      "markAll": "Mark every correct one",
+      "answerPlaceholder": "Write your answer here...",
+      "answerLabel": "Answer to question {number}",
+      "words": "{count, plural, one {# word} other {# words}}",
+      "remaining": "{count, plural, one {# question left} other {# questions left}}",
+      "submitting": "Submitting...",
+      "submit": "Submit form"
+    },
+    "lobby": {
+      "joinFailed": "Could not join the game.",
+      "connectionError": "Connection error. Please try again.",
+      "title": "Join the game!",
+      "pinLabel": "Game PIN (6 digits)",
+      "pinPlaceholder": "Example: 123456",
+      "nameLabel": "Your name",
+      "namePlaceholder": "Example: Ana",
+      "joining": "Joining...",
+      "join": "Join",
+      "avatarLabel": "Choose your avatar:"
+    }
+  },
+  "Media": {
+    "canva": "Canva presentation",
+    "documents": {
+      "PDF": "PDF document",
+      "WORD": "Word document",
+      "POWERPOINT": "PowerPoint presentation"
+    },
+    "openNewTab": "Open in a new tab",
+    "resource": "Media resource",
+    "youtube": "YouTube video",
+    "audioUnsupported": "Your browser cannot play this audio.",
+    "unsupported": "Unsupported file type: {type}"
+  },
+  "Common": {
+    "grades": {
+      "1": "First",
+      "2": "Second",
+      "3": "Third"
+    },
+    "noGrade": "No grade",
+    "activityTypes": {
+      "1": "LudiQuiz",
+      "2": "True or False",
+      "3": "LudiMemory",
+      "4": "LudiLesson",
+      "5": "LudiForm"
+    }
+  },
+  "Errors": {
+    "unauthorized": "Not authorized. Please sign in.",
+    "invalidData": "Invalid data.",
+    "deleteForbidden": "You do not have permission to delete this activity.",
+    "deleteFailed": "The activity could not be deleted.",
+    "launchFailed": "The game session could not be started.",
+    "templateNotFound": "Template not found.",
+    "cloneFailed": "The template could not be copied.",
+    "answerNotFound": "Answer not found.",
+    "reviewForbidden": "You do not have permission to grade this answer.",
+    "forbiddenOrigin": "Origin not allowed.",
+    "saveFailed": "The activity could not be saved. Please try again.",
+    "updateFailed": "The activity could not be updated. Please try again.",
+    "activityNotFound": "Activity not found.",
+    "editForbidden": "You do not have permission to edit this activity.",
+    "missingData": "Enter the PIN, your name and your avatar.",
+    "invalidJoin": "Check the PIN (6 digits) and your name (20 characters maximum).",
+    "invalidPin": "The PIN is not valid or the session has ended.",
+    "templateNotPlayable": "A template cannot be played directly.",
+    "server": "A server error occurred. Please try again."
+  },
+  "Live": {
+    "done": "Finished",
+    "points": "{score} pts",
+    "loading": "Loading live panel...",
+    "loadError": "The session could not be loaded.",
+    "myActivities": "My activities",
+    "title": "Live panel",
+    "subtitle": {
+      "waiting": "Share the PIN. The activity will start for everyone when you begin it.",
+      "active": "Follow your students' progress in real time.",
+      "finished": "These are the session's final results."
+    },
+    "phase": {
+      "waiting": "Waiting room",
+      "active": "In progress",
+      "finished": "Finished"
+    },
+    "connected": "Connected students",
+    "nobodyYet": "Nobody has joined yet. Students will appear here when they enter the PIN.",
+    "pinControls": "PIN and controls",
+    "pinLabel": "Activity PIN",
+    "pinCopied": "PIN copied",
+    "copyPin": "Copy PIN",
+    "joinHint": "Students join at <strong>{host}</strong>",
+    "start": "Start activity",
+    "startHint": "You can start once at least one student joins.",
+    "ranking": "Ranking",
+    "students": "{count, plural, one {# student} other {# students}}",
+    "noStudents": "No students are connected.",
+    "progressControls": "Progress and controls",
+    "progressTitle": "Class progress",
+    "progressValue": "{completed} of {total}",
+    "finishedStudents": "Students who finished",
+    "finishedHint": "Students who finished the activity.",
+    "finish": "End activity",
+    "results": "Results",
+    "nobodyPlayed": "Nobody took part in this session.",
+    "nextSteps": "Next steps",
+    "finishedTitle": "Session ended",
+    "finishedBody": "Review each student's details and grade written answers in the report.",
+    "viewReport": "View report",
+    "backToActivities": "Back to my activities"
+  },
+  "Templates": {
+    "grade1": "1st grade",
+    "grade2": "2nd grade",
+    "grade3": "3rd grade",
+    "allGrades": "All grades",
+    "allGradesShort": "All",
+    "title": "Template catalog",
+    "subtitle": "Explore and copy ready-to-use classroom activities.",
+    "gradeFilter": "Grade: {grade}",
+    "subjectFilter": "Subject: {subject}",
+    "allSubjectsShort": "All",
+    "allSubjects": "All subjects",
+    "subjects": {
+      "math": "Mathematics",
+      "language": "Language and Literature",
+      "technology": "Technology",
+      "ephemerides": "Nicaraguan historical dates"
+    },
+    "emptyTitle": "No templates match this filter yet",
+    "emptyBody": "Try another grade or subject.",
+    "launchFailed": "The game could not be launched",
+    "tryAgain": "Please try again.",
+    "cloneFailed": "The template could not be used",
+    "cloneError": "An error occurred while copying the template.",
+    "unexpected": "Unexpected error while using the template.",
+    "general": "General",
+    "officialTemplate": "Official LudiGame template.",
+    "studentPin": "STUDENT PIN: <strong>{pin}</strong>",
+    "preparing": "Preparing...",
+    "use": "Use template",
+    "launch": "Launch a game now",
+    "preview": "Preview"
+  },
+  "MyActivities": {
+    "confirmDelete": "Are you sure you want to delete the activity \"{name}\"?",
+    "deleteFailed": "The activity could not be deleted",
+    "tryAgain": "Please try again."
+  },
+  "Pagination": {
+    "show": "Show",
+    "records": "records",
+    "showing": "Showing <span>{start}</span> - <span>{end}</span> of <span>{total}</span>",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page}"
+  },
+  "ExportActivities": {
+    "code": "Code",
+    "name": "Name",
+    "type": "Type",
+    "grade": "Grade",
+    "creator": "Creator",
+    "creatorEmail": "Creator email",
+    "createdAt": "Created on",
+    "fileName": "My_activities",
+    "button": "Export to Excel"
+  },
+  "Navbar": {
+    "logoutFailed": "Could not sign out",
+    "tryAgain": "Please try again.",
+    "loggingOut": "Signing out...",
+    "user": "User",
+    "profile": "My profile",
+    "settings": "Settings",
+    "closing": "Closing...",
+    "logout": "Sign out"
+  },
+  "StudentDetail": {
+    "badge": "Badge",
+    "mission": "Mission",
+    "score": "Score:",
+    "points": "{score} pts",
+    "close": "Close",
+    "totalTime": "Total time:",
+    "performance": "Overall performance",
+    "effectiveness": "Overall effectiveness",
+    "classAverage": "Class average",
+    "pace": "Work pace",
+    "effort": {
+      "average": "Average",
+      "fast": "Fast",
+      "analytical": "Analytical"
+    },
+    "achievements": "Badges and missions ({count})",
+    "log": "Session log"
+  },
+  "SessionLog": {
+    "true": "True",
+    "false": "False",
+    "option": "Option {number}",
+    "noAnswer": "No answer",
+    "timeout": "No answer (time ran out)",
+    "unknown": "Unknown",
+    "pending": "To review",
+    "review": "Review",
+    "thoughtful": "Thoughtful",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "mastered": "Mastered!",
+    "question": "Question {number}",
+    "noQuestionText": "Question without text",
+    "theirAnswer": "Their answer",
+    "correctAnswer": "Correct answer",
+    "reviewFailed": "The review could not be saved",
+    "changeGrade": "Change grade",
+    "gradeAnswer": "Grade written answer",
+    "isCorrect": "Is the answer correct?"
+  },
+  "ActivityView": {
+    "invalidId": "Invalid identifier",
+    "notFound": "Activity not found",
+    "back": "Back",
+    "accessDenied": "Access denied",
+    "privateBody": "You do not have permission to view this private activity.",
+    "backToActivities": "Back to my activities",
+    "templates": "Templates",
+    "myActivities": "My activities",
+    "edit": "Edit activity",
+    "public": "Public",
+    "private": "Private",
+    "createdBy": "Created by",
+    "time": "Time",
+    "seconds": "{seconds} s",
+    "notApplicable": "N/A",
+    "points": "Points",
+    "grade": "Grade",
+    "date": "Date",
+    "confirmDelete": "Are you sure you want to deactivate the activity \"{name}\"?",
+    "deleteFailed": "The activity could not be deactivated",
+    "tryAgain": "Please try again.",
+    "delete": "Deactivate activity",
+    "launchFailed": "The game could not be launched",
+    "launchTitle": "Launch game (live panel)",
+    "launch": "Launch",
+    "copyLink": "Copy public link",
+    "linkCopied": "Link copied"
+  },
+  "ActivityContent": {
+    "true": "True",
+    "false": "False",
+    "pdfActivity": "Activity: {name}",
+    "pdfType": "Type: {type}",
+    "pdfGrade": "Grade: {grade}",
+    "pdfPairs": "Pairs (LudiMemory)",
+    "pair": "Pair #{number}",
+    "noText": "No text",
+    "pdfId": "No.",
+    "pdfContent": "Content",
+    "pdfAnswers": "Questions and correct answers",
+    "notApplicable": "N/A",
+    "openAnswer": "Open answer (reviewed by the teacher)",
+    "correctOption": "Correct option",
+    "pdfQuestion": "Question",
+    "pdfCorrect": "Correct answer",
+    "block": "Block {number}",
+    "slide": "Slide",
+    "question": "Question {number}",
+    "title": "Activity content",
+    "exportPdf": "Export PDF",
+    "points": "{points} pts",
+    "longHint": "The student writes the answer; you grade it in Reports.",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "index": "Question index"
+  },
+  "Profile": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "memberSince": "Member since {date}",
+    "myActivities": "My activities",
+    "activitiesOf": "{name}'s activities",
+    "ownHint": "Explore, edit and share the learning experiences you created.",
+    "otherHint": "Explore the public activities created by this teacher.",
+    "emptyTitle": "No activities here yet",
+    "emptyOwn": "Create your first activity from the dashboard to start filling this space.",
+    "emptyOther": "This user has not published any activities yet."
+  },
+  "AdminGuide": {
+    "open": "How to read this report",
+    "close": "Close guide",
+    "title": "Analytics guide",
+    "intro": "This guide helps you read the activity follow-up metrics.",
+    "teacher": {
+      "title": "Effectiveness according to teachers",
+      "body": "From 1 to 5, how effective or useful the teacher found the activity for meeting their class objective in that grade."
+    },
+    "objective": {
+      "title": "Objective met",
+      "body": "Whether the activity helped meet the learning objective: Yes, Partially or No. The consolidated view shows the share of sessions with Yes and, below it, with Partially."
+    },
+    "students": {
+      "title": "Student ratings",
+      "body": "Average of what students answered at the end: how much they liked the activity and how much they feel they learned, from 1 to 5."
+    },
+    "consolidated": {
+      "title": "View by activity and grade",
+      "body": "Groups every session of an activity in a grade. Copies of the same template made by different teachers count as the same activity. Sort by any column to see what works best in each grade."
+    },
+    "risk": {
+      "title": "Risk question",
+      "body": "In the per-session view, the question the class got wrong most often: a concept worth reinforcing."
+    }
+  },
+  "AdminFilter": {
+    "searchPlaceholder": "Search by activity or teacher...",
+    "grade": "Grade:",
+    "allGrades": "All",
+    "grade1": "1st grade",
+    "grade2": "2nd grade",
+    "grade3": "3rd grade",
+    "date": "Date:",
+    "allTime": "All time",
+    "last7": "Last 7 days",
+    "last30": "Last 30 days"
+  },
+  "AdminSessions": {
+    "pageTitle": "Activity follow-up",
+    "pageSubtitle": "Activity effectiveness by grade according to teachers and students.",
+    "question": "Question",
+    "notAvailable": "N/A",
+    "inProgress": "In progress",
+    "pdfTitle": "Analytics report: {name}",
+    "pdfTeacher": "Teacher: {name} ({email})",
+    "pdfDate": "Date: {date}",
+    "pdfTeacherEvaluation": "Teacher evaluation",
+    "pdfRating": "Effectiveness",
+    "pdfObjective": "Objective met",
+    "pdfDifficulty": "Reported difficulty",
+    "pdfParticipants": "Participants and performance",
+    "pdfQuestionStats": "Statistics by question",
+    "student": "Student",
+    "score": "Score",
+    "enjoyment": "Enjoyment",
+    "learning": "Learning",
+    "hit": "Correct",
+    "miss": "Wrong",
+    "teacher": "Teacher",
+    "activity": "Activity",
+    "type": "Type",
+    "grade": "Grade",
+    "date": "Date",
+    "scores": "Ratings (teacher/students)",
+    "unknownUser": "Unknown user",
+    "noEmail": "No email",
+    "teacherRating": "Effectiveness according to the teacher",
+    "studentEnjoyment": "Student enjoyment",
+    "teacherEvaluation": "Teacher evaluation:",
+    "objective": "Objective:",
+    "studentEnjoymentLabel": "Student enjoyment:",
+    "healthSummary": "Activity summary",
+    "exportPdf": "Export PDF",
+    "contentAlert": "Content alert",
+    "hardest": "Hardest question",
+    "missRate": "{rate}% wrong",
+    "reinforce": "Consider reinforcing this topic with the group.",
+    "notEnoughData": "Not enough data to detect an error pattern.",
+    "participants": "Participants ({count})",
+    "reception": "Enjoyment",
+    "receptionHigh": "High",
+    "receptionMid": "Medium",
+    "receptionLow": "Low",
+    "noParticipants": "No participants recorded.",
+    "noSessions": "No sessions found."
+  },
+  "SessionTimeout": {
+    "idleTitle": "Are you still there?",
+    "expiringTitle": "Your session is about to end",
+    "idleBody": "For your security we will sign you out due to inactivity.",
+    "expiringBody": "You reached the maximum session length. Save your work; you will need to sign in again.",
+    "logout": "Sign out",
+    "stay": "Stay signed in"
+  },
+  "AuthErrors": {
+    "noToken": "No sign-in credential was received.",
+    "invalidToken": "The sign-in credential is not valid.",
+    "stale": "Please sign in again.",
+    "configuration": "System configuration error. Contact the administrator.",
+    "registerFailed": "Your details could not be registered. Please try again.",
+    "sessionFailed": "The session could not be started. Please try again."
   }
 }

@@ -12,8 +12,6 @@ export interface TourPreferences {
 
 export interface TourConfig {
   id: string;
-  name: string;
-  description: string;
 }
 
 const STORAGE_KEY = 'ludigame_tour_preferences';

@@ -8,12 +8,16 @@ import { cloneTemplateActivity } from "./actions";
 import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
 import { notify } from "@/components/ui";
 import { getEditorRoute, openPendingEditorTab } from "@/lib/editorTab";
+import { useTranslations } from "next-intl";
 
 interface TemplateCardProps {
   template: any;
 }
 
 export default function TemplateCard({ template }: TemplateCardProps) {
+  const t = useTranslations("Templates");
+  const tCommon = useTranslations("Common");
+  const tThemes = useTranslations("themeBackground");
   const [cloning, setCloning] = useState(false);
   const [sessionPin, setSessionPin] = useState<string | null>(null);
   const [isLaunching, setIsLaunching] = useState(false);
@@ -24,7 +28,7 @@ export default function TemplateCard({ template }: TemplateCardProps) {
     if (result.success) {
         setSessionPin(result.pin || "");
     } else {
-        notify.error("No se pudo lanzar la partida", result.error || "Inténtalo de nuevo.");
+        notify.error(t("launchFailed"), result.error || t("tryAgain"));
     }
     setIsLaunching(false);
   };
@@ -64,13 +68,13 @@ export default function TemplateCard({ template }: TemplateCardProps) {
         setCloning(false);
       } else {
         editorTab.cancel();
-        notify.error("No se pudo usar la plantilla", result.error || "Ocurrió un error al clonar la plantilla.");
+        notify.error(t("cloneFailed"), result.error || t("cloneError"));
         setCloning(false);
       }
     } catch (error) {
       console.error(error);
       editorTab.cancel();
-      notify.error("Error inesperado al usar la plantilla.");
+      notify.error(t("unexpected"));
       setCloning(false);
     }
   };
@@ -90,7 +94,7 @@ export default function TemplateCard({ template }: TemplateCardProps) {
           <>
             <Image
               src={template.activity.image_url}
-              alt={template.activity.activity_name || "Template cover"}
+              alt=""
               fill
               style={{ objectFit: "cover" }}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -102,9 +106,9 @@ export default function TemplateCard({ template }: TemplateCardProps) {
             }} />
             <div className={styles.cardBadges} style={{ position: "absolute", bottom: "12px", right: "12px", zIndex: 1, display: "flex", gap: "8px" }}>
               <span className={styles.gradeBadge} style={{ background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)', color: 'white', fontWeight: 'bold' }}>
-                {template.tema?.nombre || "General"}
+                {template.tema?.nombre && tThemes.has(template.tema.nombre) ? tThemes(template.tema.nombre) : t("general")}
               </span>
-              <span className={styles.gradeBadge}>{template.grado?.grade_type_name || "Todos"}</span>
+              <span className={styles.gradeBadge}>{template.gradoId ? tCommon(`grades.${template.gradoId as 1 | 2 | 3}`) : t("allGradesShort")}</span>
             </div>
             <div style={{ position: "absolute", top: "12px", left: "12px", zIndex: 1 }}>
               <div className={`${styles.iconContainer} ${typeBadgeClass}`} style={{ width: "36px", height: "36px", minWidth: "36px" }}>
@@ -119,9 +123,9 @@ export default function TemplateCard({ template }: TemplateCardProps) {
             </div>
             <div className={styles.cardBadges}>
               <span className={styles.gradeBadge} style={{ background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)', color: 'white', fontWeight: 'bold' }}>
-                {template.tema?.nombre || "General"}
+                {template.tema?.nombre && tThemes.has(template.tema.nombre) ? tThemes(template.tema.nombre) : t("general")}
               </span>
-              <span className={styles.gradeBadge}>{template.grado?.grade_type_name || "Todos"}</span>
+              <span className={styles.gradeBadge}>{template.gradoId ? tCommon(`grades.${template.gradoId as 1 | 2 | 3}`) : t("allGradesShort")}</span>
             </div>
           </>
         )}
@@ -132,11 +136,11 @@ export default function TemplateCard({ template }: TemplateCardProps) {
           {template.activity.activity_name}
         </h3>
         <p className={styles.cardDate}>
-          {template.activity.activity_desc || "Plantilla oficial de LudiGame."}
+          {template.activity.activity_desc || t("officialTemplate")}
         </p>
         <div className="d-flex justify-content-between align-items-center w-100 mt-3">
           <span className={`${styles.badgeType} ${typeBadgeClass}`}>
-            {template.tipoActividad.nombre}
+            {tCommon(`activityTypes.${template.tipoActividadId as 1 | 2 | 3 | 4 | 5}`)}
           </span>
         </div>
       </div>
@@ -144,7 +148,7 @@ export default function TemplateCard({ template }: TemplateCardProps) {
       <div className={styles.cardFooter} style={{ padding: "1.25rem", borderTop: "1px dashed rgba(29, 21, 58, 0.1)", display: "flex", flexDirection: "column", gap: "10px" }}>
         {sessionPin && (
             <div className="w-100 text-center p-2 bg-success text-white rounded" style={{ fontSize: '0.9rem' }}>
-                PIN PARA ALUMNOS: <strong>{sessionPin}</strong>
+                {t.rich("studentPin", { pin: sessionPin, strong: (chunks) => <strong>{chunks}</strong> })}
             </div>
         )}
         <div className="d-flex w-100 gap-2">
@@ -166,12 +170,12 @@ export default function TemplateCard({ template }: TemplateCardProps) {
             {cloning ? (
                 <>
                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Preparando...
+                {t("preparing")}
                 </>
             ) : (
                 <>
-                <FaClone />
-                Usar plantilla
+                <FaClone aria-hidden="true" />
+                {t("use")}
                 </>
             )}
             </button>
@@ -180,7 +184,8 @@ export default function TemplateCard({ template }: TemplateCardProps) {
                 onClick={handleLaunch}
                 disabled={isLaunching}
                 className="btn d-flex justify-content-center align-items-center"
-                title="Lanzar partida inmediata"
+                title={t("launch")}
+                aria-label={t("launch")}
                 style={{
                     background: 'white',
                     color: '#ff9f43',
@@ -193,7 +198,7 @@ export default function TemplateCard({ template }: TemplateCardProps) {
                 onMouseEnter={(e) => { e.currentTarget.style.background = '#ff9f43'; e.currentTarget.style.color = 'white'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'white'; e.currentTarget.style.color = '#ff9f43'; }}
             >
-                {isLaunching ? <span className="spinner-border spinner-border-sm" /> : <FaRocket />}
+                {isLaunching ? <span className="spinner-border spinner-border-sm" aria-hidden="true" /> : <FaRocket aria-hidden="true" />}
             </button>
 
             <a
@@ -201,7 +206,8 @@ export default function TemplateCard({ template }: TemplateCardProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="btn d-flex justify-content-center align-items-center"
-            title="Previsualizar"
+            title={t("preview")}
+            aria-label={t("preview")}
             style={{
                 background: 'white',
                 color: '#1D153A',
@@ -214,7 +220,7 @@ export default function TemplateCard({ template }: TemplateCardProps) {
             onMouseEnter={(e) => { e.currentTarget.style.background = '#1D153A'; e.currentTarget.style.color = 'white'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'white'; e.currentTarget.style.color = '#1D153A'; }}
             >
-            <FaEye />
+            <FaEye aria-hidden="true" />
             </a>
         </div>
       </div>

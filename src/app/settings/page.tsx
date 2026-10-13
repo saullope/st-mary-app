@@ -3,12 +3,12 @@ import { PersonalInfo } from "@/components/settings/PersonalInfo";
 import getSession from '@/lib/auth/getSession'; 
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { redirect } from 'next/navigation';
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `Información Personal | LudiGame`,
-    description: 'Ajustes de información personal de LudiGame'
-  };
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("settings.personal.title"), description: t("settings.personal.description") });
 }
 
 export default async function SettingsPage() {

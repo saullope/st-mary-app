@@ -4,12 +4,12 @@ import { FaCircleDot, FaSquareCheck, FaAlignLeft } from "react-icons/fa6";
 import type { IconType } from "react-icons";
 import { EditorList, EditorListItem, EditorListEmpty, EditorTypePicker } from "@/components/editor";
 import {
-  FORM_QUESTION_LABELS,
   FORM_QUESTION_TYPES,
   validateFormQuestion,
   type FormQuestion,
   type FormQuestionType,
 } from "@/features/form/formQuestions";
+import { useTranslations } from "next-intl";
 
 export const FORM_TYPE_ICONS: Record<FormQuestionType, IconType> = {
   single: FaCircleDot,
@@ -23,19 +23,22 @@ export const FORM_TYPE_COLORS: Record<FormQuestionType, string> = {
   long: "#e8692f",
 };
 
-export const FormQuestionPicker = ({ onAdd }: { onAdd: (type: FormQuestionType) => void }) => (
-  <EditorTypePicker
-    label="Agregar pregunta"
-    groupLabel="Tipos de pregunta"
-    options={FORM_QUESTION_TYPES.map((type) => ({
-      value: type,
-      label: FORM_QUESTION_LABELS[type],
-      icon: FORM_TYPE_ICONS[type],
-      color: FORM_TYPE_COLORS[type],
-    }))}
-    onPick={onAdd}
-  />
-);
+export const FormQuestionPicker = ({ onAdd }: { onAdd: (type: FormQuestionType) => void }) => {
+  const t = useTranslations("Editor.form");
+  return (
+    <EditorTypePicker
+      label={t("addQuestion")}
+      groupLabel={t("questionTypes")}
+      options={FORM_QUESTION_TYPES.map((type) => ({
+        value: type,
+        label: t(`types.${type}`),
+        icon: FORM_TYPE_ICONS[type],
+        color: FORM_TYPE_COLORS[type],
+      }))}
+      onPick={onAdd}
+    />
+  );
+};
 
 interface FormQuestionListProps {
   questions: FormQuestion[];
@@ -46,12 +49,13 @@ interface FormQuestionListProps {
 }
 
 export const FormQuestionList = ({ questions, selectedId, onSelect, onMove, onDelete }: FormQuestionListProps) => {
+  const t = useTranslations("Editor.form");
   if (questions.length === 0) {
-    return <EditorListEmpty>Agrega la primera pregunta: de opción única, de selección múltiple o de respuesta larga.</EditorListEmpty>;
+    return <EditorListEmpty>{t("emptyList")}</EditorListEmpty>;
   }
 
   return (
-    <EditorList label="Preguntas del formulario">
+    <EditorList label={t("listLabel")}>
       {questions.map((question, index) => {
         const Icon = FORM_TYPE_ICONS[question.type];
         return (
@@ -59,11 +63,11 @@ export const FormQuestionList = ({ questions, selectedId, onSelect, onMove, onDe
             key={question.id}
             position={index + 1}
             label={question.text}
-            placeholder={FORM_QUESTION_LABELS[question.type]}
+            placeholder={t(`types.${question.type}`)}
             leading={<Icon style={{ color: FORM_TYPE_COLORS[question.type] }} aria-hidden="true" />}
-            itemName="pregunta"
+            itemName={t("questionItem")}
             selected={selectedId === question.id}
-            warning={validateFormQuestion(question) ? "Pregunta incompleta" : undefined}
+            warning={validateFormQuestion(question) ? t("incomplete") : undefined}
             isFirst={index === 0}
             isLast={index === questions.length - 1}
             onSelect={() => onSelect(question.id)}

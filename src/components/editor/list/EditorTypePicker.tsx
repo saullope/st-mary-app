@@ -5,6 +5,7 @@ import type { IconType } from "react-icons";
 import { FaPlus, FaXmark } from "react-icons/fa6";
 import { EditorAddButton } from "./EditorButtons";
 import styles from "./EditorList.module.css";
+import { useTranslations } from "next-intl";
 
 export interface EditorTypeOption<T extends string> {
   value: T;
@@ -27,6 +28,7 @@ interface EditorTypePickerProps<T extends string> {
 export const EditorTypePicker = <T extends string>({ label, groupLabel, options, hint, onPick }: EditorTypePickerProps<T>) => {
   const [open, setOpen] = useState(false);
   const pickerId = useId();
+  const t = useTranslations("Editor.list");
 
   const pick = (value: T) => {
     setOpen(false);
@@ -41,7 +43,7 @@ export const EditorTypePicker = <T extends string>({ label, groupLabel, options,
         aria-expanded={open}
         aria-controls={pickerId}
       >
-        {open ? "Cerrar" : label}
+        {open ? t("close") : label}
       </EditorAddButton>
 
       {open && (

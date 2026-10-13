@@ -6,8 +6,12 @@ import { auth } from '@/firebase/firebase';
 import { updatePassword, sendPasswordResetEmail, User } from 'firebase/auth';
 import { FaLock, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
 import styles from './Settings.module.css';
+import { useTranslations } from 'next-intl';
+
+const MIN_PASSWORD_LENGTH = 8;
 
 export const SecuritySettings = () => {
+    const t = useTranslations('SecuritySettings');
     const [user, setUser] = useState<User | null>(null);
     const [email, setEmail] = useState('');
     
@@ -42,12 +46,13 @@ export const SecuritySettings = () => {
         if (!user) return;
 
         if (newPassword !== confirmPassword) {
-            showMessage('danger', 'Las contraseñas no coinciden.');
+            showMessage('danger', t('mismatch'));
             return;
         }
 
-        if (newPassword.length < 6) {
-            showMessage('danger', 'La contraseña debe tener al menos 6 caracteres.');
+        // Mismo mínimo que el registro (SignUpForm).
+        if (newPassword.length < MIN_PASSWORD_LENGTH) {
+            showMessage('danger', t('tooShort', { min: MIN_PASSWORD_LENGTH }));
             return;
         }
         
@@ -56,14 +61,11 @@ export const SecuritySettings = () => {
             await updatePassword(user, newPassword);
             setNewPassword('');
             setConfirmPassword('');
-            showMessage('success', 'Contraseña actualizada exitosamente.');
-        } catch (error: any) {
+            showMessage('success', t('updated'));
+        } catch (error) {
             console.error(error);
-            if (error.code === 'auth/requires-recent-login') {
-                showMessage('danger', 'Por razones de seguridad, debes cerrar sesión y volver a ingresar para cambiar tu contraseña.');
-            } else {
-                showMessage('danger', `Error al actualizar contraseña: ${error.message}`);
-            }
+            const code = (error as { code?: string }).code;
+            showMessage('danger', code === 'auth/requires-recent-login' ? t('recentLogin') : t('updateFailed'));
         } finally {
             setUpdatingPassword(false);
         }
@@ -74,10 +76,10 @@ export const SecuritySettings = () => {
         try {
             setSendingEmail(true);
             await sendPasswordResetEmail(auth, email);
-            showMessage('success', 'Correo de recuperación de contraseña enviado exitosamente.');
-        } catch (error: any) {
+            showMessage('success', t('resetSent'));
+        } catch (error) {
             console.error(error);
-            showMessage('danger', `Error al enviar correo: ${error.message}`);
+            showMessage('danger', t('emailFailed'));
         } finally {
             setSendingEmail(false);
         }
@@ -97,11 +99,11 @@ export const SecuritySettings = () => {
 
     return (
         <div className={styles.container}>
-            <h2 className={styles.title}>Seguridad de la Cuenta</h2>
-            <p className={styles.subtitle}>Actualiza tus credenciales y protege tu cuenta.</p>
+            <h2 className={styles.title}>{t('title')}</h2>
+            <p className={styles.subtitle}>{t('subtitle')}</p>
 
             {message && (
-                <Alert variant={message.type} className="mb-4">
+                <Alert variant={message.type} className="mb-4" role={message.type === 'danger' ? 'alert' : 'status'}>
                     {message.text}
                 </Alert>
             )}
@@ -110,34 +112,36 @@ export const SecuritySettings = () => {
                 <div className="col-lg-8 mb-4">
                     <Card className={styles.card}>
                         <Card.Body>
-                            <h5 className={styles.cardTitle}><FaLock className="me-2" /> Cambiar Contraseña</h5>
+                            <h5 className={styles.cardTitle}><FaLock className="me-2" aria-hidden="true" /> {t('changeTitle')}</h5>
                             
                             <Form onSubmit={handleUpdatePassword}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Nueva Contraseña</Form.Label>
+                                <Form.Group className="mb-3" controlId="security-new-password">
+                                    <Form.Label>{t('newPassword')}</Form.Label>
                                     <InputGroup>
                                         <Form.Control 
                                             type={showPassword ? "text" : "password"} 
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
-                                            placeholder="Mínimo 6 caracteres"
+                                            placeholder={t('minPlaceholder', { min: MIN_PASSWORD_LENGTH })}
                                         />
                                         <Button 
                                             variant="outline-secondary" 
                                             onClick={() => setShowPassword(!showPassword)}
+                                            aria-label={showPassword ? t('hidePassword') : t('showPassword')}
+                                            aria-pressed={showPassword}
                                         >
-                                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                            {showPassword ? <FaEyeSlash aria-hidden="true" /> : <FaEye aria-hidden="true" />}
                                         </Button>
                                     </InputGroup>
                                 </Form.Group>
 
-                                <Form.Group className="mb-4">
-                                    <Form.Label>Confirmar Contraseña</Form.Label>
+                                <Form.Group className="mb-4" controlId="security-confirm-password">
+                                    <Form.Label>{t('confirmPassword')}</Form.Label>
                                     <Form.Control 
                                         type={showPassword ? "text" : "password"} 
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                        placeholder="Repite la nueva contraseña"
+                                        placeholder={t('confirmPlaceholder')}
                                     />
                                 </Form.Group>
 
@@ -146,7 +150,7 @@ export const SecuritySettings = () => {
                                     type="submit"
                                     disabled={updatingPassword || !newPassword || !confirmPassword}
                                 >
-                                    {updatingPassword ? <Spinner size="sm" /> : 'Cambiar Contraseña'}
+                                    {updatingPassword ? <Spinner size="sm" aria-label={t('saving')} /> : t('changeButton')}
                                 </Button>
                             </Form>
                         </Card.Body>
@@ -156,11 +160,10 @@ export const SecuritySettings = () => {
                 <div className="col-lg-8 mb-4">
                     <Card className={styles.card}>
                         <Card.Body>
-                            <h5 className={styles.cardTitle}><FaEnvelope className="me-2" /> Recuperación</h5>
+                            <h5 className={styles.cardTitle}><FaEnvelope className="me-2" aria-hidden="true" /> {t('recoveryTitle')}</h5>
                             
                             <p className="mb-3 text-muted">
-                                ¿Tienes problemas para recordar o quieres restablecer tu contraseña actual de forma segura? 
-                                Te enviaremos un correo a <strong>{email}</strong> con instrucciones para restablecerla.
+                                {t.rich('recoveryHint', { email, strong: (chunks) => <strong>{chunks}</strong> })}
                             </p>
                             
                             <Button 
@@ -168,7 +171,7 @@ export const SecuritySettings = () => {
                                 onClick={handlePasswordResetEmail}
                                 disabled={sendingEmail}
                             >
-                                {sendingEmail ? 'Enviando...' : 'Enviar correo de recuperación'}
+                                {sendingEmail ? t('sending') : t('sendRecovery')}
                             </Button>
                         </Card.Body>
                     </Card>

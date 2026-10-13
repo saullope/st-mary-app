@@ -28,6 +28,7 @@ CustomToggle.displayName = 'CustomToggle';
 
 export default function NewActivityButton() {
   const t = useTranslations("myActivitiesContent");
+  const tCommon = useTranslations("Common");
   const selectedGrade = useSelectedGrade();
 
   return (
@@ -37,29 +38,29 @@ export default function NewActivityButton() {
         className={designStyles.btnLudi}
         id="new-activity-dropdown"
       >
-        <FaPlus /> {t("createActivityButton")}
+        <FaPlus aria-hidden="true" /> {t("createActivityButton")}
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="shadow border-0 rounded-3 mt-2" style={{ overflow: "hidden" }}>
         <Dropdown.Item as="button" onClick={() => window.open('/create/ludiquiz', '_blank', 'noopener,noreferrer')} className="py-2 px-3 fw-medium text-dark">
-          Ludi Quiz
+          {tCommon("activityTypes.1")}
         </Dropdown.Item>
         
         <Dropdown.Item as="button" onClick={() => window.open('/create/trueorfalse', '_blank', 'noopener,noreferrer')} className="py-2 px-3 fw-medium text-dark">
-          Verdadero o Falso
+          {tCommon("activityTypes.2")}
         </Dropdown.Item>
         
         <Dropdown.Item as="button" onClick={() => window.open('/create/ludimemory', '_blank', 'noopener,noreferrer')} className="py-2 px-3 fw-medium text-dark">
-          Ludi Memory
+          {tCommon("activityTypes.3")}
         </Dropdown.Item>
 
         <Dropdown.Item as="button" onClick={() => window.open('/create/ludileccion', '_blank', 'noopener,noreferrer')} className="py-2 px-3 fw-medium text-dark">
-          Ludi Lección
+          {tCommon("activityTypes.4")}
         </Dropdown.Item>
 
         {isFormAvailableForGrade(selectedGrade) && (
           <Dropdown.Item as="button" onClick={() => window.open('/create/ludiform', '_blank', 'noopener,noreferrer')} className="py-2 px-3 fw-medium text-dark">
-            Ludi Form
+            {tCommon("activityTypes.5")}
           </Dropdown.Item>
         )}
       </Dropdown.Menu>

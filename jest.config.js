@@ -15,5 +15,14 @@ const customJestConfig = {
   },
 }
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig)
+// next-intl y sus dependencias solo se publican como ESM: se transforman en lugar de ignorarse.
+const ESM_PACKAGES = ['next-intl', 'use-intl', '@formatjs', 'intl-messageformat', '@schummar'];
+
+module.exports = async () => {
+  const config = await createJestConfig(customJestConfig)()
+  config.transformIgnorePatterns = [
+    `/node_modules/(?!(${ESM_PACKAGES.join('|')})/)`,
+    '^.+\.module\.(css|sass|scss)$',
+  ]
+  return config
+}

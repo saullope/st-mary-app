@@ -10,7 +10,6 @@ import { useFirebaseStorage } from "@/hooks/useFirebaseStorage";
 import { LESSON_FILE_PREFIX, uploadsPath } from "@/lib/mediaSources";
 import {
   DOCUMENT_ACCEPT,
-  LESSON_BLOCK_LABELS,
   LESSON_RESOURCE_TYPE,
   MAX_DOCUMENT_BYTES,
   isBlockAllowedForGrade,
@@ -18,6 +17,7 @@ import {
 } from "@/features/lesson/lessonBlocks";
 import { BLOCK_ICONS, BLOCK_COLORS } from "./blockIcons";
 import styles from "./LessonBlockEditor.module.css";
+import { useTranslations } from "next-intl";
 
 type ExternalSource = "unsplash" | "pixabay" | "youtube" | "freesound" | "canva";
 
@@ -25,14 +25,6 @@ const UPLOAD_ACCEPT: Partial<Record<LessonBlock["kind"], string>> = {
   image: "image/*",
   audio: "audio/*",
   ...DOCUMENT_ACCEPT,
-};
-
-const UPLOAD_LABEL: Partial<Record<LessonBlock["kind"], string>> = {
-  image: "Subir imagen",
-  audio: "Subir audio",
-  pdf: "Subir PDF",
-  word: "Subir documento de Word",
-  powerpoint: "Subir presentación de PowerPoint",
 };
 
 const READING_MAX_CHARS = 6000;
@@ -47,6 +39,7 @@ export const LessonBlockEditor = ({ block, gradeId, onChange }: LessonBlockEdito
   const [source, setSource] = useState<ExternalSource | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { uploadFile, uploading } = useFirebaseStorage();
+  const t = useTranslations("Editor.lesson");
   const Icon = BLOCK_ICONS[block.kind];
   const isDocument = block.kind === "pdf" || block.kind === "word" || block.kind === "powerpoint";
 
@@ -55,12 +48,12 @@ export const LessonBlockEditor = ({ block, gradeId, onChange }: LessonBlockEdito
     event.target.value = "";
     if (!file) return;
     if (isDocument && file.size > MAX_DOCUMENT_BYTES) {
-      notify.warning("Archivo demasiado grande", "El documento debe pesar 20 MB o menos.");
+      notify.warning(t("fileTooLarge"), t("fileTooLargeDescription"));
       return;
     }
     const url = await uploadFile(file, uploadsPath(LESSON_FILE_PREFIX, file.name));
     if (!url) {
-      notify.error("No se pudo subir el archivo", "Revisa tu conexión e inténtalo de nuevo.");
+      notify.error(t("uploadFailed"), t("checkConnection"));
       return;
     }
     onChange({ url });
@@ -75,39 +68,39 @@ export const LessonBlockEditor = ({ block, gradeId, onChange }: LessonBlockEdito
       : block.kind === "audio"
         ? [{ key: "freesound", label: "Freesound", icon: <FaMusic /> }]
         : block.kind === "youtube"
-          ? [{ key: "youtube", label: block.url ? "Cambiar video" : "Buscar video", icon: <FaYoutube /> }]
+          ? [{ key: "youtube", label: block.url ? t("changeVideo") : t("searchVideo"), icon: <FaYoutube /> }]
           : block.kind === "canva"
-            ? [{ key: "canva", label: block.url ? "Cambiar presentación" : "Agregar presentación", icon: <SiCanva /> }]
+            ? [{ key: "canva", label: block.url ? t("changePresentation") : t("addPresentation"), icon: <SiCanva /> }]
             : [];
 
   const uploadAccept = UPLOAD_ACCEPT[block.kind];
 
   return (
-    <EditorCard icon={Icon} label={LESSON_BLOCK_LABELS[block.kind]} color={BLOCK_COLORS[block.kind]}>
+    <EditorCard icon={Icon} label={t(`kinds.${block.kind}`)} color={BLOCK_COLORS[block.kind]}>
       {!isBlockAllowedForGrade(block.kind, gradeId) && (
-        <EditorNotice>Este tipo de bloque solo está disponible desde tercer grado. Elimínalo para poder guardar la lección.</EditorNotice>
+        <EditorNotice>{t("notAllowedNotice")}</EditorNotice>
       )}
 
-      <label htmlFor={`block-title-${block.id}`} className={fields.fieldLabel}>Título del bloque</label>
+      <label htmlFor={`block-title-${block.id}`} className={fields.fieldLabel}>{t("blockTitle")}</label>
       <input
         id={`block-title-${block.id}`}
         type="text"
         className={fields.textInput}
         maxLength={200}
-        placeholder={block.kind === "reading" ? "Ej. El ciclo del agua" : "Opcional"}
+        placeholder={block.kind === "reading" ? t("readingTitlePlaceholder") : t("optional")}
         value={block.title}
         onChange={(e) => onChange({ title: e.target.value })}
       />
 
       {block.kind === "reading" ? (
         <>
-          <label htmlFor={`block-body-${block.id}`} className={fields.fieldLabel}>Texto de la lectura</label>
+          <label htmlFor={`block-body-${block.id}`} className={fields.fieldLabel}>{t("readingText")}</label>
           <textarea
             id={`block-body-${block.id}`}
             className={fields.textArea}
             rows={12}
             maxLength={READING_MAX_CHARS}
-            placeholder="Escribe la lectura. Deja una línea en blanco para separar párrafos."
+            placeholder={t("readingPlaceholder")}
             value={block.body ?? ""}
             onChange={(e) => onChange({ body: e.target.value })}
           />
@@ -135,7 +128,7 @@ export const LessonBlockEditor = ({ block, gradeId, onChange }: LessonBlockEdito
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
                 >
-                  <FaCloudArrowUp aria-hidden="true" /> {uploading ? "Subiendo..." : UPLOAD_LABEL[block.kind]}
+                  <FaCloudArrowUp aria-hidden="true" /> {uploading ? t("uploading") : t(`upload.${block.kind as "image" | "audio" | "pdf" | "word" | "powerpoint"}`)}
                 </button>
               </>
             )}
@@ -149,8 +142,8 @@ export const LessonBlockEditor = ({ block, gradeId, onChange }: LessonBlockEdito
           {isDocument && (
             <p className={fields.fieldHint}>
               {block.kind === "pdf"
-                ? "Los estudiantes verán el PDF dentro de la lección."
-                : "Se mostrará con el visor de Microsoft Office. Máximo 20 MB."}
+                ? t("pdfHint")
+                : t("officeHint")}
             </p>
           )}
 
@@ -158,13 +151,13 @@ export const LessonBlockEditor = ({ block, gradeId, onChange }: LessonBlockEdito
             <div className={styles.previewArea}>
               <MultimediaDisplay url={block.url} type={LESSON_RESOURCE_TYPE[block.kind]} width={720} />
               <button type="button" className={styles.removeContentBtn} onClick={() => onChange({ url: null })}>
-                <FaXmark aria-hidden="true" /> Quitar contenido
+                <FaXmark aria-hidden="true" /> {t("removeContent")}
               </button>
             </div>
           ) : (
             <div className={styles.emptyContent}>
               <Icon aria-hidden="true" />
-              <span>Este bloque todavía no tiene contenido.</span>
+              <span>{t("emptyContent")}</span>
             </div>
           )}
         </>

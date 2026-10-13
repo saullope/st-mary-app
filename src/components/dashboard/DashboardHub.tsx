@@ -21,6 +21,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
   const [grade, setGrade] = useState<GradeKey>('firstGrade');
   const router = useRouter();
   const t = useTranslations('textDashboard');
+  const tCommon = useTranslations('Common');
 
   const handleNavigation = (path: string) => {
     router.push(path);
@@ -65,10 +66,10 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
             <div className={designStyles.ludiContent}>
               <span className={designStyles.ludiTag}><FaPlusCircle /> {t('create')}</span>
               <h3>{t('exprienceDescription')}</h3>
-              <p>Ludi Quiz · Ludi Memory · True or False</p>
+              <p>{[1, 3, 2].map((id) => tCommon(`activityTypes.${id as 1 | 2 | 3}`)).join(' · ')}</p>
               <button className={designStyles.ludiBtnSmall}>{t('start')}</button>
             </div>
-            <img src="/images/crear.gif" alt="Crear" className={designStyles.ludiGifLarge} />
+            <img src="/images/crear.gif" alt="" className={designStyles.ludiGifLarge} />
           </div>
 
           {/* Tarjeta 2: #6A42E1 */}
@@ -83,7 +84,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
               <p>{t('ludiTemplatesText')}</p>
               <button className={designStyles.ludiBtnSmall}>{t('seeTemplates')}</button>
             </div>
-            <img src="/images/plantillas.gif" alt="Plantillas" className={designStyles.ludiGifLarge} />
+            <img src="/images/plantillas.gif" alt="" className={designStyles.ludiGifLarge} />
           </div>
 
           {/* Tarjeta 3: #4569D5 */}
@@ -98,7 +99,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
               <p>{t('myActivitiesDescription')}</p>
               <button className={designStyles.ludiBtnSmall}>{t('check')}</button>
             </div>
-            <img src="/images/actividades.gif" alt="Actividades" className={designStyles.ludiGifLarge} />
+            <img src="/images/actividades.gif" alt="" className={designStyles.ludiGifLarge} />
           </div>
         </div>
       </section>
@@ -116,7 +117,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
                   <span className="badge bg-primary bg-opacity-25 text-white mb-2 border border-primary border-opacity-50 rounded-pill">
                     {drafts[0].tipoActividad?.nombre || "Actividad"}
                   </span>
-                  <h4 className="fw-bold text-white mb-1">{drafts[0].activity?.activity_name || "Actividad sin título"}</h4>
+                  <h4 className="fw-bold text-white mb-1">{drafts[0].activity?.activity_name || t('untitledActivity')}</h4>
                   <p className="text-white opacity-75 small mb-0">{t('lastEdition')}</p>
                 </div>
                 <div className="mt-3 mt-md-0">

@@ -4,9 +4,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, ChangeEvent, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import styles from "@/components/dashboard/ActivityFilter.module.css";
+import { useTranslations } from "next-intl";
 
 export default function AdminReportFilter() {
   const router = useRouter();
+  const t = useTranslations("AdminFilter");
   const searchParams = useSearchParams();
   
   const initialSearch = searchParams.get("search") || "";
@@ -59,7 +61,8 @@ export default function AdminReportFilter() {
         <input 
           type="text" 
           className={styles.searchInput}
-          placeholder="Buscar por actividad o educador..."
+          placeholder={t("searchPlaceholder")}
+          aria-label={t("searchPlaceholder")}
           value={searchTerm}
           onChange={handleSearchChange}
         />
@@ -68,7 +71,7 @@ export default function AdminReportFilter() {
       {/* Grade Filter */}
       <div className={styles.selectContainer}>
         <label htmlFor="gradeFilter" className={styles.selectLabel}>
-          Grado:
+          {t("grade")}
         </label>
         <select
           id="gradeFilter"
@@ -76,17 +79,17 @@ export default function AdminReportFilter() {
           value={initialGrade}
           onChange={handleGradeChange}
         >
-          <option value="">Todos</option>
-          <option value="1">1º Grado</option>
-          <option value="2">2º Grado</option>
-          <option value="3">3º Grado</option>
+          <option value="">{t("allGrades")}</option>
+          <option value="1">{t("grade1")}</option>
+          <option value="2">{t("grade2")}</option>
+          <option value="3">{t("grade3")}</option>
         </select>
       </div>
 
       {/* Date Filter */}
       <div className={styles.selectContainer}>
         <label htmlFor="dateFilter" className={styles.selectLabel}>
-          Fecha:
+          {t("date")}
         </label>
         <select
           id="dateFilter"
@@ -94,9 +97,9 @@ export default function AdminReportFilter() {
           value={initialDate}
           onChange={handleDateChange}
         >
-          <option value="">Todo el Histórico</option>
-          <option value="7">Últimos 7 días</option>
-          <option value="30">Últimos 30 días</option>
+          <option value="">{t("allTime")}</option>
+          <option value="7">{t("last7")}</option>
+          <option value="30">{t("last30")}</option>
         </select>
       </div>
     </div>

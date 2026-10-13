@@ -3,11 +3,13 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
+import { getTranslations } from "next-intl/server";
 
 export async function cloneTemplateActivity(templateActivityId: number) {
   try {
     const user = await getCurrentUser();
-    if (!user) return { success: false, error: "No autorizado. Debes iniciar sesión." };
+    const t = await getTranslations("Errors");
+    if (!user) return { success: false, error: t("unauthorized") };
     const newUserId = user.id;
 
     // 1. Fetch the full template with all nested data
@@ -26,12 +28,14 @@ export async function cloneTemplateActivity(templateActivityId: number) {
           include: {
             tarjetas: { include: { recurso: true } }
           }
-        }
+        },
+        insignias: true,
+        misiones: true
       }
     }) as any;
 
     if (!template) {
-      return { success: false, error: "Plantilla no encontrada." };
+      return { success: false, error: t("templateNotFound") };
     }
 
     // 2. Clone using a transaction
@@ -69,6 +73,10 @@ export async function cloneTemplateActivity(templateActivityId: number) {
           } : undefined,
           publico: false,
           estatus: true,
+          // Agrupa en el seguimiento las copias de una misma plantilla hechas por distintos docentes.
+          plantillaOrigen: {
+            connect: { activityId: template.activityId }
+          },
         }
       });
 
@@ -88,6 +96,17 @@ export async function cloneTemplateActivity(templateActivityId: number) {
 
         await tx.ludiActividadConfig.create({
           data: configData
+        });
+      }
+
+      if (template.insignias.length > 0) {
+        await tx.ludiActividadInsignia.createMany({
+          data: template.insignias.map((row: { insigniaId: number }) => ({ activityId: newActivityBase.id, insigniaId: row.insigniaId }))
+        });
+      }
+      if (template.misiones.length > 0) {
+        await tx.ludiActividadMision.createMany({
+          data: template.misiones.map((row: { misionId: number }) => ({ activityId: newActivityBase.id, misionId: row.misionId }))
         });
       }
 
@@ -182,6 +201,6 @@ export async function cloneTemplateActivity(templateActivityId: number) {
 
   } catch (error) {
     console.error("Error cloning template:", error);
-    return { success: false, error: "Ocurrió un error al copiar la plantilla de la base de datos." };
+    return { success: false, error: (await getTranslations("Errors"))("cloneFailed") };
   }
 }

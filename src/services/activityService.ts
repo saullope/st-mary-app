@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { ACTIVITY_ACHIEVEMENTS_INCLUDE } from "@/features/gamification/activityAchievements";
 
 export async function getActivityTypes() {
   try {
@@ -115,7 +116,8 @@ export async function getActivityById(activityId: number) {
               }
             }
           }
-        }
+        },
+        ...ACTIVITY_ACHIEVEMENTS_INCLUDE
       }
     });
     return activity;

@@ -1,6 +1,8 @@
 // Modelo, validación y calificación de LudiForm. Sin dependencias de React ni de
 // Prisma: lo usan el editor, el reproductor, la Vista Previa y el servidor.
 
+import { message, type MessageDescriptor } from "@/lib/i18n/message";
+
 export type FormQuestionType = "single" | "multiple" | "long";
 
 export interface FormOption {
@@ -18,12 +20,6 @@ export interface FormQuestion {
 }
 
 export const FORM_QUESTION_TYPES: FormQuestionType[] = ["single", "multiple", "long"];
-
-export const FORM_QUESTION_LABELS: Record<FormQuestionType, string> = {
-  single: "Opción única",
-  multiple: "Selección múltiple",
-  long: "Respuesta larga",
-};
 
 /** LudiForm solo está disponible para tercer grado. */
 export const FORM_MIN_GRADE = 3;
@@ -48,24 +44,27 @@ export function createFormQuestion(id: number, type: FormQuestionType): FormQues
   };
 }
 
-export function validateFormQuestion(question: FormQuestion): string | null {
-  if (!question.text.trim()) return "Escribe el enunciado.";
+type FormQuestionProblem = "noText" | "fewOptions" | "emptyOption" | "noCorrectSingle" | "noCorrectMultiple" | "manyCorrect";
+
+/** Clave del problema de la pregunta dentro de Validation.form, o null si está completa. */
+export function validateFormQuestion(question: FormQuestion): FormQuestionProblem | null {
+  if (!question.text.trim()) return "noText";
   if (question.type === "long") return null;
-  if (question.options.length < 2) return "Agrega al menos 2 opciones.";
-  if (question.options.some((o) => !o.text.trim())) return "Completa el texto de todas las opciones.";
+  if (question.options.length < 2) return "fewOptions";
+  if (question.options.some((o) => !o.text.trim())) return "emptyOption";
   const correct = question.options.filter((o) => o.isCorrect).length;
-  if (correct === 0) return question.type === "single" ? "Marca la opción correcta." : "Marca al menos una opción correcta.";
-  if (question.type === "single" && correct > 1) return "Solo una opción puede ser correcta.";
+  if (correct === 0) return question.type === "single" ? "noCorrectSingle" : "noCorrectMultiple";
+  if (question.type === "single" && correct > 1) return "manyCorrect";
   return null;
 }
 
 /** Devuelve el primer problema del formulario, o null si se puede guardar. */
-export function validateFormForSave(questions: FormQuestion[] | undefined, gradeId: number): string | null {
-  if (!isFormAvailableForGrade(gradeId)) return "LudiForm solo está disponible para tercer grado.";
-  if (!questions || questions.length === 0) return "Agrega al menos una pregunta al formulario.";
+export function validateFormForSave(questions: FormQuestion[] | undefined, gradeId: number): MessageDescriptor | null {
+  if (!isFormAvailableForGrade(gradeId)) return message("Validation.form.gradeNotAvailable");
+  if (!questions || questions.length === 0) return message("Validation.form.empty");
   for (const [index, question] of questions.entries()) {
     const problem = validateFormQuestion(question);
-    if (problem) return `Pregunta ${index + 1}: ${problem}`;
+    if (problem) return message(`Validation.form.${problem}`, { index: index + 1 });
   }
   return null;
 }

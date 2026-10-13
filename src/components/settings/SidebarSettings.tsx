@@ -5,21 +5,23 @@ import Image from 'next/image';
 import { FaUser, FaShieldAlt, FaGamepad, FaDatabase, FaPalette, FaArrowLeft, FaUsersCog, FaRoute } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import styles from './SidebarSettings.module.css';
+import { useTranslations } from 'next-intl';
 
 export const SidebarSettings = ({ rolId }: { rolId?: number }) => {
     const pathname = usePathname();
+    const t = useTranslations('SettingsNav');
 
     const links = [
-        { href: '/settings', icon: FaUser, text: 'Información Personal' },
-        { href: '/settings/security', icon: FaShieldAlt, text: 'Seguridad' },
-        { href: '/settings/appearance', icon: FaPalette, text: 'Apariencia e Idioma' },
-        { href: '/settings/preferences', icon: FaGamepad, text: 'Gamificación' },
-        { href: '/settings/tours', icon: FaRoute, text: 'Visitas Guiadas' },
-        { href: '/settings/data', icon: FaDatabase, text: 'Gestión de Datos' },
+        { href: '/settings', icon: FaUser, text: t('personal') },
+        { href: '/settings/security', icon: FaShieldAlt, text: t('security') },
+        { href: '/settings/appearance', icon: FaPalette, text: t('appearance') },
+        { href: '/settings/preferences', icon: FaGamepad, text: t('gamification') },
+        { href: '/settings/tours', icon: FaRoute, text: t('tours') },
+        { href: '/settings/data', icon: FaDatabase, text: t('data') },
     ];
 
     if (rolId === 1) {
-        links.push({ href: '/settings/admin', icon: FaUsersCog, text: 'Gestión de Usuarios' });
+        links.push({ href: '/settings/admin', icon: FaUsersCog, text: t('users') });
     }
 
     return (
@@ -28,7 +30,7 @@ export const SidebarSettings = ({ rolId }: { rolId?: number }) => {
                 <Image
                     src="/images/PartialLogo.png"
                     className={styles.image}
-                    alt="logo"
+                    alt="LudiGame"
                     width={150}
                     height={55}
                     priority
@@ -39,7 +41,7 @@ export const SidebarSettings = ({ rolId }: { rolId?: number }) => {
                 <Link href="/dashboard" className="text-decoration-none">
                     <div className={styles.backItem}>
                         <FaArrowLeft className={styles.icon} />
-                        <span>Volver al Dashboard</span>
+                        <span>{t('back')}</span>
                     </div>
                 </Link>
             </div>
@@ -47,7 +49,7 @@ export const SidebarSettings = ({ rolId }: { rolId?: number }) => {
             <hr className={styles.divider} />
 
             <div className={styles.navLinks}>
-                <h5 className={styles.headerTitle}>Ajustes</h5>
+                <h5 className={styles.headerTitle}>{t('title')}</h5>
                 {links.map((link, index) => {
                     const isActive = pathname === link.href;
                     return (

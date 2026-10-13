@@ -6,6 +6,7 @@ import { FaRoute, FaPlay, FaRedo, FaCheckCircle, FaInfoCircle } from 'react-icon
 import { useTourPreferences, TourMode } from '@/hooks/useTourPreferences';
 import { TOUR_REGISTRY } from '@/lib/tours/tourRegistry';
 import styles from './Settings.module.css';
+import { useTranslations } from 'next-intl';
 
 export const TourSettings = () => {
   const {
@@ -17,6 +18,8 @@ export const TourSettings = () => {
     isTourCompleted,
   } = useTourPreferences();
 
+  const t = useTranslations('TourSettings');
+  const tTours = useTranslations('Tours.registry');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'info'; text: string } | null>(null);
 
@@ -32,7 +35,7 @@ export const TourSettings = () => {
   const handleResetTours = () => {
     resetAllTours();
     setShowResetConfirm(false);
-    showMessage('success', 'Todas las visitas guiadas han sido reiniciadas. Se mostrarán automáticamente la próxima vez que visites las páginas correspondientes.');
+    showMessage('success', t('resetDone'));
   };
 
   const handlePlayTour = (tourId: string) => {
@@ -40,7 +43,7 @@ export const TourSettings = () => {
     if (!tour) return;
 
     localStorage.setItem(`trigger_tour_${tourId}`, 'true');
-    showMessage('info', `Iniciando "${tour.name}"... Serás redirigido a la página correspondiente.`);
+    showMessage('info', t('starting', { name: tTours(`${tour.id}.name`) }));
 
     const routeMap: Record<string, string> = {
       welcome_tour: '/welcome-educator',
@@ -67,9 +70,9 @@ export const TourSettings = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Visitas Guiadas</h2>
+      <h2 className={styles.title}>{t('title')}</h2>
       <p className={styles.subtitle}>
-        Configura cómo y cuándo deseas recibir asistencia interactiva en la aplicación.
+        {t('subtitle')}
       </p>
 
       {message && (
@@ -83,30 +86,30 @@ export const TourSettings = () => {
           <Card className={styles.card}>
             <Card.Body>
               <h5 className={styles.cardTitle}>
-                <FaRoute className="me-2" />
-                Configuración General
+                <FaRoute className="me-2" aria-hidden="true" />
+                {t('general')}
               </h5>
 
               <Form.Group className="mb-4">
                 <Form.Check
                   type="switch"
                   id="tours-enabled-switch"
-                  label="Habilitar visitas guiadas automáticas"
+                  label={t('enable')}
                   checked={preferences.toursEnabled}
                   onChange={(e) => setToursEnabled(e.target.checked)}
                 />
                 <Form.Text className="text-muted">
-                  Si está desactivado, los tours no se mostrarán automáticamente al visitar nuevas páginas.
+                  {t('enableHint')}
                 </Form.Text>
               </Form.Group>
 
               <Form.Group className="mb-4">
-                <Form.Label>Tipo de asistencia</Form.Label>
+                <Form.Label>{t('mode')}</Form.Label>
                 <div className="d-flex gap-3">
                   <Form.Check
                     type="radio"
                     id="tour-mode-full"
-                    label="Recorrido Completo"
+                    label={t('modeFull')}
                     checked={preferences.tourMode === 'full'}
                     onChange={() => setTourMode('full')}
                     disabled={!preferences.toursEnabled}
@@ -114,7 +117,7 @@ export const TourSettings = () => {
                   <Form.Check
                     type="radio"
                     id="tour-mode-hints"
-                    label="Solo Sugerencias"
+                    label={t('modeHints')}
                     checked={preferences.tourMode === 'hints'}
                     onChange={() => setTourMode('hints')}
                     disabled={!preferences.toursEnabled}
@@ -122,8 +125,8 @@ export const TourSettings = () => {
                 </div>
                 <Form.Text className="text-muted">
                   {preferences.tourMode === 'full'
-                    ? 'Recorrido paso a paso con overlay que bloquea la pantalla.'
-                    : 'Solo destaca elementos sin bloquear la interacción.'}
+                    ? t('modeFullHint')
+                    : t('modeHintsHint')}
                 </Form.Text>
               </Form.Group>
 
@@ -133,12 +136,12 @@ export const TourSettings = () => {
                   onClick={() => setShowResetConfirm(true)}
                   disabled={!preferences.toursEnabled}
                 >
-                  <FaRedo className="me-2" />
-                  Reiniciar todas las visitas guiadas
+                  <FaRedo className="me-2" aria-hidden="true" />
+                  {t('resetAll')}
                 </Button>
                 <Form.Text className="text-muted mb-0">
                   <FaInfoCircle className="me-1" />
-                  Esto hará que todos los tours se muestren nuevamente.
+                  {t('resetAllHint')}
                 </Form.Text>
               </div>
             </Card.Body>
@@ -149,11 +152,11 @@ export const TourSettings = () => {
           <Card className={styles.card}>
             <Card.Body>
               <h5 className={styles.cardTitle}>
-                <FaPlay className="me-2" />
-                Tours Disponibles
+                <FaPlay className="me-2" aria-hidden="true" />
+                {t('available')}
               </h5>
               <p className="text-muted mb-4">
-                Puedes reproducir cualquier tour manualmente en cualquier momento, independientemente de si ya lo completaste.
+                {t('availableHint')}
               </p>
 
               <div className="d-flex flex-column gap-3">
@@ -167,15 +170,15 @@ export const TourSettings = () => {
                     >
                       <div className="flex-grow-1">
                         <div className="d-flex align-items-center gap-2 mb-1">
-                          <strong>{tour.name}</strong>
+                          <strong>{tTours(`${tour.id}.name`)}</strong>
                           {completed && (
                             <Badge bg="success" className="d-flex align-items-center gap-1">
                               <FaCheckCircle size={12} />
-                              Completado
+                              {t('completed')}
                             </Badge>
                           )}
                         </div>
-                        <small className="text-muted">{tour.description}</small>
+                        <small className="text-muted">{tTours(`${tour.id}.description`)}</small>
                       </div>
                       <Button
                         variant="primary"
@@ -183,8 +186,8 @@ export const TourSettings = () => {
                         onClick={() => handlePlayTour(tour.id)}
                         className="ms-3"
                       >
-                        <FaPlay className="me-1" />
-                        Reproducir
+                        <FaPlay className="me-1" aria-hidden="true" />
+                        {t('play')}
                       </Button>
                     </div>
                   );
@@ -205,18 +208,16 @@ export const TourSettings = () => {
             style={{ maxWidth: '500px' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <Card.Body>
-              <h5>¿Reiniciar todas las visitas guiadas?</h5>
-              <p className="text-muted">
-                Esta acción hará que todos los tours se muestren automáticamente la próxima vez que visites las páginas correspondientes.
-              </p>
+            <Card.Body role="dialog" aria-modal="true" aria-labelledby="reset-tours-title">
+              <h5 id="reset-tours-title">{t('confirmTitle')}</h5>
+              <p className="text-muted">{t('confirmBody')}</p>
               <div className="d-flex justify-content-end gap-2 mt-4">
                 <Button variant="secondary" onClick={() => setShowResetConfirm(false)}>
-                  Cancelar
+                  {t('cancel')}
                 </Button>
                 <Button variant="warning" onClick={handleResetTours}>
-                  <FaRedo className="me-2" />
-                  Reiniciar
+                  <FaRedo className="me-2" aria-hidden="true" />
+                  {t('reset')}
                 </Button>
               </div>
             </Card.Body>

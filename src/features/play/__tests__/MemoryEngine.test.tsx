@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { screen, fireEvent, act } from "@testing-library/react";
+import { renderWithAchievements as render } from "@/features/gamification/testing/renderWithAchievements";
 import { ActivityPlayer } from "../ActivityPlayer";
 
 const mockRouter = { push: jest.fn() };
@@ -15,9 +16,11 @@ const sesion = {
   LUDI_ACTIVIDAD: {
     tipoActividadId: 3,
     gradoId: 1,
+    insignias: ["coleccionista", "buena-memoria"].map((codigo) => ({ insignia: { codigo } })),
+    misiones: ["M1-completo"].map((codigo) => ({ mision: { codigo } })),
     config: {
       puntajeBase: 5,
-      ajustesJson: JSON.stringify({ badges: ["coleccionista", "buena-memoria"], missions: ["M1-completo"], voiceEnabled: false }),
+      ajustesJson: JSON.stringify({ voiceEnabled: false }),
     },
     preguntas: [],
     memoriaParejas: [pair("1", "/sol.png"), pair("2", "/luna.png")],

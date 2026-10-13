@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { FaArrowUp, FaArrowDown, FaTrash, FaTriangleExclamation } from "react-icons/fa6";
 import styles from "./EditorList.module.css";
+import { useTranslations } from "next-intl";
 
 export type EditorListTagTone = "violet" | "cyan" | "success" | "danger";
 
@@ -52,6 +53,7 @@ export const EditorListItem = ({
   onMove,
   onDelete,
 }: EditorListItemProps) => {
+  const t = useTranslations("Editor.list");
   const text = label.trim();
   const hasActions = !draft && (onMove || onDelete);
 
@@ -69,16 +71,16 @@ export const EditorListItem = ({
         <div className={styles.actions}>
           {onMove && (
             <>
-              <button type="button" onClick={() => onMove(-1)} disabled={isFirst} aria-label={`Subir ${itemName} ${position}`} title="Subir">
+              <button type="button" onClick={() => onMove(-1)} disabled={isFirst} aria-label={t("moveUpItem", { item: itemName, position })} title={t("moveUp")}>
                 <FaArrowUp aria-hidden="true" />
               </button>
-              <button type="button" onClick={() => onMove(1)} disabled={isLast} aria-label={`Bajar ${itemName} ${position}`} title="Bajar">
+              <button type="button" onClick={() => onMove(1)} disabled={isLast} aria-label={t("moveDownItem", { item: itemName, position })} title={t("moveDown")}>
                 <FaArrowDown aria-hidden="true" />
               </button>
             </>
           )}
           {onDelete && (
-            <button type="button" className={styles.deleteAction} onClick={onDelete} aria-label={`Eliminar ${itemName} ${position}`} title="Eliminar">
+            <button type="button" className={styles.deleteAction} onClick={onDelete} aria-label={t("deleteItem", { item: itemName, position })} title={t("delete")}>
               <FaTrash aria-hidden="true" />
             </button>
           )}

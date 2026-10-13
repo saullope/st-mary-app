@@ -153,7 +153,7 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
               type="text"
               id="modal-search-input"
               placeholder={searchplaceholder}
-              aria-label="Buscar contenido"
+              aria-label={t("searchContent")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
@@ -248,7 +248,7 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
                   >
                     <Image 
                       src={item.urls.small}
-                      alt={item.alt_description || "Imagen Unsplash"}
+                      alt={item.alt_description || t("unsplashImage")}
                       className={style["modal-image"]}
                       width={300}
                       height={200}
@@ -306,7 +306,7 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
           <span
             className={style["close-btn"]}
             role="button"
-            aria-label="Cerrar Modal"
+            aria-label={t("closeModal")}
             onClick={handleClose}
           >
             &times;

@@ -1,9 +1,9 @@
 "use client";
 
-import type { Badge } from "@/features/gamification/achievementRules";
+import type { BadgeDef } from "@/features/gamification/catalog";
 
 interface BadgeArtProps {
-  badge: Pick<Badge, "img">;
+  badge: Pick<BadgeDef, "img">;
   size: number;
   className?: string;
   radius?: number | string;

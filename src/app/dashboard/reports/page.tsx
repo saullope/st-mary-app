@@ -9,6 +9,7 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import ReportFilter from "@/components/dashboard/ReportFilter";
 import styles from "@/styles/pages/my-activities.module.css";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 interface PageProps {
   searchParams: Promise<{
@@ -18,12 +19,8 @@ interface PageProps {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("SidebarTranslation");
-
-    return {
-        title: t('reports'),
-        description: ''
-    };
+  const t = await getTranslations("reports");
+  return pageMetadata({ title: t("metaTitle"), description: t("metaDescription") });
 }
 
 export default async function ReportsHubPage({ searchParams }: PageProps) {

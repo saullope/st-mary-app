@@ -7,6 +7,7 @@ import { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
 import { GamificationConfig } from "@/context/ActivityEditorContext";
 import { kindFromResourceType, type LessonBlock } from "@/features/lesson/lessonBlocks";
 import { toFormQuestionType, type FormQuestion } from "@/features/form/formQuestions";
+import { selectedAchievementCodes } from "@/features/gamification/activityAchievements";
 
 export async function getActivityForEdit(id: number) {
   try {
@@ -32,7 +33,7 @@ export async function getActivityForEdit(id: number) {
     else if (typeName.includes("falso") || typeName.includes("false")) type = "trueorfalse";
 
     // Parse config
-    let parsedAjustes: any = { badges: [], missions: [] };
+    let parsedAjustes: any = {};
     if (activityData.config?.ajustesJson) {
       try {
         parsedAjustes = JSON.parse(activityData.config.ajustesJson);
@@ -41,12 +42,13 @@ export async function getActivityForEdit(id: number) {
       }
     }
 
+    const selected = selectedAchievementCodes(activityData);
     const config: GamificationConfig = {
       gradeId: activityData.gradoId || 1,
       timeLimit: activityData.config?.tiempoPreguntaMs ? activityData.config.tiempoPreguntaMs / 1000 : 60,
       pointsPerCorrect: activityData.config?.puntajeBase || 10,
-      selectedBadges: parsedAjustes.badges || [],
-      selectedMissions: parsedAjustes.missions || [],
+      selectedBadges: selected.badges,
+      selectedMissions: selected.missions,
       voiceEnabled: parsedAjustes.voiceEnabled ?? true,
     };
 

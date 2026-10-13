@@ -3,12 +3,10 @@
 import Image from "next/image";
 import { isCanvaUrl } from "@/lib/canva";
 import { officeViewerUrl } from "@/features/lesson/lessonBlocks";
+import { useTranslations } from "next-intl";
 
-const DOCUMENT_TITLES: Record<string, string> = {
-  PDF: "Documento PDF",
-  WORD: "Documento de Word",
-  POWERPOINT: "Presentación de PowerPoint",
-};
+// Títulos accesibles de cada visor: messages Media.documents.<tipo>.
+const DOCUMENT_TYPES = new Set(["PDF", "WORD", "POWERPOINT"]);
 
 interface MultimediaDisplayProps {
   url: string;
@@ -18,13 +16,14 @@ interface MultimediaDisplayProps {
 }
 
 export default function MultimediaDisplay({ url, type, width = 400, height = 300 }: MultimediaDisplayProps) {
+  const t = useTranslations("Media");
   // Va primero: la URL de Canva no debe caer en las reglas por coincidencia de texto de abajo.
   if (type === 'PRESENTACION' || type === 'canva' || isCanvaUrl(url)) {
     return (
       <div className="rounded overflow-hidden shadow-sm" style={{ width: '100%', maxWidth: Math.max(width, 640), aspectRatio: '16 / 9' }}>
         <iframe
           src={url}
-          title="Presentación de Canva"
+          title={t("canva")}
           allow="fullscreen"
           allowFullScreen
           loading="lazy"
@@ -35,16 +34,16 @@ export default function MultimediaDisplay({ url, type, width = 400, height = 300
   }
 
   const docType = type.toUpperCase();
-  if (DOCUMENT_TITLES[docType]) {
+  if (DOCUMENT_TYPES.has(docType)) {
     // Word y PowerPoint se muestran con el visor de Office; el PDF lo abre el navegador.
     const src = docType === 'PDF' ? url : officeViewerUrl(url);
     return (
       <div className="d-flex flex-column align-items-center gap-2" style={{ width: '100%', maxWidth: Math.max(width, 640) }}>
         <div className="rounded overflow-hidden shadow-sm bg-white" style={{ width: '100%', height: 'min(70vh, 720px)' }}>
-          <iframe src={src} title={DOCUMENT_TITLES[docType]} style={{ width: '100%', height: '100%', border: 0 }} />
+          <iframe src={src} title={t(`documents.${docType as "PDF" | "WORD" | "POWERPOINT"}`)} style={{ width: '100%', height: '100%', border: 0 }} />
         </div>
         <a href={url} target="_blank" rel="noopener noreferrer" className="small fw-semibold" style={{ color: '#6a4bff' }}>
-          Abrir en una pestaña nueva
+          {t("openNewTab")}
         </a>
       </div>
     );
@@ -66,7 +65,7 @@ export default function MultimediaDisplay({ url, type, width = 400, height = 300
       <div className="rounded overflow-hidden shadow-sm" style={{ position: 'relative', width: '100%', height: 'auto', maxWidth: width }}>
         <Image
           src={url}
-          alt="Recurso multimedia"
+          alt={t("resource")}
           width={width}
           height={height}
           style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
@@ -96,7 +95,7 @@ export default function MultimediaDisplay({ url, type, width = 400, height = 300
       <div className="rounded overflow-hidden shadow-sm ratio ratio-16x9" style={{ maxWidth: width }}>
         <iframe
           src={`https://www.youtube.com/embed/${videoId}`}
-          title="YouTube video"
+          title={t("youtube")}
           allowFullScreen
           style={{ border: 0 }}
         />
@@ -109,11 +108,11 @@ export default function MultimediaDisplay({ url, type, width = 400, height = 300
       <div className="p-3 bg-light rounded border shadow-sm" style={{ width: '100%', maxWidth: width }}>
         <audio controls style={{ width: '100%' }}>
           <source src={url} />
-          Tu navegador no soporta el elemento de audio.
+          {t("audioUnsupported")}
         </audio>
       </div>
     );
   }
 
-  return <p className="text-muted small">Tipo de archivo no soportado: {type}</p>;
+  return <p className="text-muted small">{t("unsupported", { type })}</p>;
 }

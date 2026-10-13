@@ -3,12 +3,12 @@ import { GamePreferences } from "@/components/settings/GamePreferences";
 import getSession from '@/lib/auth/getSession'; 
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { redirect } from 'next/navigation';
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `Preferencias de Juego | LudiGame`,
-    description: 'Ajustes predeterminados para la creación de juegos en LudiGame'
-  };
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("settings.preferences.title"), description: t("settings.preferences.description") });
 }
 
 export default async function GamePreferencesPage() {

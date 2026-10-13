@@ -12,16 +12,19 @@ import Reading from "@/lotties/reading.json"
 import Rocket from "@/lotties/rocket.json"
 import { LottieCharge } from '@/components/LottieComponents/LottieCharge'
 import Link from "next/link"
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 
-export const metadata: Metadata = {
-  title: "LudiGame",
-  description: "",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("home.title"), description: t("home.description"), path: "/home", index: true });
+}
 
 export default function HomePage() {
 
   const t = useTranslations("HomePage");
+  const tCommon = useTranslations("Common");
 
   return (
     <>
@@ -58,7 +61,7 @@ export default function HomePage() {
           {/* <!-- Card 1 --> */}
           <div className={styles['ludi-importance-card']}>
             <div className={styles['ludi-importance-icon']}>
-              <Image className={styles.imgludi} src={fomentaInt} alt="Fomenta el interés" width={100} height={100} />
+              <Image className={styles.imgludi} src={fomentaInt} alt="" width={100} height={100} />
             </div>
             <h3>{t("card1Title")}</h3>
             <p>{t("card1Desc")}</p>
@@ -66,7 +69,7 @@ export default function HomePage() {
           {/* <!-- Card 2 --> */}
           <div className={styles['ludi-importance-card']}>
             <div className={styles['ludi-importance-icon']}>
-              <Image src={mejoraAprendizaje} alt="Mejora el aprendizaje" width={100} height={100} />
+              <Image src={mejoraAprendizaje} alt="" width={100} height={100} />
             </div>
             <h3>{t("card2Title")}</h3>
             <p>{t("card2Desc")}</p>
@@ -75,7 +78,7 @@ export default function HomePage() {
           {/* <!-- Card 3 --> */}
           <div className={styles['ludi-importance-card']}>
             <div className={styles['ludi-importance-icon']}>
-              <Image src={facilitaParticipacion} alt="Facilita la participación" width={100} height={100} />
+              <Image src={facilitaParticipacion} alt="" width={100} height={100} />
             </div>
             <h3>{t("card3Title")}</h3>
             <p>{t("card3Desc")}</p>
@@ -104,13 +107,13 @@ export default function HomePage() {
         <div className={styles.cards}>
           <div className={styles.card}>
             <Image className={styles.imgcard} src={Ludiquiz}
-            alt="LudiQuiz" width={100} height={100} /><p>LudiQuiz</p></div>
+            alt="" width={100} height={100} /><p>{tCommon("activityTypes.1")}</p></div>
           <div className={styles.card}>
             <Image className={styles.imgcard} src={Memory}
-            alt="LudiMemory" width={100} height={100} /><p>LudiMemory</p></div>
+            alt="" width={100} height={100} /><p>{tCommon("activityTypes.3")}</p></div>
           <div className={styles.card}>
             <Image className={styles.imgcard} src={TrueOrFalse}
-            alt="True or False" width={100} height={100} /><p>True or False</p></div>
+            alt="" width={100} height={100} /><p>{tCommon("activityTypes.2")}</p></div>
         </div>
       </section>
 

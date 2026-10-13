@@ -6,6 +6,7 @@ import { usePlaySession } from "./usePlaySession";
 import { PlayScreen } from "./PlayScreens";
 import type { SessionPhase } from "@/lib/play/sessionState";
 import styles from "./waiting.module.css";
+import { useTranslations } from "next-intl";
 
 const POLL_MS = 2500;
 
@@ -21,6 +22,7 @@ interface WaitingRoomProps {
 export const WaitingRoom = ({ sesion, phase }: WaitingRoomProps) => {
   const router = useRouter();
   const { participant, backgroundImage } = usePlaySession({ sesion, previewMode: false });
+  const t = useTranslations("Play.waiting");
 
   useEffect(() => {
     if (phase === "finished") return;
@@ -43,20 +45,20 @@ export const WaitingRoom = ({ sesion, phase }: WaitingRoomProps) => {
       <section className={styles.card} aria-live="polite">
         {phase === "finished" ? (
           <>
-            <h1 className={styles.title}>La actividad terminó</h1>
-            <p className={styles.text}>Tu docente ya cerró esta sesión. Pídele un nuevo PIN para jugar otra vez.</p>
+            <h1 className={styles.title}>{t("finishedTitle")}</h1>
+            <p className={styles.text}>{t("finishedBody")}</p>
             <button type="button" className={styles.button} onClick={() => router.push("/play")}>
-              Volver al inicio
+              {t("backHome")}
             </button>
           </>
         ) : (
           <>
             {activityName && <span className={styles.eyebrow}>{activityName}</span>}
-            <h1 className={styles.title}>{participant ? `Hola, ${participant.name}` : "Hola"}</h1>
-            <p className={styles.text}>Ya estás dentro. La actividad comenzará cuando tu docente la inicie.</p>
+            <h1 className={styles.title}>{participant ? t("helloName", { name: participant.name }) : t("hello")}</h1>
+            <p className={styles.text}>{t("waitingBody")}</p>
             <span className={styles.status}>
               <span className={styles.pulse} aria-hidden="true" />
-              Esperando al docente
+              {t("waitingTeacher")}
             </span>
           </>
         )}

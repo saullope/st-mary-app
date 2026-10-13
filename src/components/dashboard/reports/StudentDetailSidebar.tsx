@@ -3,18 +3,21 @@
 import { FaTimes, FaChartLine, FaCalendarAlt, FaBullseye, FaBolt, FaListUl, FaMedal } from "react-icons/fa";
 import StudentSessionLog from "./StudentSessionLog";
 import { isPendingReview } from "@/features/form/formQuestions";
-import { findBadge, findMission, type Badge } from "@/features/gamification/achievementRules";
+import { toBadgeDef, toMissionDef, type BadgeDef, type BadgeRow, type MissionRow } from "@/features/gamification/catalog";
+import { useAchievementText } from "@/features/gamification/useAchievementText";
 import { BadgeArt } from "@/features/gamification/components/BadgeArt";
+import { useTranslations } from "next-intl";
 
 interface SidebarProps {
   student: any | null;
   onClose: () => void;
   avgClassScore: number;
   avgClassTotalTimeMs: number;
-  gradeId: number;
 }
 
-export default function StudentDetailSidebar({ student, onClose, avgClassScore, avgClassTotalTimeMs, gradeId }: SidebarProps) {
+export default function StudentDetailSidebar({ student, onClose, avgClassScore, avgClassTotalTimeMs }: SidebarProps) {
+  const achievementText = useAchievementText();
+  const t = useTranslations("StudentDetail");
   if (!student) return null;
 
   // Calculate Effectiveness
@@ -35,29 +38,28 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
   // Effort Metric
   const studentTotalTimeMs = student.respuestas.reduce((acc: number, r: any) => acc + (r.tiempoRespuestaMs || 0), 0);
   
-  let effortLabel = "Promedio";
+  let effort: "average" | "fast" | "analytical" = "average";
   if (avgClassTotalTimeMs > 0) {
     if (studentTotalTimeMs < avgClassTotalTimeMs * 0.7) {
-      effortLabel = "Rápido";
+      effort = "fast";
     } else if (studentTotalTimeMs > avgClassTotalTimeMs * 1.3) {
-      effortLabel = "Analítico";
+      effort = "analytical";
     }
   }
 
-  // Resolver los logros guardados (LudiLogroParticipante) contra el
-  // catálogo compartido para mostrar nombre/imagen/frase.
-  const earnedAchievements = (student.logros || [])
-    .map((logro: any) => {
-      if (logro.tipo === "INSIGNIA") {
-        const badge = findBadge(logro.codigo);
-        if (!badge) return null;
-        return { key: logro.codigo, kind: "Insignia", name: badge.name, detail: badge.phrase, badge, color: badge.color };
-      }
-      const mission = findMission(logro.codigo, gradeId);
-      if (!mission) return null;
-      return { key: logro.codigo, kind: "Misión", name: mission.text, detail: mission.studentText, badge: undefined as Badge | undefined, color: "#6a4bff" };
-    })
-    .filter(Boolean);
+  // Logros ganados con su fila del catálogo; los textos, en el idioma del docente.
+  const earnedAchievements = [
+    ...(student.insignias || []).map(({ insignia }: { insignia: BadgeRow }) => {
+      const badge = toBadgeDef(insignia);
+      const { name, phrase } = achievementText.badge(badge);
+      return { key: `INSIGNIA-${badge.code}`, kind: t("badge"), name, detail: phrase, badge: badge as BadgeDef | undefined, color: badge.color };
+    }),
+    ...(student.misiones || []).map(({ mision }: { mision: MissionRow }) => {
+      const mission = toMissionDef(mision);
+      const { text, studentText } = achievementText.mission(mission);
+      return { key: `MISION-${mission.code}`, kind: t("mission"), name: text, detail: studentText, badge: undefined as BadgeDef | undefined, color: "#6a4bff" };
+    }),
+  ];
 
   return (
     <div className="student-sidebar-overlay" onClick={onClose} style={{ zIndex: 1050 }}>
@@ -67,7 +69,7 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
           <div className="d-flex justify-content-between align-items-start mb-2">
             <div className="d-flex align-items-center gap-3">
               {student.avatar ? (
-                <img src={student.avatar.urlImagen} alt="Avatar" className="rounded-circle shadow-sm" style={{ width: '50px', height: '50px', objectFit: 'cover', border: '2px solid white' }} />
+                <img src={student.avatar.urlImagen} alt="" className="rounded-circle shadow-sm" style={{ width: '50px', height: '50px', objectFit: 'cover', border: '2px solid white' }} />
               ) : (
                 <div className="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '50px', height: '50px', fontSize: '24px' }}>
                   {student.nombre.charAt(0).toUpperCase()}
@@ -76,14 +78,14 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
               <div>
                 <h5 className="fw-bold mb-0" style={{ color: '#1D153A' }}>{student.nombre}</h5>
                 <div className="small" style={{ color: '#4a4266' }}>
-                  Score: <strong style={{ color: isAboveAverage ? '#198754' : '#dc3545' }}>{student.puntaje_total} pts</strong>
+                  {t("score")} <strong style={{ color: isAboveAverage ? '#198754' : '#dc3545' }}>{t("points", { score: student.puntaje_total })}</strong>
                 </div>
               </div>
             </div>
-            <button className="btn btn-close shadow-none" onClick={onClose} aria-label="Close"></button>
+            <button className="btn btn-close shadow-none" onClick={onClose} aria-label={t("close")}></button>
           </div>
           <div className="d-flex justify-content-between align-items-center mt-2 px-3 py-2 rounded-3 border" style={{ background: 'rgba(29, 21, 58, 0.05)', borderColor: 'rgba(29, 21, 58, 0.1) !important' }}>
-            <span className="small fw-bold" style={{ color: '#4a4266' }}>Tiempo Total:</span>
+            <span className="small fw-bold" style={{ color: '#4a4266' }}>{t("totalTime")}</span>
             <span className="small fw-bold" style={{ color: '#1D153A' }}>{(studentTotalTimeMs / 1000).toFixed(1)} s</span>
           </div>
         </div>
@@ -92,11 +94,11 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
         <div className="p-4 flex-grow-1 overflow-auto" style={{ background: '#fdfdfd' }}>
           {/* Stats Section */}
           <div className="mb-4">
-            <h6 className="fw-bold mb-3 text-uppercase small" style={{ color: '#1D153A' }}><FaChartLine className="me-2"/> Rendimiento General</h6>
+            <h6 className="fw-bold mb-3 text-uppercase small" style={{ color: '#1D153A' }}><FaChartLine className="me-2" aria-hidden="true"/> {t("performance")}</h6>
             
             <div className="card bg-white border-0 shadow-sm rounded-4 p-3 mb-3" style={{ border: '1px solid rgba(29,21,58,0.05) !important' }}>
               <div className="d-flex justify-content-between mb-1">
-                <span className="small fw-bold" style={{ color: '#4a4266' }}>Efectividad Global</span>
+                <span className="small fw-bold" style={{ color: '#4a4266' }}>{t("effectiveness")}</span>
                 <span className="small fw-bold" style={{ color: '#1D153A' }}>{effectiveness}%</span>
               </div>
               <div className="progress" style={{ height: '8px', background: 'rgba(29,21,58,0.1)' }}>
@@ -107,19 +109,19 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
             <div className="row g-2">
               <div className="col-6">
                 <div className="card bg-white border-0 shadow-sm rounded-4 p-3 h-100 text-center" style={{ border: '1px solid rgba(29,21,58,0.05) !important' }}>
-                  <small className="d-block mb-1" style={{ color: '#4a4266' }}>Promedio Clase</small>
+                  <small className="d-block mb-1" style={{ color: '#4a4266' }}>{t("classAverage")}</small>
                   <div className="d-flex align-items-center justify-content-center gap-2">
-                    <strong className="fs-6" style={{ color: '#1D153A' }}>{Math.round(avgClassScore)} pts</strong>
+                    <strong className="fs-6" style={{ color: '#1D153A' }}>{t("points", { score: Math.round(avgClassScore) })}</strong>
                     <FaBullseye style={{ color: isAboveAverage ? '#198754' : '#dc3545' }} />
                   </div>
                 </div>
               </div>
               <div className="col-6">
                 <div className="card bg-white border-0 shadow-sm rounded-4 p-3 h-100 text-center" style={{ border: '1px solid rgba(29,21,58,0.05) !important' }}>
-                  <small className="d-block mb-1" style={{ color: '#4a4266' }}>Ritmo de Trabajo</small>
+                  <small className="d-block mb-1" style={{ color: '#4a4266' }}>{t("pace")}</small>
                   <div className="d-flex align-items-center justify-content-center gap-2">
-                    <strong className="fs-6" style={{ color: '#1D153A' }}>{effortLabel}</strong>
-                    <FaBolt className={effortLabel === 'Rápido' ? 'text-warning' : effortLabel === 'Analítico' ? 'text-info' : 'text-secondary'} />
+                    <strong className="fs-6" style={{ color: '#1D153A' }}>{t(`effort.${effort}`)}</strong>
+                    <FaBolt aria-hidden="true" className={effort === 'fast' ? 'text-warning' : effort === 'analytical' ? 'text-info' : 'text-secondary'} />
                   </div>
                 </div>
               </div>
@@ -131,7 +133,7 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
               <hr className="my-4" style={{ borderColor: 'rgba(29,21,58,0.1)' }} />
               <div className="mb-4">
                 <h6 className="fw-bold mb-3 text-uppercase small" style={{ color: '#1D153A' }}>
-                  <FaMedal className="me-2" /> Insignias y Misiones ({earnedAchievements.length})
+                  <FaMedal className="me-2" aria-hidden="true" /> {t("achievements", { count: earnedAchievements.length })}
                 </h6>
                 <div className="d-flex flex-column gap-2">
                   {earnedAchievements.map((a: any) => (
@@ -165,7 +167,7 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
 
           {/* Chronological Session Log */}
           <div className="mb-4">
-            <h6 className="fw-bold mb-3 text-uppercase small" style={{ color: '#1D153A' }}><FaListUl className="me-2"/> Bitácora de Sesión</h6>
+            <h6 className="fw-bold mb-3 text-uppercase small" style={{ color: '#1D153A' }}><FaListUl className="me-2" aria-hidden="true"/> {t("log")}</h6>
             <StudentSessionLog respuestas={student.respuestas} />
           </div>
 

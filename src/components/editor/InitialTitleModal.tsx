@@ -5,6 +5,7 @@ import { useActivityEditor } from "@/context/ActivityEditorContext";
 import styles from './InitialTitleModal.module.css';
 import { FaPenNib } from "react-icons/fa6";
 import { useSearchParams } from 'next/navigation';
+import { useTranslations } from "next-intl";
 
 const InitialTitleModalContent = () => {
     const { state, setTitle } = useActivityEditor();
@@ -12,13 +13,14 @@ const InitialTitleModalContent = () => {
     const [localTitle, setLocalTitle] = useState("");
     const [hasChecked, setHasChecked] = useState(false);
     const searchParams = useSearchParams();
+    const t = useTranslations("Editor.titleModal");
     const id = searchParams.get("id");
 
     useEffect(() => {
         // Only run once on mount
         if (!hasChecked) {
             // Do not open if we are in Edit Mode (i.e. URL has an id)
-            if (!id && state.title === "Nueva Actividad") {
+            if (!id && !state.title) {
                 setIsOpen(true);
             }
             setHasChecked(true);
@@ -35,6 +37,7 @@ const InitialTitleModalContent = () => {
     };
 
     const handleSkip = () => {
+        setTitle(t("defaultTitle"));
         setIsOpen(false);
     };
 
@@ -48,21 +51,21 @@ const InitialTitleModalContent = () => {
                         <FaPenNib className={styles.icon} />
                     </div>
                     <h2 id="modal-title" className={styles.title}>
-                        ¡Vamos a crear algo increíble!
+                        {t("heading")}
                     </h2>
                 </div>
                 
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.inputGroup}>
                         <label htmlFor="input-activity-name" className={styles.label}>
-                            ¿Cómo se llamará la actividad?
+                            {t("label")}
                         </label>
                         <input 
                             id="input-activity-name"
                             data-tour="activity-name"
                             type="text" 
                             className={styles.input}
-                            placeholder="Ej. Fracciones Divertidas..."
+                            placeholder={t("placeholder")}
                             value={localTitle}
                             onChange={(e) => setLocalTitle(e.target.value)}
                             autoFocus
@@ -75,7 +78,7 @@ const InitialTitleModalContent = () => {
                             className={styles.skipBtn} 
                             onClick={handleSkip}
                         >
-                            Omitir
+                            {t("skip")}
                         </button>
                         <button 
                             id="btn-accept-name"
@@ -83,7 +86,7 @@ const InitialTitleModalContent = () => {
                             className={styles.startBtn}
                             disabled={!localTitle.trim()}
                         >
-                            Comenzar
+                            {t("start")}
                         </button>
                     </div>
                 </form>

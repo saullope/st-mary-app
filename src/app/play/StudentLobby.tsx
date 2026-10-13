@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './play.module.css';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 interface Avatar {
     id: number;
@@ -17,6 +18,7 @@ interface StudentLobbyProps {
 
 export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
     const router = useRouter();
+    const t = useTranslations('Play.lobby');
     const [gamePin, setGamePin] = useState('');
     const [playerName, setPlayerName] = useState('');
     const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
@@ -59,11 +61,11 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
                 // La página del juego muestra la sala de espera hasta que el docente inicie.
                 router.push(`/play/student/${data.sesionId}`);
             } else {
-                setError(data.error || "Error al unirse al juego.");
+                setError(data.error || t("joinFailed"));
             }
         } catch (err) {
             console.error("Join error:", err);
-            setError("Error de conexión. Inténtalo de nuevo.");
+            setError(t("connectionError"));
         } finally {
             setLoading(false);
         }
@@ -82,7 +84,7 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
                 <div className={styles.titleContainer}>
                     <Image
                         src="/images/play/logo-ludigame.png"
-                        alt="LudiGame Logo"
+                        alt="LudiGame"
                         width={220}
                         height={80}
                         className={styles.logo}
@@ -90,57 +92,69 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
                     />
                 </div>
 
-                <h2 className={styles.title}>¡Únete al Juego!</h2>
+                <h1 className={styles.title}>{t("title")}</h1>
 
                 <div className={styles.contentGrid}>
                     {/* Form Section */}
                     <form className={styles.formSection} onSubmit={handleJoin}>
-                        <label htmlFor="gamePin">PIN del Juego (6 dígitos)</label>
+                        <label htmlFor="gamePin">{t("pinLabel")}</label>
                         <input
                             type="text"
                             id="gamePin"
                             maxLength={6}
                             value={gamePin}
                             onChange={(e) => setGamePin(e.target.value.replace(/\D/g, ''))}
-                            placeholder="Ejemplo: 123456"
+                            placeholder={t("pinPlaceholder")}
+                            inputMode="numeric"
+                            autoComplete="off"
                             required
                         />
 
-                        <label htmlFor="playerName">Tu Nombre</label>
+                        <label htmlFor="playerName">{t("nameLabel")}</label>
                         <input
                             type="text"
                             id="playerName"
                             maxLength={12}
                             value={playerName}
                             onChange={(e) => setPlayerName(e.target.value)}
-                            placeholder="Ejemplo: Ana"
+                            placeholder={t("namePlaceholder")}
                             required
                         />
 
-                        {error && <span className={styles.errorMessage}>{error}</span>}
+                        {error && <span className={styles.errorMessage} role="alert">{error}</span>}
 
                         <button
                             type="submit"
                             className={styles.joinButton}
                             disabled={!isFormValid || loading}
                         >
-                            {loading ? "Entrando..." : "Unirse"}
+                            {loading ? t("joining") : t("join")}
                         </button>
                     </form>
 
                     {/* Avatar Selection */}
                     <div className={styles.avatarSection}>
-                        <p>Selecciona tu avatar:</p>
-                        <div className={styles.avatarsGrid}>
+                        <p id="avatar-label">{t("avatarLabel")}</p>
+                        <div className={styles.avatarsGrid} role="radiogroup" aria-labelledby="avatar-label">
                             {avatars.map((avatar) => (
                                 <div
                                     key={avatar.id}
                                     className={`${styles.avatarWrapper} ${selectedAvatarId === avatar.id ? styles.avatarSelected : ''}`}
+                                    role="radio"
+                                    aria-checked={selectedAvatarId === avatar.id}
+                                    aria-label={avatar.nombre}
+                                    tabIndex={0}
                                     onClick={() => setSelectedAvatarId(avatar.id)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            setSelectedAvatarId(avatar.id);
+                                        }
+                                    }}
                                 >
                                     <img
                                         src={avatar.urlImagen}
-                                        alt={avatar.nombre}
+                                        alt=""
                                         className={styles.avatarImage}
                                     />
                                 </div>

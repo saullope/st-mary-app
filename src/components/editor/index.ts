@@ -4,8 +4,6 @@
  */
 
 export { TitleActivity } from './TitleActivity';
-export { LoadImagesComponent } from './LoadImagesComponent';
-export { Imagepreview } from './ImagePreview';
 export { ModalMultimedia } from './ModalMultimedia';
 export { CanvaEmbedModal } from './CanvaEmbedModal';
 export { useContentSlides } from './useContentSlides';

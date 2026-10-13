@@ -3,12 +3,12 @@ import { SecuritySettings } from "@/components/settings/SecuritySettings";
 import getSession from '@/lib/auth/getSession'; 
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { redirect } from 'next/navigation';
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `Seguridad | LudiGame`,
-    description: 'Ajustes de seguridad y contraseña'
-  };
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("settings.security.title"), description: t("settings.security.description") });
 }
 
 export default async function SecurityPage() {

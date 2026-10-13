@@ -3,12 +3,12 @@ import { TourSettings } from '@/components/settings/TourSettings';
 import getSession from '@/lib/auth/getSession';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { redirect } from 'next/navigation';
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: 'Visitas Guiadas | LudiGame',
-    description: 'Configuración de visitas guiadas interactivas de LudiGame',
-  };
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("settings.tours.title"), description: t("settings.tours.description") });
 }
 
 export default async function ToursPage() {

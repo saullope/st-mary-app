@@ -8,12 +8,14 @@ import { EditorSidebar, EditorCanvas, EditorPlaceholder, EditorGamificationColum
 import { LessonBlockList, LessonBlockPicker } from "@/features/lesson/components/LessonBlockList";
 import { LessonBlockEditor } from "@/features/lesson/components/LessonBlockEditor";
 import type { LessonBlock, LessonBlockKind } from "@/features/lesson/lessonBlocks";
+import { useTranslations } from "next-intl";
 
 export default function LudiLeccion() {
     const { state, setActivityType, setLessonBlocks, setTitle, updateConfig, setActivityId, setBackgroundImage } = useActivityEditor();
     const { lessonBlocks: blocks, fullScreen, config } = state;
     const searchParams = useSearchParams();
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const t = useTranslations("Editor.lesson");
 
     useEffect(() => {
         setActivityType("ludileccion");
@@ -63,7 +65,7 @@ export default function LudiLeccion() {
         <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}>
             {!fullScreen && (
                 <EditorSidebar
-                    title="Bloques"
+                    title={t("sidebarTitle")}
                     count={blocks.length}
                     actions={<LessonBlockPicker gradeId={config.gradeId} onAdd={addBlock} />}
                 >
@@ -78,7 +80,7 @@ export default function LudiLeccion() {
                 </EditorSidebar>
             )}
 
-            <EditorCanvas title="LudiLección">
+            <EditorCanvas title={t("canvasTitle")}>
                 {selectedBlock ? (
                     <LessonBlockEditor
                         key={selectedBlock.id}
@@ -87,9 +89,8 @@ export default function LudiLeccion() {
                         onChange={(changes) => updateBlock(selectedBlock.id, changes)}
                     />
                 ) : (
-                    <EditorPlaceholder title="Arma tu lección">
-                        Agrega bloques desde la columna izquierda. Tus estudiantes los recorrerán en orden
-                        y ganarán las insignias y misiones que elijas al completarla.
+                    <EditorPlaceholder title={t("placeholderTitle")}>
+                        {t("placeholderBody")}
                     </EditorPlaceholder>
                 )}
             </EditorCanvas>

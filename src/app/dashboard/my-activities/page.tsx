@@ -11,14 +11,11 @@ import styles from "@/styles/pages/my-activities.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
 import ActivityCard from "@/components/dashboard/ActivityCard";
 import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("myActivitiesContent");
-
-    return {
-        title: t('metaTitle'),
-        description: t('metaDescription')
-    };
+  const t = await getTranslations("myActivitiesContent");
+  return pageMetadata({ title: t("metaTitle"), description: t("metaDescription") });
 }
 
 interface PageProps {
@@ -54,15 +51,9 @@ export default async function MyActivities({ searchParams }: PageProps) {
   
   const { activities, total } = await getUserActivities(user.id, selectedTypeId, searchQuery, page, limit);
 
-  const getGradeLabel = (gradeName?: string) => {
-    if (!gradeName) return "N/A";
-    const lower = gradeName.toLowerCase();
-    // Mapa de traducción flexible
-    if (lower.includes("first") || lower.includes("1")) return "Primero";
-    if (lower.includes("second") || lower.includes("2")) return "Segundo";
-    if (lower.includes("third") || lower.includes("3")) return "Tercero";
-    return gradeName; // Fallback
-  };
+  const tCommon = await getTranslations("Common");
+  const getGradeLabel = (gradoId: number | null) =>
+    gradoId === 1 || gradoId === 2 || gradoId === 3 ? tCommon(`grades.${gradoId}`) : tCommon("noGrade");
 
   const getTypeBadgeClass = (id: number) => {
     switch(id) {
@@ -102,7 +93,7 @@ export default async function MyActivities({ searchParams }: PageProps) {
             <ActivityCard 
               key={act.activityId}
               activity={act}
-              gradeLabel={getGradeLabel(act.grado?.grade_type_name)}
+              gradeLabel={getGradeLabel(act.gradoId)}
               typeBadgeClass={getTypeBadgeClass(act.tipoActividadId)}
               sessionPicture={session.picture}
               isAdmin={user.rol.nombre === 'ADMIN'}
@@ -111,9 +102,9 @@ export default async function MyActivities({ searchParams }: PageProps) {
         </div>
       ) : (
         <div className={styles.emptyStateCard}>
-          <div className={styles.emptyStateIcon}>🚀</div>
-          <h3><span className={designStyles.star}>★</span> ¡Tu aventura está a punto de comenzar!</h3>
-          <p>Aún no has creado ninguna actividad. Crea tu primer desafío y sorprende a tus estudiantes con una experiencia de aprendizaje inolvidable.</p>
+          <div className={styles.emptyStateIcon} aria-hidden="true">🚀</div>
+          <h3><span className={designStyles.star} aria-hidden="true">★</span> {t("emptyTitle")}</h3>
+          <p>{t("emptyBody")}</p>
         </div>
       )}
       

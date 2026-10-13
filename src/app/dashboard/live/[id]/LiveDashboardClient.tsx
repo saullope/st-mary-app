@@ -3,9 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { FaArrowLeft, FaCheck, FaCopy, FaPlay, FaFlagCheckered, FaChartColumn } from "react-icons/fa6";
-import { PostGameFeedbackModal } from "@/components/activity/PostGameFeedbackModal";
+import { TeacherEvaluationModal } from "@/features/followUp/components/TeacherEvaluationModal";
+import { saveTeacherEvaluation } from "@/features/followUp/teacherEvaluationApi";
+import type { TeacherEvaluation } from "@/features/followUp/followUp";
 import type { SessionPhase } from "@/lib/play/sessionState";
 import styles from "./LivePanel.module.css";
+import { useTranslations } from "next-intl";
 
 interface Participant {
   id: string;
@@ -24,12 +27,6 @@ interface SessionState {
 
 const POLL_MS = 2500;
 
-const PHASE_LABELS: Record<SessionPhase, string> = {
-  waiting: "Sala de espera",
-  active: "En curso",
-  finished: "Finalizada",
-};
-
 const StudentAvatar = ({ participant, small = false }: { participant: Participant; small?: boolean }) => {
   const className = small ? styles.avatarSmall : styles.avatar;
   if (participant.avatar) {
@@ -43,7 +40,9 @@ const StudentAvatar = ({ participant, small = false }: { participant: Participan
   );
 };
 
-const Ranking = ({ participants }: { participants: Participant[] }) => (
+const Ranking = ({ participants }: { participants: Participant[] }) => {
+  const t = useTranslations("Live");
+  return (
   <ol className={styles.ranking}>
     {participants.map((p, index) => (
       <li key={p.id} className={styles.rankRow} data-top={index < 3}>
@@ -51,19 +50,29 @@ const Ranking = ({ participants }: { participants: Participant[] }) => (
         <StudentAvatar participant={p} small />
         <span className={styles.rankName}>{p.nombre}</span>
         {p.completado && (
-          <span className={styles.done}><FaCheck aria-hidden="true" /> Terminó</span>
+          <span className={styles.done}><FaCheck aria-hidden="true" /> {t("done")}</span>
         )}
-        <span className={styles.points}>{p.puntaje_total} pts</span>
+        <span className={styles.points}>{t("points", { score: p.puntaje_total })}</span>
       </li>
     ))}
   </ol>
-);
+  );
+};
 
-export default function LiveDashboardClient({ sessionId }: { sessionId: string }) {
+interface LiveDashboardClientProps {
+  sessionId: string;
+  gradeId: number | null;
+  fromTemplate: boolean;
+  /** Preferencia del docente (enableTeacherEvaluation). */
+  askEvaluation: boolean;
+}
+
+export default function LiveDashboardClient({ sessionId, gradeId, fromTemplate, askEvaluation }: LiveDashboardClientProps) {
   const [session, setSession] = useState<SessionState | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const t = useTranslations("Live");
 
   const fetchSession = useCallback(async () => {
     try {
@@ -106,30 +115,29 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
     }
   };
 
-  // La valoración del docente se pide antes de cerrar; omitirla también termina la actividad.
-  const finishWithFeedback = async (data?: { utilityRating: number; difficultyRating: number | null; objectiveMet: boolean | null }) => {
+  // La evaluación se pide antes de cerrar; omitirla también termina y el reporte la vuelve a ofrecer.
+  const requestFinish = () => {
+    if (askEvaluation) setShowFeedbackModal(true);
+    else updateSession("end");
+  };
+
+  const finishWithEvaluation = async (evaluation: TeacherEvaluation) => {
+    const saved = await saveTeacherEvaluation(sessionId, evaluation);
+    if (!saved) return false;
     setShowFeedbackModal(false);
-    if (data) {
-      try {
-        await fetch("/api/play/teacher-feedback", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sesionId: sessionId,
-            rating: data.utilityRating,
-            difficultyRating: data.difficultyRating,
-            objectiveMet: data.objectiveMet,
-          }),
-        });
-      } catch (error) {
-        console.error("Error sending teacher feedback:", error);
-      }
-    }
+    updateSession("end");
+    return true;
+  };
+
+  const finishWithoutEvaluation = () => {
+    setShowFeedbackModal(false);
     updateSession("end");
   };
 
-  if (loading && !session) return <div className={styles.state} role="status">Cargando panel en vivo...</div>;
-  if (!session) return <div className={styles.state} role="alert">No se pudo cargar la sesión.</div>;
+  const cancelFinish = useCallback(() => setShowFeedbackModal(false), []);
+
+  if (loading && !session) return <div className={styles.state} role="status">{t("loading")}</div>;
+  if (!session) return <div className={styles.state} role="alert">{t("loadError")}</div>;
 
   const participants = session.participantes;
   const completed = participants.filter((p) => p.completado).length;
@@ -139,21 +147,19 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
   return (
     <div className={styles.page}>
       <Link href="/dashboard/my-activities" className={styles.backLink}>
-        <FaArrowLeft aria-hidden="true" /> Mis actividades
+        <FaArrowLeft aria-hidden="true" /> {t("myActivities")}
       </Link>
 
       <header className={styles.header}>
         <div>
-          <h1 className={styles.title}>Panel en vivo</h1>
+          <h1 className={styles.title}>{t("title")}</h1>
           <p className={styles.subtitle}>
-            {session.phase === "waiting" && "Comparte el PIN. La actividad comenzará para todos cuando la inicies."}
-            {session.phase === "active" && "Sigue el avance de tus estudiantes en tiempo real."}
-            {session.phase === "finished" && "Estos son los resultados finales de la sesión."}
+            {t(`subtitle.${session.phase}`)}
           </p>
         </div>
         <span className={styles.status}>
           <span className={styles.statusDot} data-phase={session.phase} aria-hidden="true" />
-          {PHASE_LABELS[session.phase]}
+          {t(`phase.${session.phase}`)}
         </span>
       </header>
 
@@ -161,11 +167,11 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
         <div className={styles.grid}>
           <section className={styles.panel} aria-labelledby="students-title">
             <h2 id="students-title" className={styles.panelTitle}>
-              Estudiantes conectados <span className={styles.count}>{participants.length}</span>
+              {t("connected")} <span className={styles.count}>{participants.length}</span>
             </h2>
             {participants.length === 0 ? (
               <div className={styles.empty}>
-                <p className={styles.muted}>Aún no se ha unido nadie. Los estudiantes aparecerán aquí al ingresar el PIN.</p>
+                <p className={styles.muted}>{t("nobodyYet")}</p>
               </div>
             ) : (
               <ul className={styles.students}>
@@ -179,15 +185,15 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
             )}
           </section>
 
-          <aside className={styles.panel} aria-label="PIN y controles">
-            <p className={styles.pinLabel}>PIN de la actividad</p>
+          <aside className={styles.panel} aria-label={t("pinControls")}>
+            <p className={styles.pinLabel}>{t("pinLabel")}</p>
             <div className={styles.pinRow}>
               <span className={styles.pin}>{session.codigo}</span>
-              <button type="button" className={styles.iconButton} onClick={copyPin} aria-label={copied ? "PIN copiado" : "Copiar PIN"} title="Copiar PIN">
+              <button type="button" className={styles.iconButton} onClick={copyPin} aria-label={copied ? t("pinCopied") : t("copyPin")} title={t("copyPin")}>
                 {copied ? <FaCheck aria-hidden="true" /> : <FaCopy aria-hidden="true" />}
               </button>
             </div>
-            <p className={styles.joinHint}>Los estudiantes entran en <strong>{joinHost}</strong></p>
+            <p className={styles.joinHint}>{t.rich("joinHint", { host: joinHost, strong: (chunks) => <strong>{chunks}</strong> })}</p>
 
             <div className={styles.actions}>
               <button
@@ -196,10 +202,10 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
                 onClick={() => updateSession("start")}
                 disabled={participants.length === 0}
               >
-                <FaPlay aria-hidden="true" /> Iniciar actividad
+                <FaPlay aria-hidden="true" /> {t("start")}
               </button>
               {participants.length === 0 && (
-                <p className={styles.muted}>Podrás iniciar cuando se una al menos un estudiante.</p>
+                <p className={styles.muted}>{t("startHint")}</p>
               )}
             </div>
           </aside>
@@ -210,33 +216,33 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
         <div className={styles.grid}>
           <section className={styles.panel} aria-labelledby="ranking-title">
             <h2 id="ranking-title" className={styles.panelTitle}>
-              Posiciones <span className={styles.count}>{participants.length} estudiantes</span>
+              {t("ranking")} <span className={styles.count}>{t("students", { count: participants.length })}</span>
             </h2>
             {participants.length === 0 ? (
-              <p className={styles.muted}>No hay estudiantes conectados.</p>
+              <p className={styles.muted}>{t("noStudents")}</p>
             ) : (
               <Ranking participants={participants} />
             )}
           </section>
 
-          <aside className={styles.panel} aria-label="Avance y controles">
-            <h2 className={styles.panelTitle}>Avance de la clase</h2>
-            <p className={styles.progressValue}>{completed} de {participants.length}</p>
+          <aside className={styles.panel} aria-label={t("progressControls")}>
+            <h2 className={styles.panelTitle}>{t("progressTitle")}</h2>
+            <p className={styles.progressValue}>{t("progressValue", { completed, total: participants.length })}</p>
             <div
               className={styles.progressTrack}
               role="progressbar"
               aria-valuenow={progress}
               aria-valuemin={0}
               aria-valuemax={100}
-              aria-label="Estudiantes que terminaron"
+              aria-label={t("finishedStudents")}
             >
               <div className={styles.progressFill} style={{ width: `${progress}%` }} />
             </div>
-            <p className={`${styles.muted} mt-2`}>Estudiantes que terminaron la actividad.</p>
+            <p className={`${styles.muted} mt-2`}>{t("finishedHint")}</p>
 
             <div className={styles.actions}>
-              <button type="button" className={styles.dangerButton} onClick={() => setShowFeedbackModal(true)}>
-                <FaFlagCheckered aria-hidden="true" /> Terminar actividad
+              <button type="button" className={styles.dangerButton} onClick={requestFinish}>
+                <FaFlagCheckered aria-hidden="true" /> {t("finish")}
               </button>
             </div>
           </aside>
@@ -247,24 +253,24 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
         <div className={styles.grid}>
           <section className={styles.panel} aria-labelledby="results-title">
             <h2 id="results-title" className={styles.panelTitle}>
-              Resultados <span className={styles.count}>{participants.length} estudiantes</span>
+              {t("results")} <span className={styles.count}>{t("students", { count: participants.length })}</span>
             </h2>
             {participants.length === 0 ? (
-              <p className={styles.muted}>Nadie participó en esta sesión.</p>
+              <p className={styles.muted}>{t("nobodyPlayed")}</p>
             ) : (
               <Ranking participants={participants} />
             )}
           </section>
 
-          <aside className={styles.panel} aria-label="Siguientes pasos">
-            <h2 className={styles.panelTitle}>Sesión finalizada</h2>
-            <p className={styles.muted}>Revisa el detalle por estudiante y califica las respuestas escritas en el reporte.</p>
+          <aside className={styles.panel} aria-label={t("nextSteps")}>
+            <h2 className={styles.panelTitle}>{t("finishedTitle")}</h2>
+            <p className={styles.muted}>{t("finishedBody")}</p>
             <div className={styles.actions}>
               <Link href={`/dashboard/reports/${session.id}`} className={styles.primaryButton}>
-                <FaChartColumn aria-hidden="true" /> Ver reporte
+                <FaChartColumn aria-hidden="true" /> {t("viewReport")}
               </Link>
               <Link href="/dashboard/my-activities" className={styles.secondaryButton}>
-                Volver a mis actividades
+                {t("backToActivities")}
               </Link>
             </div>
           </aside>
@@ -272,11 +278,12 @@ export default function LiveDashboardClient({ sessionId }: { sessionId: string }
       )}
 
       {showFeedbackModal && (
-        <PostGameFeedbackModal
-          isOpen={showFeedbackModal}
-          onClose={() => finishWithFeedback()}
-          onSubmit={finishWithFeedback}
-          isTemplate={false}
+        <TeacherEvaluationModal
+          gradeId={gradeId}
+          fromTemplate={fromTemplate}
+          onSubmit={finishWithEvaluation}
+          onSkip={finishWithoutEvaluation}
+          onCancel={cancelFinish}
         />
       )}
     </div>

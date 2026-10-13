@@ -9,11 +9,13 @@ import styles from "@/styles/pages/my-activities.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
 import { FaShapes } from "react-icons/fa6";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Plantillas | LudiGame",
-  description: "Catálogo de plantillas de LudiGame",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("templates.title"), description: t("templates.description") });
+}
 
 export default async function TemplatesPage({
   searchParams,
@@ -28,6 +30,7 @@ export default async function TemplatesPage({
   }
 
   const resolvedSearchParams = await searchParams;
+  const t = await getTranslations("Templates");
 
   const cookieStore = await cookies();
   const defaultGrade = cookieStore.get("selectedGrade")?.value || "1ro";
@@ -70,9 +73,10 @@ export default async function TemplatesPage({
   });
 
   const getGradeTitle = (gradeStr: string) => {
-    if (gradeStr === "firstGrade" || gradeStr === "1ro") return "1º Grado";
-    if (gradeStr === "secondGrade" || gradeStr === "2do") return "2º Grado";
-    if (gradeStr === "thirdGrade" || gradeStr === "3ro") return "3º Grado";
+    if (gradeStr === "firstGrade" || gradeStr === "1ro") return t("grade1");
+    if (gradeStr === "secondGrade" || gradeStr === "2do") return t("grade2");
+    if (gradeStr === "thirdGrade" || gradeStr === "3ro") return t("grade3");
+    if (gradeStr === "All") return t("allGrades");
     return gradeStr;
   };
 
@@ -81,10 +85,10 @@ export default async function TemplatesPage({
       <div className={styles.headerContainer} style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
         <div>
           <h1 className={designStyles.titleLudi} style={{ textAlign: 'left', marginBottom: '10px' }}>
-            <FaShapes className="me-3" />
-            Catálogo de Plantillas
+            <FaShapes className="me-3" aria-hidden="true" />
+            {t("title")}
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.7)' }}>Explora y clona actividades listas para usar en clase.</p>
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>{t("subtitle")}</p>
         </div>
       </div>
 
@@ -104,14 +108,14 @@ export default async function TemplatesPage({
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              Grado: {getGradeTitle(currentGradeFilter)}
+              {t("gradeFilter", { grade: getGradeTitle(currentGradeFilter) })}
             </button>
             <ul className="dropdown-menu shadow-sm border-0">
-              <li><Link className="dropdown-item" href={`?grade=firstGrade&subject=${currentSubjectFilter}`}>1º Grado</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=secondGrade&subject=${currentSubjectFilter}`}>2º Grado</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=thirdGrade&subject=${currentSubjectFilter}`}>3º Grado</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=firstGrade&subject=${currentSubjectFilter}`}>{t("grade1")}</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=secondGrade&subject=${currentSubjectFilter}`}>{t("grade2")}</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=thirdGrade&subject=${currentSubjectFilter}`}>{t("grade3")}</Link></li>
               <li><hr className="dropdown-divider" /></li>
-              <li><Link className="dropdown-item" href={`?grade=All&subject=${currentSubjectFilter}`}>Todos los grados</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=All&subject=${currentSubjectFilter}`}>{t("allGrades")}</Link></li>
             </ul>
           </div>
           
@@ -129,14 +133,14 @@ export default async function TemplatesPage({
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              Materia: {currentSubjectFilter === "All" ? "Todas" : currentSubjectFilter}
+              {t("subjectFilter", { subject: currentSubjectFilter === "All" ? t("allSubjectsShort") : currentSubjectFilter })}
             </button>
             <ul className="dropdown-menu shadow-sm border-0">
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=All`}>Todas las materias</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Matemáticas`}>Matemáticas</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Lengua`}>Lengua y Literatura</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Tecnología`}>Tecnología</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Efemérides`}>Efemérides de Nicaragua</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=All`}>{t("allSubjects")}</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Matemáticas`}>{t("subjects.math")}</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Lengua`}>{t("subjects.language")}</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Tecnología`}>{t("subjects.technology")}</Link></li>
+              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Efemérides`}>{t("subjects.ephemerides")}</Link></li>
             </ul>
           </div>
         </div>
@@ -150,9 +154,9 @@ export default async function TemplatesPage({
         </div>
       ) : (
         <div className={styles.emptyStateCard}>
-          <div className={styles.emptyStateIcon}>📚</div>
-          <h3><span className={designStyles.star}>★</span> Aún no hay plantillas para este filtro</h3>
-          <p>Intenta seleccionar otro grado u otra materia.</p>
+          <div className={styles.emptyStateIcon} aria-hidden="true">📚</div>
+          <h3><span className={designStyles.star} aria-hidden="true">★</span> {t("emptyTitle")}</h3>
+          <p>{t("emptyBody")}</p>
         </div>
       )}
     </div>

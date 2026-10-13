@@ -1,46 +1,26 @@
-"use server";
-
 import prisma from "@/lib/db";
-import getCurrentUser from "@/lib/auth/getCurrentUser";
-import { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
-import { GamificationConfig } from "@/context/ActivityEditorContext";
+import type { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
+import { ActivityWriteError, type ActivityWriteResult, type ActivityWriter, type UpdateActivityData } from "./types";
 import { getActivityTypeId, getThemeIdByUrl, getOrCreateResource, setOptionImage, replaceLessonBlocks, validateLessonForSave, replaceFormQuestions, validateFormForSave } from "@/lib/activity-helpers";
 import { validateMemoryForSave } from "@/features/memory/memoryCards";
-import type { LessonBlock } from "@/features/lesson/lessonBlocks";
-import type { FormQuestion } from "@/features/form/formQuestions";
+import { translateMessage } from "@/lib/i18n/translateMessage";
+import { replaceActivityAchievements } from "@/features/gamification/activityAchievements";
+import { message } from "@/lib/i18n/message";
 
-interface UpdateActivityData {
-  activityId: number;
-  title: string;
-  type: "ludiquiz" | "ludimemory" | "trueorfalse" | "ludileccion" | "ludiform";
-  questions: (LudiQuizQuestion | TrueOrFalseQuestion)[];
-  config: GamificationConfig;
-  backgroundImage?: string;
-  memoryImages?: string[];
-  lessonBlocks?: LessonBlock[];
-  formQuestions?: FormQuestion[];
-}
-
-export async function updateActivity(data: UpdateActivityData) {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return { error: "No autorizado. Debes iniciar sesión." };
-  }
-
+export async function updateActivityForUser(user: ActivityWriter, data: UpdateActivityData): Promise<ActivityWriteResult> {
   if (data.type === "ludileccion") {
     const problem = validateLessonForSave(data.lessonBlocks, data.config.gradeId);
-    if (problem) return { error: problem };
+    if (problem) return { error: await translateMessage(problem), status: 400 };
   }
 
   if (data.type === "ludiform") {
     const problem = validateFormForSave(data.formQuestions, data.config.gradeId);
-    if (problem) return { error: problem };
+    if (problem) return { error: await translateMessage(problem), status: 400 };
   }
 
   if (data.type === "ludimemory") {
     const problem = validateMemoryForSave(data.memoryImages);
-    if (problem) return { error: problem };
+    if (problem) return { error: await translateMessage(problem), status: 400 };
   }
 
   try {
@@ -51,11 +31,11 @@ export async function updateActivity(data: UpdateActivityData) {
       });
 
       if (!existingActivity) {
-        throw new Error("Actividad no encontrada.");
+        throw new ActivityWriteError("Errors.activityNotFound", 404);
       }
 
       if (existingActivity.userId !== user.id) {
-        throw new Error("No tienes permiso para editar esta actividad.");
+        throw new ActivityWriteError("Errors.editForbidden", 403);
       }
 
       const tipoActividadId = await getActivityTypeId(data.type);
@@ -87,30 +67,25 @@ export async function updateActivity(data: UpdateActivityData) {
       });
 
       // 4. Update Configuración
+      const ajustesJson = JSON.stringify({
+        voiceEnabled: data.config.voiceEnabled,
+        backgroundImage: data.backgroundImage
+      });
       await tx.ludiActividadConfig.upsert({
         where: { activityId: data.activityId },
         update: {
           puntajeBase: data.config.pointsPerCorrect,
           tiempoPreguntaMs: data.config.timeLimit * 1000,
-          ajustesJson: JSON.stringify({
-            badges: data.config.selectedBadges,
-            missions: data.config.selectedMissions,
-            voiceEnabled: data.config.voiceEnabled,
-            backgroundImage: data.backgroundImage
-          })
+          ajustesJson
         },
         create: {
           activity: { connect: { activityId: data.activityId } },
           puntajeBase: data.config.pointsPerCorrect,
           tiempoPreguntaMs: data.config.timeLimit * 1000,
-          ajustesJson: JSON.stringify({
-            badges: data.config.selectedBadges,
-            missions: data.config.selectedMissions,
-            voiceEnabled: data.config.voiceEnabled,
-            backgroundImage: data.backgroundImage
-          })
+          ajustesJson
         }
       });
+      await replaceActivityAchievements(tx, data.activityId, data.config.selectedBadges, data.config.selectedMissions);
 
       // 5. Smart Content Update
       if (data.type === 'ludileccion') {
@@ -304,8 +279,13 @@ export async function updateActivity(data: UpdateActivityData) {
         activityId: result.activityId
     };
 
-  } catch (error: any) {
+  } catch (error) {
+    // El detalle de la BD queda en el log; al usuario no se le muestra.
     console.error("Error updating activity:", error);
-    return { error: "Error al actualizar en base de datos: " + error.message };
+    const known = error instanceof ActivityWriteError;
+    return {
+      error: await translateMessage(message(known ? error.messageKey : "Errors.updateFailed")),
+      status: known ? error.status : 500,
+    };
   }
 }

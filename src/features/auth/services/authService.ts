@@ -30,7 +30,7 @@ export const sendResetPasswordEmail = async (email: string): Promise<LoginRespon
          // Log internally but return generic or specific error depending on policy
          console.error("Reset password error:", error);
          // Return success false, but the UI might choose to show a generic message for security
-         return { success: false, message: "Error sending email" };
+         return { success: false };
     }
 };
 
@@ -53,12 +53,13 @@ export const createSessionOnServer = async (idToken: string): Promise<Omit<Login
       const data = await response.json().catch(() => ({}));
       return { 
         success: false, 
-        message: data.error || "Failed to create session on server" 
+        // El servidor ya responde traducido; sin mensaje, el formulario muestra el suyo.
+        message: data.error
       };
     }
   } catch (error) {
     console.error("Session creation error:", error);
-    return { success: false, message: "Network error during session creation" };
+    return { success: false };
   }
 };
 
@@ -68,7 +69,7 @@ export const createSessionOnServer = async (idToken: string): Promise<Omit<Login
 export const loginWithEmail = async (email: string, password: string): Promise<LoginResponse> => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    if (!userCredential.user) return { success: false, message: "User not found" };
+    if (!userCredential.user) return { success: false };
 
     const idToken = await userCredential.user.getIdToken(true);
     const sessionResponse = await createSessionOnServer(idToken);
@@ -88,7 +89,7 @@ export const loginWithEmail = async (email: string, password: string): Promise<L
 };
 
 /**
- * Handles the complete Google login flow
+ * Inicio de session con cuenta de google
  */
 export const loginWithGoogle = async (): Promise<LoginResponse> => {
   const googleProvider = new GoogleAuthProvider();
@@ -96,7 +97,7 @@ export const loginWithGoogle = async (): Promise<LoginResponse> => {
 
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    if (!result.user) return { success: false, message: "Google authentication failed" };
+    if (!result.user) return { success: false };
 
     const idToken = await result.user.getIdToken(true);
     const sessionResponse = await createSessionOnServer(idToken);
@@ -142,7 +143,7 @@ export const registerUser = async (
             // but the user exists in Firebase.
              return { 
                 success: false, 
-                message: sessionResponse.message || "User created but failed to start session" 
+                message: sessionResponse.message
             };
         }
 

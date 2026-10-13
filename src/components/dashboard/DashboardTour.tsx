@@ -4,9 +4,11 @@ import React, { useEffect } from "react";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useTourPreferences } from "@/hooks/useTourPreferences";
+import { useTranslations } from "next-intl";
 
 export default function DashboardTour() {
   const { shouldShowTour, markTourAsCompleted, preferences } = useTourPreferences();
+  const t = useTranslations("Tours.dashboard");
 
   useEffect(() => {
     if (!shouldShowTour('dashboard_tour')) return;
@@ -19,15 +21,15 @@ export default function DashboardTour() {
       overlayColor: isHintsMode ? 'rgba(0, 0, 0, 0)' : 'rgba(29, 21, 58, 0.75)',
       popoverClass: isHintsMode ? 'driverjs-hints-only' : 'driverjs-dashboard-theme',
       animate: !isHintsMode,
-      nextBtnText: "Siguiente",
-      prevBtnText: "Anterior",
-      doneBtnText: "¡Entendido!",
+      nextBtnText: t("buttons.next"),
+      prevBtnText: t("buttons.previous"),
+      doneBtnText: t("buttons.done"),
       steps: [
         {
           element: "#sidebar-dashboard",
           popover: {
-            title: "Tu Centro de Mando",
-            description: "Este es tu centro de mando. Desde aquí puedes navegar rápidamente entre tus actividades, reportes y plantillas.",
+            title: t("command.title"),
+            description: t("command.description"),
             side: "right",
             align: "start"
           }
@@ -35,8 +37,8 @@ export default function DashboardTour() {
         {
           element: "#dashboard-user-greeting",
           popover: {
-            title: "Tu Espacio Personal",
-            description: "Tu espacio personal. Aquí siempre verás un resumen rápido de lo que puedes hacer.",
+            title: t("personal.title"),
+            description: t("personal.description"),
             side: "bottom",
             align: "center"
           }
@@ -44,8 +46,8 @@ export default function DashboardTour() {
         {
           element: "#card-create-activity",
           popover: {
-            title: "Diseña Experiencias Educativas",
-            description: "¡Aquí ocurre la magia! Crea actividades interactivas como Quizzes o Juegos de Memoria en solo unos clics. Es la opción favorita de nuestros educadores.",
+            title: t("create.title"),
+            description: t("create.description"),
             side: "bottom",
             align: "center"
           }
@@ -53,8 +55,8 @@ export default function DashboardTour() {
         {
           element: "#card-templates",
           popover: {
-            title: "Recursos y Plantillas",
-            description: "Ahorra tiempo usando nuestras plantillas o gestiona tus creaciones anteriores de forma fácil.",
+            title: t("templates.title"),
+            description: t("templates.description"),
             side: "bottom",
             align: "center"
           }
@@ -62,8 +64,8 @@ export default function DashboardTour() {
         {
           element: "#dashboard-drafts-section",
           popover: {
-            title: "Continuar Trabajando",
-            description: "Nunca pierdas tu progreso. Retoma tus borradores exactamente donde los dejaste.",
+            title: t("drafts.title"),
+            description: t("drafts.description"),
             side: "top",
             align: "center"
           }
@@ -79,7 +81,7 @@ export default function DashboardTour() {
     }, 1500);
 
     return () => clearTimeout(timer);
-  }, [shouldShowTour, markTourAsCompleted, preferences.tourMode]);
+  }, [shouldShowTour, markTourAsCompleted, preferences.tourMode, t]);
 
   return null;
 }

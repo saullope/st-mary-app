@@ -7,6 +7,7 @@ import { useActivityEditor } from "@/context/ActivityEditorContext";
 import { useAuth } from "@/hooks/useAuth";
 import { ActivityPlayer } from "@/features/play/ActivityPlayer";
 import { buildPreviewSession } from "@/features/play/buildPreviewSession";
+import { useTranslations } from "next-intl";
 
 interface ActivityPreviewModalProps {
     isOpen: boolean;
@@ -23,12 +24,15 @@ export const ActivityPreviewModal = ({ isOpen, onClose }: ActivityPreviewModalPr
     const { state } = useActivityEditor();
     const { user } = useAuth();
     const [mounted, setMounted] = useState(false);
+    const t = useTranslations("Editor.preview");
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    const sesion = useMemo(() => buildPreviewSession(state), [state]);
+    const tList = useTranslations("Editor.list");
+    const untitled = tList("untitledQuestion");
+    const sesion = useMemo(() => buildPreviewSession(state, untitled), [state, untitled]);
 
     if (!mounted || !isOpen) return null;
 
@@ -36,8 +40,7 @@ export const ActivityPreviewModal = ({ isOpen, onClose }: ActivityPreviewModalPr
         <div style={{ position: "fixed", inset: 0, zIndex: 2000 }}>
             <button
                 onClick={onClose}
-                title="Cerrar Vista Previa"
-                aria-label="Cerrar Vista Previa"
+                title={t("close")}
                 style={{
                     position: "fixed",
                     top: 16,
@@ -58,8 +61,8 @@ export const ActivityPreviewModal = ({ isOpen, onClose }: ActivityPreviewModalPr
                     cursor: "pointer",
                 }}
             >
-                <IoClose size={20} />
-                Cerrar Vista Previa
+                <IoClose size={20} aria-hidden="true" />
+                {t("close")}
             </button>
             <ActivityPlayer sesion={sesion} previewMode onExit={onClose} previewName={user?.displayName || undefined} />
         </div>,

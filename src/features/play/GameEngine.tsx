@@ -9,6 +9,7 @@ import { evaluateBadges, evaluateMissions, evaluateLessonBadges, evaluateLessonM
 import { usePlaySession } from "./usePlaySession";
 import { postPlay } from "./playApi";
 import { PlayScreen, ReadyCard, AchievementsRecap, SummaryActions } from "./PlayScreens";
+import { useTranslations } from "next-intl";
 
 // Debe coincidir con ACTIVITY_TYPE_MAP en src/lib/activity-helpers.ts
 const TIPO_LUDILECCION = 4;
@@ -33,9 +34,10 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
     const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
     const [feedback, setFeedback] = useState<{ isCorrect: boolean; points: number } | null>(null);
     const {
-        config, participant, backgroundImage, selectedBadges, selectedMissions, gradeId, speak,
+        config, participant, backgroundImage, selectedBadges, selectedMissions, speak,
         achievementQueue, awardedBadgesRef, awardedMissionsRef, recordBadges, announceMissions,
     } = usePlaySession({ sesion, previewMode, previewName });
+    const t = useTranslations("Play.game");
 
     const questions = sesion.LUDI_ACTIVIDAD.preguntas || [];
     // Las diapositivas de contenido no cuentan en el progreso "n / total".
@@ -188,7 +190,7 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
             isFinished: false,
         };
         recordBadges(evaluateBadges(selectedBadges, awardedBadgesRef.current, stats));
-        announceMissions(evaluateMissions(selectedMissions, gradeId, awardedMissionsRef.current, stats));
+        announceMissions(evaluateMissions(selectedMissions, awardedMissionsRef.current, stats));
 
         // Auto-advance after 3 seconds
         if (advanceTimeoutRef.current) clearTimeout(advanceTimeoutRef.current);
@@ -210,7 +212,7 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
             readingBlockIndexes: readingBlockIndexesRef.current,
             isFinished: index >= questions.length - 1,
         };
-        announceMissions(evaluateLessonMissions(selectedMissions, gradeId, awardedMissionsRef.current, stats));
+        announceMissions(evaluateLessonMissions(selectedMissions, awardedMissionsRef.current, stats));
         recordBadges(evaluateLessonBadges(selectedBadges, awardedBadgesRef.current, stats));
     };
 
@@ -276,7 +278,7 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
     if (gameState === 'COUNTDOWN') {
         return (
             <PlayScreen backgroundImage={backgroundImage}>
-                <div className={styles.countdownValue}>{countdown > 0 ? countdown : '¡YA!'}</div>
+                <div className={styles.countdownValue}>{countdown > 0 ? countdown : t('go')}</div>
             </PlayScreen>
         );
     }
@@ -285,13 +287,12 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
         return (
             <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
                 <div className={styles.centerCard}>
-                    <FaTrophy className={styles.trophyIcon} />
-                    <h1 className={styles.summaryTitle}>{isLesson ? '¡Lección completada!' : '¡Increíble trabajo!'}</h1>
-                    {!isLesson && <p className={styles.summaryScore}>Puntaje Final: <span>{score}</span></p>}
+                    <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
+                    <h1 className={styles.summaryTitle}>{isLesson ? t('lessonCompleted') : t('greatJob')}</h1>
+                    {!isLesson && <p className={styles.summaryScore}>{t.rich('finalScore', { score, span: (chunks) => <span>{chunks}</span> })}</p>}
                     <AchievementsRecap
                         missionCodes={Array.from(awardedMissionsRef.current)}
                         badgeCodes={Array.from(awardedBadgesRef.current)}
-                        gradeId={gradeId}
                         onReveal={speak}
                     />
                     <SummaryActions sesion={sesion} participant={participant} previewMode={previewMode} onExit={onExit} />
@@ -306,7 +307,7 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
         return (
             <PlayScreen backgroundImage={backgroundImage}>
                 <div className={styles.centerCard}>
-                    <h1 className={styles.readyTitle}>Cargando...</h1>
+                    <h1 className={styles.readyTitle}>{t('loading')}</h1>
                 </div>
             </PlayScreen>
         );
@@ -322,11 +323,11 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
             <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
                 <div className={styles.hud}>
                     <div className={styles.hudItem}>
-                        <FaBookOpen aria-hidden="true" /> {isLesson ? `Bloque ${currentQuestionIndex + 1} / ${questions.length}` : 'Diapositiva'}
+                        <FaBookOpen aria-hidden="true" /> {isLesson ? t('blockProgress', { current: currentQuestionIndex + 1, total: questions.length }) : t('slide')}
                     </div>
                     {!isLesson && (
                         <div className={styles.hudItem}>
-                            <FaStar /> {score} pts
+                            <FaStar aria-hidden="true" /> {t('points', { score })}
                         </div>
                     )}
                 </div>
@@ -350,7 +351,7 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
                             className={`${styles.bigStartBtn} ${styles.slideContinueBtn}`}
                             onClick={handleContinue}
                         >
-                            {isLesson && currentQuestionIndex === questions.length - 1 ? 'Terminar lección' : 'Continuar'} <FaArrowRight aria-hidden="true" />
+                            {isLesson && currentQuestionIndex === questions.length - 1 ? t('finishLesson') : t('continue')} <FaArrowRight aria-hidden="true" />
                         </button>
                     </section>
                 </div>
@@ -362,13 +363,13 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
         <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
             {/* HUD */}
             <div className={styles.hud}>
-                <div className={styles.hudItem}>
-                    <FaClock /> {timeLeft}s
+                <div className={styles.hudItem} aria-label={t('timeLeft', { seconds: timeLeft })}>
+                    <FaClock aria-hidden="true" /> {timeLeft}s
                 </div>
                 <div className={styles.hudItem}>
-                    <FaStar /> {score} pts
+                    <FaStar aria-hidden="true" /> {t('points', { score })}
                 </div>
-                <div className={styles.hudItem}>
+                <div className={styles.hudItem} aria-label={t('questionProgress', { current: questionNumber, total: totalQuestions })}>
                     {questionNumber} / {totalQuestions}
                 </div>
             </div>
@@ -405,13 +406,14 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
                             onClick={() => handleAnswer(opcion.id.toString())}
                             disabled={gameState === 'FEEDBACK'}
                         >
-                            <span className={styles.optionSymbol}>{['🔺', '🔷', '🟢', '🟪'][idx % 4]}</span>
+                            <span className={styles.optionSymbol} aria-hidden="true">{['🔺', '🔷', '🟢', '🟪'][idx % 4]}</span>
                             {imageUrl && (
                                 /* eslint-disable-next-line @next/next/no-img-element */
                                 <img src={imageUrl} alt="" className={styles.optionImage} />
                             )}
                             <span className={styles.optionText}>
-                                {opcion.texto || (sesion.LUDI_ACTIVIDAD.tipoActividadId === 2 ? (opcion.indice === 1 ? 'Verdadero' : 'Falso') : '')}
+                                {/* En Verdadero/Falso la BD guarda el texto en español: se muestra por posición en el idioma activo. */}
+                                {sesion.LUDI_ACTIVIDAD.tipoActividadId === 2 ? (opcion.indice === 1 ? t('true') : t('false')) : opcion.texto}
                             </span>
                         </button>
                         );
@@ -421,11 +423,11 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
 
             {/* Feedback Overlay */}
             {gameState === 'FEEDBACK' && (
-                <div className={`${styles.feedbackToast} ${feedback?.isCorrect ? styles.toastSuccess : styles.toastError}`}>
+                <div className={`${styles.feedbackToast} ${feedback?.isCorrect ? styles.toastSuccess : styles.toastError}`} role="status">
                     {feedback?.isCorrect ? (
-                        <>¡Correcto! +{feedback.points} pts</>
+                        <>{t('correct', { points: feedback.points })}</>
                     ) : (
-                        <>¡Oh no! Sigue intentándolo</>
+                        <>{t('incorrect')}</>
                     )}
                 </div>
             )}

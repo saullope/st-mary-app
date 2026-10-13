@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { FaCopy, FaCheck } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 interface CopyableCodeProps {
   code: string | number;
 }
 
 export default function CopyableCode({ code }: CopyableCodeProps) {
+  const t = useTranslations("activityCard");
   const [copied, setCopied] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -28,7 +30,16 @@ export default function CopyableCode({ code }: CopyableCodeProps) {
       onMouseLeave={() => setIsHovered(false)}
       style={{ cursor: "pointer", width: "fit-content" }}
       onClick={handleCopy}
-      title="Clic para copiar código"
+      title={t("copyCode")}
+      role="button"
+      tabIndex={0}
+      aria-label={t("copyCode")}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCopy();
+        }
+      }}
     >
       <span className="fw-bold text-muted me-2">#{code}</span>
       
@@ -56,7 +67,7 @@ export default function CopyableCode({ code }: CopyableCodeProps) {
             zIndex: 10
           }}
         >
-          ¡Copiado!
+          {t("copied")}
         </span>
       )}
     </div>

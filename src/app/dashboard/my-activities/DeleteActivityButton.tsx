@@ -5,18 +5,19 @@ import { FaTrash } from "react-icons/fa6";
 import { softDeleteActivity } from "./actions";
 import styles from "@/styles/pages/my-activities.module.css";
 import { notify } from "@/components/ui";
+import { useTranslations } from "next-intl";
 
 export function DeleteActivityButton({ activityId, activityName, titleButton }: { activityId: number, activityName: string, titleButton: string }) {
+  const t = useTranslations("MyActivities");
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    // Confirmación nativa sencilla por ahora (luego podemos mejorarla visualmente)
-    if (window.confirm(`¿Estás seguro de que deseas eliminar la actividad "${activityName}"?`)) {
+    if (window.confirm(t("confirmDelete", { name: activityName }))) {
       setIsDeleting(true);
       const result = await softDeleteActivity(activityId);
       
       if (!result.success) {
-        notify.error("No se pudo eliminar la actividad", result.error || "Inténtalo de nuevo.");
+        notify.error(t("deleteFailed"), result.error || t("tryAgain"));
         setIsDeleting(false); // Restablecer si falla
       }
       // Si tiene éxito, Next.js revalidará la página y el componente desaparecerá
@@ -27,6 +28,7 @@ export function DeleteActivityButton({ activityId, activityName, titleButton }: 
     <button 
         className={`${styles.actionButtonIcon} ${styles.deleteIcon}`} 
         title={titleButton}
+        aria-label={`${titleButton}: ${activityName}`}
         onClick={handleDelete}
         disabled={isDeleting}
         style={{ opacity: isDeleting ? 0.5 : 1, cursor: isDeleting ? 'not-allowed' : 'pointer' }}
@@ -34,7 +36,7 @@ export function DeleteActivityButton({ activityId, activityName, titleButton }: 
       {isDeleting ? (
           <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" style={{ width: '14px', height: '14px' }}></span>
       ) : (
-          <FaTrash size={18} />
+          <FaTrash size={18} aria-hidden="true" />
       )}
     </button>
   );

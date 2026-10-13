@@ -9,6 +9,7 @@ import { useFirebaseStorage } from "@/hooks/useFirebaseStorage";
 import { MEMORY_FILE_PREFIX, uploadsPath } from "@/lib/mediaSources";
 import { MEMORY_MAX_PAIRS, MEMORY_MIN_PAIRS } from "@/features/memory/memoryCards";
 import styles from "./MemoryBoardEditor.module.css";
+import { useTranslations } from "next-intl";
 
 type SearchSource = "unsplash" | "pixabay";
 
@@ -19,6 +20,7 @@ interface MemoryBoardEditorProps {
 
 /** Imágenes del tablero: cada una se convierte en una pareja de cartas al jugar. */
 export const MemoryBoardEditor = ({ images, onChange }: MemoryBoardEditorProps) => {
+  const t = useTranslations("Editor.memory");
   const { uploadFiles } = useFirebaseStorage();
   const [uploading, setUploading] = useState(false);
   const [searchSource, setSearchSource] = useState<SearchSource | null>(null);
@@ -27,7 +29,7 @@ export const MemoryBoardEditor = ({ images, onChange }: MemoryBoardEditorProps) 
 
   const addImages = (urls: string[]) => {
     const fresh = urls.filter((url) => !images.includes(url));
-    if (fresh.length < urls.length) notify.warning("Imagen repetida", "Esa imagen ya está en el tablero.");
+    if (fresh.length < urls.length) notify.warning(t("duplicate"), t("duplicateDescription"));
     onChange([...images, ...fresh].slice(0, MEMORY_MAX_PAIRS));
   };
 
@@ -40,7 +42,7 @@ export const MemoryBoardEditor = ({ images, onChange }: MemoryBoardEditorProps) 
       const files = Array.from(input.files ?? []);
       if (files.length === 0) return;
       if (files.length > remaining) {
-        notify.warning("Demasiadas imágenes", `Solo caben ${remaining} imágenes más en el tablero.`);
+        notify.warning(t("tooMany"), t("tooManyDescription", { remaining }));
       }
       setUploading(true);
       try {
@@ -58,15 +60,14 @@ export const MemoryBoardEditor = ({ images, onChange }: MemoryBoardEditorProps) 
   const removeImage = (index: number) => onChange(images.filter((_, i) => i !== index));
 
   return (
-    <EditorCard icon={FaClone} label="Parejas del tablero" color="#0096b4">
+    <EditorCard icon={FaClone} label={t("cardLabel")} color="#0096b4">
       <p className={editorFieldStyles.fieldHint}>
-        Cada imagen se convierte en una pareja de cartas. Agrega entre {MEMORY_MIN_PAIRS} y {MEMORY_MAX_PAIRS} imágenes;
-        el tablero se mezcla cada vez que un estudiante juega.
+        {t("hint", { min: MEMORY_MIN_PAIRS, max: MEMORY_MAX_PAIRS })}
       </p>
 
-      <div className={styles.actions} role="group" aria-label="Agregar imágenes">
+      <div className={styles.actions} role="group" aria-label={t("addImages")}>
         <button type="button" className={editorFieldStyles.secondaryButton} onClick={uploadFromDevice} disabled={isFull || uploading}>
-          <FaUpload aria-hidden="true" /> {uploading ? "Subiendo..." : "Subir desde tu equipo"}
+          <FaUpload aria-hidden="true" /> {uploading ? t("uploading") : t("uploadFromDevice")}
         </button>
         <button type="button" className={editorFieldStyles.secondaryButton} onClick={() => setSearchSource("unsplash")} disabled={isFull || uploading}>
           <FaImages aria-hidden="true" /> Unsplash
@@ -77,19 +78,19 @@ export const MemoryBoardEditor = ({ images, onChange }: MemoryBoardEditorProps) 
       </div>
 
       {images.length === 0 ? (
-        <p className={styles.empty}>Todavía no hay imágenes. Usa los botones de arriba para agregar la primera.</p>
+        <p className={styles.empty}>{t("empty")}</p>
       ) : (
-        <ul className={styles.grid} aria-label="Imágenes del tablero">
+        <ul className={styles.grid} aria-label={t("gridLabel")}>
           {images.map((url, index) => (
             <li key={url} className={styles.tile}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={url} alt={`Imagen ${index + 1} del tablero`} />
+              <img src={url} alt={t("imageAlt", { number: index + 1 })} />
               <button
                 type="button"
                 className={styles.remove}
                 onClick={() => removeImage(index)}
-                aria-label={`Eliminar imagen ${index + 1}`}
-                title="Eliminar"
+                aria-label={t("deleteImage", { number: index + 1 })}
+                title={t("delete")}
               >
                 <FaTrash aria-hidden="true" />
               </button>
@@ -99,8 +100,8 @@ export const MemoryBoardEditor = ({ images, onChange }: MemoryBoardEditorProps) 
       )}
 
       <p className={styles.counter} aria-live="polite">
-        {images.length} de {MEMORY_MAX_PAIRS} parejas
-        {images.length < MEMORY_MIN_PAIRS && ` · faltan ${MEMORY_MIN_PAIRS - images.length} para poder jugar`}
+        {t("counter", { count: images.length, max: MEMORY_MAX_PAIRS })}
+        {images.length < MEMORY_MIN_PAIRS && ` · ${t("missing", { count: MEMORY_MIN_PAIRS - images.length })}`}
       </p>
 
       <ModalMultimedia

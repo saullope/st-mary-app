@@ -11,17 +11,19 @@ interface ExportActivitiesButtonProps {
 
 export default function ExportActivitiesButton({ activities }: ExportActivitiesButtonProps) {
 const t = useTranslations("myActivitiesContent");
+  const tExport = useTranslations("ExportActivities");
+  const tCommon = useTranslations("Common");
 
   const handleExport = () => {
     // 1. Format Data
     const dataToExport = activities.map(act => ({
-      "Código": act.activityId,
-      "Nombre": act.activity.activity_name,
-      "Tipo": act.tipoActividad.nombre,
-      "Grado": act.grado?.grade_type_name || "N/A",
-      "Creador": act.user.nombre,
-      "Email Creador": act.user.email,
-      "Fecha Creación": new Date(act.activity.created_date).toLocaleDateString()
+      [tExport("code")]: act.activityId,
+      [tExport("name")]: act.activity.activity_name,
+      [tExport("type")]: tCommon(`activityTypes.${act.tipoActividadId as 1 | 2 | 3 | 4 | 5}`),
+      [tExport("grade")]: act.gradoId ? tCommon(`grades.${act.gradoId as 1 | 2 | 3}`) : tCommon("noGrade"),
+      [tExport("creator")]: act.user.nombre,
+      [tExport("creatorEmail")]: act.user.email,
+      [tExport("createdAt")]: new Date(act.activity.created_date).toLocaleDateString()
     }));
 
     // 2. Create Worksheet
@@ -32,14 +34,15 @@ const t = useTranslations("myActivitiesContent");
     XLSX.utils.book_append_sheet(workbook, worksheet, t('titlePage'));
 
     // 4. Write File
-    XLSX.writeFile(workbook, `Mis_Actividades_${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(workbook, `${tExport("fileName")}_${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 
   return (
     <button
       onClick={handleExport}
       className={designStyles.btnLudiSuccess}
-      title="Exportar a Excel"
+      title={tExport("button")}
+      aria-label={tExport("button")}
       disabled={activities.length === 0}
       style={{
         backgroundColor: '#10b981', // Verde esmeralda (combina con tonos oscuros y lavanda)

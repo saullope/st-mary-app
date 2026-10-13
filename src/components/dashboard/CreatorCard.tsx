@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface CreatorCardProps {
   name: string;
@@ -12,7 +13,8 @@ interface CreatorCardProps {
   isAdmin?: boolean;
 }
 
-export default function CreatorCard({ name, email, pictureUrl, role = "Educador", isAdmin = false }: CreatorCardProps) {
+export default function CreatorCard({ name, email, pictureUrl, role, isAdmin = false }: CreatorCardProps) {
+  const t = useTranslations("activityCard");
   const [isHovered, setIsHovered] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -116,10 +118,10 @@ export default function CreatorCard({ name, email, pictureUrl, role = "Educador"
 
                 <div style={{ marginTop: "40px" }}>
                     <h5 className="card-title mb-0 fw-bold text-primary">{name}</h5>
-                    <p className="text-muted small mb-2">{role}</p>
+                    <p className="text-muted small mb-2">{role ?? t("teacherRole")}</p>
                     
                 <div className="d-flex align-items-center justify-content-center gap-2 text-secondary bg-light p-2 rounded">
-                    <span style={{ fontSize: "0.85rem" }}>📧 {email || "No email"}</span>
+                    <span style={{ fontSize: "0.85rem" }}><span aria-hidden="true">📧</span> {email || t("noEmail")}</span>
                 </div>
 
                 {/* Botón Ver Perfil (Solo Admin) */}
@@ -133,7 +135,7 @@ export default function CreatorCard({ name, email, pictureUrl, role = "Educador"
                       cursor: isAdmin ? 'pointer' : 'not-allowed'
                     }}
                   >
-                    Ver Perfil
+                    {t("viewProfile")}
                   </button>
                 </div>
             </div>

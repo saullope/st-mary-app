@@ -1,4 +1,5 @@
-import { render, screen, act, fireEvent } from "@testing-library/react";
+import { screen, act, fireEvent } from "@testing-library/react";
+import { renderWithAchievements as render } from "@/features/gamification/testing/renderWithAchievements";
 import { ActivityPlayer } from "../ActivityPlayer";
 import { buildPreviewSession } from "../buildPreviewSession";
 import type { ActivityEditorState } from "@/context/ActivityEditorContext";

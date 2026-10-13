@@ -1,4 +1,5 @@
-import { render, screen, act, fireEvent } from "@testing-library/react";
+import { screen, act, fireEvent } from "@testing-library/react";
+import { renderWithAchievements as render } from "@/features/gamification/testing/renderWithAchievements";
 import { GameEngine } from "../GameEngine";
 
 // Referencia estable, como el router real de Next: GameEngine lo usa como dependencia de un efecto.
@@ -29,8 +30,10 @@ const sesion = {
   LUDI_ACTIVIDAD: {
     tipoActividadId: 4,
     gradoId: 3,
+    insignias: ["explorador", "atento"].map((codigo) => ({ insignia: { codigo } })),
+    misiones: ["L3-mitad", "L3-completa"].map((codigo) => ({ mision: { codigo } })),
     config: {
-      ajustesJson: JSON.stringify({ badges: ["explorador", "atento"], missions: ["L3-mitad", "L3-completa"], voiceEnabled: false }),
+      ajustesJson: JSON.stringify({ voiceEnabled: false }),
     },
     preguntas: [
       block("b1", 1, {
@@ -53,7 +56,7 @@ describe("GameEngine en modo LudiLección", () => {
 
     expect(screen.getByText(/Bloque 1 \/ 2/)).toBeInTheDocument();
     expect(screen.queryByText(/pts/)).not.toBeInTheDocument();
-    expect(screen.getByTitle("YouTube video")).toBeInTheDocument();
+    expect(screen.getByTitle("Video de YouTube")).toBeInTheDocument();
 
     tick(12);
     fireEvent.click(screen.getByRole("button", { name: /Continuar/ }));

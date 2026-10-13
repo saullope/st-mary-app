@@ -6,12 +6,15 @@ import { DecodedIdToken } from 'firebase-admin/auth';
 import { Metadata } from 'next';
 import { ActivityEditorProvider } from "@/context/ActivityEditorContext";
 import { CreateNavbar } from "@/components/editor";
+import { AchievementCatalogLoader } from "@/features/gamification/AchievementCatalogLoader";
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 // add metadata to the page
-export const metadata: Metadata = {
-  title: 'LudiGame | Crear actividad',
-  description: 'Create a new activity',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Metadata.editor");
+  return pageMetadata({ title: t("ludiquiz"), description: t("description") });
+}
 
 export default async function CreateActivityLayout({
     children,
@@ -26,6 +29,7 @@ export default async function CreateActivityLayout({
     }
   
     return (
+      <AchievementCatalogLoader>
       <ActivityEditorProvider>
         <div className="d-flex flex-column vh-100">
           {/* Barra de navegación fija en la parte superior */}
@@ -40,5 +44,6 @@ export default async function CreateActivityLayout({
           </div>
         </div>
       </ActivityEditorProvider>
+      </AchievementCatalogLoader>
     );
   }

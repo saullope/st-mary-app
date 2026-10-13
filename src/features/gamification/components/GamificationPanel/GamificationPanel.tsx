@@ -1,38 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { SelectableCard } from "@/features/gamification/components/SelectableCard/SelectableCard";
 import styles from "./GamificationPanel.module.css";
 import { useActivityEditor } from "@/context/ActivityEditorContext";
-import { badgeCatalogFor, missionCatalogFor } from "@/features/gamification/achievementRules";
+import { badgesFor, catalogKeyForActivity, missionsFor, type BadgeDef, type MissionDef } from "@/features/gamification/catalog";
+import { useAchievementCatalog } from "@/features/gamification/AchievementCatalogContext";
+import { useAchievementText } from "@/features/gamification/useAchievementText";
 import { BadgeArt } from "@/features/gamification/components/BadgeArt";
 import { useGameVoice } from "@/features/gamification/useGameVoice";
 import { useSelectedGrade, GRADE_LABELS } from "@/hooks/useSelectedGrade";
+import { useTranslations } from "next-intl";
 
-/** Textos del panel que cambian según cómo se gana en cada tipo de actividad. */
-const PANEL_COPY: Record<string, { points: string; badges: string; grade: string }> = {
-  ludileccion: {
-    points: "",
-    badges: "Selecciona las insignias que tus estudiantes podrán ganar al completar la lección.",
-    grade: "de ahí dependen los bloques y misiones disponibles.",
-  },
-  ludiform: {
-    points: "Puntos por cada pregunta de opción acertada o respuesta escrita que apruebes.",
-    badges: "Selecciona las insignias que tus estudiantes podrán ganar al entregar el formulario.",
-    grade: "de ahí dependen las misiones disponibles.",
-  },
-  ludimemory: {
-    points: "Puntos que gana el estudiante por cada pareja que encuentra.",
-    badges: "Selecciona las insignias que tus estudiantes podrán ganar mientras encuentran las parejas.",
-    grade: "de ahí dependen las misiones disponibles.",
-  },
-};
-
-const DEFAULT_COPY = {
-  points: "Define los puntos que el estudiante gana por cada respuesta correcta.",
-  badges: "Selecciona las insignias que podrán ganar tus estudiantes.",
-  grade: "de ahí dependen las misiones disponibles.",
-};
+/** Los textos del panel cambian según cómo se gana en cada tipo de actividad (GamificationPanel.copy.*). */
+const COPY_KEYS = new Set(["ludileccion", "ludiform", "ludimemory"]);
 
 /** Panel Lúdico integrado en la columna derecha de cada editor (ver EditorGamificationColumn). */
 export default function GamificationPanel() {
@@ -42,14 +23,20 @@ export default function GamificationPanel() {
   const hasTimer = activityType === "ludiquiz" || activityType === "trueorfalse";
   const hasPoints = activityType !== "ludileccion";
   const isMemory = activityType === "ludimemory";
-  const copy = (activityType && PANEL_COPY[activityType]) || DEFAULT_COPY;
-  const badges = badgeCatalogFor(activityType);
-  const missionsByGrade = missionCatalogFor(activityType);
+  const t = useTranslations("GamificationPanel");
+  const copyKey = activityType && COPY_KEYS.has(activityType) ? activityType : "default";
+  const copy = (field: "points" | "badges" | "grade") => t(`copy.${copyKey}.${field}`);
+  const catalog = useAchievementCatalog();
+  const achievementText = useAchievementText();
+  const catalogKey = catalogKeyForActivity(activityType);
+  const badges = useMemo(() => badgesFor(catalog, catalogKey), [catalog, catalogKey]);
+  const missions = useMemo(() => missionsFor(catalog, catalogKey, config.gradeId), [catalog, catalogKey, config.gradeId]);
 
   // Una actividad guardada antes de tener catálogo propio puede traer insignias de otro tipo.
   useEffect(() => {
-    if (!activityType) return;
-    const valid = config.selectedBadges.filter((id) => badges.some((b) => b.id === id));
+    // Sin catálogo cargado no se sabe qué es válido: no se toca la selección.
+    if (!activityType || badges.length === 0) return;
+    const valid = config.selectedBadges.filter((code) => badges.some((b) => b.code === code));
     if (valid.length !== config.selectedBadges.length) updateConfig({ selectedBadges: valid });
   }, [activityType, badges, config.selectedBadges, updateConfig]);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
@@ -68,48 +55,49 @@ export default function GamificationPanel() {
     }
   }, [selectedGradeId, config.gradeId, updateConfig]);
 
-  const handleBadgeToggle = (id: string, phrase: string, name: string) => {
+  const handleBadgeToggle = (badge: BadgeDef) => {
     const currentBadges = new Set(config.selectedBadges);
-    if (currentBadges.has(id)) {
-      currentBadges.delete(id);
+    if (currentBadges.has(badge.code)) {
+      currentBadges.delete(badge.code);
     } else {
-      currentBadges.add(id);
+      currentBadges.add(badge.code);
       // Feedback visual y auditivo al seleccionar
       triggerConfetti();
-      if (config.voiceEnabled) speak(`Has seleccionado la insignia ${name}. ${phrase}`);
+      if (config.voiceEnabled) speak(achievementText.badgeSelected(badge));
     }
     updateConfig({ selectedBadges: Array.from(currentBadges) });
   };
 
-  const handleMissionToggle = (missionId: string, missionText: string) => {
+  const handleMissionToggle = (mission: MissionDef) => {
+    const missionId = mission.code;
     const currentMissions = new Set(config.selectedMissions || []);
     if (currentMissions.has(missionId)) {
       currentMissions.delete(missionId);
     } else {
       currentMissions.add(missionId);
       triggerConfetti();
-      if (config.voiceEnabled) speak(`Misión seleccionada: ${missionText}`);
+      if (config.voiceEnabled) speak(achievementText.missionSelected(mission));
     }
     updateConfig({ selectedMissions: Array.from(currentMissions) });
   };
 
   const handleSave = () => {
     if (hasTimer && (!config.timeLimit || config.timeLimit <= 0)) {
-      showFeedback("Por favor, ingresa un valor válido de tiempo.");
+      showFeedback(t("invalidTime"));
       return;
     }
     if (hasPoints && (!config.pointsPerCorrect || config.pointsPerCorrect <= 0)) {
-      showFeedback("Por favor, ingresa un valor válido de puntos.");
+      showFeedback(t("invalidPoints"));
       return;
     }
     if (config.selectedBadges.length === 0) {
-      showFeedback("Por favor, selecciona al menos una insignia.");
+      showFeedback(t("selectBadge"));
       return;
     }
 
-    showFeedback("¡Configuración guardada!");
-    if (config.voiceEnabled) speak("¡Configuración guardada con éxito!");
-    // Aquí ya no necesitamos hacer nada más porque el estado ya está actualizado en el Contexto
+    showFeedback(t("saved"));
+    // El estado ya está en el contexto del editor: guardar aquí solo confirma.
+    if (config.voiceEnabled) speak(t("savedVoice"));
   };
 
   const showFeedback = (msg: string) => {
@@ -129,43 +117,43 @@ export default function GamificationPanel() {
         data-tour="panel-ludico"
         className={`${styles.gamificationPanel} ${styles.embedded}`}
         role="region"
-        aria-label="Panel de configuración lúdica"
+        aria-label={t("regionLabel")}
       >
-        <h3 className={styles.headerGlow}>Configuración Lúdica</h3>
+        <h3 className={styles.headerGlow}>{t("title")}</h3>
 
         {/* Configuración general */}
-        <section className={styles.sectionCard} aria-label="Configuración general">
-          <h4 className={styles.sectionTitle}>Configuración general</h4>
+        <section className={styles.sectionCard} aria-labelledby="panel-general-title">
+          <h4 id="panel-general-title" className={styles.sectionTitle}>{t("general")}</h4>
           <div className={styles.configGrid}>
             <div className={styles.configFieldFull}>
-              <span className={styles.label}>Grado:</span>
+              <span className={styles.label}>{t("grade")}</span>
               <div className={styles.select} aria-live="polite">
-                {GRADE_LABELS[config.gradeId] || "Sin definir"}
+                {GRADE_LABELS[config.gradeId] ? t(`grades.${config.gradeId as 1 | 2 | 3}`) : t("gradeUndefined")}
               </div>
               <div className={styles.desc}>
                 {selectedGradeId
-                  ? `Tomado del grado que seleccionaste en Bienvenida; ${copy.grade}`
-                  : "No se detectó un grado seleccionado. Ve a la pantalla de Bienvenida para elegir uno."}
+                  ? t("gradeFromWelcome", { reason: copy("grade") })
+                  : t("gradeMissing")}
               </div>
             </div>
 
             {hasTimer && (
             <div>
               <label htmlFor="tiempo" className={styles.label}>
-                Tiempo por actividad (segundos):
+                {t("timeLabel")}
               </label>
               <input
                 type="number"
                 id="tiempo"
                 min="10"
                 max="300"
-                placeholder="Ingresa el tiempo"
+                placeholder={t("timePlaceholder")}
                 className={styles.inputNumber}
                 value={config.timeLimit || ""}
                 onChange={(e) => updateConfig({ timeLimit: Number(e.target.value) })}
               />
               <div className={styles.desc}>
-                Ajusta el tiempo que tiene el estudiante para responder.
+                {t("timeHint")}
               </div>
             </div>
             )}
@@ -173,96 +161,97 @@ export default function GamificationPanel() {
             {hasPoints && (
             <div>
               <label htmlFor="puntos" className={styles.label}>
-                {isMemory ? "Puntos por pareja encontrada:" : "Puntos por respuesta correcta:"}
+                {isMemory ? t("pointsPerPair") : t("pointsPerAnswer")}
               </label>
               <input
                 type="number"
                 id="puntos"
                 min="1"
                 max="100"
-                placeholder="Ingresa los puntos"
+                placeholder={t("pointsPlaceholder")}
                 className={styles.inputNumber}
                 value={config.pointsPerCorrect || ""}
                 onChange={(e) => updateConfig({ pointsPerCorrect: Number(e.target.value) })}
               />
-              <div className={styles.desc}>{copy.points}</div>
+              <div className={styles.desc}>{copy("points")}</div>
             </div>
             )}
           </div>
         </section>
 
         {/* Insignias */}
-        <section className={styles.sectionCard} aria-label="Insignias de recompensa disponibles">
-          <h4 className={styles.sectionTitle}>Insignias de recompensa</h4>
-          <p className={styles.sectionHint}>{copy.badges}</p>
+        <section className={styles.sectionCard} aria-labelledby="panel-badges-title">
+          <h4 id="panel-badges-title" className={styles.sectionTitle}>{t("badgesTitle")}</h4>
+          <p className={styles.sectionHint}>{copy("badges")}</p>
           <div className={styles.insigniasContainer}>
-            {badges.map((badge) => (
-              <SelectableCard
-                key={badge.id}
-                selected={config.selectedBadges.includes(badge.id)}
-                onToggle={() => handleBadgeToggle(badge.id, badge.phrase, badge.name)}
-                ariaLabel={`Insignia ${badge.name}: ${badge.desc}`}
-                className={styles.badgeCard}
-              >
-                <BadgeArt badge={badge} size={72} className={styles.badgeImg} />
-                <span className={styles.badgeName}>{badge.name}</span>
-                <p className={styles.badgeDescription}>{badge.desc}</p>
-              </SelectableCard>
-            ))}
+            {badges.map((badge) => {
+              const text = achievementText.badge(badge);
+              return (
+                <SelectableCard
+                  key={badge.code}
+                  selected={config.selectedBadges.includes(badge.code)}
+                  onToggle={() => handleBadgeToggle(badge)}
+                  ariaLabel={t("badgeLabel", { name: text.name, description: text.description })}
+                  className={styles.badgeCard}
+                >
+                  <BadgeArt badge={badge} size={72} className={styles.badgeImg} />
+                  <span className={styles.badgeName}>{text.name}</span>
+                  <p className={styles.badgeDescription}>{text.description}</p>
+                </SelectableCard>
+              );
+            })}
           </div>
         </section>
 
         {/* Misiones */}
-        <section className={styles.sectionCard} aria-label="Misiones y Desafíos configurables">
-          <h4 className={styles.sectionTitle}>Misiones y Desafíos</h4>
-          <p className={styles.sectionHint}>
-            Activa los retos opcionales que los estudiantes podrán completar.
-          </p>
+        <section className={styles.sectionCard} aria-labelledby="panel-missions-title">
+          <h4 id="panel-missions-title" className={styles.sectionTitle}>{t("missionsTitle")}</h4>
+          <p className={styles.sectionHint}>{t("missionsHint")}</p>
           <div id="misiones-container" className={styles.missionsGrid}>
-            {missionsByGrade[config.gradeId]?.map((mision) => (
+            {missions.map((mision) => (
               <SelectableCard
-                key={mision.id}
-                selected={(config.selectedMissions || []).includes(mision.id)}
-                onToggle={() => handleMissionToggle(mision.id, mision.studentText)}
-                ariaLabel={`Misión: ${mision.text}`}
+                key={mision.code}
+                selected={(config.selectedMissions || []).includes(mision.code)}
+                onToggle={() => handleMissionToggle(mision)}
+                ariaLabel={t("missionLabel", { text: achievementText.mission(mision).text })}
                 className={styles.missionCard}
               >
                 <span className={styles.missionDot} aria-hidden="true"></span>
-                <span>{mision.text}</span>
+                <span>{achievementText.mission(mision).text}</span>
               </SelectableCard>
             ))}
           </div>
         </section>
 
         {/* Toggle Voz */}
-        <section className={styles.sectionCard} aria-label="Opciones de accesibilidad">
+        <section className={styles.sectionCard} aria-label={t("accessibility")}>
           <SelectableCard
             selected={config.voiceEnabled}
             onToggle={() => updateConfig({ voiceEnabled: !config.voiceEnabled })}
-            ariaLabel="Voz de retroalimentación"
+            ariaLabel={t("voiceLabel")}
             className={styles.voiceCard}
           >
             <span className={styles.missionDot} aria-hidden="true"></span>
-            <span>{config.voiceEnabled ? "Voz activada" : "Voz desactivada"}</span>
+            <span>{config.voiceEnabled ? t("voiceOn") : t("voiceOff")}</span>
           </SelectableCard>
         </section>
 
         {/* Botón Guardar */}
         <div className={styles.saveContainer}>
           <button className={styles.saveBtn} onClick={handleSave}>
-            Guardar Configuración
+            {t("save")}
           </button>
         </div>
       </div>
 
       {/* Feedback Toast */}
-      <div className={`${styles.feedbackContainer} ${feedbackMsg ? styles.show : ""}`}>
+      <div className={`${styles.feedbackContainer} ${feedbackMsg ? styles.show : ""}`} role="status">
         {feedbackMsg}
       </div>
 
       {/* Confetti Animation Layer */}
       {showConfetti && (
-        <div className={styles.confettiContainer}>
+        <div className={styles.confettiContainer} aria-hidden="true">
           {Array.from({ length: 50 }).map((_, i) => (
             <div
               key={i}

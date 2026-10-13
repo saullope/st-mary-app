@@ -11,6 +11,7 @@ import { LanguageSelector } from "@/components";
 import { notify } from "@/components/ui";
 import { AUTH_API_ROUTES } from "@/lib/auth/constants";
 import designStyles from '@/styles/pages/LudiDesign.module.css';
+import { useTranslations } from "next-intl";
 
 interface FirebaseSession {
     s: string;
@@ -58,6 +59,7 @@ CustomToggle.displayName = 'CustomToggle';
 export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData }) => {
     const router = useRouter();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const t = useTranslations("Navbar");
 
     const handleLogout = async () => {
         setIsLoggingOut(true);
@@ -75,13 +77,12 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                 router.push('/auth/login');
             } else {
                 setIsLoggingOut(false);
-                const errorData = await response.json();
-                notify.error("Error al cerrar sesión", errorData.error || "Error desconocido.");
+                notify.error(t("logoutFailed"), t("tryAgain"));
             }
         } catch (error) {
             setIsLoggingOut(false);
             console.error("Error al cerrar sesion:", error);
-            notify.error("Error al cerrar sesión", String(error));
+            notify.error(t("logoutFailed"), t("tryAgain"));
         }
     };
 
@@ -133,7 +134,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                 fontFamily: 'Comic Sans MS, cursive',
                             }}
                         >
-                            Cerrando sesion...
+                            {t("loggingOut")}
                         </p>
                     </div>
                 </div>
@@ -152,7 +153,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                     </div>
                     <div className="d-grid gap-2 d-md-flex justify-content-center justify-content-md-end align-items-center">
                         <div className={`d-flex align-items-center gap-2 ${designStyles.darkNavbarText}`}>
-                        <BsGlobe />
+                        <BsGlobe aria-hidden="true" />
                         <LanguageSelector />
                         </div>
                         <div className="dropdown">
@@ -161,7 +162,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                     <span className={`d-flex align-items-center justify-content-center ${designStyles.darkNavbarText}`}>
                                         <img
                                             src={sessionData.picture || '/images/profile.png'}
-                                            alt="User Profile"
+                                            alt=""
                                             className="rounded-circle shadow-sm"
                                             style={{ 
                                                 width: '40px',
@@ -182,7 +183,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                     <div className="px-3 py-2 text-center border-bottom mb-2 d-flex flex-column align-items-center">
                                         <img
                                             src={sessionData.picture || '/images/profile.png'}
-                                            alt="User Profile"
+                                            alt=""
                                             className="rounded-circle shadow-sm mb-3"
                                             style={{ 
                                                 width: '65px', 
@@ -194,7 +195,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                                 e.currentTarget.src = '/images/profile.png';
                                             }}
                                         />
-                                        <p className="mb-0 fw-bold text-dark">{sessionData.name || 'Usuario'}</p>
+                                        <p className="mb-0 fw-bold text-dark">{sessionData.name || t('user')}</p>
                                         <p className="mb-0 text-muted small">{sessionData.email}</p>
                                     </div>
                                     
@@ -203,7 +204,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                         onClick={() => router.push(`/view/profile/${sessionData.uid}`)}
                                         className="py-2 px-3 fw-medium d-flex align-items-center"
                                     >
-                                        <FaUserCircle className="me-2 text-primary" /> Mi Perfil
+                                        <FaUserCircle className="me-2 text-primary" aria-hidden="true" /> {t("profile")}
                                     </Dropdown.Item>
 
                                     <Dropdown.Item 
@@ -211,7 +212,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                         onClick={() => router.push('/settings')}
                                         className="py-2 px-3 fw-medium d-flex align-items-center"
                                     >
-                                        <FaCog className="me-2 text-secondary" /> Configuración
+                                        <FaCog className="me-2 text-secondary" aria-hidden="true" /> {t("settings")}
                                     </Dropdown.Item>
                                     
                                     <Dropdown.Divider />
@@ -224,11 +225,11 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                                         {isLoggingOut ? (
                                             <>
                                                 <Spinner animation="border" size="sm" className="me-2" />
-                                                Cerrando...
+                                                {t("closing")}
                                             </>
                                         ) : (
                                             <>
-                                                <FaSignOutAlt className="me-2" /> Cerrar sesión
+                                                <FaSignOutAlt className="me-2" aria-hidden="true" /> {t("logout")}
                                             </>
                                         )}
                                     </Dropdown.Item>

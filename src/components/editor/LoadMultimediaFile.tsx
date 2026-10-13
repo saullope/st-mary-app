@@ -15,6 +15,7 @@ import { IconType } from "react-icons";
 import { useFirebaseStorage } from "@/hooks/useFirebaseStorage";
 import type { MediaType } from "@/lib/types";
 import styles from "./LoadMultimediaFile.module.css";
+import { useTranslations } from "next-intl";
 
 interface LoadMultimediaProps {
   type: MediaType | null;
@@ -52,6 +53,7 @@ export const LoadMultimediaFile = ({
   const { uploadFile, uploading, error } = useFirebaseStorage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const optionsId = useId();
+  const t = useTranslations("Editor.media");
 
   const toggleOptions = () => setShowOptions((open) => !open);
 
@@ -89,7 +91,7 @@ export const LoadMultimediaFile = ({
   const options: MediaOption[] = [
     {
       key: "upload",
-      title: "Subir archivo",
+      title: t("upload"),
       icon: FaCloudArrowUp,
       color: "#6a4bff",
       background: "rgba(106, 75, 255, 0.12)",
@@ -156,7 +158,7 @@ export const LoadMultimediaFile = ({
         {uploading ? (
           <div className={styles.uploading} role="status">
             <div className="spinner-border" style={{ color: "#6a4bff" }} aria-hidden="true" />
-            Subiendo archivo...
+            {t("uploading")}
           </div>
         ) : url ? (
           <>
@@ -166,7 +168,7 @@ export const LoadMultimediaFile = ({
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={url}
-                    alt="Imagen seleccionada"
+                    alt={t("selectedImage")}
                     className={styles.previewContent}
                     style={{ transform: `scale(${scale / 100})`, maxWidth: "400px" }}
                   />
@@ -187,7 +189,7 @@ export const LoadMultimediaFile = ({
                     src={url}
                     width="100%"
                     height="220"
-                    title="Video de YouTube seleccionado"
+                    title={t("selectedVideo")}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className={styles.previewContent}
@@ -198,8 +200,8 @@ export const LoadMultimediaFile = ({
                   type="button"
                   className={styles.removeBtn}
                   onClick={onRemove}
-                  aria-label="Quitar archivo multimedia"
-                  title="Quitar archivo"
+                  aria-label={t("remove")}
+                  title={t("remove")}
                 >
                   <FaXmark />
                 </button>
@@ -207,7 +209,7 @@ export const LoadMultimediaFile = ({
             </div>
 
             <label className={styles.sizeControl}>
-              Ajustar tamaño
+              {t("adjustSize")}
               <input
                 type="range"
                 min="50"
@@ -226,7 +228,7 @@ export const LoadMultimediaFile = ({
                 aria-controls={optionsId}
               >
                 {showOptions ? <FaXmark /> : <FaArrowsRotate />}
-                {showOptions ? "Cerrar opciones" : "Reemplazar"}
+                {showOptions ? t("closeOptions") : t("replace")}
               </button>
             </div>
           </>
@@ -239,9 +241,9 @@ export const LoadMultimediaFile = ({
               aria-expanded={showOptions}
               aria-controls={optionsId}
             >
-              <span className={styles.emptyTitle}>Agrega imagen, video o audio</span>
+              <span className={styles.emptyTitle}>{t("emptyTitle")}</span>
               <span className={styles.emptyHint}>
-                {showOptions ? "Elige de dónde quieres traerlo" : "Pulsa + para ver las opciones"}
+                {showOptions ? t("chooseSource") : t("pressPlus")}
               </span>
             </button>
 
@@ -252,7 +254,7 @@ export const LoadMultimediaFile = ({
                 onClick={toggleOptions}
                 aria-expanded={showOptions}
                 aria-controls={optionsId}
-                aria-label={showOptions ? "Ocultar opciones multimedia" : "Mostrar opciones multimedia"}
+                aria-label={showOptions ? t("hideOptions") : t("showOptions")}
               >
                 <span className={styles.toggleIcon}><FaPlus /></span>
               </button>
@@ -260,7 +262,8 @@ export const LoadMultimediaFile = ({
           </>
         )}
 
-        {error && <p className={styles.error}>{error}</p>}
+        {/* El mensaje de Firebase es técnico y en inglés: se muestra uno propio. */}
+        {error && <p className={styles.error} role="alert">{t("uploadFailed")}</p>}
 
         <div
           id={optionsId}

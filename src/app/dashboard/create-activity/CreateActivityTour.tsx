@@ -4,9 +4,11 @@ import React, { useEffect } from "react";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useTourPreferences } from "@/hooks/useTourPreferences";
+import { useTranslations } from "next-intl";
 
 export default function CreateActivityTour() {
   const { shouldShowTour, markTourAsCompleted, preferences } = useTourPreferences();
+  const t = useTranslations("Tours.createActivity");
 
   useEffect(() => {
     const isManuallyTriggered = localStorage.getItem("trigger_tour_create_activity_tour") === "true";
@@ -29,8 +31,8 @@ export default function CreateActivityTour() {
         {
           element: '[data-tour="ludiquiz-card"]',
           popover: {
-            title: "¡LudiQuiz!",
-            description: "¡Bienvenido al creador de actividades! Para comenzar a diseñar tu cuestionario interactivo, haz clic aquí en LudiQuiz.",
+            title: t("ludiquiz.title"),
+            description: t("ludiquiz.description"),
             side: "bottom",
             align: "center",
           }
@@ -61,7 +63,7 @@ export default function CreateActivityTour() {
     }, 1500);
 
     return () => clearTimeout(timer);
-  }, [shouldShowTour, markTourAsCompleted, preferences.tourMode]);
+  }, [shouldShowTour, markTourAsCompleted, preferences.tourMode, t]);
 
   return null;
 }

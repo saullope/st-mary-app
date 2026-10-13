@@ -5,6 +5,7 @@ import { FaClone } from "react-icons/fa6";
 import { cloneTemplateActivity } from "@/app/dashboard/templates/actions";
 import { notify } from "@/components/ui";
 import { getEditorRoute, openPendingEditorTab } from "@/lib/editorTab";
+import { useTranslations } from "next-intl";
 
 interface UseTemplateButtonProps {
   templateActivityId: number;
@@ -12,6 +13,7 @@ interface UseTemplateButtonProps {
 }
 
 export default function UseTemplateButton({ templateActivityId, tipoActividadId }: UseTemplateButtonProps) {
+  const t = useTranslations("Templates");
   const [cloning, setCloning] = useState(false);
 
   const handleClone = async () => {
@@ -24,13 +26,13 @@ export default function UseTemplateButton({ templateActivityId, tipoActividadId 
         setCloning(false);
       } else {
         editorTab.cancel();
-        notify.error("No se pudo usar la plantilla", result.error || "Ocurrió un error al clonar la plantilla.");
+        notify.error(t("cloneFailed"), result.error || t("cloneError"));
         setCloning(false);
       }
     } catch (error) {
       console.error(error);
       editorTab.cancel();
-      notify.error("Error inesperado al usar la plantilla.");
+      notify.error(t("unexpected"));
       setCloning(false);
     }
   };
@@ -50,12 +52,12 @@ export default function UseTemplateButton({ templateActivityId, tipoActividadId 
       {cloning ? (
         <>
           <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Preparando...
+          {t("preparing")}
         </>
       ) : (
         <>
-          <FaClone />
-          Usar plantilla
+          <FaClone aria-hidden="true" />
+          {t("use")}
         </>
       )}
     </button>

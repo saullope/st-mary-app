@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { findMission } from "@/features/gamification/achievementRules";
+import { badgesFor, catalogKeyForTipo, findMission, missionsFor, pickSelected } from "@/features/gamification/catalog";
+import { useAchievementCatalog } from "@/features/gamification/AchievementCatalogContext";
+import { useAchievementText } from "@/features/gamification/useAchievementText";
 import { useGameVoice } from "@/features/gamification/useGameVoice";
+import { selectedAchievementCodes } from "@/features/gamification/activityAchievements";
 import type { AchievementItem } from "./AchievementToast";
 import { postPlay, type PlayParticipant } from "./playApi";
 
@@ -36,11 +39,25 @@ export function usePlaySession({ sesion, previewMode, previewName }: UsePlaySess
   }
 
   const backgroundImage: string = settings.backgroundImage || "/images/theme/tema1.jpg";
-  const selectedBadges: string[] = settings.badges || [];
-  const selectedMissions: string[] = settings.missions || [];
   const gradeId: number = sesion.LUDI_ACTIVIDAD.gradoId || 1;
   const voiceEnabled: boolean = settings.voiceEnabled ?? true;
   const { speak } = useGameVoice(voiceEnabled);
+  const achievementText = useAchievementText();
+
+  // Solo cuentan los logros del catálogo de esta actividad y de su grado.
+  const catalog = useAchievementCatalog();
+  const catalogKey = catalogKeyForTipo(sesion.LUDI_ACTIVIDAD.tipoActividadId);
+  const { badges: badgeCodes, missions: missionCodes } = selectedAchievementCodes(sesion.LUDI_ACTIVIDAD);
+  const badgeCodesKey = badgeCodes.join(",");
+  const missionCodesKey = missionCodes.join(",");
+  const selectedBadges = useMemo(
+    () => pickSelected(badgesFor(catalog, catalogKey), badgeCodesKey.split(",")),
+    [catalog, catalogKey, badgeCodesKey]
+  );
+  const selectedMissions = useMemo(
+    () => pickSelected(missionsFor(catalog, catalogKey, gradeId), missionCodesKey.split(",")),
+    [catalog, catalogKey, gradeId, missionCodesKey]
+  );
 
   useEffect(() => {
     if (previewMode) {
@@ -73,13 +90,14 @@ export function usePlaySession({ sesion, previewMode, previewName }: UsePlaySess
   const announceMissions = (codes: string[]) => {
     codes.forEach((code) => {
       awardedMissionsRef.current.add(code);
-      const mission = findMission(code, gradeId);
+      const mission = findMission(catalog, code);
       if (!mission) return;
+      const { text, studentText } = achievementText.mission(mission);
       setAchievementQueue((q) => [
         ...q,
-        { key: `mission-${code}-${Date.now()}`, kind: "mission", title: mission.text, description: mission.studentText },
+        { key: `mission-${code}-${Date.now()}`, kind: "mission", title: text, description: studentText },
       ]);
-      speak(mission.studentText);
+      speak(studentText);
       persistAward("MISION", code);
     });
   };

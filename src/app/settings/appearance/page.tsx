@@ -3,12 +3,12 @@ import { AppearanceSettings } from "@/components/settings/AppearanceSettings";
 import getSession from '@/lib/auth/getSession'; 
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { redirect } from 'next/navigation';
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: `Apariencia e Idioma | LudiGame`,
-    description: 'Configuración visual y lenguaje de LudiGame'
-  };
+  const t = await getTranslations("Metadata");
+  return pageMetadata({ title: t("settings.appearance.title"), description: t("settings.appearance.description") });
 }
 
 export default async function AppearancePage() {

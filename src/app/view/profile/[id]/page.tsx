@@ -5,6 +5,8 @@ import getSession from "@/lib/auth/getSession";
 import prisma from "@/lib/db";
 import ProfileClient from "./ProfileClient";
 import { getActivityTypes } from "@/services/activityService";
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 interface PageProps {
   params: Promise<{
@@ -19,22 +21,14 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const resolvedParams = await params;
-  const targetUserId = resolvedParams.id;
-  
+  const t = await getTranslations("Metadata");
+  const targetUserId = (await params).id;
   const targetUser = await prisma.ludiUser.findFirst({
-    where: {
-      OR: [
-        { firebaseUid: targetUserId },
-        { id: targetUserId }
-      ]
-    },
-    select: { nombre: true }
+    where: { OR: [{ firebaseUid: targetUserId }, { id: targetUserId }] },
+    select: { nombre: true },
   });
-
-  return {
-    title: targetUser ? `Perfil de ${targetUser.nombre} | LudiGame` : 'Perfil no encontrado | LudiGame',
-  };
+  if (!targetUser) return pageMetadata({ title: t("profileNotFound.title"), description: t("profileNotFound.description") });
+  return pageMetadata({ title: t("profile.title", { name: targetUser.nombre }), description: t("profile.description", { name: targetUser.nombre }) });
 }
 
 export default async function ProfilePage({ params, searchParams }: PageProps) {

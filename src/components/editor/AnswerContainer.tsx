@@ -8,6 +8,7 @@ import { AnswerImageSearch, type ImageSearchSource } from './AnswerImageSearch';
 import { notify } from '@/components/ui';
 import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
 import { ANSWER_FILE_PREFIX, uploadsPath } from '@/lib/mediaSources';
+import { useTranslations } from "next-intl";
 
 interface Answer {
     id: number;
@@ -42,6 +43,7 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
     const [activeAnswerId, setActiveAnswerId] = useState<number | null>(null);
     const [uploadingAnswerId, setUploadingAnswerId] = useState<number | null>(null);
     const { uploadFile } = useFirebaseStorage();
+    const t = useTranslations("Editor.answers");
 
     const handleOpenSearch = useCallback((answerId: number, source: ImageSearchSource) => {
         setActiveAnswerId(answerId);
@@ -76,7 +78,7 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
         const url = await uploadFile(file, uploadsPath(ANSWER_FILE_PREFIX, file.name));
         setUploadingAnswerId(null);
         if (!url) {
-            notify.error('No se pudo subir la imagen', 'Revisa tu conexión e inténtalo de nuevo.');
+            notify.error(t("uploadFailed"), t("checkConnection"));
             return;
         }
         onUpdateAnswerImage(answerId, url);
@@ -109,7 +111,8 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                 <span className={styles['answer-symbol']}>{symbols[index % symbols.length]}</span>
                                 <input
                                     type="text"
-                                    placeholder={`Respuesta ${index + 1}`}
+                                    placeholder={t("answerPlaceholder", { number: index + 1 })}
+                                    aria-label={t("answerPlaceholder", { number: index + 1 })}
                                     value={answer.text}
                                     onChange={(e) => onUpdateAnswerText(answer.id, e.target.value)}
                                     className={`${styles.actinput} answer-input-field`}
@@ -124,7 +127,9 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                     className={`${styles['answer-action-btn']} ${styles['check-btn']} ${answer.isCorrect ? styles.active : ''}`}
                                     onClick={() => onToggleCorrectAnswer(answer.id)}
                                     type="button"
-                                    title="Marcar como correcta"
+                                    title={t("markCorrect")}
+                                    aria-label={t("markCorrectFor", { number: index + 1 })}
+                                    aria-pressed={answer.isCorrect}
                                 />
 
                                 {/* Hidden file input */}
@@ -141,8 +146,8 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                     className={styles['answer-action-btn']}
                                     onClick={() => handleFileSelect(answer.id)}
                                     type="button"
-                                    title="Subir imagen"
-                                    aria-label={`Subir imagen para la respuesta ${index + 1}`}
+                                    title={t("uploadImage")}
+                                    aria-label={t("uploadImageFor", { number: index + 1 })}
                                     disabled={uploadingAnswerId === answer.id}
                                 >
                                     {uploadingAnswerId === answer.id
@@ -163,7 +168,7 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={answer.imageUrl}
-                                            alt={`Imagen de la respuesta ${index + 1}`}
+                                            alt={t("imageOf", { number: index + 1 })}
                                             width={120}
                                             height={90}
                                             style={{ objectFit: 'cover', borderRadius: '8px' }}
@@ -172,7 +177,8 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                             className={styles['remove-answer-image']}
                                             onClick={() => handleRemoveImage(answer.id)}
                                             type="button"
-                                            title="Eliminar imagen"
+                                            title={t("removeImage")}
+                                            aria-label={t("removeImage")}
                                         >
                                             <FaTimes />
                                         </button>
@@ -186,9 +192,10 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                     className={styles['delete-answer-btn']}
                                     onClick={() => handleDeleteAnswer(answer.id)}
                                     type="button"
-                                    title="Eliminar respuesta"
+                                    title={t("deleteAnswer")}
+                                    aria-label={t("deleteAnswerFor", { number: index + 1 })}
                                 >
-                                    <FaTrash />
+                                    <FaTrash aria-hidden="true" />
                                 </button>
                             )}
                         </div>

@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import styles from "./PaginationControls.module.css";
+import { useTranslations } from "next-intl";
 
 interface PaginationControlsProps {
   totalCount: number;
@@ -12,6 +13,7 @@ interface PaginationControlsProps {
 
 export default function PaginationControls({ totalCount, currentPage, pageSize }: PaginationControlsProps) {
   const router = useRouter();
+  const t = useTranslations("Pagination");
   const searchParams = useSearchParams();
 
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -45,8 +47,9 @@ export default function PaginationControls({ totalCount, currentPage, pageSize }
     <div className={styles.paginationWrapper}>
       {/* Page Size Selector */}
       <div className={styles.limitSelector}>
-        <span>Mostrar</span>
+        <label htmlFor="pagination-limit">{t("show")}</label>
         <select 
+            id="pagination-limit"
             className={styles.limitSelect}
             value={pageSize}
             onChange={handleLimitChange}
@@ -54,12 +57,12 @@ export default function PaginationControls({ totalCount, currentPage, pageSize }
             <option value="5">5</option>
             <option value="10">10</option>
         </select>
-        <span>registros</span>
+        <span>{t("records")}</span>
       </div>
 
       {/* Info Text */}
       <div className={styles.infoText}>
-        Mostrando <span>{startRecord}</span> - <span>{endRecord}</span> de <span>{totalCount}</span>
+        {t.rich("showing", { start: startRecord, end: endRecord, total: totalCount, span: (chunks) => <span>{chunks}</span> })}
       </div>
 
       {/* Navigation Buttons */}
@@ -68,13 +71,14 @@ export default function PaginationControls({ totalCount, currentPage, pageSize }
             className={styles.navBtn}
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage <= 1}
-            title="Anterior"
+            title={t("previous")}
+            aria-label={t("previous")}
         >
             <FaChevronLeft size={12} />
         </button>
         
         {/* Simple Page Numbers logic (Current / Total) */}
-        <div className={styles.currentPage}>
+        <div className={styles.currentPage} aria-current="page" aria-label={t("page", { page: currentPage })}>
             {currentPage}
         </div>
 
@@ -82,7 +86,8 @@ export default function PaginationControls({ totalCount, currentPage, pageSize }
             className={styles.navBtn}
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage >= totalPages}
-            title="Siguiente"
+            title={t("next")}
+            aria-label={t("next")}
         >
             <FaChevronRight size={12} />
         </button>

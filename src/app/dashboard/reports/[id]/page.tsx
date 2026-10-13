@@ -1,11 +1,35 @@
 import "@/styles/pages/reports.css";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import prisma from "@/lib/db";
 import ReportDetailClient from "./ReportDetailClient";
 import { isPendingReview } from "@/features/form/formQuestions";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import { pageMetadata } from "@/lib/seo/metadata";
+import getCurrentUser from "@/lib/auth/getCurrentUser";
+import { isAdmin } from "@/lib/auth/guards";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const t = await getTranslations("Metadata");
+  const notFoundMeta = () => pageMetadata({ title: t("reportNotFound.title"), description: t("reportNotFound.description") });
+  const { id } = await params;
+  const user = await getCurrentUser();
+  if (!user || !/^\d+$/.test(id)) return notFoundMeta();
+  const session = await prisma.lUDI_SESION.findUnique({
+    where: { id: BigInt(id) },
+    select: { userId: true, LUDI_ACTIVIDAD: { select: { activity: { select: { activity_name: true } } } } },
+  });
+  // El nombre de la actividad solo se muestra a quien puede ver el reporte.
+  if (!session || (session.userId !== user.id && !isAdmin(user))) return notFoundMeta();
+  const activity = session.LUDI_ACTIVIDAD.activity.activity_name;
+  return pageMetadata({ title: t("reportDetail.title", { activity }), description: t("reportDetail.description", { activity }) });
+}
 
 export default async function ReportDetail({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
+  const user = await getCurrentUser();
+  if (!user) redirect(`/auth/login?redirect=${encodeURIComponent(`/dashboard/reports/${resolvedParams.id}`)}`);
+  if (!/^\d+$/.test(resolvedParams.id)) notFound();
   const sesionId = BigInt(resolvedParams.id);
 
   const session = await prisma.lUDI_SESION.findUnique({
@@ -29,7 +53,9 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
             },
             orderBy: { id: 'asc' }
           },
-          logros: true
+          // Con su fila del catálogo: una insignia retirada después sigue apareciendo a quien la ganó.
+          insignias: { include: { insignia: true }, orderBy: { otorgadoEn: 'asc' } },
+          misiones: { include: { mision: true }, orderBy: { otorgadoEn: 'asc' } }
         },
         orderBy: { puntaje_total: 'desc' }
       },
@@ -39,9 +65,11 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
     }
   });
 
-  if (!session) notFound();
+  // Solo el docente de la sesión (o un administrador) ve sus resultados.
+  if (!session || (session.userId !== user.id && !isAdmin(user))) notFound();
 
   const participantes = session.LUDI_SESION_PARTICIPANTE;
+  const t = await getTranslations("reportsDetails");
 
   // 1. Insights Calculations
   let totalTime = 0;
@@ -57,7 +85,7 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
 
       const qId = r.preguntaId.toString();
       if (!questionStats[qId]) {
-        questionStats[qId] = { failed: 0, total: 0, text: r.pregunta?.enunciado || "Pregunta" };
+        questionStats[qId] = { failed: 0, total: 0, text: r.pregunta?.enunciado || t("question") };
       }
       questionStats[qId].total++;
       if (!r.esCorrecta) {
@@ -88,7 +116,7 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
   const enableTeacherEvaluation = session.user?.config?.enableTeacherEvaluation !== false;
 
   return (
-    <ReportDetailClient 
+    <ReportDetailClient
       session={session}
       participantes={participantes}
       avgTimeSeconds={avgTimeSeconds}
