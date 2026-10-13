@@ -74,7 +74,7 @@ export async function getUserActivities(userId: string, typeId?: number, searchQ
 export async function getActivityById(activityId: number) {
   try {
     const activity = await prisma.ludiActividad.findFirst({
-      where: { 
+      where: {
         activityId: activityId,
         estatus: true // Asegurar que no se obtengan actividades borradas lógicamente
       },
@@ -93,7 +93,7 @@ export async function getActivityById(activityId: number) {
         },
         preguntas: {
           include: {
-            opciones: true,
+            opciones: { include: { opcionRecursos: { include: { recurso: true } } } },
             preguntaRecursos: {
               include: {
                 recurso: {

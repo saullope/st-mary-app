@@ -3,19 +3,29 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from '@/styles/pages/landing.module.css';
+import { safeRedirectPath } from "@/lib/auth/redirect";
+import styles from '@/styles/pages/auth-session.module.css';
 import Image from "next/image";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { loginWithEmail, loginWithGoogle } from "@/features/auth/services/authService";
 import { FirebaseError } from "firebase/app";
+import { TitleLoginForm } from "./TitleLoginForm";
+import { FcGoogle } from "react-icons/fc";
 
 export const SignInForm = () => {
     const t = useTranslations("SignInForm");
     const [errorLogin, setErrorLogin] = useState("");
     const [isLoading, setLoading] = useState(false);
     const router = useRouter();
+
+    // Explica por qué se cerró la sesión cuando se llega desde el cierre automático.
+    useEffect(() => {
+        const reason = new URLSearchParams(window.location.search).get("reason");
+        if (reason === "idle") toast.info(t("sessionEndedIdle"));
+        if (reason === "absolute") toast.info(t("sessionEndedAbsolute"));
+    }, [t]);
 
     const validationSchema = Yup.object({
         emailUser: Yup.string().email(t("emailInvalid")).required(t("emailRequired")),
@@ -24,7 +34,7 @@ export const SignInForm = () => {
 
     const handleAuthError = (error: unknown) => {
         setLoading(false);
-        
+
         // Define specific Firebase error type locally or import if available
         const errorCode = error instanceof FirebaseError ? error.code : "unknown";
 
@@ -51,7 +61,8 @@ export const SignInForm = () => {
 
     const handleSuccess = (userName?: string | null) => {
         toast.success(`${t("welcome")}, ${userName || 'User'}`);
-        router.push('/welcome-educator');
+        // Vuelve a la página protegida que pidió el usuario antes del login.
+        router.push(safeRedirectPath(new URLSearchParams(window.location.search).get('redirect')));
         router.refresh();
     };
 
@@ -61,9 +72,9 @@ export const SignInForm = () => {
 
         try {
             const response = await loginWithEmail(values.emailUser, values.password);
-            
+
             if (response.success) {
-                handleSuccess(response.user?.displayName); 
+                handleSuccess(response.user?.displayName);
             } else {
                 setLoading(false);
                 toast.error(response.message || t("genericError"));
@@ -76,7 +87,7 @@ export const SignInForm = () => {
     const onGoogleSignin = async () => {
         try {
             const response = await loginWithGoogle();
-            
+
             if (response.success) {
                 handleSuccess(response.user?.displayName);
             } else {
@@ -87,100 +98,98 @@ export const SignInForm = () => {
             if (error?.code === 'auth/popup-closed-by-user') {
                 return; // User cancelled, no need to show error
             }
-            
+
             console.error(error);
             toast.error(t("errorLogionWithGoogle"));
         }
     };
 
     return (
-        <div className={styles['login-container']}>
-            <Toaster richColors position="bottom-right" closeButton={true} expand={true} duration={5000} />
-            <div className={styles['login-info-container']}>
-                <h1 className={styles['title-login']}>
-                    {t("titleForm")} </h1>
-                <div className={styles['social-login']}>
-                    <div
-                        onClick={onGoogleSignin}
-                        className={styles['social-login-element']}
-                        role="button"
-                        tabIndex={0}
-                    >
-                        <Image
-                            src="/images/LogoGoogle.png"
-                            width={50}
-                            height={50}
-                            alt="google-image"
-                        />
-                        {t("SignInWithGoogle")}
+        <div className={styles.container}>
+            <div className={styles.card}>
+                <div className={styles.left}>
+
+                    <TitleLoginForm icon="🔒" title={t("titleForm")} />
+
+                    <div className="text-center">
+                    <p>{t("orSignIn")}</p>
                     </div>
+                    <Formik
+                        initialValues={{ emailUser: '', password: '' }}
+                        validationSchema={validationSchema}
+                        onSubmit={onSubmit}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form>
+                                <div className={styles['input-group']}>
+                                    <Field
+                                        type="email"
+                                        name="emailUser"
+                                        placeholder={t("email")}
+                                        className={styles['input']}
+                                    />
+                                    <ErrorMessage name="emailUser" component="div" className="text-danger" />
+                                </div>
+                                <div className={`${styles['input-group']} mt-2`}>
+                                    <Field
+                                        type="password"
+                                        name="password"
+                                        placeholder={t("password")}
+                                        className={styles['input']}
+                                    />
+                                    <ErrorMessage name="password" component="div" className="text-danger" />
+                                </div>
+                                <div>
+                                    {!!errorLogin && (
+                                        <p className="text-danger">
+                                            {errorLogin}
+                                        </p>
+                                    )}
+                                </div>
+                                <p> {t('forgotPassword')}
+                                    <Link className={styles['back-link']} href={'/auth/forgot-password'}>{` ${t('clickHere')}`}</Link>
+                                </p>
+                                <div className="text-center">
+                                    {
+                                        !isLoading ?
+                                            <button
+                                                type="submit"
+                                                className={styles['btn-primary']}
+                                                disabled={isSubmitting}
+                                            >
+                                                {t("signInButton")}
+                                            </button>
+                                            :
+                                            <button
+                                                type="submit"
+                                                className={styles['btn-primary']}
+                                                disabled
+                                            >
+                                                <div className="spinner-border text-light" role="status">
+                                                </div>
+                                            </button>
+                                    }
+
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                    <button
+                        className={styles['btn-google']}
+                        onClick={onGoogleSignin}
+                        type="button"
+                    >
+                        <FcGoogle size={18} />
+                        {t("SignInWithGoogle")}
+                    </button>
+                    <p>
+                        {`${t('noAccount')} `}
+                        <Link className={styles['back-link']} href={'/auth/signup'}>{t('signUp')}</Link>
+                    </p>
                 </div>
-                <p>{t("orSignIn")}</p>
-                <Formik
-                    initialValues={{ emailUser: '', password: '' }}
-                    validationSchema={validationSchema}
-                    onSubmit={onSubmit}
-                >
-                    {({ isSubmitting }) => (
-                        <Form className={styles['inputs-container']}>
-                            <Field
-                                type="email"
-                                name="emailUser"
-                                placeholder={t("email")}
-                                className={styles.input}
-                            />
-                            <ErrorMessage name="emailUser" component="div" className="text-danger" />
-                            <Field
-                                type="password"
-                                name="password"
-                                placeholder={t("password")}
-                                className={styles.input}
-                            />
-                            <ErrorMessage name="password" component="div" className="text-danger" />
-                            <div className="mb-3">
-                                {!!errorLogin && (
-                                    <p className="text-danger">
-                                        {errorLogin}
-                                    </p>
-                                )}
-                            </div>
-                            <p> {t('forgotPassword')}
-                                <Link href={'/auth/forgot-password'}>{` ${t('clickHere')}`}</Link>
-                            </p>
-                            {
-                                !isLoading ?
-                                    <button
-                                        type="submit"
-                                        className={styles['btn-acceso']}
-                                        disabled={isSubmitting}
-                                    >
-                                        {t("signInButton")}
-                                    </button>
-                                    :
-                                    <button
-                                        type="submit"
-                                        className={styles['btn-acceso']}
-                                        disabled
-                                    >
-                                        <div className="spinner-border text-primary" role="status">
-                                        </div>
-                                    </button>
-                            }
-                            <p>
-                                {`${t('noAccount')} `}
-                                <Link href={'/auth/signup'}>{t('signUp')}</Link>
-                            </p>
-                        </Form>
-                    )}
-                </Formik>
+                <div className={styles.right}>
+                </div>
             </div>
-            <Image
-                className={styles['image-login']}
-                src="/images/LoginBanner.png"
-                width={400}
-                height={540}
-                alt="Log in Image"
-            />
         </div>
-    )
+    );
 }

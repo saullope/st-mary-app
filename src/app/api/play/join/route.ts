@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { issueParticipantToken } from "@/lib/play/participantToken";
+import { SESSION_STATE } from "@/lib/play/sessionState";
 
 export async function POST(req: NextRequest) {
     try {
@@ -9,11 +11,16 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, error: "Datos incompletos." }, { status: 400 });
         }
 
+        const nombreTrimmed = String(nombre).trim();
+        if (!/^\d{6}$/.test(String(pin)) || nombreTrimmed.length === 0 || nombreTrimmed.length > 20) {
+            return NextResponse.json({ success: false, error: "Datos inválidos." }, { status: 400 });
+        }
+
         // 1. Buscar la sesión por el PIN
-        const sesion = await (prisma as any).lUDI_SESION.findFirst({
+        const sesion = await prisma.lUDI_SESION.findFirst({
             where: {
                 codigo: pin,
-                estado: { in: ["lobby", "activa"] }
+                estado: { in: [SESSION_STATE.waiting, SESSION_STATE.active] }
             },
             include: {
                 LUDI_ACTIVIDAD: {
@@ -33,12 +40,14 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, error: "No se puede jugar una plantilla directamente." }, { status: 400 });
         }
 
-        // 2. Registrar al participante
-        const participante = await (prisma as any).lUDI_SESION_PARTICIPANTE.upsert({
+        // 2. Registrar al participante. Volver a unirse con el mismo nombre genera un
+        // código nuevo, así la pestaña anterior deja de poder jugar por él.
+        const { token, hash } = issueParticipantToken();
+        const participante = await prisma.lUDI_SESION_PARTICIPANTE.upsert({
             where: {
                 sesion_id_nombre: {
                     sesion_id: sesion.id,
-                    nombre: nombre
+                    nombre: nombreTrimmed
                 }
             },
             update: {
@@ -46,25 +55,28 @@ export async function POST(req: NextRequest) {
                     connect: { id: Number(avatarId) }
                 },
                 puntaje_total: 0,
-                completado: false
+                completado: false,
+                token_hash: hash
             },
             create: {
                 LUDI_SESION: {
                     connect: { id: sesion.id }
                 },
-                nombre: nombre,
+                nombre: nombreTrimmed,
                 avatar: {
                     connect: { id: Number(avatarId) }
                 },
                 puntaje_total: 0,
-                completado: false
+                completado: false,
+                token_hash: hash
             }
         });
 
-        return NextResponse.json({ 
-            success: true, 
-            sesionId: sesion.id.toString(), 
-            participanteId: participante.id.toString() 
+        return NextResponse.json({
+            success: true,
+            sesionId: sesion.id.toString(),
+            participanteId: participante.id.toString(),
+            token
         });
 
     } catch (error: any) {

@@ -1,6 +1,7 @@
 import { NavbarDashboard, SidebarDashboard } from "@/components/dashboard";
 import getSession from '@/lib/auth/getSession';
 import getCurrentUser from "@/lib/auth/getCurrentUser";
+import { isAdmin } from "@/lib/auth/guards";
 import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import styles from '@/styles/pages/sidebar.module.css';
@@ -68,6 +69,11 @@ export default async function DashboardLayout({
 
   // Get user from our SQL database (via Prisma) to fetch real name
   const dbUser = await getCurrentUser();
+
+  // Toda la sección /admin es solo para administradores, no solo cada página.
+  if (!dbUser || !isAdmin(dbUser)) {
+    redirect('/dashboard');
+  }
 
   const user: FirebaseSession = mapDecodedIdTokenToFirebaseSession(token, dbUser);
 

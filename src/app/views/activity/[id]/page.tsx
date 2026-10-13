@@ -11,6 +11,7 @@ import { LaunchSessionButton } from "./LaunchSessionButton";
 import styles from "@/styles/pages/view-activity.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
 import ActivityContentViewer from "./ActivityContentViewer";
+import { getEditorRoute } from "@/lib/editorTab";
 
 interface PageProps {
   params: Promise<{
@@ -72,11 +73,7 @@ export default async function ActivityDetailView({ params }: PageProps) {
     );
   }
 
-  const editRoute = activity.tipoActividadId === 1 
-      ? `/create/ludiquiz?id=${activity.activityId}`
-      : activity.tipoActividadId === 2 
-          ? `/create/trueorfalse?id=${activity.activityId}`
-          : `/create/ludimemory?id=${activity.activityId}`;
+  const editRoute = getEditorRoute(activity.tipoActividadId, activity.activityId);
 
   return (
     <div className={styles.pageContainer} style={{ position: 'relative', overflowX: 'hidden' }}>
@@ -110,6 +107,7 @@ export default async function ActivityDetailView({ params }: PageProps) {
                 <ShareActivityButton activityId={activity.activityId} />
                 <Link 
                   href={editRoute} 
+                  target="_blank" rel="noopener noreferrer"
                   className="btn d-flex align-items-center gap-2 shadow-sm"
                   style={{ background: 'white', color: '#1D153A', borderRadius: '12px', padding: '8px 16px', fontWeight: 'bold', border: '1px solid rgba(29, 21, 58, 0.1)' }}
                   title="Editar actividad"
@@ -127,8 +125,7 @@ export default async function ActivityDetailView({ params }: PageProps) {
                 <LaunchSessionButton activityId={activity.activityId} />
                 <UseTemplateButton 
                     templateActivityId={activity.activityId} 
-                    tipoActividadId={activity.tipoActividadId} 
-                    userId={user.id} 
+                    tipoActividadId={activity.tipoActividadId}
                 />
               </>
             )}

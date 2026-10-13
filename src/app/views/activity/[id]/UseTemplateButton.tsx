@@ -3,42 +3,41 @@
 import { useState } from "react";
 import { FaClone } from "react-icons/fa6";
 import { cloneTemplateActivity } from "@/app/dashboard/templates/actions";
+import { notify } from "@/components/ui";
+import { getEditorRoute, openPendingEditorTab } from "@/lib/editorTab";
 
 interface UseTemplateButtonProps {
   templateActivityId: number;
   tipoActividadId: number;
-  userId: string;
 }
 
-export default function UseTemplateButton({ templateActivityId, tipoActividadId, userId }: UseTemplateButtonProps) {
+export default function UseTemplateButton({ templateActivityId, tipoActividadId }: UseTemplateButtonProps) {
   const [cloning, setCloning] = useState(false);
 
   const handleClone = async () => {
+    const editorTab = openPendingEditorTab();
     setCloning(true);
     try {
-      const result = await cloneTemplateActivity(templateActivityId, userId);
+      const result = await cloneTemplateActivity(templateActivityId);
       if (result.success && result.newActivityId) {
-        const editRoute = tipoActividadId === 1 
-            ? `/create/ludiquiz?id=${result.newActivityId}`
-            : tipoActividadId === 2 
-                ? `/create/trueorfalse?id=${result.newActivityId}`
-                : `/create/ludimemory?id=${result.newActivityId}`;
-        
-        window.location.href = editRoute;
+        editorTab.navigate(getEditorRoute(tipoActividadId, result.newActivityId));
+        setCloning(false);
       } else {
-        alert(result.error || "Ocurrió un error al clonar la plantilla.");
+        editorTab.cancel();
+        notify.error("No se pudo usar la plantilla", result.error || "Ocurrió un error al clonar la plantilla.");
         setCloning(false);
       }
     } catch (error) {
       console.error(error);
-      alert("Error inesperado al usar la plantilla.");
+      editorTab.cancel();
+      notify.error("Error inesperado al usar la plantilla.");
       setCloning(false);
     }
   };
 
   return (
-    <button 
-      onClick={handleClone} 
+    <button
+      onClick={handleClone}
       disabled={cloning}
       className="btn btn-primary d-flex align-items-center gap-2 shadow-sm"
       style={{

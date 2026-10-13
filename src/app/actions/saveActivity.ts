@@ -4,15 +4,20 @@ import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
 import { GamificationConfig } from "@/context/ActivityEditorContext";
-import { getActivityTypeId, getThemeIdByUrl, getOrCreateResource } from "@/lib/activity-helpers";
+import { getActivityTypeId, getThemeIdByUrl, getOrCreateResource, setOptionImage, replaceLessonBlocks, validateLessonForSave, replaceFormQuestions, validateFormForSave } from "@/lib/activity-helpers";
+import { validateMemoryForSave } from "@/features/memory/memoryCards";
+import type { LessonBlock } from "@/features/lesson/lessonBlocks";
+import type { FormQuestion } from "@/features/form/formQuestions";
 
 interface ActivityData {
   title: string;
-  type: "ludiquiz" | "ludimemory" | "trueorfalse";
+  type: "ludiquiz" | "ludimemory" | "trueorfalse" | "ludileccion" | "ludiform";
   questions: (LudiQuizQuestion | TrueOrFalseQuestion)[];
   config: GamificationConfig;
   backgroundImage?: string;
   memoryImages?: string[];
+  lessonBlocks?: LessonBlock[];
+  formQuestions?: FormQuestion[];
 }
 
 export async function saveActivity(data: ActivityData) {
@@ -22,11 +27,26 @@ export async function saveActivity(data: ActivityData) {
     return { error: "No autorizado. Debes iniciar sesión." };
   }
 
+  if (data.type === "ludileccion") {
+    const problem = validateLessonForSave(data.lessonBlocks, data.config.gradeId);
+    if (problem) return { error: problem };
+  }
+
+  if (data.type === "ludiform") {
+    const problem = validateFormForSave(data.formQuestions, data.config.gradeId);
+    if (problem) return { error: problem };
+  }
+
+  if (data.type === "ludimemory") {
+    const problem = validateMemoryForSave(data.memoryImages);
+    if (problem) return { error: problem };
+  }
+
   try {
     const result = await prisma.$transaction(async (tx) => {
       // 1. Obtener ID del Tipo de Actividad
       const tipoActividadId = await getActivityTypeId(data.type);
-      
+
       // Intentar obtener el tema por el fondo seleccionado. Si no existe, usamos el primer tema activo por defecto.
       let temaId = data.backgroundImage ? await getThemeIdByUrl(data.backgroundImage) : null;
       if (!temaId) {
@@ -78,13 +98,18 @@ export async function saveActivity(data: ActivityData) {
           ajustesJson: JSON.stringify({
             badges: data.config.selectedBadges,
             missions: data.config.selectedMissions,
+            voiceEnabled: data.config.voiceEnabled,
             backgroundImage: data.backgroundImage
           })
         }
       });
 
-      // 5. Crear Contenido (Preguntas o Memory)
-      if (data.type === 'ludimemory' && data.memoryImages) {
+      // 5. Crear Contenido (Preguntas, Memory o bloques de lección)
+      if (data.type === 'ludileccion') {
+        await replaceLessonBlocks(tx, ludiActivity.activityId, tipoActividadId, data.lessonBlocks ?? []);
+      } else if (data.type === 'ludiform') {
+        await replaceFormQuestions(tx, ludiActivity.activityId, tipoActividadId, data.formQuestions ?? [], data.config.pointsPerCorrect);
+      } else if (data.type === 'ludimemory' && data.memoryImages) {
         for (const imgUrl of data.memoryImages) {
             const resourceId = await getOrCreateResource(tx, imgUrl, 'image');
             const pareja = await tx.ludiMemoriaPareja.create({
@@ -118,8 +143,9 @@ export async function saveActivity(data: ActivityData) {
               numero: i,
               enunciado: q.text,
               tipoActividad: { connect: { id: tipoActividadId } },
-              puntaje: data.config.pointsPerCorrect,
-              tiempoLimiteMs: data.config.timeLimit * 1000
+              esContenido: Boolean(q.isSlide),
+              puntaje: q.isSlide ? null : data.config.pointsPerCorrect,
+              tiempoLimiteMs: q.isSlide ? null : data.config.timeLimit * 1000
             }
           });
 
@@ -134,9 +160,14 @@ export async function saveActivity(data: ActivityData) {
              });
           }
 
+          if (q.isSlide) {
+             i++;
+             continue;
+          }
+
           if ('answers' in q) {
              for (const ans of (q as LudiQuizQuestion).answers) {
-                await tx.ludiOpcion.create({
+                const opcion = await tx.ludiOpcion.create({
                     data: {
                         pregunta: { connect: { id: newQuestion.id } },
                         indice: ans.id,
@@ -144,6 +175,7 @@ export async function saveActivity(data: ActivityData) {
                         esCorrecta: ans.isCorrect
                     }
                 });
+                await setOptionImage(tx, opcion.id, ans.imageUrl);
              }
           } else {
              const tfQ = q as TrueOrFalseQuestion;
@@ -171,9 +203,9 @@ export async function saveActivity(data: ActivityData) {
       return ludiActivity;
     });
 
-    return { 
-        success: true, 
-        message: "Actividad guardada exitosamente", 
+    return {
+        success: true,
+        message: "Actividad guardada exitosamente",
         activityId: result.activityId
     };
 

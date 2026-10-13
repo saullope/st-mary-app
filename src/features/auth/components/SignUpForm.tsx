@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import styles from '@/styles/pages/landing.module.css';
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { registerUser } from "@/features/auth/services/authService";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
@@ -71,7 +71,6 @@ export const SignUpForm = () => {
     return (
         <>
             <div className={styles['body-registro']}>
-                <Toaster richColors position="bottom-right" closeButton={true} expand={true} duration={6000}/>
                     <div className="">
                         <Formik
                             initialValues={{ email: '', password: '', confirmPassword: '', name: '', lastName: '' }}

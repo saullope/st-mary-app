@@ -1,14 +1,20 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
+import { SESSION_STATE, sessionPhase } from "@/lib/play/sessionState";
 
 // GET: Fetch session status, PIN, and participants (with avatar and score)
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const resolvedParams = await params;
     const sessionId = BigInt(resolvedParams.id);
 
-    const session = await (prisma as any).lUDI_SESION.findUnique({
+    const session = await prisma.lUDI_SESION.findUnique({
       where: { id: sessionId },
       include: {
         LUDI_SESION_PARTICIPANTE: {
@@ -26,10 +32,15 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json({ error: "Session not found" }, { status: 404 });
     }
 
+    if (session.userId !== user.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     return NextResponse.json({
       id: session.id.toString(),
       codigo: session.codigo,
       estado: session.estado,
+      phase: sessionPhase(session.estado),
       preguntaActualIndex: session.preguntaActualIndex,
       participantes: session.LUDI_SESION_PARTICIPANTE.map((p: any) => ({
         id: p.id.toString(),
@@ -58,7 +69,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const body = await request.json();
     const { action } = body;
 
-    const session = await (prisma as any).lUDI_SESION.findUnique({
+    const session = await prisma.lUDI_SESION.findUnique({
       where: { id: sessionId }
     });
 
@@ -73,12 +84,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     let updateData: any = {};
 
     if (action === "start") {
-      updateData.estado = "activa";
+      updateData.estado = SESSION_STATE.active;
       updateData.iniciada_en = new Date();
     } else if (action === "next") {
       updateData.preguntaActualIndex = session.preguntaActualIndex + 1;
     } else if (action === "end") {
-      updateData.estado = "finalizada";
+      updateData.estado = SESSION_STATE.finished;
       updateData.finalizada_en = new Date();
     } else {
       return NextResponse.json({ error: "Invalid action" }, { status: 400 });

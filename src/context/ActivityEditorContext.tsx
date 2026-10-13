@@ -2,6 +2,12 @@
 
 import React, { createContext, useContext, useState, ReactNode, useCallback } from "react";
 import { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
+import type { LessonBlock } from "@/features/lesson/lessonBlocks";
+import type { FormQuestion } from "@/features/form/formQuestions";
+
+export type EditorActivityType = "ludiquiz" | "ludimemory" | "trueorfalse" | "ludileccion" | "ludiform";
+
+type ListUpdate<T> = T[] | ((prev: T[]) => T[]);
 
 // Tipos para la configuración de gamificación
 export interface GamificationConfig {
@@ -14,11 +20,11 @@ export interface GamificationConfig {
 }
 
   // Estado global del editor
-interface ActivityEditorState {
+export interface ActivityEditorState {
   // Datos Generales
   activityId: number | null; // ID para saber si estamos editando
   title: string;
-  activityType: "ludiquiz" | "ludimemory" | "trueorfalse" | null;
+  activityType: EditorActivityType | null;
   
   // UI States
   backgroundImage: string;
@@ -29,6 +35,8 @@ interface ActivityEditorState {
 
   questions: (LudiQuizQuestion | TrueOrFalseQuestion)[];
   memoryImages: string[]; // URLs para LudiMemory
+  lessonBlocks: LessonBlock[]; // Bloques de LudiLección
+  formQuestions: FormQuestion[]; // Preguntas de LudiForm
   
   // Configuración Lúdica (Panel)
   config: GamificationConfig;
@@ -41,7 +49,7 @@ interface ActivityEditorContextType {
   // Setters Generales
   setActivityId: (id: number | null) => void;
   setTitle: (title: string) => void;
-  setActivityType: (type: "ludiquiz" | "ludimemory" | "trueorfalse") => void;
+  setActivityType: (type: EditorActivityType) => void;
   
   // Setters UI
   setBackgroundImage: (url: string) => void;
@@ -51,6 +59,8 @@ interface ActivityEditorContextType {
   // Setters de Contenido
   setQuestions: (questions: (LudiQuizQuestion | TrueOrFalseQuestion)[]) => void;
   setMemoryImages: (images: string[]) => void;
+  setLessonBlocks: (blocks: ListUpdate<LessonBlock>) => void;
+  setFormQuestions: (questions: ListUpdate<FormQuestion>) => void;
   
   // Setters de Configuración (Gamification Panel)
   updateConfig: (updates: Partial<GamificationConfig>) => void;
@@ -68,6 +78,8 @@ const defaultState: ActivityEditorState = {
   fullScreen: false,
   questions: [],
   memoryImages: [],
+  lessonBlocks: [],
+  formQuestions: [],
   config: {
     gradeId: 1,
     timeLimit: 30,
@@ -91,7 +103,7 @@ export const ActivityEditorProvider = ({ children }: { children: ReactNode }) =>
     setState((prev) => ({ ...prev, title }));
   }, []);
 
-  const setActivityType = useCallback((activityType: "ludiquiz" | "ludimemory" | "trueorfalse") => {
+  const setActivityType = useCallback((activityType: EditorActivityType) => {
     setState((prev) => ({ ...prev, activityType }));
   }, []);
 
@@ -113,6 +125,15 @@ export const ActivityEditorProvider = ({ children }: { children: ReactNode }) =>
 
   const setMemoryImages = useCallback((memoryImages: string[]) => {
     setState((prev) => ({ ...prev, memoryImages }));
+  }, []);
+
+  // Acepta un updater: las subidas de archivos terminan de forma asíncrona y no deben pisar ediciones recientes.
+  const setLessonBlocks = useCallback((next: ListUpdate<LessonBlock>) => {
+    setState((prev) => ({ ...prev, lessonBlocks: typeof next === "function" ? next(prev.lessonBlocks) : next }));
+  }, []);
+
+  const setFormQuestions = useCallback((next: ListUpdate<FormQuestion>) => {
+    setState((prev) => ({ ...prev, formQuestions: typeof next === "function" ? next(prev.formQuestions) : next }));
   }, []);
 
   const updateConfig = useCallback((updates: Partial<GamificationConfig>) => {
@@ -138,6 +159,8 @@ export const ActivityEditorProvider = ({ children }: { children: ReactNode }) =>
         setFullScreen,
         setQuestions,
         setMemoryImages,
+        setLessonBlocks,
+        setFormQuestions,
         updateConfig,
         resetEditor,
       }}

@@ -1,7 +1,8 @@
-import prisma from "@/lib/db";
-import { notFound } from "next/navigation";
-import ReportDetailClient from "./ReportDetailClient";
 import "@/styles/pages/reports.css";
+import { notFound } from "next/navigation";
+import prisma from "@/lib/db";
+import ReportDetailClient from "./ReportDetailClient";
+import { isPendingReview } from "@/features/form/formQuestions";
 
 export default async function ReportDetail({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -20,14 +21,15 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
         include: {
           avatar: true,
           respuestas: {
-            include: { 
+            include: {
               pregunta: {
                 include: { opciones: true }
               },
               opcion: true
             },
             orderBy: { id: 'asc' }
-          }
+          },
+          logros: true
         },
         orderBy: { puntaje_total: 'desc' }
       },
@@ -50,6 +52,8 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
     p.respuestas.forEach(r => {
       totalTime += r.tiempoRespuestaMs || 0;
       totalResponses++;
+      // Sin revisar todavía no es acierto ni fallo.
+      if (isPendingReview(r)) return;
 
       const qId = r.preguntaId.toString();
       if (!questionStats[qId]) {

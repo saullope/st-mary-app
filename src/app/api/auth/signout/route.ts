@@ -1,17 +1,9 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { AUTH_COOKIE_NAME } from "@/lib/auth/constants";
+import { clearSessionCookie } from "@/lib/auth/session";
 
 export async function POST() {
     try {
-        const cookieStore = await cookies();
-        cookieStore.set({
-            name: AUTH_COOKIE_NAME,
-            value: "",
-            maxAge: 0,
-            path: "/",
-        });
-
+        await clearSessionCookie();
         return NextResponse.json({ message: "Session closed successfully." }, { status: 200 });
     } catch (error) {
         console.error("Error closing session:", error);

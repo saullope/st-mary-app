@@ -1,16 +1,20 @@
 "use client";
 
-import { FaTimes, FaChartLine, FaCalendarAlt, FaBullseye, FaBolt, FaListUl } from "react-icons/fa";
+import { FaTimes, FaChartLine, FaCalendarAlt, FaBullseye, FaBolt, FaListUl, FaMedal } from "react-icons/fa";
 import StudentSessionLog from "./StudentSessionLog";
+import { isPendingReview } from "@/features/form/formQuestions";
+import { findBadge, findMission, type Badge } from "@/features/gamification/achievementRules";
+import { BadgeArt } from "@/features/gamification/components/BadgeArt";
 
 interface SidebarProps {
   student: any | null;
   onClose: () => void;
   avgClassScore: number;
   avgClassTotalTimeMs: number;
+  gradeId: number;
 }
 
-export default function StudentDetailSidebar({ student, onClose, avgClassScore, avgClassTotalTimeMs }: SidebarProps) {
+export default function StudentDetailSidebar({ student, onClose, avgClassScore, avgClassTotalTimeMs, gradeId }: SidebarProps) {
   if (!student) return null;
 
   // Calculate Effectiveness
@@ -18,6 +22,7 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
   let pTotal = 0;
 
   student.respuestas.forEach((r: any) => {
+    if (isPendingReview(r)) return;
     pTotal++;
     if (r.esCorrecta) {
       pCorrect++;
@@ -38,6 +43,21 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
       effortLabel = "Analítico";
     }
   }
+
+  // Resolver los logros guardados (LudiLogroParticipante) contra el
+  // catálogo compartido para mostrar nombre/imagen/frase.
+  const earnedAchievements = (student.logros || [])
+    .map((logro: any) => {
+      if (logro.tipo === "INSIGNIA") {
+        const badge = findBadge(logro.codigo);
+        if (!badge) return null;
+        return { key: logro.codigo, kind: "Insignia", name: badge.name, detail: badge.phrase, badge, color: badge.color };
+      }
+      const mission = findMission(logro.codigo, gradeId);
+      if (!mission) return null;
+      return { key: logro.codigo, kind: "Misión", name: mission.text, detail: mission.studentText, badge: undefined as Badge | undefined, color: "#6a4bff" };
+    })
+    .filter(Boolean);
 
   return (
     <div className="student-sidebar-overlay" onClick={onClose} style={{ zIndex: 1050 }}>
@@ -105,6 +125,41 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
               </div>
             </div>
           </div>
+
+          {earnedAchievements.length > 0 && (
+            <>
+              <hr className="my-4" style={{ borderColor: 'rgba(29,21,58,0.1)' }} />
+              <div className="mb-4">
+                <h6 className="fw-bold mb-3 text-uppercase small" style={{ color: '#1D153A' }}>
+                  <FaMedal className="me-2" /> Insignias y Misiones ({earnedAchievements.length})
+                </h6>
+                <div className="d-flex flex-column gap-2">
+                  {earnedAchievements.map((a: any) => (
+                    <div
+                      key={a.key}
+                      className="d-flex align-items-center gap-3 p-2 rounded-4 bg-white shadow-sm"
+                      style={{ border: '1px solid rgba(29,21,58,0.05)' }}
+                    >
+                      {a.badge ? (
+                        <BadgeArt badge={a.badge} size={36} radius={8} />
+                      ) : (
+                        <div
+                          className="d-flex align-items-center justify-content-center rounded-3"
+                          style={{ width: 36, height: 36, background: a.color, color: 'white', flexShrink: 0 }}
+                        >
+                          <FaMedal size={16} />
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <div className="small text-uppercase fw-bold" style={{ color: a.color, fontSize: '0.65rem' }}>{a.kind}</div>
+                        <div className="fw-bold small text-truncate" style={{ color: '#1D153A' }}>{a.name}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
 
           <hr className="my-4" style={{ borderColor: 'rgba(29,21,58,0.1)' }} />
 

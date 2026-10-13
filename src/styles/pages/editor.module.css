@@ -103,7 +103,7 @@
     border: none;
     outline: none;
     text-decoration: underline;
-    text-decoration-color: blue;
+    text-decoration-color: #6a4bff;
 }
 
 .contenedor-titulo {
@@ -113,7 +113,7 @@
 }
 
 .icono-titulo {
-  color: blue;
+  color: #6a4bff;
   font-size: 2rem;
 }
 

@@ -3,15 +3,22 @@
 import React, { useEffect } from "react";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import { useTourPreferences } from "@/hooks/useTourPreferences";
 
 export default function WelcomeTour() {
+  const { shouldShowTour, markTourAsCompleted, preferences } = useTourPreferences();
+
   useEffect(() => {
-    // 2. Configure and instantiate driver.js with the Ludi theme
+    if (!shouldShowTour('welcome_tour')) return;
+
+    const isHintsMode = preferences.tourMode === 'hints';
+
     const driverObj = driver({
-      showProgress: true,
-      allowClose: true, // ESC key and overlay click allowed for accessibility
-      overlayColor: "rgba(29, 21, 58, 0.75)", // Morado Profundo overlay with transparency
-      popoverClass: "driverjs-theme", // Custom CSS class for styling
+      showProgress: !isHintsMode,
+      allowClose: true,
+      overlayColor: isHintsMode ? 'rgba(0, 0, 0, 0)' : 'rgba(29, 21, 58, 0.75)',
+      popoverClass: isHintsMode ? 'driverjs-hints-only' : 'driverjs-theme',
+      animate: !isHintsMode,
       nextBtnText: "Siguiente",
       prevBtnText: "Anterior",
       doneBtnText: "¡A crear!",
@@ -40,16 +47,18 @@ export default function WelcomeTour() {
             description: "¡Excelente elección! Al seleccionar, entrarás directamente a tu dashboard personalizado. ¡A crear!",
           }
         }
-      ]
+      ],
+      onDestroyed: () => {
+        markTourAsCompleted('welcome_tour');
+      }
     });
 
-    // Small delay to ensure all DOM elements are fully rendered in next.js client
     const timer = setTimeout(() => {
       driverObj.drive();
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [shouldShowTour, markTourAsCompleted, preferences.tourMode]);
 
   return null;
 }

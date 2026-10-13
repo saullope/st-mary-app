@@ -1,288 +1,342 @@
 .gamificationPanel {
-  position: fixed;
-  top: 80px;
-  right: -700px;
-  width: 605px;
-  height: 90vh;
   padding: 25px 30px 120px;
-  background: linear-gradient(180deg, #1b2447, #121a3c);
-  border-radius: 20px 0 0 20px;
-  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.7);
+  /* Mismo violeta oscuro del sidebar/fondo animado del dashboard
+     (LudiDesign.module.css: .sidebarDark / .bgAnimation), en vez del
+     azul-pizarra genérico: así el panel se siente parte de la misma app. */
+  background: linear-gradient(180deg, #1f1147 0%, #140a2e 100%);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-md);
   overflow-y: auto;
-  transition: right 0.4s ease;
-  z-index: 1000;
   color: #dbe7ff;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-family: var(--font-family-primary);
+  height: 100%;
+  width: 100%;
+  /* Estilos de panel lateral removidos para integración en el layout */
+
 }
 
-.panelOpen {
-  right: 0;
+
+
+/* Modo embebido: el panel vive dentro de la columna derecha del editor,
+   junto al listado de preguntas (izquierda). El violeta deja de ser el
+   fondo dominante del panel y pasa a ser acento (selección, focos, botón
+   de guardar) sobre una tarjeta clara — mismo lenguaje que ya usa el
+   sidebar de preguntas a la izquierda. */
+.gamificationPanel.embedded {
+  padding: 20px 18px 24px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
 }
 
-.panelPuntosArriba {
-  display: flex;
-  justify-content: space-around;
-  margin: 15px 0 10px 0;
+.embedded .headerGlow {
+  color: var(--text-primary);
+  font-size: 19px;
+  padding: 4px 10px 0;
+  margin-bottom: 16px;
 }
 
-.panelPuntosArriba div {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+.embedded .label {
+  color: var(--text-primary);
 }
 
-.panelPuntosArriba div:nth-child(1) { background-color: #FFD700; }
-.panelPuntosArriba div:nth-child(2) { background-color: #FF7F50; }
-.panelPuntosArriba div:nth-child(3) { background-color: #6FCF97; }
-
-.panelPuntosAbajo {
-  display: flex;
-  justify-content: space-around;
-  margin: 60px 0 0 0;
+.embedded .sectionCard {
+  background: var(--gray-50);
+  border-color: var(--gray-200);
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
-.panelPuntosAbajo div {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+.embedded .sectionTitle {
+  color: var(--text-primary);
 }
 
-.panelPuntosAbajo div:nth-child(1) { background-color: #FFD700; }
-.panelPuntosAbajo div:nth-child(2) { background-color: #FF7F7F; }
-.panelPuntosAbajo div:nth-child(3) { background-color: #9B51E0; }
+.embedded .sectionHint,
+.embedded .desc,
+.embedded .badgeDescription {
+  color: var(--gray-500);
+}
+
+.embedded .badgeName {
+  color: var(--text-primary);
+}
+
+.embedded .configGrid {
+  grid-template-columns: 1fr;
+}
+
+.embedded .select,
+.embedded .inputNumber {
+  background-color: var(--white);
+  border-color: var(--gray-300);
+  color: var(--text-primary);
+}
+
+.embedded .insigniasContainer {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.embedded .badgeCard {
+  padding: 14px 10px;
+  min-height: 150px;
+}
+
+/* Tarjetas seleccionables (insignias, misiones, voz): sobre fondo claro el
+   acento pasa a violeta, igual que la pregunta activa en el sidebar
+   izquierdo (borde #6a4bff + relleno tenue), en vez del glow de neón
+   pensado para fondo oscuro. */
+.embedded .badgeCard,
+.embedded .missionCard,
+.embedded .voiceCard {
+  background: var(--gray-50);
+  border-color: var(--gray-200);
+  color: var(--text-primary);
+}
+
+.embedded .badgeCard:hover,
+.embedded .missionCard:hover,
+.embedded .voiceCard:hover {
+  background: var(--white);
+  border-color: #c9bfff;
+}
+
+/* .selected es una clase interna de SelectableCard.module.css (otro
+   módulo, otro hash) así que no se puede referenciar por nombre aquí;
+   aria-pressed sí es un atributo real del DOM y funciona como gancho
+   entre módulos (igual que ya se hace abajo con .missionDot). */
+.embedded .badgeCard[aria-pressed="true"],
+.embedded .missionCard[aria-pressed="true"],
+.embedded .voiceCard[aria-pressed="true"] {
+  background: rgba(106, 75, 255, 0.06);
+  border-color: #6a4bff;
+  box-shadow: none;
+}
+
+.embedded .badgeCard[aria-pressed="true"]::after,
+.embedded .missionCard[aria-pressed="true"]::after,
+.embedded .voiceCard[aria-pressed="true"]::after {
+  background: linear-gradient(90deg, transparent, #6a4bff, transparent);
+}
+
+.embedded .missionDot {
+  border-color: var(--gray-300);
+}
+
+.embedded .missionCard[aria-pressed="true"] .missionDot,
+.embedded .voiceCard[aria-pressed="true"] .missionDot {
+  border-color: #6a4bff;
+  background-color: #6a4bff;
+  box-shadow: 0 0 6px rgba(106, 75, 255, 0.4);
+}
 
 .gamificationPanel::-webkit-scrollbar {
   width: 7px;
 }
 
 .gamificationPanel::-webkit-scrollbar-track {
-  background: #0c1330;
-  border-radius: 10px;
+  background: #140a2e;
+  border-radius: var(--border-radius-md);
 }
 
 .gamificationPanel::-webkit-scrollbar-thumb {
-  background: #4e79e1;
-  border-radius: 10px;
-  border: 2px solid #0c1330;
+  background: #6a4bff;
+  border-radius: var(--border-radius-md);
+  border: 2px solid #140a2e;
 }
 
-.togglePanel {
-  position: fixed;
-  top: 90px;
-  right: 20px;
-  z-index: 1100;
-  background-color: #3a4f91;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 18px;
-  font-size: 16px;
-  color: #f0f5ff;
-  cursor: pointer;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.25s ease;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+.embedded::-webkit-scrollbar-track {
+  background: var(--gray-50);
 }
 
-.togglePanel:hover {
-  background-color: #5576d6;
+.embedded::-webkit-scrollbar-thumb {
+  border-color: var(--gray-50);
 }
 
-.togglePanel.hidden {
-  display: none;
-}
 
-.returnButton {
-  position: fixed;
-  top: 90px;
-  right: 20px;
-  z-index: 1101;
-  background: #5bb8b6;
-  color: #122222;
-  border: none;
-  padding: 12px;
-  font-size: 20px;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.25s ease;
-}
 
-.returnButton:hover {
-  background-color: #43908f;
-}
 
 .headerGlow {
   color: #fff;
-  font-weight: 500;
+  font-weight: var(--font-weight-bold);
   font-size: 24px;
-  padding: 14px 20px;
-  margin-bottom: 25px;
+  padding: 14px 20px 0;
+  margin-bottom: 20px;
   text-align: center;
-  text-shadow: 0 0 6px #fff, 0 0 12px #9ec9ff;
-  animation: glowText 2.5s ease-in-out infinite alternate;
   user-select: none;
 }
 
-@keyframes glowText {
-  0% { text-shadow: 0 0 4px #fff, 0 0 10px #9ec9ff; }
-  100% { text-shadow: 0 0 8px #fff, 0 0 18px #9ec9ff; }
-}
-
-.label, .legend {
+.label {
   display: block;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   margin-bottom: 6px;
   color: #fff;
   user-select: none;
+  font-size: 14px;
+}
+
+.sectionCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-radius-xl);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  color: #fff;
+  font-size: 17px;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 4px;
+  user-select: none;
+}
+
+.sectionHint {
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  color: var(--gray-400);
+  margin-bottom: 16px;
+}
+
+.configGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.configFieldFull {
+  grid-column: 1 / -1;
+}
+
+.configGrid .select,
+.configGrid .inputNumber {
+  margin-bottom: 0;
+}
+
+.configGrid .desc {
+  margin-top: 6px;
+  margin-bottom: 0;
+  font-size: 12px;
 }
 
 .select {
   width: 100%;
   padding: 8px 10px;
-  border-radius: 10px;
-  border: 2px solid #425bb5;
-  background-color: #2d3a7a;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.06);
   color: #e0e7ff;
   font-size: 14px;
   margin-bottom: 14px;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-family: var(--font-family-primary);
+  transition: border-color 0.2s ease;
+}
+
+.select:focus {
+  border-color: #8b73ff;
+  outline: none;
 }
 
 .inputNumber {
   width: 100%;
   padding: 9px 12px;
-  border-radius: 10px;
-  border: 2px solid #425bb5;
-  background-color: #2d3a7a;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.06);
   color: #fff;
   font-size: 15px;
   margin-bottom: 14px;
   box-sizing: border-box;
-  transition: border-color 0.3s ease;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  transition: border-color 0.2s ease;
+  font-family: var(--font-family-primary);
 }
 
 .inputNumber:focus {
-  border-color: #83a1ff;
+  border-color: #8b73ff;
   outline: none;
 }
 
 .desc {
-  font-size: 15px;
-  margin-top: -10px;
+  font-size: 13px;
+  margin-top: 6px;
   margin-bottom: 18px;
-  color: #fff;
-  font-weight: 500;
+  color: var(--gray-400);
+  font-weight: var(--font-weight-normal);
 }
 
 .insigniasContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  padding: 15px;
-  margin-bottom: 25px;
+  gap: 16px;
 }
 
-.checkboxLabel {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  color: #dbe7ff;
-  position: relative;
-  font-size: 14px;
-}
-
-.checkboxLabel input[type="checkbox"] {
-  margin: 0;
-  cursor: pointer;
-  accent-color: #F3D046;
-}
-
-/* Insignia styling */
-.insignia {
-  display: flex;
+.badgeCard {
   flex-direction: column;
-  align-items: center;
-  background-color: var(--color-bg, #4352a3);
-  padding: 12px 8px;
-  border-radius: 15px;
-  width: 100%;
-  min-height: 180px;
-  height: 100%;
-  text-align: center;
-  color: #000;
-  transition: box-shadow 0.3s ease, transform 0.25s ease;
-  user-select: none;
   justify-content: flex-start;
+  text-align: center;
+  padding: 18px 12px;
+  min-height: 175px;
 }
 
-.insignia img {
-  width: 80px;
-  height: 80px;
+.badgeImg {
+  width: 72px;
+  height: 72px;
   object-fit: cover;
-  border-radius: 10%;
-  margin-bottom: 6px;
+  border-radius: var(--border-radius-lg);
+  margin-bottom: 10px;
 }
 
-.insignia span {
-  font-weight: 600;
+.badgeName {
+  font-weight: var(--font-weight-bold);
   font-size: 14px;
   margin-bottom: 4px;
-  color: #000;
+  color: #fff;
   word-break: break-word;
 }
 
-.insigniaDescription {
-  display: block;
-  font-size: 14px;
-  margin-top: 2px;
-  color: #000;
-  font-weight: 600;
+.badgeDescription {
+  font-size: 12px;
+  font-weight: var(--font-weight-normal);
+  margin: 0;
+  color: var(--gray-400);
   word-break: break-word;
   text-align: center;
 }
 
-/* Checkbox checked effect handled in JSX via class binding or adjacent sibling if structure maintained */
-.checkboxLabel input[type="checkbox"]:checked + .insignia {
-  box-shadow: 0 0 14px 4px #7a8edbaa;
-  transform: scale(1.05);
-  animation: pulseGlow 1.4s ease-in-out infinite alternate;
-}
-
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 14px 3px #7287db99; }
-  100% { box-shadow: 0 0 20px 8px #9aaefcbb; }
-}
-
-.insignia:hover {
-  transform: scale(1.07) rotate(1deg);
-  box-shadow: 0 0 18px 6px rgba(122, 142, 219, 0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.fieldset {
-  border: 2px dashed #4a5db9cc;
-  border-radius: 15px;
-  padding: 18px 16px;
-  margin-bottom: 30px;
-  background: #1e2a60;
-  color: #c8d2ff;
-}
-
-.legend {
-  font-size: 17px;
-  font-weight: 500;
-  color: #e0e7ff;
-  user-select: none;
-}
-
-.voiceToggleContainer {
-  margin-bottom: 18px;
+.missionsGrid {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.missionCard {
+  justify-content: flex-start;
+  font-size: 14px;
+}
+
+.missionDot {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.missionCard[aria-pressed="true"] .missionDot,
+.voiceCard[aria-pressed="true"] .missionDot {
+  /* Mismo cian de acento que el indicador activo del sidebar del
+     dashboard (LudiDesign.module.css: .navLink.active::after). */
+  border-color: #00d4ff;
+  background-color: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+
+.voiceCard {
+  justify-content: flex-start;
+  font-size: 14px;
 }
 
 .saveContainer {
@@ -293,18 +347,22 @@
 .saveBtn {
   padding: 12px 22px;
   font-size: 16px;
-  border-radius: 15px;
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius-lg);
   border: none;
-  background-color: #3a4f91;
+  /* Mismo morado que .btnLudi (LudiDesign.module.css), el botón de
+     acción principal en el resto de la app. */
+  background: linear-gradient(135deg, #6a4bff 0%, #8b73ff 100%);
   color: #fff;
   cursor: pointer;
-  transition: background 0.25s ease, transform 0.2s ease;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+  font-family: var(--font-family-primary);
 }
 
 .saveBtn:hover {
-  background-color: #5576d6;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #5835e5 0%, #7c5cff 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(106, 75, 255, 0.35);
 }
 
 .feedbackContainer {
@@ -356,13 +414,14 @@
 @media (max-width: 768px) {
   .gamificationPanel { width: 90%; padding: 20px; height: 85vh; }
   .insigniasContainer { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .insignia { min-height: 140px; }
+  .configGrid { grid-template-columns: 1fr; }
+  .badgeCard { min-height: 150px; }
   .saveBtn { padding: 10px 18px; font-size: 15px; }
-  .insigniaDescription { font-size: 13px; }
+  .badgeDescription { font-size: 11px; }
 }
 
 @media (max-width: 480px) {
   .insigniasContainer { grid-template-columns: 1fr; gap: 10px; }
-  .insignia { min-height: 120px; }
-  .insigniaDescription { font-size: 12px; }
+  .badgeCard { min-height: 120px; }
+  .badgeDescription { font-size: 11px; }
 }

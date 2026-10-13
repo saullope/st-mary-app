@@ -1,14 +1,16 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, ChangeEvent, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useCallback, ChangeEvent, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import styles from "./ActivityFilter.module.css";
 
 export default function ReportFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+  const tReports = useTranslations("reportsFilters");
+
   const initialStatus = searchParams.get("status") || "";
   const initialSearch = searchParams.get("search") || "";
 
@@ -54,7 +56,7 @@ export default function ReportFilter() {
         <input 
           type="text" 
           className={styles.searchInput}
-          placeholder="Buscar actividad por nombre..."
+          placeholder={tReports("searchPlaceholder")}
           value={searchTerm}
           onChange={handleSearchChange}
         />
@@ -63,7 +65,7 @@ export default function ReportFilter() {
       {/* Status Filter */}
       <div className={styles.selectContainer}>
         <label htmlFor="reportStatus" className={styles.selectLabel}>
-          Estado:
+          {tReports("status")}:
         </label>
         <select
           id="reportStatus"
@@ -71,10 +73,10 @@ export default function ReportFilter() {
           value={initialStatus}
           onChange={handleFilterChange}
         >
-          <option value="">Todos</option>
-          <option value="ESPERANDO">Esperando / Lobby</option>
-          <option value="ACTIVA">En Curso</option>
-          <option value="FINALIZADA">Finalizada</option>
+          <option value=""></option>
+          <option value="ESPERANDO">{tReports("all")}</option>
+          <option value="ACTIVA">{tReports("inProgress")}</option>
+          <option value="FINALIZADA">{tReports("completed")}</option>
         </select>
       </div>
     </div>

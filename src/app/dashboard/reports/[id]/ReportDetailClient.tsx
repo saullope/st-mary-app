@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { FaTrophy, FaArrowUp, FaArrowDown, FaFilePdf, FaClock, FaExclamationTriangle, FaExternalLinkAlt, FaArrowLeft } from "react-icons/fa";
 import StudentDetailSidebar from "@/components/dashboard/reports/StudentDetailSidebar";
+import { isPendingReview } from "@/features/form/formQuestions";
 import TeacherEvaluationToast from "@/components/dashboard/reports/TeacherEvaluationToast";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface ReportDetailClientProps {
   session: any;
@@ -30,6 +32,7 @@ export default function ReportDetailClient({
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
   const [teacherRating, setTeacherRating] = useState<number | null>(session.teacherRating || null);
   const [submittingRating, setSubmittingRating] = useState(false);
+  const t = useTranslations("reportsDetails");
 
   const handleExportPDF = () => {
     window.print();
@@ -68,8 +71,8 @@ export default function ReportDetailClient({
       {/* Header & Export Action */}
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 pb-3" style={{ borderBottom: '2px dashed rgba(255,255,255,0.1)' }}>
         <div>
-          <h2 className="fw-bold mb-1" style={{ color: '#E8E5F7' }}>Reporte: {session.LUDI_ACTIVIDAD.activity.activity_name}</h2>
-          <p style={{ color: 'rgba(255,255,255,0.7)' }}>Sesión PIN: <span className="fw-bold" style={{ color: '#E8E5F7' }}>{session.codigo}</span> | {new Date(session.creada_en).toLocaleDateString()}</p>
+          <h2 className="fw-bold mb-1" style={{ color: '#E8E5F7' }}>{session.LUDI_ACTIVIDAD.activity.activity_name}</h2>
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>{t("sessionPin")}: <span className="fw-bold" style={{ color: '#E8E5F7' }}>{session.codigo}</span> | {new Date(session.creada_en).toLocaleDateString()}</p>
         </div>
         <div className="mt-3 mt-md-0 no-print d-flex align-items-center gap-3">
           <button 
@@ -77,7 +80,7 @@ export default function ReportDetailClient({
             style={{ background: '#1D153A', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}
             onClick={handleExportPDF}
           >
-            <FaFilePdf className="me-2" style={{ color: '#dc3545' }} /> Exportar a PDF
+            <FaFilePdf className="me-2" style={{ color: '#dc3545' }} /> {t("exportPDF")}
           </button>
         </div>
       </div>
@@ -91,7 +94,7 @@ export default function ReportDetailClient({
                 <FaExclamationTriangle className="fs-3" style={{ color: '#dc3545' }} />
               </div>
               <div>
-                <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266' }}>Pregunta Más Difícil</h6>
+                <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266' }}>{t("hardQuestions")}</h6>
                 <h5 className="fw-bold mb-0" style={{ color: '#1D153A' }}>
                   {hardestQuestion && hardestRate > 0 
                     ? `"${hardestQuestion?.text}" (${hardestRate}% de fallos)` 
@@ -108,8 +111,8 @@ export default function ReportDetailClient({
                 <FaClock className="fs-3" style={{ color: '#1D153A' }} />
               </div>
               <div>
-                <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266' }}>Tiempo Promedio por Respuesta</h6>
-                <h3 className="fw-bold mb-0" style={{ color: '#1D153A' }}>{avgTimeSeconds} segundos</h3>
+                <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266' }}>{t("timeForAnswer")}</h6>
+                <h3 className="fw-bold mb-0" style={{ color: '#1D153A' }}>{avgTimeSeconds} {t("seconds")}</h3>
               </div>
             </div>
           </div>
@@ -119,7 +122,7 @@ export default function ReportDetailClient({
       {/* Podium - Lavender Theme */}
       <div className="mb-5 p-4 rounded-4 shadow-lg position-relative" style={{ background: '#E8E5F7', border: '1px solid rgba(29, 21, 58, 0.05)' }}>
         <h3 className="text-center fw-bold mb-5 flex-row align-items-center justify-content-center d-flex" style={{ color: '#1D153A' }}>
-            <FaTrophy className="me-2" style={{ color: '#e5b869' }}/> Podio de Clase
+            <FaTrophy className="me-2" style={{ color: '#e5b869' }}/> {t("podium")}
         </h3>
         
         <div className="row justify-content-center align-items-end" style={{ minHeight: '200px' }}>
@@ -131,7 +134,7 @@ export default function ReportDetailClient({
                   <img src={participantes[1].avatar.urlImagen} alt="Avatar" className="rounded-circle shadow-lg mb-2" style={{ width: '70px', height: '70px', objectFit: 'cover', border: '3px solid #cbd5e1' }} />
                 )}
                 <span className="fw-bold text-truncate w-100" style={{ color: '#1D153A' }}>{participantes[1].nombre}</span>
-                <div className="badge bg-secondary rounded-pill my-1 fs-6">2º LUGAR</div>
+                <div className="badge bg-secondary rounded-pill my-1 fs-6">2º {t("place")}</div>
                 <div className="fw-bold fs-5" style={{ color: '#4a4266' }}>{participantes[1].puntaje_total} pts</div>
                 <div className="w-100 mt-2 border rounded-top shadow-sm" style={{ height: '100px', background: 'linear-gradient(to top, #cbd5e1, #f8fafc)', borderBottom: 'none' }}>
                   <span className="fs-3 fw-bold mt-3 d-block" style={{ color: '#64748b' }}>2</span>
@@ -149,7 +152,7 @@ export default function ReportDetailClient({
                   <img src={participantes[0].avatar.urlImagen} alt="Avatar" className="rounded-circle shadow-lg mb-2" style={{ width: '90px', height: '90px', objectFit: 'cover', border: '4px solid #fbbf24' }} />
                 )}
                 <span className="fw-bold fs-5 text-truncate w-100" style={{ color: '#1D153A' }}>{participantes[0].nombre}</span>
-                <div className="badge bg-warning text-dark rounded-pill my-1 fs-5 shadow-sm">1º LUGAR</div>
+                <div className="badge bg-warning text-dark rounded-pill my-1 fs-5 shadow-sm">1º {t("place")}</div>
                 <div className="fw-bold fs-4" style={{ color: '#198754' }}>{participantes[0].puntaje_total} pts</div>
                 <div className="w-100 mt-2 shadow border rounded-top" style={{ height: '150px', background: 'linear-gradient(to top, #fbbf24, #fef3c7)', borderBottom: 'none' }}>
                   <span className="text-dark fs-1 fw-bold mt-4 d-block">1</span>
@@ -166,7 +169,7 @@ export default function ReportDetailClient({
                   <img src={participantes[2].avatar.urlImagen} alt="Avatar" className="rounded-circle shadow-lg mb-2" style={{ width: '60px', height: '60px', objectFit: 'cover', border: '3px solid #fca5a5' }} />
                 )}
                 <span className="fw-bold text-truncate w-100" style={{ color: '#1D153A' }}>{participantes[2].nombre}</span>
-                <div className="badge rounded-pill my-1" style={{ backgroundColor: '#cd7f32', color: 'white' }}>3º LUGAR</div>
+                <div className="badge rounded-pill my-1" style={{ backgroundColor: '#cd7f32', color: 'white' }}>3º {t("place")}</div>
                 <div className="fw-bold fs-6" style={{ color: '#4a4266' }}>{participantes[2].puntaje_total} pts</div>
                 <div className="w-100 mt-2 border rounded-top shadow-sm" style={{ height: '70px', background: 'linear-gradient(to top, #fed7aa, #fff7ed)', borderBottom: 'none' }}>
                   <span className="fs-4 fw-bold mt-2 d-block" style={{ color: '#c2410c' }}>3</span>
@@ -178,17 +181,17 @@ export default function ReportDetailClient({
       </div>
 
       {/* Student Identity Table */}
-      <h4 className="fw-bold mb-4" style={{ color: '#E8E5F7' }}>Desempeño Detallado</h4>
+      <h4 className="fw-bold mb-4" style={{ color: '#E8E5F7' }}>{t("detailedPerformance")}</h4>
       <div className="card border-0 shadow-sm" style={{ borderRadius: '1.5rem', overflow: 'hidden', background: '#E8E5F7' }}>
         <div className="table-responsive">
           <table className="table align-middle mb-0" style={{ background: 'transparent' }}>
             <thead style={{ borderBottom: '2px solid rgba(29, 21, 58, 0.1)' }}>
               <tr>
-                <th className="px-4 py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>Estudiante</th>
-                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>Puntaje</th>
-                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>Efectividad</th>
-                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>Tendencia</th>
-                <th className="py-3 text-end no-print" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>Acción</th>
+                <th className="px-4 py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("student")}</th>
+                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("score")}</th>
+                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("effectiveness")}</th>
+                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("trend")}</th>
+                <th className="py-3 text-end no-print" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("actions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -196,6 +199,7 @@ export default function ReportDetailClient({
                 let pCorrect = 0;
                 let pTotal = 0;
                 p.respuestas.forEach((r: any) => {
+                  if (isPendingReview(r)) return;
                   pTotal++;
                   if (r.esCorrecta) pCorrect++;
                 });
@@ -228,11 +232,11 @@ export default function ReportDetailClient({
                     <td className="py-3 border-0" style={{ background: 'transparent' }}>
                       {isAboveAverage ? (
                         <span className="badge rounded-pill px-3 py-2 d-inline-flex align-items-center" style={{ background: 'rgba(25, 135, 84, 0.15)', color: '#198754' }}>
-                          <FaArrowUp className="me-1" /> Sobre Promedio
+                          <FaArrowUp className="me-1" /> {t("overAverage")}
                         </span>
                       ) : (
                         <span className="badge rounded-pill px-3 py-2 d-inline-flex align-items-center" style={{ background: 'rgba(220, 53, 69, 0.15)', color: '#dc3545' }}>
-                          <FaArrowDown className="me-1" /> Bajo Promedio
+                          <FaArrowDown className="me-1" /> {t("belowAverage")}
                         </span>
                       )}
                     </td>
@@ -246,7 +250,7 @@ export default function ReportDetailClient({
               })}
               {participantes.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="text-center py-5 text-muted border-0" style={{ background: 'transparent' }}>No hay estudiantes en esta sesión.</td>
+                  <td colSpan={5} className="text-center py-5 text-muted border-0" style={{ background: 'transparent' }}>{t("noStudentsInSession")}</td>
                 </tr>
               )}
             </tbody>
@@ -257,11 +261,12 @@ export default function ReportDetailClient({
       {/* Sidebar Component */}
       <div className="no-print">
         {selectedStudent && (
-          <StudentDetailSidebar 
-            student={selectedStudent} 
-            avgClassScore={avgClassScore} 
+          <StudentDetailSidebar
+            student={selectedStudent}
+            avgClassScore={avgClassScore}
             avgClassTotalTimeMs={avgClassTotalTimeMs}
-            onClose={() => setSelectedStudent(null)} 
+            gradeId={session.LUDI_ACTIVIDAD.gradoId || 1}
+            onClose={() => setSelectedStudent(null)}
           />
         )}
       </div>

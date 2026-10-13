@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 
 export default async function PlayLobbyPage() {
     // Fetch avatars from DB
-    let avatars = [];
+    let avatars: { id: number; nombre: string; urlImagen: string; activo: boolean }[] = [];
     try {
-        avatars = await (prisma as any).ludiAvatar.findMany({
+        avatars = await prisma.ludiAvatar.findMany({
             where: { activo: true }
         });
     } catch (e) {

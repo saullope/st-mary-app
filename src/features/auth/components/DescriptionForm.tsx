@@ -1,4 +1,4 @@
-import styles from '@/styles/pages/landing.module.css';
+import styles from '@/styles/pages/auth-session.module.css';
 
 interface DescriptionFormProps {
     text: string;

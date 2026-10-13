@@ -1,3 +1,5 @@
+import type { MediaType } from "./media";
+
 export type TrueOrFalseActivity = {
     activityName: string; // Nombre de la actividad
     activityType: string | null; // Tipo de actividad
@@ -15,6 +17,7 @@ export type TrueOrFalseQuestion = {
     id: number; // Identificador único de la pregunta
     text: string; // Texto de la pregunta
     correctAnswer: "true" | "false" | null; // Respuesta correcta
-    mediaType: "image" | "video" | "audio" | "youtube" | null; // Tipo de archivo multimedia
+    mediaType: MediaType | null;
     mediaUrl: string | null; // URL del archivo multimedia
+    isSlide?: boolean; // Diapositiva de contenido: solo text + mediaUrl, sin respuesta ni tiempo
 };

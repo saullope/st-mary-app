@@ -1,25 +1,6 @@
-import { cookies } from "next/headers";
-import { adminAuth } from "@/firebase/firebase-admin";
-import { AUTH_COOKIE_NAME } from "./constants";
+import { readSessionClaims } from "./session";
 
-// Returns decoded user from session cookie, or null if invalid/expired
-const getSession = async () => {
-    const cookieStore = await cookies();
-    const session = cookieStore.get(AUTH_COOKIE_NAME)?.value;
-
-    if (!session) {
-        return null;
-    }
-
-    try {
-        const user = await adminAuth.verifySessionCookie(session, true);
-        return user;
-    } catch (error: any) {
-        if (error?.errorInfo?.code === "auth/session-cookie-expired") {
-            console.log("Session cookie expired");
-        }
-        return null;
-    }
-};
+// Returns decoded user from session cookie, or null if invalid, expired or past the absolute limit
+const getSession = async () => readSessionClaims();
 
 export default getSession;

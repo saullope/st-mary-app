@@ -150,6 +150,12 @@ model LudiPregunta {
   tiempoLimiteMs   Int?                  @map("tiempo_limite_ms")
   puntaje          Int?
   activo           Boolean               @default(true, map: "DF_LUDI_PREG_activo")
+  // Diapositiva de contenido (p. ej. Canva): sin opciones, sin tiempo y sin puntaje.
+  esContenido      Boolean               @default(false, map: "DF_LUDI_PREG_contenido") @map("es_contenido")
+  // Cuerpo de los bloques de lectura de LudiLección (el título va en enunciado).
+  contenidoTexto   String?               @map("contenido_texto") @db.NVarChar(Max)
+  // LudiForm: "single" | "multiple" | "long". Null en el resto de actividades (opción única).
+  tipoPregunta     String?               @map("tipo_pregunta") @db.NVarChar(20)
   opciones         LudiOpcion[]
   activity         LudiActividad         @relation("PreguntaActivity", fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Pregunta_Activity")
   tipoActividad    LudiTipoActividad     @relation(fields: [tipoActividadId], references: [id], onUpdate: NoAction, map: "FK__LUDI_PREG__tipo___467D75B8")
@@ -268,11 +274,27 @@ model LUDI_SESION_PARTICIPANTE {
   studentRating Float?      @map("student_rating")
   studentEnjoyment Float?   @map("student_enjoyment")
   studentLearning  Float?   @map("student_learning")
+  // SHA-256 del código secreto entregado al unirse; null en participantes previos a este control.
+  token_hash       String?  @db.Char(64)
   LUDI_SESION   LUDI_SESION @relation(fields: [sesion_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK__LUDI_SESI__sesio__69C6B1F5")
   avatar        LudiAvatar? @relation(fields: [avatarId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   respuestas    LudiRespuestaEstudiante[]
+  logros        LudiLogroParticipante[]
 
   @@unique([sesion_id, nombre], map: "UQ_LUDI_PART_ses_nom")
+}
+
+model LudiLogroParticipante {
+  id             BigInt   @id @default(autoincrement())
+  participanteId BigInt   @map("participante_id")
+  tipo           String   @db.NVarChar(20) // "INSIGNIA" | "MISION"
+  codigo         String   @db.NVarChar(50) // id del catálogo en achievementRules.ts (p.ej. "sabio", "1-3-en-raya")
+  otorgadoEn     DateTime @default(dbgenerated("sysdatetime()")) @map("otorgado_en")
+
+  participante   LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade)
+
+  @@unique([participanteId, tipo, codigo], map: "UQ_LUDI_LOGRO_part_tipo_cod")
+  @@map("LUDI_LOGRO_PARTICIPANTE")
 }
 
 model LudiRol {
@@ -310,6 +332,9 @@ model LudiUserConfig {
   defaultIsPublic         Boolean  @default(false) @map("default_is_public")
   enableStudentFeedback   Boolean  @default(true) @map("enable_student_feedback")
   enableTeacherEvaluation Boolean  @default(true) @map("enable_teacher_evaluation")
+  toursEnabled            Boolean  @default(true) @map("tours_enabled")
+  tourMode                String   @default("full") @map("tour_mode") @db.NVarChar(20)
+  completedTours          String   @default("[]") @map("completed_tours") @db.NVarChar(Max)
   
   user                    LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -335,6 +360,11 @@ model LudiRespuestaEstudiante {
   esCorrecta        Boolean
   tiempoRespuestaMs Int
   puntajeObtenido   Int
+  // LudiForm: texto escrito (respuesta larga) y opciones marcadas (selección múltiple, JSON de ids).
+  respuestaTexto    String?  @db.NVarChar(Max)
+  opcionesJson      String?  @db.NVarChar(400)
+  // "PENDIENTE" mientras el docente no califica una respuesta escrita; "REVISADA" después.
+  estadoRevision    String?  @db.NVarChar(20)
 
   participante      LUDI_SESION_PARTICIPANTE @relation(fields: [participanteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   pregunta          LudiPregunta             @relation(fields: [preguntaId], references: [id], onDelete: NoAction, onUpdate: NoAction) // THIS IS THE LINE TO FIX

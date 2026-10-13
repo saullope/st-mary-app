@@ -20,10 +20,8 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
     const [gamePin, setGamePin] = useState('');
     const [playerName, setPlayerName] = useState('');
     const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
-    const [isReady, setIsReady] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [joinedSessionId, setJoinedSessionId] = useState<string | null>(null);
 
     const isFormValid = gamePin.length === 6 && playerName.trim().length > 0 && selectedAvatarId !== null;
 
@@ -52,13 +50,14 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
                 // and tie it to the specific session ID
                 sessionStorage.setItem(`ludi_participant_${data.sesionId}`, JSON.stringify({
                     id: data.participanteId,
+                    token: data.token,
                     name: playerName,
                     avatarId: selectedAvatarId,
                     sesionId: data.sesionId
                 }));
-                
-                setJoinedSessionId(data.sesionId);
-                setIsReady(true);
+
+                // La página del juego muestra la sala de espera hasta que el docente inicie.
+                router.push(`/play/student/${data.sesionId}`);
             } else {
                 setError(data.error || "Error al unirse al juego.");
             }
@@ -69,30 +68,6 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
             setLoading(false);
         }
     };
-
-    const handleStart = () => {
-        if (joinedSessionId) {
-            router.push(`/play/student/${joinedSessionId}`);
-        }
-    };
-
-    if (isReady) {
-        return (
-            <div className={styles.readyScreen}>
-                <Image 
-                    src="/images/play/confeti.png" 
-                    alt="Confeti" 
-                    width={140} 
-                    height={140} 
-                    className={styles.confettiImage}
-                />
-                <p className={styles.readyText}>¡Listo, el juego está por comenzar!</p>
-                <button className={styles.startBtn} onClick={handleStart}>
-                    Iniciar
-                </button>
-            </div>
-        );
-    }
 
     return (
         <div className={styles.pageWrapper}>
@@ -105,11 +80,11 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
 
             <div className={styles.container}>
                 <div className={styles.titleContainer}>
-                    <Image 
-                        src="/images/play/logo-ludigame.png" 
-                        alt="LudiGame Logo" 
-                        width={220} 
-                        height={80} 
+                    <Image
+                        src="/images/play/logo-ludigame.png"
+                        alt="LudiGame Logo"
+                        width={220}
+                        height={80}
                         className={styles.logo}
                         style={{ width: '100%', height: 'auto' }}
                     />
@@ -130,7 +105,7 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
                             placeholder="Ejemplo: 123456"
                             required
                         />
-                        
+
                         <label htmlFor="playerName">Tu Nombre</label>
                         <input
                             type="text"
@@ -141,12 +116,12 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
                             placeholder="Ejemplo: Ana"
                             required
                         />
-                        
+
                         {error && <span className={styles.errorMessage}>{error}</span>}
 
-                        <button 
-                            type="submit" 
-                            className={styles.joinButton} 
+                        <button
+                            type="submit"
+                            className={styles.joinButton}
                             disabled={!isFormValid || loading}
                         >
                             {loading ? "Entrando..." : "Unirse"}
@@ -158,15 +133,15 @@ export const StudentLobby = ({ avatars }: StudentLobbyProps) => {
                         <p>Selecciona tu avatar:</p>
                         <div className={styles.avatarsGrid}>
                             {avatars.map((avatar) => (
-                                <div 
-                                    key={avatar.id} 
+                                <div
+                                    key={avatar.id}
                                     className={`${styles.avatarWrapper} ${selectedAvatarId === avatar.id ? styles.avatarSelected : ''}`}
                                     onClick={() => setSelectedAvatarId(avatar.id)}
                                 >
-                                    <img 
-                                        src={avatar.urlImagen} 
-                                        alt={avatar.nombre} 
-                                        className={styles.avatarImage} 
+                                    <img
+                                        src={avatar.urlImagen}
+                                        alt={avatar.nombre}
+                                        className={styles.avatarImage}
                                     />
                                 </div>
                             ))}

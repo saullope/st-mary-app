@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button, Alert, Card, Spinner, Table, Modal } from 'react-bootstrap';
+import { Button, Alert, Card, Spinner, Table } from 'react-bootstrap';
 import { FaUsersCog, FaTrash } from 'react-icons/fa';
 import styles from './Settings.module.css';
 
@@ -19,7 +19,6 @@ export const AdminUsers = () => {
     const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState<{type: 'success' | 'danger', text: string} | null>(null);
 
-    // Modal state
     const [showModal, setShowModal] = useState(false);
     const [userToDelete, setUserToDelete] = useState<UserData | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -154,31 +153,51 @@ export const AdminUsers = () => {
                 </Card.Body>
             </Card>
 
-            {/* Delete Confirmation Modal */}
-            <Modal show={showModal} onHide={() => !isDeleting && setShowModal(false)} centered>
-                <Modal.Header closeButton={!isDeleting}>
-                    <Modal.Title className="text-danger">Confirmar Eliminación</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Alert variant="warning" className="fw-bold mb-3">
-                        ¡Atención! Esta acción es irreversible.
-                    </Alert>
-                    <p>
-                        ¿Estás seguro de que deseas eliminar permanentemente a <strong>{userToDelete?.nombre}</strong>?
-                    </p>
-                    <p className="text-muted small">
-                        Esto eliminará todos sus datos, incluyendo las actividades creadas y los reportes de sus estudiantes.
-                    </p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)} disabled={isDeleting}>
-                        Cancelar
-                    </Button>
-                    <Button variant="danger" onClick={handleDelete} disabled={isDeleting}>
-                        {isDeleting ? <Spinner size="sm" /> : 'Sí, Eliminar Permanentemente'}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            {showModal && (
+                <div 
+                    className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}
+                    onClick={() => !isDeleting && setShowModal(false)}
+                >
+                    <Card 
+                        style={{ maxWidth: '500px', width: '90%' }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <Card.Header className="bg-danger text-white d-flex justify-content-between align-items-center">
+                            <h5 className="m-0">Confirmar Eliminación</h5>
+                            {!isDeleting && (
+                                <Button 
+                                    variant="link" 
+                                    className="text-white p-0" 
+                                    onClick={() => setShowModal(false)}
+                                    style={{ fontSize: '1.5rem', lineHeight: 1 }}
+                                >
+                                    ×
+                                </Button>
+                            )}
+                        </Card.Header>
+                        <Card.Body>
+                            <Alert variant="warning" className="fw-bold mb-3">
+                                ¡Atención! Esta acción es irreversible.
+                            </Alert>
+                            <p>
+                                ¿Estás seguro de que deseas eliminar permanentemente a <strong>{userToDelete?.nombre}</strong>?
+                            </p>
+                            <p className="text-muted small">
+                                Esto eliminará todos sus datos, incluyendo las actividades creadas y los reportes de sus estudiantes.
+                            </p>
+                        </Card.Body>
+                        <Card.Footer className="d-flex justify-content-end gap-2">
+                            <Button variant="secondary" onClick={() => setShowModal(false)} disabled={isDeleting}>
+                                Cancelar
+                            </Button>
+                            <Button variant="danger" onClick={handleDelete} disabled={isDeleting}>
+                                {isDeleting ? <Spinner size="sm" /> : 'Sí, Eliminar Permanentemente'}
+                            </Button>
+                        </Card.Footer>
+                    </Card>
+                </div>
+            )}
         </div>
     );
 };

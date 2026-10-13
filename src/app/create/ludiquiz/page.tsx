@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getActivityForEdit } from '@/app/actions/getActivityForEdit';
-import { ModalMultimedia, LoadMultimediaFile, AnswerContainer, QuestionListItem } from "@/components/editor";
+import { ModalMultimedia, CanvaEmbedModal, LoadMultimediaFile, AnswerContainer, useContentSlides, EditorSidebar, EditorGamificationColumn, EditorAddButton, EditorFooterButton, QuestionList, moveItem } from "@/components/editor";
+import { SiCanva } from "react-icons/si";
+import { notify } from "@/components/ui";
 import style2 from '@/styles/pages/ludiquiz.module.css';
 import { useTranslations } from 'next-intl';
-import { LudiQuizQuestion } from '@/lib/types/';
+import { LudiQuizQuestion, MediaType, createContentSlide } from '@/lib/types/';
 import { useActivityEditor } from "@/context/ActivityEditorContext";
 import LudiQuizTour from "./LudiQuizTour";
 
@@ -18,9 +20,9 @@ export default function LudiQuiz() {
     const { state, setActivityType, setQuestions, setTitle, updateConfig, setActivityId, setBackgroundImage } = useActivityEditor();
     const searchParams = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const { backgroundImage, fullScreen } = state; // Usar valores del contexto
-    
+
     // Inicializar el tipo de actividad al montar
     useEffect(() => {
         setActivityType("ludiquiz");
@@ -30,13 +32,14 @@ export default function LudiQuiz() {
     const [showYoutube, setShowYoutube] = useState(false);
     const [showUnsplash, setShowUnsplash] = useState(false);
     const [showFreesound, setShowFreesound] = useState(false);
-    
+    const [showPixabay, setShowPixabay] = useState(false);
+
     // Estado local para la "Pregunta en Edición" (Staging area)
     const [questionId, setQuestionId] = useState(1);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [questionText, setQuestionText] = useState("");
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
-    
+
     const [newQuestion, setNewQuestion] = useState<LudiQuizQuestion>({
         id: questionId,
         text: "",
@@ -51,9 +54,22 @@ export default function LudiQuiz() {
     // Lista de preguntas confirmadas localmente
     const [localQuestions, setLocalQuestions] = useState<LudiQuizQuestion[]>([]);
 
-    
+    const slides = useContentSlides<LudiQuizQuestion>({
+        questions: localQuestions,
+        setQuestions: setLocalQuestions,
+        allocateId: () => {
+            const id = questionId;
+            setQuestionId(id + 1);
+            // Mientras se edita otra pregunta, newQuestion es esa pregunta: no se le cambia el id.
+            if (editingId === null) setNewQuestion(prev => ({ ...prev, id: id + 1 }));
+            return id;
+        },
+        buildSlide: (id, title, url) => ({ ...createContentSlide(id, title, url), answers: [] }),
+    });
 
-    
+
+
+
     useEffect(() => {
         const loadActivity = async () => {
             const idParam = searchParams.get("id");
@@ -65,7 +81,7 @@ export default function LudiQuiz() {
                     setTitle(result.data.title);
                     updateConfig(result.data.config);
                     setBackgroundImage(result.data.backgroundImage);
-                    
+
                     if (result.data.questions && result.data.questions.length > 0) {
                         const questions = result.data.questions as LudiQuizQuestion[];
                         setLocalQuestions(questions);
@@ -84,7 +100,7 @@ export default function LudiQuiz() {
     useEffect(() => {
         // Crear una lista combinada para el contexto
         let questionsToSave: LudiQuizQuestion[] = [...localQuestions];
-        
+
         const currentDraft = {
             ...newQuestion,
             text: questionText,
@@ -97,7 +113,7 @@ export default function LudiQuiz() {
              if (index !== -1) {
                  questionsToSave[index] = currentDraft;
              }
-        } 
+        }
         // Si estamos agregando (y hay contenido), agregamos al final
         // El usuario pidió: "Al hacer clic en Guardar, el arreglo debe incluir la pregunta actual"
         // Esto lo logramos enviando el borrador actual al contexto.
@@ -124,15 +140,16 @@ export default function LudiQuiz() {
         return () => clearTimeout(timeoutId);
 
     }, [localQuestions, newQuestion, questionText, editingId, setQuestions]);
-    
+
     // --- Fin sincronización ---
 
     const handleShowUnsplash = () => setShowUnsplash(!showUnsplash);
     const handleShowYoutube = () => setShowYoutube(!showYoutube);
     const handleShowFreesound = () => setShowFreesound(!showFreesound);
+    const handleShowPixabay = () => setShowPixabay(!showPixabay);
 
     const handleSelectMediaNewQuestion = (type: string, url: string) => {
-        setNewQuestion({ ...newQuestion, mediaType: type as "image" | "youtube" | "audio" | "video", mediaUrl: url });
+        setNewQuestion({ ...newQuestion, mediaType: type as MediaType, mediaUrl: url });
     };
 
     // Funciones para manejar múltiples preguntas
@@ -159,9 +176,9 @@ export default function LudiQuiz() {
             event.preventDefault();
             // Marcar como correcta y, si el formulario es válido, guardar
             toggleCorrectAnswerInNewQuestion(newQuestion.answers[index].id);
-            
+
             // Check validity after toggling (using the updated state indirectly or waiting)
-            // It's safer to just toggle for now to avoid state staleness issues, 
+            // It's safer to just toggle for now to avoid state staleness issues,
             // but we can encourage them to hit Ctrl+Shift+Enter or just let them press Enter on the button.
             return;
         }
@@ -169,7 +186,7 @@ export default function LudiQuiz() {
         if (event.key === 'Enter') {
             event.preventDefault();
             const inputs = document.querySelectorAll('.answer-input-field') as NodeListOf<HTMLInputElement>;
-            
+
             if (index < inputs.length - 1) {
                 // Hay otra respuesta abajo, le pasamos el foco
                 inputs[index + 1].focus();
@@ -199,7 +216,7 @@ export default function LudiQuiz() {
     const updateAnswerTextInNewQuestion = (id: number, text: string) => {
         setNewQuestion(prev => ({
             ...prev,
-            answers: prev.answers.map(answer => 
+            answers: prev.answers.map(answer =>
                 answer.id === id ? { ...answer, text } : answer
             )
         }));
@@ -244,6 +261,15 @@ export default function LudiQuiz() {
     const triggerValidation = () => {
         setShowErrors(true);
         setTimeout(() => setShowErrors(false), 3000); // Ocultar después de 3 segundos
+
+        const reason = !isQuestionTextValid
+            ? "Falta escribir la pregunta."
+            : !hasEnoughAnswers
+                ? "Agrega al menos 2 respuestas."
+                : !areAllAnswersFilled
+                    ? "Completa el texto en todas las respuestas."
+                    : "Marca cuál es la respuesta correcta.";
+        notify.warning("No se pudo guardar la pregunta", reason);
     };
 
     const handleAddQuestion = () => {
@@ -258,7 +284,7 @@ export default function LudiQuiz() {
             id: questionId
         };
 
-        setLocalQuestions(prev => [...prev, questionToAdd]); 
+        setLocalQuestions(prev => [...prev, questionToAdd]);
         setQuestionId(prev => prev + 1);
         setQuestionText("");
         setNewQuestion({
@@ -274,7 +300,7 @@ export default function LudiQuiz() {
     };
 
     const handleEditQuestion = (id: number) => {
-        const question = localQuestions.find(q => q.id === id); 
+        const question = localQuestions.find(q => q.id === id);
         if (question) {
             setEditingId(id);
             setQuestionText(question.text);
@@ -288,11 +314,11 @@ export default function LudiQuiz() {
             return;
         }
 
-        setLocalQuestions(prev => prev.map(q => 
-            q.id === editingId 
+        setLocalQuestions(prev => prev.map(q =>
+            q.id === editingId
                 ? { ...newQuestion, text: questionText }
                 : q
-        )); 
+        ));
         setEditingId(null);
         setQuestionText("");
         // Reset to new question state for adding next one
@@ -309,7 +335,12 @@ export default function LudiQuiz() {
     };
 
     const handleDeleteQuestion = (id: number) => {
-        setLocalQuestions(prev => prev.filter(q => q.id !== id)); 
+        setLocalQuestions(prev => prev.filter(q => q.id !== id));
+        if (editingId === id) handleCancelEdit();
+    };
+
+    const handleMoveQuestion = (id: number, direction: -1 | 1) => {
+        setLocalQuestions(prev => moveItem(prev, id, direction));
     };
 
     const handleCancelEdit = () => {
@@ -331,81 +362,41 @@ export default function LudiQuiz() {
         <>
             <LudiQuizTour />
             {/* El Navbar ahora está en layout.tsx */}
-            
-            <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}> 
-                {!fullScreen && (
-                    <div className="col-2 card shadow-sm rounded p-3 me-3" style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}>
-                        <h5 className="mb-3 text-muted">Preguntas ({localQuestions.length})</h5>
-                        <ul className="list-group list-group-flush p-0 mb-3">
-                            {localQuestions.map((q) => (
-                                <QuestionListItem
-                                    key={q.id}
-                                    id={q.id}
-                                    text={q.text}
-                                    mediaType={q.mediaType}
-                                    mediaUrl={q.mediaUrl}
-                                    correctAnswer={q.answers.find(a => a.isCorrect) ? "true" : "false"}
-                                    activityType="ludiquiz"
-                                    isSelected={editingId === q.id}
-                                    onClick={() => handleEditQuestion(q.id)}
-                                    onDelete={() => handleDeleteQuestion(q.id)}
-                                />
-                            ))}
-                            {!editingId && (
-                                <QuestionListItem
-                                    id={newQuestion.id}
-                                    text={newQuestion.text || "Nueva pregunta..."}
-                                    mediaType={newQuestion.mediaType}
-                                    mediaUrl={newQuestion.mediaUrl}
-                                    correctAnswer={newQuestion.answers.find(a => a.isCorrect) ? "true" : "false"}
-                                    activityType="ludiquiz"
-                                    isSelected={true}
-                                    onClick={() => {}}
-                                />
-                            )}
-                        </ul>
 
-                        <div className="d-flex flex-column gap-2 mt-auto">
-                            <button
-                                className="btn w-100"
-                                onClick={editingId ? handleUpdateQuestion : handleAddQuestion}
-                                style={{
-                                    background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                                    border: 'none',
-                                    color: 'white',
-                                    fontWeight: 'bold',
-                                    borderRadius: '15px',
-                                    padding: '12px',
-                                    boxShadow: '0 4px 15px rgba(40, 167, 69, 0.3)',
-                                    transition: 'all 0.3s ease',
-                                    fontFamily: 'Comic Sans MS, cursive'
-                                }}
-                            >
-                                {editingId !== null ? "Guardar Cambios" : "Agregar Pregunta"}
-                            </button>
-                            {editingId && (
-                                <button
-                                    className="btn w-100"
-                                    onClick={handleCancelEdit}
-                                    style={{
-                                        background: 'linear-gradient(135deg, #6c757d 0%, #495057 100%)',
-                                        border: 'none',
-                                        color: 'white',
-                                        fontWeight: 'bold',
-                                        borderRadius: '15px',
-                                        padding: '12px',
-                                        boxShadow: '0 4px 15px rgba(108, 117, 125, 0.3)',
-                                        transition: 'all 0.3s ease',
-                                        fontFamily: 'Comic Sans MS, cursive'
-                                    }}
-                                >
-                                    Cancelar Edición
-                                </button>
-                            )}
-                        </div>
-                    </div>
+            <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}>
+                {!fullScreen && (
+                    <EditorSidebar
+                        title="Preguntas"
+                        count={localQuestions.filter(q => !q.isSlide).length}
+                        actions={
+                            <EditorAddButton icon={<SiCanva />} onClick={slides.openNewSlide} title="Presentación de Canva que se muestra antes de las preguntas, sin tiempo ni puntaje">
+                                Agregar diapositiva
+                            </EditorAddButton>
+                        }
+                        footer={
+                            <>
+                                <EditorFooterButton variant="primary" onClick={editingId !== null ? handleUpdateQuestion : handleAddQuestion}>
+                                    {editingId !== null ? "Guardar cambios" : "Agregar pregunta"}
+                                </EditorFooterButton>
+                                {editingId !== null && (
+                                    <EditorFooterButton variant="secondary" onClick={handleCancelEdit}>
+                                        Cancelar edición
+                                    </EditorFooterButton>
+                                )}
+                            </>
+                        }
+                    >
+                        <QuestionList
+                            items={localQuestions.map(q => ({ ...q, tag: q.isSlide ? undefined : undefined }))}
+                            draft={editingId === null ? { ...newQuestion, text: questionText, tag: undefined } : null}
+                            selectedId={editingId}
+                            onSelect={(q) => (q.isSlide ? slides.openEditSlide(q.id) : handleEditQuestion(q.id))}
+                            onMove={handleMoveQuestion}
+                            onDelete={handleDeleteQuestion}
+                        />
+                    </EditorSidebar>
                 )}
-                
+
                 <div className={`col card shadow-sm rounded p-0 d-flex ${fullScreen ? "col-12" : "col"}`}
                     style={{
                         backgroundImage: `url(${backgroundImage})`,
@@ -418,33 +409,35 @@ export default function LudiQuiz() {
                         transition: "all 0.3s ease-in-out",
                         position: "relative",
                         border: 'none',
+                        borderRadius: 'var(--border-radius-2xl)',
+                        boxShadow: 'var(--shadow-md)',
                         overflow: 'hidden'
                     }}>
-                    
-                    {/* Overlay semi-transparente para mejorar legibilidad */}
+
+                    {/* Overlay semi-transparente para que la imagen no compita con la tarjeta */}
                     <div style={{
                         position: "absolute",
                         top: 0,
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        background: "rgba(0, 0, 0, 0.3)",
+                        background: "rgba(20, 10, 46, 0.42)",
                         zIndex: 1
                     }}></div>
-                    
+
                     <div className='col d-flex flex-column justify-content-center align-items-center position-relative' style={{ zIndex: 2, padding: '2rem' }}>
                         {/** INICIO CONTENIDO DEL EDITOR */}
                         <div className={style2.container}>
                             <div className="d-flex flex-column align-items-center mb-4 position-relative w-100">
-                                <h1 className={style2.acth1} style={{ 
-                                    fontFamily: 'Comic Sans MS, cursive',
+                                <h1 className={style2.acth1} style={{
+                                    fontFamily: 'var(--font-family-primary)',
                                     fontSize: '2.5rem',
-                                    fontWeight: 'bold',
-                                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                                    fontWeight: 'var(--font-weight-bold)',
+                                    textShadow: '0 1px 3px rgba(0,0,0,0.25)',
                                     color: '#ffffff', // Cambiado a blanco para contraste con fondo oscuro
                                     marginBottom: '0.5rem'
                                 }}>LudiQuiz</h1>
-                                
+
                                 {/* Indicador de autoguardado */}
                                 <div style={{
                                     height: '24px',
@@ -491,11 +484,11 @@ export default function LudiQuiz() {
                                             Falta escribir la pregunta
                                         </div>
                                     )}
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         className={`${style2['question-input']} textarea-question-input`}
                                         data-tour="question-input"
-                                        placeholder="Escribe tu pregunta aquí... (Presiona Enter para ir a las respuestas)" 
+                                        placeholder="Escribe tu pregunta aquí... (Presiona Enter para ir a las respuestas)"
                                         aria-label="Pregunta"
                                         value={questionText}
                                         onChange={handleInputNewQuestion}
@@ -512,8 +505,8 @@ export default function LudiQuiz() {
                                     onUpload={handleSelectMediaNewQuestion}
                                     onUnsplash={handleShowUnsplash}
                                     onYoutube={handleShowYoutube}
+                                    onPixabay={handleShowPixabay}
                                     onFreesound={handleShowFreesound}
-                                    styleComponent={"ludiquiz"}
                                 />
 
                                 <div className={style2['main-container']} style={{ position: 'relative' }}>
@@ -543,10 +536,10 @@ export default function LudiQuiz() {
                             </div>
                         </div>
                         {/** FIN CONTENIDO DEL EDITOR */}
-                        
+
                         {/* Tip del tema y atajos */}
                         <div className="mt-4 d-flex flex-column gap-2 align-items-center">
-                            <div className="alert alert-info border-0 shadow-sm d-inline-block m-0" style={{ 
+                            <div className="alert alert-info border-0 shadow-sm d-inline-block m-0" style={{
                                 borderRadius: '20px',
                                 background: 'rgba(255, 255, 255, 0.9)',
                                 color: '#0dcaf0',
@@ -557,7 +550,7 @@ export default function LudiQuiz() {
                                     <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
                                 </small>
                             </div>
-                            <div className="alert alert-secondary border-0 shadow-sm d-inline-block m-0" style={{ 
+                            <div className="alert alert-secondary border-0 shadow-sm d-inline-block m-0" style={{
                                 borderRadius: '20px',
                                 background: 'rgba(0, 0, 0, 0.6)',
                                 color: '#e2e8f0',
@@ -571,6 +564,8 @@ export default function LudiQuiz() {
                         </div>
                     </div>
                 </div>
+
+                <EditorGamificationColumn />
 
                 {/** Area de modal */}
                 <ModalMultimedia
@@ -591,6 +586,13 @@ export default function LudiQuiz() {
                     origin="freesound"
                     onSelectMedia={handleSelectMediaNewQuestion}
                 />
+                <ModalMultimedia
+                    show={showPixabay}
+                    handleClose={handleShowPixabay}
+                    origin="pixabay"
+                    onSelectMedia={handleSelectMediaNewQuestion}
+                />
+                <CanvaEmbedModal key={slides.modalKey} {...slides.modalProps} />
             </div>
         </>
     );

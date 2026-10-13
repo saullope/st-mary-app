@@ -2,9 +2,14 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import getCurrentUser from "@/lib/auth/getCurrentUser";
 
-export async function cloneTemplateActivity(templateActivityId: number, newUserId: string) {
+export async function cloneTemplateActivity(templateActivityId: number) {
   try {
+    const user = await getCurrentUser();
+    if (!user) return { success: false, error: "No autorizado. Debes iniciar sesión." };
+    const newUserId = user.id;
+
     // 1. Fetch the full template with all nested data
     const template = await prisma.ludiActividad.findFirst({
       where: { activityId: templateActivityId, activity: { isTemplate: true } as any },
@@ -13,7 +18,7 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
         config: true,
         preguntas: {
           include: {
-            opciones: true,
+            opciones: { include: { opcionRecursos: { include: { recurso: true } } } },
             preguntaRecursos: { include: { recurso: true } }
           }
         },
@@ -101,13 +106,16 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
             tiempoLimiteMs: tPregunta.tiempoLimiteMs,
             puntaje: tPregunta.puntaje,
             activo: tPregunta.activo,
+            esContenido: tPregunta.esContenido,
+            contenidoTexto: tPregunta.contenidoTexto,
+            tipoPregunta: tPregunta.tipoPregunta,
           }
         });
 
         // Copy Options
         if (tPregunta.opciones.length > 0) {
           for (const opt of tPregunta.opciones) {
-              await tx.ludiOpcion.create({
+              const newOpcion = await tx.ludiOpcion.create({
                   data: {
                       pregunta: { connect: { id: newPregunta.id } },
                       indice: opt.indice,
@@ -115,6 +123,16 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
                       esCorrecta: opt.esCorrecta || opt.es_correcta
                   }
               });
+              // La copia reutiliza el mismo recurso de imagen de la plantilla.
+              for (const opcionRecurso of opt.opcionRecursos) {
+                  await tx.ludiOpcionRecurso.create({
+                      data: {
+                          opcion: { connect: { id: newOpcion.id } },
+                          recurso: { connect: { id: opcionRecurso.recursoId } },
+                          rol: opcionRecurso.rol
+                      }
+                  });
+              }
           }
         }
 
@@ -140,7 +158,7 @@ export async function cloneTemplateActivity(templateActivityId: number, newUserI
                 etiqueta: tPareja.etiqueta,
             }
         });
-        
+
         if (tPareja.tarjetas.length > 0) {
             for (const tTarjeta of tPareja.tarjetas) {
                 await tx.ludiMemoriaTarjeta.create({

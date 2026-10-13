@@ -69,6 +69,8 @@ export default async function MyActivities({ searchParams }: PageProps) {
       case 1: return styles.badgeQuiz;
       case 2: return styles.badgeTF;
       case 3: return styles.badgeMemory;
+      case 4: return styles.badgeLesson;
+      case 5: return styles.badgeForm;
       default: return "bg-light text-dark";
     }
   };

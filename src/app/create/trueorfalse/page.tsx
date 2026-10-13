@@ -3,10 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getActivityForEdit } from '@/app/actions/getActivityForEdit';
-import { ModalMultimedia, LoadMultimediaFile, QuestionListItem } from "@/components/editor";
+import { ModalMultimedia, CanvaEmbedModal, LoadMultimediaFile, useContentSlides, EditorSidebar, EditorGamificationColumn, EditorAddButton, EditorFooterButton, QuestionList, moveItem, type EditorListTagTone } from "@/components/editor";
+import { SiCanva } from "react-icons/si";
+import { notify } from "@/components/ui";
 import style2 from '@/styles/pages/ludiquiz.module.css'; // Using the same style as LudiQuiz for consistency
-import { TrueOrFalseQuestion } from '@/lib/types/';
+import { TrueOrFalseQuestion, MediaType, createContentSlide } from '@/lib/types/';
 import { useActivityEditor } from "@/context/ActivityEditorContext";
+
+// Distintivo de la respuesta correcta en la lista lateral.
+const answerTag = (answer: TrueOrFalseQuestion["correctAnswer"]): { text: string; tone: EditorListTagTone } | undefined =>
+    answer === "true" ? { text: "Verdadero", tone: "success" } : answer === "false" ? { text: "Falso", tone: "danger" } : undefined;
 
 export default function TrueOrFalse() {
     // Contexto Global
@@ -23,13 +29,14 @@ export default function TrueOrFalse() {
     const [showYoutube, setShowYoutube] = useState(false);
     const [showUnsplash, setShowUnsplash] = useState(false);
     const [showFreesound, setShowFreesound] = useState(false);
+    const [showPixabay, setShowPixabay] = useState(false);
     const [showErrors, setShowErrors] = useState(false);
-    
+
     // Estado de la pregunta en edición
     const [questionId, setQuestionId] = useState(1);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
-    
+
     // Estado local sincronizado
     const [localQuestions, setLocalQuestions] = useState<TrueOrFalseQuestion[]>([]);
 
@@ -41,7 +48,19 @@ export default function TrueOrFalse() {
         mediaUrl: null,
     });
 
-    
+    const slides = useContentSlides<TrueOrFalseQuestion>({
+        questions: localQuestions,
+        setQuestions: setLocalQuestions,
+        allocateId: () => {
+            const id = questionId;
+            setQuestionId(id + 1);
+            // Mientras se edita otra pregunta, newQuestion es esa pregunta: no se le cambia el id.
+            if (editingId === null) setNewQuestion(prev => ({ ...prev, id: id + 1 }));
+            return id;
+        },
+        buildSlide: (id, title, url) => ({ ...createContentSlide(id, title, url), correctAnswer: null }),
+    });
+
     useEffect(() => {
         const loadActivity = async () => {
             const idParam = searchParams.get("id");
@@ -53,7 +72,7 @@ export default function TrueOrFalse() {
                     setTitle(result.data.title);
                     updateConfig(result.data.config);
                     setBackgroundImage(result.data.backgroundImage);
-                    
+
                     if (result.data.questions && result.data.questions.length > 0) {
                         const questions = result.data.questions as TrueOrFalseQuestion[];
                         setLocalQuestions(questions);
@@ -72,7 +91,7 @@ export default function TrueOrFalse() {
     useEffect(() => {
         // Crear una lista combinada para el contexto (persistiendo el borrador actual)
         let questionsToSave: TrueOrFalseQuestion[] = [...localQuestions];
-        
+
         const currentDraft = {
             ...newQuestion,
             id: editingId !== null ? editingId : newQuestion.id
@@ -84,7 +103,7 @@ export default function TrueOrFalse() {
              if (index !== -1) {
                  questionsToSave[index] = currentDraft;
              }
-        } 
+        }
         // Si estamos agregando (y hay contenido), agregamos al final
         else {
             // Validamos mínimamente
@@ -113,6 +132,7 @@ export default function TrueOrFalse() {
     const handleShowUnsplash = () => setShowUnsplash(!showUnsplash);
     const handleShowYoutube = () => setShowYoutube(!showYoutube);
     const handleShowFreesound = () => setShowFreesound(!showFreesound);
+    const handleShowPixabay = () => setShowPixabay(!showPixabay);
 
     // --- Validación Dinámica ---
     const isQuestionTextValid = newQuestion.text.trim().length > 0;
@@ -123,6 +143,11 @@ export default function TrueOrFalse() {
     const triggerValidation = () => {
         setShowErrors(true);
         setTimeout(() => setShowErrors(false), 3000);
+
+        const reason = !isQuestionTextValid
+            ? "Falta escribir la afirmación."
+            : "Marca si es Verdadero o Falso.";
+        notify.warning("No se pudo guardar la pregunta", reason);
     };
 
     const handleQuestionKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -150,7 +175,7 @@ export default function TrueOrFalse() {
 
         setLocalQuestions(prev => [...prev, questionToAdd]);
         setQuestionId(prev => prev + 1);
-        
+
         // Reset
         setNewQuestion({
             id: questionId + 1,
@@ -167,12 +192,12 @@ export default function TrueOrFalse() {
             return;
          }
 
-        setLocalQuestions(prev => prev.map(q => 
-            q.id === editingId 
+        setLocalQuestions(prev => prev.map(q =>
+            q.id === editingId
                 ? { ...newQuestion }
                 : q
         ));
-        
+
         setEditingId(null);
         // Reset to new question state
         setNewQuestion({
@@ -191,6 +216,10 @@ export default function TrueOrFalse() {
         }
     };
 
+    const handleMoveQuestion = (id: number, direction: -1 | 1) => {
+        setLocalQuestions(prev => moveItem(prev, id, direction));
+    };
+
     const handleEditQuestion = (id: number) => {
         const q = localQuestions.find(q => q.id === id);
         if (!q) return;
@@ -206,7 +235,7 @@ export default function TrueOrFalse() {
     };
 
     const handleSelectMediaNewQuestion = (type: string, url: string) => {
-        setNewQuestion({ ...newQuestion, mediaType: type as "image" | "youtube" | "audio" | "video", mediaUrl: url });
+        setNewQuestion({ ...newQuestion, mediaType: type as MediaType, mediaUrl: url });
     };
 
     const handleCancelEdit = () => {
@@ -224,78 +253,38 @@ export default function TrueOrFalse() {
         <>
              <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}>
                 {!fullScreen && (
-                    <div className="col-2 card shadow-sm rounded p-3 me-3" style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}>
-                         <h5 className="mb-3 text-muted">Preguntas ({localQuestions.length})</h5>
-                        <ul className="list-group list-group-flush p-0 mb-3">
-                            {localQuestions.map((q) => (
-                                <QuestionListItem
-                                    key={q.id}
-                                    id={q.id}
-                                    text={q.text}
-                                    mediaType={q.mediaType}
-                                    mediaUrl={q.mediaUrl}
-                                    correctAnswer={q.correctAnswer}
-                                    activityType="trueorfalse"
-                                    isSelected={editingId === q.id}
-                                    onClick={() => handleEditQuestion(q.id)}
-                                    onDelete={() => handleDeleteQuestion(q.id)}
-                                />
-                            ))}
-                            {!editingId && (
-                                <QuestionListItem
-                                    id={newQuestion.id}
-                                    text={newQuestion.text || "Nueva pregunta..."}
-                                    mediaType={newQuestion.mediaType}
-                                    mediaUrl={newQuestion.mediaUrl}
-                                    correctAnswer={newQuestion.correctAnswer ?? "false"}
-                                    activityType="trueorfalse"
-                                    isSelected={true}
-                                    onClick={() => {}}
-                                />
-                            )}
-                        </ul>
-
-                        <div className="d-flex flex-column gap-2 mt-auto">
-                            <button
-                                className="btn w-100"
-                                onClick={editingId ? handleUpdateQuestion : handleAddQuestion}
-                                style={{
-                                    background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                                    border: 'none',
-                                    color: 'white',
-                                    fontWeight: 'bold',
-                                    borderRadius: '15px',
-                                    padding: '12px',
-                                    boxShadow: '0 4px 15px rgba(40, 167, 69, 0.3)',
-                                    transition: 'all 0.3s ease',
-                                    fontFamily: 'Comic Sans MS, cursive'
-                                }}
-                            >
-                                {editingId !== null ? "Guardar Cambios" : "Agregar Pregunta"}
-                            </button>
-                            {editingId && (
-                                <button
-                                    className="btn w-100"
-                                    onClick={handleCancelEdit}
-                                    style={{
-                                        background: 'linear-gradient(135deg, #6c757d 0%, #495057 100%)',
-                                        border: 'none',
-                                        color: 'white',
-                                        fontWeight: 'bold',
-                                        borderRadius: '15px',
-                                        padding: '12px',
-                                        boxShadow: '0 4px 15px rgba(108, 117, 125, 0.3)',
-                                        transition: 'all 0.3s ease',
-                                        fontFamily: 'Comic Sans MS, cursive'
-                                    }}
-                                >
-                                    Cancelar Edición
-                                </button>
-                            )}
-                        </div>
-                    </div>
+                    <EditorSidebar
+                        title="Preguntas"
+                        count={localQuestions.filter(q => !q.isSlide).length}
+                        actions={
+                            <EditorAddButton icon={<SiCanva />} onClick={slides.openNewSlide} title="Presentación de Canva que se muestra antes de las preguntas, sin tiempo ni puntaje">
+                                Agregar diapositiva
+                            </EditorAddButton>
+                        }
+                        footer={
+                            <>
+                                <EditorFooterButton variant="primary" onClick={editingId !== null ? handleUpdateQuestion : handleAddQuestion}>
+                                    {editingId !== null ? "Guardar cambios" : "Agregar pregunta"}
+                                </EditorFooterButton>
+                                {editingId !== null && (
+                                    <EditorFooterButton variant="secondary" onClick={handleCancelEdit}>
+                                        Cancelar edición
+                                    </EditorFooterButton>
+                                )}
+                            </>
+                        }
+                    >
+                        <QuestionList
+                            items={localQuestions.map(q => ({ ...q, tag: q.isSlide ? undefined : answerTag(q.correctAnswer) }))}
+                            draft={editingId === null ? { ...newQuestion, text: newQuestion.text, tag: answerTag(newQuestion.correctAnswer) } : null}
+                            selectedId={editingId}
+                            onSelect={(q) => (q.isSlide ? slides.openEditSlide(q.id) : handleEditQuestion(q.id))}
+                            onMove={handleMoveQuestion}
+                            onDelete={handleDeleteQuestion}
+                        />
+                    </EditorSidebar>
                 )}
-                
+
                 <div className={`col card shadow-sm rounded p-0 d-flex ${fullScreen ? "col-12" : "col"}`}
                     style={{
                         backgroundImage: `url(${backgroundImage})`,
@@ -308,32 +297,34 @@ export default function TrueOrFalse() {
                         transition: "all 0.3s ease-in-out",
                         position: "relative",
                         border: 'none',
+                        borderRadius: 'var(--border-radius-2xl)',
+                        boxShadow: 'var(--shadow-md)',
                         overflow: 'hidden'
                     }}
                 >
-                    {/* Overlay semi-transparente para mejorar legibilidad */}
+                    {/* Overlay semi-transparente para que la imagen no compita con la tarjeta */}
                     <div style={{
                         position: "absolute",
                         top: 0,
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        background: "rgba(0, 0, 0, 0.3)",
+                        background: "rgba(20, 10, 46, 0.42)",
                         zIndex: 1
                     }}></div>
-                    
+
                     <div className="col d-flex flex-column justify-content-center align-items-center position-relative" style={{ zIndex: 2, padding: '2rem' }}>
                         <div className={style2.container}>
                             <div className="d-flex flex-column align-items-center mb-4 position-relative w-100">
-                                <h1 className={style2.acth1} style={{ 
-                                    fontFamily: 'Comic Sans MS, cursive',
+                                <h1 className={style2.acth1} style={{
+                                    fontFamily: 'var(--font-family-primary)',
                                     fontSize: '2.5rem',
-                                    fontWeight: 'bold',
-                                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                                    fontWeight: 'var(--font-weight-bold)',
+                                    textShadow: '0 1px 3px rgba(0,0,0,0.25)',
                                     color: '#ffffff',
                                     marginBottom: '0.5rem'
                                 }}>Verdadero o Falso</h1>
-                                
+
                                 {/* Indicador de autoguardado */}
                                 <div style={{
                                     height: '24px',
@@ -365,7 +356,7 @@ export default function TrueOrFalse() {
                                             )}
                                 </div>
                             </div>
-                            
+
                             <div className={style2.card}>
                                 <div style={{ position: 'relative', width: '100%' }}>
                                     {showErrors && !isQuestionTextValid && (
@@ -399,8 +390,8 @@ export default function TrueOrFalse() {
                                     onUpload={handleSelectMediaNewQuestion}
                                     onUnsplash={handleShowUnsplash}
                                     onYoutube={handleShowYoutube}
+                                    onPixabay={handleShowPixabay}
                                     onFreesound={handleShowFreesound}
-                                    styleComponent={"trueorfalse"} // Note: passing 'trueorfalse' although we use style2 from ludiquiz might need checking, but style2 seems generic enough here or we reuse it. Reusing ludiquiz styles for consistency.
                                 />
 
                                 <div className="d-flex justify-content-center gap-4 mt-4 w-100 flex-wrap" style={{ position: 'relative' }}>
@@ -419,19 +410,19 @@ export default function TrueOrFalse() {
                                             setNewQuestion({ ...newQuestion, correctAnswer: "true" })
                                         }
                                         style={{
-                                            background: newQuestion.correctAnswer === "true" 
+                                            background: newQuestion.correctAnswer === "true"
                                                 ? 'linear-gradient(135deg, #28a745 0%, #20c997 100%)'
                                                 : 'rgba(255, 255, 255, 0.9)',
                                             border: newQuestion.correctAnswer === "true" ? 'none' : '2px solid #28a745',
                                             color: newQuestion.correctAnswer === "true" ? 'white' : '#28a745',
                                             fontWeight: 'bold',
-                                            borderRadius: '20px',
+                                            borderRadius: 'var(--border-radius-lg)',
                                             padding: '15px 40px',
-                                            boxShadow: newQuestion.correctAnswer === "true" 
+                                            boxShadow: newQuestion.correctAnswer === "true"
                                                 ? '0 6px 20px rgba(40, 167, 69, 0.4)'
                                                 : '0 4px 10px rgba(0,0,0,0.1)',
                                             transition: 'all 0.3s ease',
-                                            fontFamily: 'Comic Sans MS, cursive',
+                                            fontFamily: 'var(--font-family-primary)',
                                             fontSize: '1.2rem',
                                             transform: newQuestion.correctAnswer === "true" ? 'scale(1.05)' : 'scale(1)',
                                             cursor: 'pointer',
@@ -455,19 +446,19 @@ export default function TrueOrFalse() {
                                             setNewQuestion({ ...newQuestion, correctAnswer: "false" })
                                         }
                                         style={{
-                                            background: newQuestion.correctAnswer === "false" 
+                                            background: newQuestion.correctAnswer === "false"
                                                 ? 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)'
                                                 : 'rgba(255, 255, 255, 0.9)',
                                             border: newQuestion.correctAnswer === "false" ? 'none' : '2px solid #dc3545',
                                             color: newQuestion.correctAnswer === "false" ? 'white' : '#dc3545',
                                             fontWeight: 'bold',
-                                            borderRadius: '20px',
+                                            borderRadius: 'var(--border-radius-lg)',
                                             padding: '15px 40px',
-                                            boxShadow: newQuestion.correctAnswer === "false" 
+                                            boxShadow: newQuestion.correctAnswer === "false"
                                                 ? '0 6px 20px rgba(220, 53, 69, 0.4)'
                                                 : '0 4px 10px rgba(0,0,0,0.1)',
                                             transition: 'all 0.3s ease',
-                                            fontFamily: 'Comic Sans MS, cursive',
+                                            fontFamily: 'var(--font-family-primary)',
                                             fontSize: '1.2rem',
                                             transform: newQuestion.correctAnswer === "false" ? 'scale(1.05)' : 'scale(1)',
                                             cursor: 'pointer',
@@ -492,7 +483,7 @@ export default function TrueOrFalse() {
 
                         {/* Tip del tema y atajos */}
                         <div className="mt-4 d-flex flex-column gap-2 align-items-center">
-                             <div className="alert alert-info border-0 shadow-sm d-inline-block m-0" style={{ 
+                             <div className="alert alert-info border-0 shadow-sm d-inline-block m-0" style={{
                                 borderRadius: '20px',
                                 background: 'rgba(255, 255, 255, 0.9)',
                                 color: '#0dcaf0',
@@ -503,7 +494,7 @@ export default function TrueOrFalse() {
                                     <strong>Tip:</strong> El tema de fondo se aplicará automáticamente a la actividad
                                 </small>
                             </div>
-                            <div className="alert alert-secondary border-0 shadow-sm d-inline-block m-0" style={{ 
+                            <div className="alert alert-secondary border-0 shadow-sm d-inline-block m-0" style={{
                                 borderRadius: '20px',
                                 background: 'rgba(0, 0, 0, 0.6)',
                                 color: '#e2e8f0',
@@ -517,7 +508,9 @@ export default function TrueOrFalse() {
                         </div>
                     </div>
                 </div>
-                
+
+                <EditorGamificationColumn />
+
                 <ModalMultimedia
                     show={showUnsplash}
                     handleClose={handleShowUnsplash}
@@ -536,6 +529,13 @@ export default function TrueOrFalse() {
                     origin="freesound"
                     onSelectMedia={handleSelectMediaNewQuestion}
                 />
+                <ModalMultimedia
+                    show={showPixabay}
+                    handleClose={handleShowPixabay}
+                    origin="pixabay"
+                    onSelectMedia={handleSelectMediaNewQuestion}
+                />
+                <CanvaEmbedModal key={slides.modalKey} {...slides.modalProps} />
             </div>
         </>
     );

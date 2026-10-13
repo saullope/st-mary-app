@@ -45,8 +45,8 @@ export const SidebarDashboard = () => {
                 <Image
                     src="/images/Logo-LudiGame.png"
                     alt="logo"
-                    width={80}
-                    height={80}
+                    width={190}
+                    height={114}
                     style={{ objectFit: 'contain' }}
                 />
             </div>

@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// Reglas de Firebase Storage de LudiGame. Toda subida desde la app va a uploads/
+// (ver src/lib/mediaSources.ts). Los estudiantes ven los archivos mediante URLs de
+// descarga con token, que no dependen de estas reglas, así que no necesitan cuenta.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    match /uploads/{allPaths=**} {
+      allow read: if request.auth != null;
+
+      // Docentes con sesión de Firebase; solo multimedia y documentos de hasta 20 MB
+      // (el límite de documentos de LudiLección, MAX_DOCUMENT_BYTES).
+      allow create, update: if request.auth != null
+        && request.resource.size < 20 * 1024 * 1024
+        && request.resource.contentType.matches(
+          'image/.*|video/.*|audio/.*|application/pdf|application/msword|application/vnd[.]ms-powerpoint|application/vnd[.]openxmlformats-officedocument[.].*'
+        );
+
+      allow delete: if false;
+    }
+
+    // Cualquier otra ruta queda cerrada.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

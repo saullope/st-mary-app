@@ -1,3 +1,18 @@
+/* Contenedor de las 3 tarjetas en una sola línea */
+.actionsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+  padding-top: 10px;
+}
+
+@media (min-width: 992px) {
+  .actionsGrid {
+    grid-template-columns: repeat(3, 1fr); /* Fuerza 3 columnas iguales en desktop */
+  }
+}
+
 /* Estilo base para las tarjetas que contienen GIFs */
 .tag {
     background: rgba(255,255,255,0.2);
@@ -166,14 +181,22 @@
 }
 
 .createCards {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 25px;
-    flex-wrap: wrap;
-    justify-content: center;
+    align-items: stretch;
+}
+
+@media (max-width: 767px) {
+    .createCards {
+        grid-template-columns: 1fr;
+    }
 }
 
 .createCard {
-    width: 280px;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
     border-radius: 20px;
     overflow: hidden;
     color: white;
@@ -234,6 +257,14 @@
 
 .cardTrueFalse {
     background: linear-gradient(135deg, #ff8a5c, #ffc27a);
+}
+
+.cardForm {
+    background: linear-gradient(135deg, #ff5c8a, #ffa36c);
+}
+
+.cardLesson {
+    background: linear-gradient(135deg, #00b4e6, #6a4bff);
 }
 
 .createImg {
@@ -439,61 +470,67 @@
 }
 
 .ludiCard {
-  height: 250px; /* Altura fija para uniformidad */
-  border-radius: 28px;
+  min-height: 250px;
+  border-radius: 24px;
   position: relative;
-  overflow: hidden; /* Mantiene el GIF dentro de los bordes redondeados */
-  padding: 30px;
+  overflow: hidden;
+  padding: 24px;
   display: flex;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ludiCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* GIF como fondo completo de la tarjeta, ilustración desplazada al cuadrante derecho */
+.ludiGifLarge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: 85% center !important;
+  z-index: 1;
+  pointer-events: none;
   transition: transform 0.3s ease;
 }
 
-.ludiContent {
-  position: relative;
-  z-index: 2;
-  width: 65%; /* Restringe el texto para que no choque con el GIF */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.ludiCard:hover .ludiGifLarge {
+  transform: scale(1.08); /* Efecto zoom suave al pasar el cursor */
 }
 
-/* GIF Redimensionado (Más grande y mejor posicionado) */
-.ludiGifLarge {
-  position: absolute;
-  right: -15px;  /* Sobresale un poco para verse más grande */
-  bottom: -15px; /* Sobresale un poco */
-  width: 200px;  /* Aumentado de 160px a 200px */
-  height: auto;
-  z-index: 1;
-  object-fit: contain;
-  pointer-events: none;
-  /* Suavizado de bordes para integrarse al fondo */
-  mask-image: linear-gradient(to top left, black 80%, transparent 100%);
-}
-
+/* Botón pequeño dentro de la tarjeta */
 .ludiBtnSmall {
   cursor: pointer;
   z-index: 3;
-  width: fit-content;
-  /* ... resto de tus estilos de botón */
-}
-/* Solo el botón tiene el puntero */
-.ludiBtnSmall {
-  cursor: pointer;
-  z-index: 5;
-  position: relative; /* Asegura que el click no sea bloqueado por el GIF */
+  position: relative;
   border: none;
-  background: #7c5cff;
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 8px 18px;
+  border-radius: 10px;
   font-weight: 600;
-  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  width: fit-content;
+  backdrop-filter: blur(4px);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cardDark .ludiBtnSmall {
+  background: #6a4bff;
 }
 
 .ludiBtnSmall:hover {
-  transform: scale(1.05);
-  background: #6a4bff;
+  transform: scale(1.04);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.cardDark .ludiBtnSmall:hover {
+  background: #5835e5;
 }
 
 /* Centrado del título de bienvenida */
@@ -507,28 +544,20 @@
   gap: 15px;
 }
 
-/* Ajuste del GIF para que no tape el botón */
-.ludiGif {
-  position: absolute;
-  right: -5px;
-  bottom: -5px;
-  width: 160px;
-  z-index: 1; /* Por debajo del botón */
-  pointer-events: none; /* El GIF es "invisible" para el mouse */
+
+.cardDark { 
+  background: #1C1530;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Colores de fondo exactos a la imagen deseada */
-.cardDark { background: #0f0a1e; }
-.cardPurple { background: linear-gradient(135deg, #4c2bc7, #6a4bff); }
-.cardBlue { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+.cardPurple { 
+  background: linear-gradient(135deg, #4f2cd9, #6d42f8); 
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
 
-.ludiContent {
-  position: relative;
-  z-index: 2; /* Por encima del GIF */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 70%; /* Deja espacio a la derecha para que se vea el GIF */
+.cardBlue { 
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6); 
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .ludiTag {
@@ -543,17 +572,27 @@
   color: white;
 }
 
+.ludiContent {
+  position: relative;
+  z-index: 2;
+  width: 50% !important;
+  max-width: 50% !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .ludiContent h3 {
-  font-size: 1.4rem;
-  margin: 10px 0;
+  font-size: 1.25rem;
+  margin: 10px 0 6px 0;
   color: white;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .ludiContent p {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
   margin-bottom: 15px;
 }
 

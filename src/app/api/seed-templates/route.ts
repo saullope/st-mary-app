@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import getCurrentUser from "@/lib/auth/getCurrentUser";
+import { isAdmin } from "@/lib/auth/guards";
 
 const TEMPLATES_DATA = [
   {
@@ -1602,6 +1604,10 @@ const TEMPLATES_DATA = [
 
 export async function GET() {
   try {
+    const user = await getCurrentUser();
+    if (!user || !isAdmin(user)) {
+      return NextResponse.json({ error: "No autorizado." }, { status: 403 });
+    }
     const grade1 = await prisma.lUDI_COMMON_GRADE.findFirst({ where: { key_string: 'firstGrade' } });
     const grade2 = await prisma.lUDI_COMMON_GRADE.findFirst({ where: { key_string: 'secondGrade' } });
     const grade3 = await prisma.lUDI_COMMON_GRADE.findFirst({ where: { key_string: 'thirdGrade' } });

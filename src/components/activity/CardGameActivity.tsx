@@ -21,11 +21,14 @@ export const CardGameActivity = ({ imageAct, title, page_to, subtitle, descripti
     let bgClass = designStyles.cardQuiz;
     if (typeId === 'ludimemory') bgClass = designStyles.cardMemory;
     if (typeId === 'trueorfalse') bgClass = designStyles.cardTrueFalse;
+    if (typeId === 'ludileccion') bgClass = designStyles.cardLesson;
+    if (typeId === 'ludiform') bgClass = designStyles.cardForm;
 
     return (
-        <div className="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+        <div className="d-flex justify-content-center">
             <Link 
                 href={`/create/${page_to}`} 
+                target="_blank" rel="noopener noreferrer"
                 className={`${designStyles.createCard} ${bgClass}`} 
                 style={{ textDecoration: 'none' }}
                 data-tour={typeId === 'ludiquiz' ? 'ludiquiz-card' : undefined}

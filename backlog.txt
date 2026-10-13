@@ -1,0 +1,220 @@
+============================================================================
+PRODUCT BACKLOG CONSOLIDADO - LUDIGAME / ST. MARY SCHOOL
+Fecha: Junio 2026
+============================================================================
+
+EPIC 1: AUTENTICACION Y CUENTAS
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-001  | Registro con Email y Contrasena             | Educador     | No Ludico | Alta      | Done        |
+| HU-002  | Inicio de Sesion con Email                  | Educador     | No Ludico | Alta      | Done        |
+| HU-003  | Inicio de Sesion con Google                 | Educador     | No Ludico | Alta      | Done        |
+| HU-004  | Recuperacion de Contrasena                  | Educador     | No Ludico | Alta      | Done        |
+| HU-005  | Cierre de Sesion Seguro                     | Educador     | No Ludico | Alta      | Done        |
+| HU-006  | Proteccion de Rutas (Middleware)            | Sistema      | No Ludico | Alta      | Done        |
+| HU-007  | Renovacion Automatica de Sesion             | Sistema      | No Ludico | Alta      | Done        |
+| HU-008  | Cambio de Contrasena                        | Educador     | No Ludico | Media     | Done        |
+| HU-009  | Verificacion y Reenvio de Email             | Educador     | No Ludico | Media     | Done        |
+| HU-010  | Edicion de Nombre de Perfil                 | Educador     | No Ludico | Baja      | Done        |
+
+EPIC 2: DASHBOARD DEL EDUCADOR
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-011  | Centro de Mando (Dashboard Hub)             | Educador     | No Ludico | Alta      | Done        |
+| HU-012  | Tour Guiado del Dashboard                   | Educador     | No Ludico | Media     | Done        |
+| HU-013  | Sidebar de Navegacion                       | Educador     | No Ludico | Alta      | Done        |
+| HU-014  | Navbar (Idioma, Perfil, Config)             | Educador     | No Ludico | Alta      | Done        |
+| HU-015  | Seccion de Borradores                       | Educador     | No Ludico | Media     | Done        |
+
+EPIC 3: GESTION DE ACTIVIDADES
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-016  | Listado con Paginacion                      | Educador     | No Ludico | Alta      | Done        |
+| HU-017  | Filtrado por Tipo y Busqueda                | Educador     | No Ludico | Alta      | Done        |
+| HU-018  | Tarjeta de Actividad con Acciones           | Educador     | No Ludico | Alta      | Done        |
+| HU-019  | Compartir Actividad (Copiar Enlace)         | Educador     | No Ludico | Media     | Done        |
+| HU-020  | Lanzar Sesion desde Tarjeta                 | Educador     | Ludico    | Alta      | Done        |
+| HU-021  | Eliminar Actividad (Soft Delete)            | Educador     | No Ludico | Media     | Done        |
+| HU-022  | Exportar Actividades a Excel                | Educador     | No Ludico | Baja      | Done        |
+| HU-023  | Creacion Rapida desde Dropdown              | Educador     | No Ludico | Media     | Done        |
+| HU-024  | Tarjeta del Creador (Popover)               | Educador     | No Ludico | Baja      | Done        |
+
+EPIC 4: EDITOR - GENERAL
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-025  | Nombrar Actividad (Modal Inicial)           | Educador     | No Ludico | Alta      | Done        |
+| HU-026  | Edicion Inline del Titulo                   | Educador     | No Ludico | Alta      | Done        |
+| HU-027  | Seleccion de Tema/Fondo Visual              | Educador     | Ludico    | Media     | Done        |
+| HU-028  | Modo Pantalla Completa                      | Educador     | No Ludico | Baja      | Done        |
+| HU-029  | Guardado de Actividad Nueva                 | Educador     | No Ludico | Alta      | Done        |
+| HU-030  | Actualizacion de Actividad Existente        | Educador     | No Ludico | Alta      | Done        |
+| HU-031  | Indicador de Auto-Guardado                  | Educador     | No Ludico | Media     | Done        |
+| HU-032  | Tour Guiado del Editor                      | Educador     | No Ludico | Media     | Done        |
+| HU-033  | Descarga de Respaldo JSON                   | Educador     | No Ludico | Baja      | Done        |
+
+EPIC 5: EDITOR LUDIQUIZ
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-034  | Crear Pregunta de Opcion Multiple           | Educador     | Ludico    | Alta      | Done        |
+| HU-035  | Agregar y Eliminar Opciones                 | Educador     | No Ludico | Alta      | Done        |
+| HU-036  | Adjuntar Imagen a Opcion                    | Educador     | Ludico    | Media     | Done        |
+| HU-037  | Atajos de Teclado del Editor                | Educador     | No Ludico | Media     | Done        |
+| HU-038  | Panel Lateral de Preguntas                  | Educador     | No Ludico | Alta      | Done        |
+| HU-039  | Editar y Cancelar Pregunta                  | Educador     | No Ludico | Alta      | Done        |
+
+EPIC 6: EDITOR VERDADERO O FALSO
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-040  | Crear Afirmacion V/F                        | Educador     | Ludico    | Alta      | Done        |
+| HU-041  | Panel Lateral de Afirmaciones               | Educador     | No Ludico | Alta      | Done        |
+
+EPIC 7: EDITOR LUDIMEMORY
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-042  | Subir Imagenes desde PC                     | Educador     | Ludico    | Alta      | Done        |
+| HU-043  | Buscar Imagenes en Unsplash                 | Educador     | No Ludico | Media     | Done        |
+| HU-044  | Grid de Imagenes con Eliminacion            | Educador     | No Ludico | Alta      | Done        |
+
+EPIC 8: MULTIMEDIA EN PREGUNTAS
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-045  | Subir Archivo Multimedia                    | Educador     | No Ludico | Alta      | Done        |
+| HU-046  | Buscar Video en YouTube                     | Educador     | No Ludico | Media     | Done        |
+| HU-047  | Buscar Audio en Freesound                   | Educador     | No Ludico | Baja      | Done        |
+| HU-048  | Previsualizacion y Ajuste de Multimedia     | Educador     | No Ludico | Media     | Done        |
+
+EPIC 9: PANEL LUDICO (GAMIFICACION)
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-049  | Configurar Grado, Tiempo y Puntos           | Educador     | Ludico    | Alta      | Done        |
+| HU-050  | Seleccionar Insignias de Recompensa         | Educador     | Ludico    | Alta      | Done        |
+| HU-051  | Seleccionar Misiones por Grado              | Educador     | Ludico    | Alta      | Done        |
+| HU-052  | Toggle de Voz y Validacion                  | Educador     | Ludico    | Media     | Done        |
+
+EPIC 10: VISTA DETALLE DE ACTIVIDAD
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-053  | Visualizar Detalle Completo                 | Educador     | No Ludico | Alta      | Done        |
+| HU-054  | Control de Acceso (Publica/Privada)         | Sistema      | No Ludico | Alta      | Done        |
+| HU-055  | Visor de Contenido con Scroll Spy           | Educador     | No Ludico | Media     | Done        |
+| HU-056  | Exportar Actividad a PDF                    | Educador     | No Ludico | Media     | Done        |
+
+EPIC 11: PLANTILLAS
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-057  | Catalogo con Filtros (Grado/Materia)        | Educador     | No Ludico | Media     | Done        |
+| HU-058  | Clonar Plantilla (Crear Copia)              | Educador     | No Ludico | Alta      | Done        |
+| HU-059  | Lanzar Sesion desde Plantilla               | Educador     | Ludico    | Media     | Done        |
+| HU-060  | Vista Previa de Plantilla                   | Educador     | No Ludico | Media     | Done        |
+
+EPIC 12: SESION DE JUEGO EN VIVO
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-061  | Crear Sesion con PIN Unico                  | Educador     | Ludico    | Alta      | Done        |
+| HU-062  | Sala de Control (Live Dashboard)            | Educador     | Ludico    | Alta      | Done        |
+| HU-063  | Controlar Flujo (Iniciar/Siguiente/Fin)     | Educador     | Ludico    | Alta      | Done        |
+| HU-064  | Feedback Docente Post-Sesion (Modal)        | Educador     | No Ludico | Media     | Done        |
+
+EPIC 13: LOBBY DEL ESTUDIANTE
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-065  | Ingresar PIN, Nombre y Avatar               | Estudiante   | Ludico    | Alta      | Done        |
+| HU-066  | Seleccion de Avatar                         | Estudiante   | Ludico    | Media     | Done        |
+| HU-067  | Pantalla de Espera (Listo)                  | Estudiante   | Ludico    | Media     | Done        |
+
+EPIC 14: MOTOR DE JUEGO DEL ESTUDIANTE
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-068  | Preparacion y Cuenta Regresiva              | Estudiante   | Ludico    | Alta      | Done        |
+| HU-069  | Visualizacion de Pregunta con Multimedia    | Estudiante   | Ludico    | Alta      | Done        |
+| HU-070  | Seleccion de Respuesta con Feedback         | Estudiante   | Ludico    | Alta      | Done        |
+| HU-071  | Calculo de Puntaje por Velocidad            | Estudiante   | Ludico    | Alta      | Done        |
+| HU-072  | HUD (Reloj, Puntaje, Progreso)              | Estudiante   | Ludico    | Alta      | Done        |
+| HU-073  | Pantalla de Resumen y Trofeo                | Estudiante   | Ludico    | Alta      | Done        |
+| HU-074  | Sincronizacion de Respuestas con Servidor   | Sistema      | No Ludico | Alta      | Done        |
+
+EPIC 15: RETROALIMENTACION POST-JUEGO
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-075  | Evaluacion del Estudiante (Emojis)          | Estudiante   | Ludico    | Media     | Done        |
+| HU-076  | Evaluacion Rapida del Docente (Estrellas)   | Educador     | No Ludico | Media     | Done        |
+
+EPIC 16: REPORTES Y ANALISIS
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-077  | Hub de Reportes con Metricas                | Educador     | No Ludico | Alta      | Done        |
+| HU-078  | Detalle de Reporte con Podio                | Educador     | Ludico    | Alta      | Done        |
+| HU-079  | Insights: Pregunta Dificil y Tiempo         | Educador     | No Ludico | Media     | Done        |
+| HU-080  | Tabla de Desempeno Individual               | Educador     | No Ludico | Alta      | Done        |
+| HU-081  | Sidebar de Detalle del Estudiante           | Educador     | No Ludico | Media     | Done        |
+| HU-082  | Bitacora de Sesion del Estudiante           | Educador     | No Ludico | Media     | Done        |
+| HU-083  | Exportar Reporte a PDF                      | Educador     | No Ludico | Media     | Done        |
+
+EPIC 17: CONFIGURACION Y PREFERENCIAS
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-084  | Preferencias de Juego por Defecto           | Educador     | No Ludico | Media     | Done        |
+| HU-085  | Cambio de Idioma (Espanol/Ingles)           | Educador     | No Ludico | Media     | In Progress |
+| HU-086  | Sidebar de Navegacion de Configuracion      | Educador     | No Ludico | Media     | Done        |
+
+EPIC 18: SEGURIDAD Y DATOS
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-087  | Exportacion de Datos Personales (JSON)      | Educador     | No Ludico | Baja      | Done        |
+
+EPIC 19: ADMINISTRACION
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-088  | Listado y Eliminacion de Usuarios (Admin)   | Admin IT     | No Ludico | Media     | Done        |
+
+EPIC 20: PAGINA PUBLICA (LANDING)
+| ID      | Titulo                                      | Rol          | Tipo      | Prioridad | Estado      |
+|---------|---------------------------------------------|--------------|-----------|-----------|-------------|
+| HU-089  | Landing Page Informativa                    | Visitante    | No Ludico | Alta      | Done        |
+| HU-090  | Navegacion Publica                          | Visitante    | No Ludico | Alta      | Done        |
+
+============================================================================
+RESUMEN ESTADISTICO
+============================================================================
+Total de Historias: 90
+Con Enfoque Ludico: 28 (31%)
+Sin Enfoque Ludico: 62 (69%)
+
+Por Rol:
+  - Educador: 72 (80%)
+  - Estudiante: 10 (11%)
+  - Sistema: 4 (4%)
+  - Administrador IT: 1 (1%)
+  - Visitante: 2 (2%)
+  - Mixto: 1 (1%)
+
+Por Prioridad:
+  - Alta: 48 (53%)
+  - Media: 34 (38%)
+  - Baja: 8 (9%)
+
+Por Estado:
+  - Done: 89 (99%)
+  - In Progress: 1 (HU-085 i18n incompleta)
+
+Por Epic:
+  - Autenticacion y Cuentas: 10
+  - Dashboard del Educador: 5
+  - Gestion de Actividades: 9
+  - Editor General: 9
+  - Editor LudiQuiz: 6
+  - Editor V/F: 2
+  - Editor LudiMemory: 3
+  - Multimedia: 4
+  - Panel Ludico: 4
+  - Vista Detalle: 4
+  - Plantillas: 4
+  - Sesion en Vivo: 4
+  - Lobby Estudiante: 3
+  - Motor de Juego: 7
+  - Retroalimentacion: 2
+  - Reportes: 7
+  - Configuracion: 3
+  - Seguridad y Datos: 1
+  - Administracion: 1
+  - Landing: 2

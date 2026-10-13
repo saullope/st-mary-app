@@ -21,7 +21,9 @@ async function main() {
   const tiposActividad = [
     { id: 1, nombre: 'LUDIQUIZ' },
     { id: 2, nombre: 'TRUEORFALSE' },
-    { id: 3, nombre: 'LUDYMEMORY' }
+    { id: 3, nombre: 'LUDYMEMORY' },
+    { id: 4, nombre: 'LUDILECCION' },
+    { id: 5, nombre: 'LUDIFORM' }
   ];
 
   for (const tipo of tiposActividad) {
@@ -37,7 +39,9 @@ async function main() {
     { id: 1, nombre: 'LOCAL_STORAGE' },
     { id: 2, nombre: 'UNSPLASH' },
     { id: 3, nombre: 'YOUTUBE' },
-    { id: 4, nombre: 'FREESOUND' }
+    { id: 4, nombre: 'FREESOUND' },
+    { id: 5, nombre: 'PIXABAY' },
+    { id: 6, nombre: 'CANVA' }
   ];
 
   for (const origen of origenes) {
@@ -53,7 +57,10 @@ async function main() {
     { id: 1, nombre: 'IMAGEN' },
     { id: 2, nombre: 'VIDEO' },
     { id: 3, nombre: 'AUDIO' },
-    { id: 4, nombre: 'PRESENTACION' }
+    { id: 4, nombre: 'PRESENTACION' },
+    { id: 5, nombre: 'PDF' },
+    { id: 6, nombre: 'WORD' },
+    { id: 7, nombre: 'POWERPOINT' }
   ];
 
   for (const tipo of tiposRecurso) {

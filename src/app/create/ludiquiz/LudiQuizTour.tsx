@@ -3,20 +3,29 @@
 import React, { useEffect, useRef } from "react";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import { useTourPreferences } from "@/hooks/useTourPreferences";
 
 export default function LudiQuizTour() {
   const driverInstance = useRef<any>(null);
+  const { shouldShowTour, markTourAsCompleted, preferences } = useTourPreferences();
 
   useEffect(() => {
-    // Check if the tour is triggered from the card click
-    const isTourActive = localStorage.getItem("ludiquiz_tour_active") === "true";
-    if (!isTourActive) return;
+    const isManuallyTriggered = localStorage.getItem("trigger_tour_ludiquiz_tour") === "true";
+    
+    if (!isManuallyTriggered && !shouldShowTour('ludiquiz_tour')) return;
+
+    if (isManuallyTriggered) {
+      localStorage.removeItem("trigger_tour_ludiquiz_tour");
+    }
+
+    const isHintsMode = preferences.tourMode === 'hints';
 
     const driverObj = driver({
-      showProgress: true,
-      allowClose: true, // Allow skip/close at any time for maximum ease
-      overlayColor: "rgba(29, 21, 58, 0.75)",
-      popoverClass: "driverjs-dashboard-theme",
+      showProgress: !isHintsMode,
+      allowClose: true,
+      overlayColor: isHintsMode ? 'rgba(0, 0, 0, 0)' : 'rgba(29, 21, 58, 0.75)',
+      popoverClass: isHintsMode ? 'driverjs-hints-only' : 'driverjs-dashboard-theme',
+      animate: !isHintsMode,
       nextBtnText: "Siguiente",
       prevBtnText: "Anterior",
       doneBtnText: "Finalizar",
@@ -72,6 +81,7 @@ export default function LudiQuizTour() {
         }
       ],
       onDestroyed: () => {
+        markTourAsCompleted('ludiquiz_tour');
         localStorage.removeItem("ludiquiz_tour_active");
       }
     });
@@ -79,7 +89,6 @@ export default function LudiQuizTour() {
     driverInstance.current = driverObj;
 
     const timer = setTimeout(() => {
-      // In case they click Next from answers to panel ludico, let's open the drawer programmatically
       const nextBtn = document.querySelector(".driver-popover-next-btn");
       if (nextBtn) {
         nextBtn.addEventListener("click", () => {
@@ -100,7 +109,7 @@ export default function LudiQuizTour() {
         driverInstance.current.destroy();
       }
     };
-  }, []);
+  }, [shouldShowTour, markTourAsCompleted, preferences.tourMode]);
 
   return null;
 }

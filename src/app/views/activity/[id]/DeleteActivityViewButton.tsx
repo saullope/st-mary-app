@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa6";
 import { softDeleteActivity } from "@/app/dashboard/my-activities/actions";
+import { notify } from "@/components/ui";
 import { useRouter } from "next/navigation";
 
 export function DeleteActivityViewButton({ activityId, activityName }: { activityId: number, activityName: string }) {
@@ -14,7 +15,7 @@ export function DeleteActivityViewButton({ activityId, activityName }: { activit
       setIsDeleting(true);
       const result = await softDeleteActivity(activityId);
       if (!result.success) {
-        alert(result.error);
+        notify.error("No se pudo dar de baja la actividad", result.error || "Inténtalo de nuevo.");
         setIsDeleting(false);
       } else {
         // Redirigir al dashboard tras eliminar exitosamente

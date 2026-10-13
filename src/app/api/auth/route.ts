@@ -1,22 +1,13 @@
-import { adminAuth } from "@/firebase/firebase-admin";
-import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
-import { AUTH_COOKIE_NAME } from "@/lib/auth/constants";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { readSessionClaims } from "@/lib/auth/session";
 
-export async function GET(request: NextRequest) {
-    const session = (await cookies()).get(AUTH_COOKIE_NAME)?.value || "";
-
-    if (!session) {
-        return NextResponse.json({ isLogged: false, uid: "", email: "" }, { status: 401 });
-    }
+export async function GET() {
+    const notLogged = NextResponse.json({ isLogged: false, uid: "", email: "" }, { status: 401 });
 
     try {
-        const decodedClaims = await adminAuth.verifySessionCookie(session, true);
-
-        if (!decodedClaims) {
-            return NextResponse.json({ isLogged: false, uid: "", email: "" }, { status: 401 });
-        }
+        const decodedClaims = await readSessionClaims();
+        if (!decodedClaims) return notLogged;
 
         // Fetch User from SQL to ensure we have the latest name/details without Firestore
         const user = await prisma.ludiUser.findFirst({
@@ -32,7 +23,7 @@ export async function GET(request: NextRequest) {
             photoURL: decodedClaims.picture || "",
             role: user?.rol?.nombre || "EDUCADOR"
         }, { status: 200 });
-    } catch (error) {
-        return NextResponse.json({ isLogged: false, uid: "", email: "" }, { status: 401 });
+    } catch {
+        return notLogged;
     }
 }

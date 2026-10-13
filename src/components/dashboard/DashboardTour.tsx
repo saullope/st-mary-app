@@ -3,15 +3,22 @@
 import React, { useEffect } from "react";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import { useTourPreferences } from "@/hooks/useTourPreferences";
 
 export default function DashboardTour() {
+  const { shouldShowTour, markTourAsCompleted, preferences } = useTourPreferences();
+
   useEffect(() => {
-    // 2. Configure and instantiate driver.js with the Ludi Dashboard theme
+    if (!shouldShowTour('dashboard_tour')) return;
+
+    const isHintsMode = preferences.tourMode === 'hints';
+
     const driverObj = driver({
-      showProgress: true,
-      allowClose: true, // ESC key and click on overlay can close for accessibility
-      overlayColor: "rgba(29, 21, 58, 0.75)", // Morado Profundo translucent overlay
-      popoverClass: "driverjs-dashboard-theme", // Lavender and Success themed popover class
+      showProgress: !isHintsMode,
+      allowClose: true,
+      overlayColor: isHintsMode ? 'rgba(0, 0, 0, 0)' : 'rgba(29, 21, 58, 0.75)',
+      popoverClass: isHintsMode ? 'driverjs-hints-only' : 'driverjs-dashboard-theme',
+      animate: !isHintsMode,
       nextBtnText: "Siguiente",
       prevBtnText: "Anterior",
       doneBtnText: "¡Entendido!",
@@ -63,18 +70,16 @@ export default function DashboardTour() {
         }
       ],
       onDestroyed: () => {
-        // Mark the dashboard tour as completed
-        localStorage.setItem("hasSeenDashboardTour", "true");
+        markTourAsCompleted('dashboard_tour');
       }
     });
 
-    // Run the tour with a small delay to ensure page elements and layouts are fully mounted
     const timer = setTimeout(() => {
       driverObj.drive();
     }, 1500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [shouldShowTour, markTourAsCompleted, preferences.tourMode]);
 
   return null;
 }

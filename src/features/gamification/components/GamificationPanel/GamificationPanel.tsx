@@ -1,113 +1,72 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useState, useEffect } from "react";
+import { SelectableCard } from "@/features/gamification/components/SelectableCard/SelectableCard";
 import styles from "./GamificationPanel.module.css";
 import { useActivityEditor } from "@/context/ActivityEditorContext";
+import { badgeCatalogFor, missionCatalogFor } from "@/features/gamification/achievementRules";
+import { BadgeArt } from "@/features/gamification/components/BadgeArt";
+import { useGameVoice } from "@/features/gamification/useGameVoice";
+import { useSelectedGrade, GRADE_LABELS } from "@/hooks/useSelectedGrade";
 
-// Definición de tipos para las misiones
-type Mission = {
-  id: string;
-  text: string;
-  studentText: string;
+/** Textos del panel que cambian según cómo se gana en cada tipo de actividad. */
+const PANEL_COPY: Record<string, { points: string; badges: string; grade: string }> = {
+  ludileccion: {
+    points: "",
+    badges: "Selecciona las insignias que tus estudiantes podrán ganar al completar la lección.",
+    grade: "de ahí dependen los bloques y misiones disponibles.",
+  },
+  ludiform: {
+    points: "Puntos por cada pregunta de opción acertada o respuesta escrita que apruebes.",
+    badges: "Selecciona las insignias que tus estudiantes podrán ganar al entregar el formulario.",
+    grade: "de ahí dependen las misiones disponibles.",
+  },
+  ludimemory: {
+    points: "Puntos que gana el estudiante por cada pareja que encuentra.",
+    badges: "Selecciona las insignias que tus estudiantes podrán ganar mientras encuentran las parejas.",
+    grade: "de ahí dependen las misiones disponibles.",
+  },
 };
 
-type MissionsByGrade = {
-  [key: number]: Mission[];
+const DEFAULT_COPY = {
+  points: "Define los puntos que el estudiante gana por cada respuesta correcta.",
+  badges: "Selecciona las insignias que podrán ganar tus estudiantes.",
+  grade: "de ahí dependen las misiones disponibles.",
 };
 
-// Misiones por grado (hardcoded por ahora, podría venir de props o DB)
-const MISIONES_POR_GRADO: MissionsByGrade = {
-  1: [
-    { id: "1-3-en-raya", text: "Responde 3 preguntas correctas seguidas", studentText: "¡Felicitaciones! Lograste responder 3 preguntas seguidas correctamente." },
-    { id: "1-rapidez-15s", text: "Responde rápido en menos de 15 segundos", studentText: "¡Genial! Respondiste rápido en menos de 15 segundos." },
-    { id: "1-20-puntos", text: "Acumula 20 puntos en total", studentText: "¡Increíble! Acumulaste 20 puntos." },
-  ],
-  2: [
-    { id: "2-4-en-raya", text: "Responde 4 preguntas correctas seguidas", studentText: "¡Excelente! Respondiste 4 preguntas seguidas correctamente." },
-    { id: "2-rapidez-12s", text: "Responde rápido en menos de 12 segundos", studentText: "¡Genial! Respondiste rápido en menos de 12 segundos." },
-    { id: "2-35-puntos", text: "Acumula 30 puntos en total", studentText: "¡Bravo! Acumulaste 30 puntos." },
-  ],
-  3: [
-    { id: "3-5-en-raya", text: "Responde 5 preguntas correctas seguidas", studentText: "¡Increíble! Respondiste 5 preguntas seguidas correctamente." },
-    { id: "3-rapidez-10s", text: "Responde rápido en menos de 10 segundos", studentText: "¡Genial! Respondiste rápido en menos de 10 segundos." },
-    { id: "3-45-puntos", text: "Acumula 40 puntos en total", studentText: "¡Fantástico! Acumulaste 40 puntos." },
-  ],
-};
-
-const INSIGNIAS = [
-  { id: "sabio", name: "Sabio", phrase: "¡Increíble! Respondiste muy bien", desc: "Para estudiantes que responden correctamente.", color: "#5FC4D0", img: "/images/panelludico/sabio.png" },
-  { id: "veloz", name: "Veloz", phrase: "¡Eso fue rapidísimo! Eres muy veloz", desc: "Para estudiantes que responden rápidamente.", color: "#9B51E0", img: "/images/panelludico/veloz.png" },
-  { id: "valiente", name: "Valiente", phrase: "No te rendiste y seguiste intentando", desc: "Para quienes, aunque fallen, siguen intentando.", color: "#FFDA5F", img: "/images/panelludico/valiente.png" },
-  { id: "mente-creativa", name: "Mente Creativa", phrase: "¡Qué creativo! Tus ideas son muy especiales", desc: "Para quienes aportan ideas originales y creativas.", color: "#FF7F7F", img: "/images/panelludico/mente-creativa.png" },
-  { id: "agil", name: "Ágil", phrase: "Encontraste la respuesta con rapidez e ingenio", desc: "Para estudiantes que resuelven con destreza y precisión.", color: "#6FCF97", img: "/images/panelludico/agil.png" },
-  { id: "detective", name: "Detective", phrase: "¡Eres todo un Detective! Descubriste la respuesta correcta.", desc: "Para quienes descubren la respuesta correcta.", color: "#A567B6", img: "/images/panelludico/detective.png" },
-];
-
-export default function GamificationPanel({
-  isOpen: controlledIsOpen,
-  onToggle: controlledOnToggle,
-  trigger
-}: {
-  isOpen?: boolean;
-  onToggle?: () => void;
-  trigger?: React.ReactNode;
-}) {
+/** Panel Lúdico integrado en la columna derecha de cada editor (ver EditorGamificationColumn). */
+export default function GamificationPanel() {
   const { state, updateConfig } = useActivityEditor();
-  const { config } = state;
+  const { config, activityType } = state;
+  // Solo LudiQuiz y Verdadero/Falso se juegan contra el reloj; las lecciones tampoco dan puntos.
+  const hasTimer = activityType === "ludiquiz" || activityType === "trueorfalse";
+  const hasPoints = activityType !== "ludileccion";
+  const isMemory = activityType === "ludimemory";
+  const copy = (activityType && PANEL_COPY[activityType]) || DEFAULT_COPY;
+  const badges = badgeCatalogFor(activityType);
+  const missionsByGrade = missionCatalogFor(activityType);
 
-  const [localIsOpen, setLocalIsOpen] = useState(false);
-  
-  const isControlled = controlledIsOpen !== undefined;
-  const isOpen = isControlled ? controlledIsOpen : localIsOpen;
-  
-  const togglePanel = () => {
-    if (controlledOnToggle) {
-      controlledOnToggle();
-    } else {
-      setLocalIsOpen(!localIsOpen);
-    }
-  };
+  // Una actividad guardada antes de tener catálogo propio puede traer insignias de otro tipo.
+  useEffect(() => {
+    if (!activityType) return;
+    const valid = config.selectedBadges.filter((id) => badges.some((b) => b.id === id));
+    if (valid.length !== config.selectedBadges.length) updateConfig({ selectedBadges: valid });
+  }, [activityType, badges, config.selectedBadges, updateConfig]);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  // Referencia para la voz sintetizada
-  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+  const { speak } = useGameVoice(config.voiceEnabled);
 
-  // Cargar voces al montar
+  // El grado ya no se elige aquí: se toma del grado que el docente
+  // seleccionó en /welcome-educator, porque de eso dependen las misiones
+  // disponibles. Se mantiene sincronizado en el estado del editor apenas
+  // se conoce (o cambia).
+  const selectedGradeId = useSelectedGrade();
   useEffect(() => {
-    const loadVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      voiceRef.current =
-        voices.find((v) => v.name.includes("Sofía") || v.name.includes("Sofia")) ||
-        voices.find((v) => /es(-|_)US|es(-|_)MX/.test(v.lang)) ||
-        voices[0] ||
-        null;
-    };
-
-    loadVoice();
-    window.speechSynthesis.onvoiceschanged = loadVoice;
-  }, []);
-
-  // Función para hablar
-  const speak = (text: string) => {
-    if (!config.voiceEnabled || !window.speechSynthesis) return;
-    
-    // Cancelar cualquier audio previo para evitar superposiciones
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    if (voiceRef.current) {
-      utterance.voice = voiceRef.current;
-      utterance.rate = 1.2;
-      utterance.pitch = 1.1;
+    if (selectedGradeId && selectedGradeId !== config.gradeId) {
+      updateConfig({ gradeId: selectedGradeId });
     }
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const handleGradeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    updateConfig({ gradeId: Number(e.target.value) });
-  };
+  }, [selectedGradeId, config.gradeId, updateConfig]);
 
   const handleBadgeToggle = (id: string, phrase: string, name: string) => {
     const currentBadges = new Set(config.selectedBadges);
@@ -123,26 +82,23 @@ export default function GamificationPanel({
   };
 
   const handleMissionToggle = (missionId: string, missionText: string) => {
-    // Feedback auditivo/visual simple
-    triggerConfetti();
-    if (config.voiceEnabled) speak(`Misión seleccionada: ${missionText}`);
-     
-    // Guardar estado de misiones seleccionadas
     const currentMissions = new Set(config.selectedMissions || []);
     if (currentMissions.has(missionId)) {
       currentMissions.delete(missionId);
     } else {
       currentMissions.add(missionId);
+      triggerConfetti();
+      if (config.voiceEnabled) speak(`Misión seleccionada: ${missionText}`);
     }
     updateConfig({ selectedMissions: Array.from(currentMissions) });
   };
 
   const handleSave = () => {
-    if (!config.timeLimit || config.timeLimit <= 0) {
+    if (hasTimer && (!config.timeLimit || config.timeLimit <= 0)) {
       showFeedback("Por favor, ingresa un valor válido de tiempo.");
       return;
     }
-    if (!config.pointsPerCorrect || config.pointsPerCorrect <= 0) {
+    if (hasPoints && (!config.pointsPerCorrect || config.pointsPerCorrect <= 0)) {
       showFeedback("Por favor, ingresa un valor válido de puntos.");
       return;
     }
@@ -166,180 +122,136 @@ export default function GamificationPanel({
     setTimeout(() => setShowConfetti(false), 3000); // Duración de la animación
   };
 
-  // Usamos un estado para saber si el componente ya se montó en el cliente
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  // Si no está montado, no renderizamos nada (evita errores de hidratación con portales)
-  if (!mounted) return null;
-
-  // Renderizamos el contenido usando un Portal al body
-  return createPortal(
+  return (
     <>
-      {/* Botón abrir panel */}
-      {trigger !== null ? (
-        trigger || (
-          <button
-            className={`${styles.togglePanel} ${isOpen ? styles.hidden : ""}`}
-            onClick={togglePanel}
-            title="Abrir Panel Lúdico"
-          >
-            Panel Lúdico
-          </button>
-        )
-      ) : null}
-
-      {/* Botón cerrar panel */}
-      {isOpen && (
-        <button
-          className={styles.returnButton}
-          onClick={togglePanel}
-          title="Cerrar Panel"
-          aria-label="Cerrar panel"
-        >
-          Cerrar
-        </button>
-      )}
-
-      {/* Panel Lateral */}
       <div
         id="sidebar-panel-ludico"
         data-tour="panel-ludico"
-        className={`${styles.gamificationPanel} ${isOpen ? styles.panelOpen : ""}`}
+        className={`${styles.gamificationPanel} ${styles.embedded}`}
         role="region"
         aria-label="Panel de configuración lúdica"
       >
-        {/* Decoración Superior */}
-        <div className={styles.panelPuntosArriba}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-
         <h3 className={styles.headerGlow}>Configuración Lúdica</h3>
 
-        {/* Selección de Grado */}
-        <label htmlFor="grado" className={styles.label}>
-          Selecciona el grado:
-        </label>
-        <select
-          id="grado"
-          value={config.gradeId}
-          onChange={handleGradeChange}
-          className={styles.select}
-        >
-          <option value="1">1° Grado</option>
-          <option value="2">2° Grado</option>
-          <option value="3">3° Grado</option>
-        </select>
+        {/* Configuración general */}
+        <section className={styles.sectionCard} aria-label="Configuración general">
+          <h4 className={styles.sectionTitle}>Configuración general</h4>
+          <div className={styles.configGrid}>
+            <div className={styles.configFieldFull}>
+              <span className={styles.label}>Grado:</span>
+              <div className={styles.select} aria-live="polite">
+                {GRADE_LABELS[config.gradeId] || "Sin definir"}
+              </div>
+              <div className={styles.desc}>
+                {selectedGradeId
+                  ? `Tomado del grado que seleccionaste en Bienvenida; ${copy.grade}`
+                  : "No se detectó un grado seleccionado. Ve a la pantalla de Bienvenida para elegir uno."}
+              </div>
+            </div>
 
-        {/* Configuración de Tiempo */}
-        <label htmlFor="tiempo" className={styles.label}>
-          Tiempo por actividad (segundos):
-        </label>
-        <input
-          type="number"
-          id="tiempo"
-          min="10"
-          max="300"
-          placeholder="Ingresa el tiempo"
-          className={styles.inputNumber}
-          value={config.timeLimit || ""}
-          onChange={(e) => updateConfig({ timeLimit: Number(e.target.value) })}
-        />
-        <div className={styles.desc}>
-          Ajusta el tiempo que tiene el estudiante para responder.
-        </div>
+            {hasTimer && (
+            <div>
+              <label htmlFor="tiempo" className={styles.label}>
+                Tiempo por actividad (segundos):
+              </label>
+              <input
+                type="number"
+                id="tiempo"
+                min="10"
+                max="300"
+                placeholder="Ingresa el tiempo"
+                className={styles.inputNumber}
+                value={config.timeLimit || ""}
+                onChange={(e) => updateConfig({ timeLimit: Number(e.target.value) })}
+              />
+              <div className={styles.desc}>
+                Ajusta el tiempo que tiene el estudiante para responder.
+              </div>
+            </div>
+            )}
 
-        {/* Configuración de Puntos */}
-        <label htmlFor="puntos" className={styles.label}>
-          Puntos por respuesta correcta:
-        </label>
-        <input
-          type="number"
-          id="puntos"
-          min="1"
-          max="100"
-          placeholder="Ingresa los puntos"
-          className={styles.inputNumber}
-          value={config.pointsPerCorrect || ""}
-          onChange={(e) => updateConfig({ pointsPerCorrect: Number(e.target.value) })}
-        />
-        <div className={styles.desc}>
-          Define los puntos que el estudiante gana por cada respuesta correcta.
-        </div>
+            {hasPoints && (
+            <div>
+              <label htmlFor="puntos" className={styles.label}>
+                {isMemory ? "Puntos por pareja encontrada:" : "Puntos por respuesta correcta:"}
+              </label>
+              <input
+                type="number"
+                id="puntos"
+                min="1"
+                max="100"
+                placeholder="Ingresa los puntos"
+                className={styles.inputNumber}
+                value={config.pointsPerCorrect || ""}
+                onChange={(e) => updateConfig({ pointsPerCorrect: Number(e.target.value) })}
+              />
+              <div className={styles.desc}>{copy.points}</div>
+            </div>
+            )}
+          </div>
+        </section>
 
         {/* Insignias */}
-        <fieldset className={styles.fieldset} aria-label="Insignias disponibles">
-          <legend className={styles.legend}>Insignias de recompensa</legend>
+        <section className={styles.sectionCard} aria-label="Insignias de recompensa disponibles">
+          <h4 className={styles.sectionTitle}>Insignias de recompensa</h4>
+          <p className={styles.sectionHint}>{copy.badges}</p>
           <div className={styles.insigniasContainer}>
-            {INSIGNIAS.map((badge) => (
-              <label key={badge.id} className={styles.checkboxLabel} htmlFor={`insignia-${badge.id}`}>
-                <input
-                  type="checkbox"
-                  id={`insignia-${badge.id}`}
-                  checked={config.selectedBadges.includes(badge.id)}
-                  onChange={() => handleBadgeToggle(badge.id, badge.phrase, badge.name)}
-                />
-                <div className={styles.insignia} style={{ "--color-bg": badge.color } as React.CSSProperties}>
-                  {/* Nota: Usamos <img> estándar porque las rutas son relativas a public/ y pueden cambiar dinámicamente */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={badge.img} alt={badge.name} />
-                  <span>{badge.name}</span>
-                  <p className={styles.insigniaDescription}>{badge.desc}</p>
-                </div>
-              </label>
+            {badges.map((badge) => (
+              <SelectableCard
+                key={badge.id}
+                selected={config.selectedBadges.includes(badge.id)}
+                onToggle={() => handleBadgeToggle(badge.id, badge.phrase, badge.name)}
+                ariaLabel={`Insignia ${badge.name}: ${badge.desc}`}
+                className={styles.badgeCard}
+              >
+                <BadgeArt badge={badge} size={72} className={styles.badgeImg} />
+                <span className={styles.badgeName}>{badge.name}</span>
+                <p className={styles.badgeDescription}>{badge.desc}</p>
+              </SelectableCard>
             ))}
           </div>
-        </fieldset>
+        </section>
 
         {/* Misiones */}
-        <fieldset className={styles.fieldset} aria-label="Misiones y Desafíos configurables">
-          <legend className={styles.legend}>Misiones y Desafíos</legend>
-          <div id="misiones-container">
-            {MISIONES_POR_GRADO[config.gradeId]?.map((mision) => (
-              <label key={mision.id} className={styles.checkboxLabel}>
-                <input 
-                    type="checkbox"
-                    id={`mision-${mision.id}`}
-                    checked={(config.selectedMissions || []).includes(mision.id)}
-                    onChange={() => handleMissionToggle(mision.id, mision.studentText)}
-                />
-                <span style={{ marginLeft: "8px" }}>{mision.text}</span>
-              </label>
+        <section className={styles.sectionCard} aria-label="Misiones y Desafíos configurables">
+          <h4 className={styles.sectionTitle}>Misiones y Desafíos</h4>
+          <p className={styles.sectionHint}>
+            Activa los retos opcionales que los estudiantes podrán completar.
+          </p>
+          <div id="misiones-container" className={styles.missionsGrid}>
+            {missionsByGrade[config.gradeId]?.map((mision) => (
+              <SelectableCard
+                key={mision.id}
+                selected={(config.selectedMissions || []).includes(mision.id)}
+                onToggle={() => handleMissionToggle(mision.id, mision.studentText)}
+                ariaLabel={`Misión: ${mision.text}`}
+                className={styles.missionCard}
+              >
+                <span className={styles.missionDot} aria-hidden="true"></span>
+                <span>{mision.text}</span>
+              </SelectableCard>
             ))}
           </div>
-        </fieldset>
+        </section>
 
         {/* Toggle Voz */}
-        <div className={styles.voiceToggleContainer}>
-          <input
-            type="checkbox"
-            id="voice-toggle"
-            checked={config.voiceEnabled}
-            onChange={(e) => updateConfig({ voiceEnabled: e.target.checked })}
-          />
-          <label htmlFor="voice-toggle" style={{ cursor: "pointer" }}>
-            Voz activada
-          </label>
-        </div>
+        <section className={styles.sectionCard} aria-label="Opciones de accesibilidad">
+          <SelectableCard
+            selected={config.voiceEnabled}
+            onToggle={() => updateConfig({ voiceEnabled: !config.voiceEnabled })}
+            ariaLabel="Voz de retroalimentación"
+            className={styles.voiceCard}
+          >
+            <span className={styles.missionDot} aria-hidden="true"></span>
+            <span>{config.voiceEnabled ? "Voz activada" : "Voz desactivada"}</span>
+          </SelectableCard>
+        </section>
 
         {/* Botón Guardar */}
         <div className={styles.saveContainer}>
           <button className={styles.saveBtn} onClick={handleSave}>
             Guardar Configuración
           </button>
-        </div>
-
-        {/* Decoración Inferior */}
-        <div className={styles.panelPuntosAbajo}>
-          <div></div>
-          <div></div>
-          <div></div>
         </div>
       </div>
 
@@ -369,7 +281,6 @@ export default function GamificationPanel({
           ))}
         </div>
       )}
-    </>,
-    document.body
+    </>
   );
 }

@@ -1,0 +1,76 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Commands
+
+```bash
+npm run dev          # Next.js dev server (localhost:3000)
+npm run build        # Production build
+npm run start        # Serve the production build
+npm run lint         # next lint (extends next/core-web-vitals)
+npm run test         # Jest (jsdom)
+npm run test:watch   # Jest watch mode
+npx jest path/to/file.test.ts        # Run a single test file
+npx jest -t "test name substring"    # Run tests matching a name
+npx tsc --noEmit     # Type-check without emitting (no separate typecheck script)
+```
+
+Prisma (SQL Server via `DATABASE_URL`):
+```bash
+npx prisma generate       # Regenerate the client after editing schema.prisma
+npx prisma migrate dev    # Create/apply a migration in dev
+npx prisma studio         # Browse the DB
+npx prisma db seed        # Runs prisma/seed.ts (configured in package.json)
+```
+
+## Architecture
+
+### Stack
+Next.js App Router (`src/app`) + TypeScript + Bootstrap 5/React-Bootstrap for layout primitives, with feature-specific styling in CSS Modules. Redux Toolkit (`src/store`) holds only the auth slice; per-feature UI/editor state lives in React Context (`src/context`) instead — don't reach for Redux for new local state.
+
+### Auth: two layers, two identity sources
+- **Firebase** (`src/firebase/firebase.ts` client, `firebase-admin.ts` server) is the identity provider. Client-side sign-in exchanges a Firebase ID token for a server session cookie (`AUTH_COOKIE_NAME = "session"`, `src/lib/auth/constants.ts`).
+- **`src/middleware.ts`** only checks whether the session cookie is *present* (fast path) against `PROTECTED_ROUTES` in `constants.ts` — it does not verify it. The "already logged in" redirect lives in the login/signup pages, which verify the session for real (a stale cookie must not bounce between login and the dashboard).
+- **Session lifetime** (`src/lib/auth/constants.ts`, `src/lib/auth/session.ts`): 30 min idle and 12 h absolute, per OWASP and NIST SP 800-63B AAL2. The cookie lives 30 min and `/api/auth/refresh` extends it only while the current session is still valid; the absolute limit is measured from the original `auth_time`. `/api/auth/login` only accepts a sign-in from the last 5 minutes. On the client, `useSessionTimeout` (mounted by `SessionInitializer`) tracks activity across tabs, renews while active, warns 2 min before and signs out; the live panel counts as activity.
+- **Play sessions**: `LUDI_SESION.estado` is read through `sessionPhase` (`src/lib/play/sessionState.ts`). Students wait in `WaitingRoom` until the teacher starts the activity; answer/award/form routes use `authorizeParticipant(..., { requireActive: true })`.
+- Real verification happens per-request in Server Components/Actions via `getSession()` (`src/lib/auth/getSession.ts`, calls `adminAuth.verifySessionCookie`) and `getCurrentUser()` (`getCurrentUser.ts`), which additionally looks up the matching `LudiUser` row in SQL Server by `firebaseUid`. Any server code that needs the app-level user (role, id used for Prisma relations) must call `getCurrentUser()`, not just trust the cookie.
+- `src/lib/auth/guards.ts` centralizes authorization: `requireUser`/`requireAdmin` for pages, `isAdmin`, and `canAccessActivity(user, activityId, "owner" | "play")`. Every Server Action and API route that reads or changes an educator's data must check the session user and ownership with these - never trust a user id sent by the client.
+- `/api/play/*` has no user session: students join with a PIN and have no account. Instead, `/api/play/join` issues a per-participant secret (only its SHA-256 is stored in `token_hash`); the client sends it via `postPlay` (`src/features/play/playApi.ts`) and every play route checks it with `authorizeParticipant` (`src/lib/play/participantToken.ts`). Participants created before this check have no hash and are allowed through.
+- After login, `SignInForm` returns to `?redirect=` through `safeRedirectPath` (`src/lib/auth/redirect.ts`, internal paths only).
+
+### Database: legacy-shaped schema via Prisma
+`prisma/schema.prisma` targets SQL Server. Model names are a mix of PascalCase (mapped to `LUDI_*` tables via `@@map`) and raw legacy tables. Two things to know before touching activity data:
+- An activity is split across a legacy `ACTIVITY` row and a `LudiActividad` row pointing at it 1:1 — creating an activity means creating both (see `src/app/actions/saveActivity.ts`).
+- Free-form/experimental settings that don't have their own columns are stashed as JSON in `LudiActividadConfig.ajustesJson` (e.g. selected badges/missions, background image) rather than normalized further — check there before adding new columns for editor config.
+- `src/app/actions/*.ts` (`saveActivity`, `updateActivity`, `getActivityForEdit`) are the only place activity read/write logic lives; they run inside `prisma.$transaction`.
+
+### i18n
+`next-intl` with locales `es` (default, unprefixed) and `en`, configured in `src/i18n/routing.ts` and `src/i18n/request.ts`. There is no `[locale]` route segment — routing is unprefixed for the default locale. Translation strings live in `messages/{es,en}.json`, both must be kept in sync when adding a key.
+
+### The activity editor (`/create/*`)
+Five activity types share one editor shell: `ludiquiz`, `ludimemory`, `trueorfalse`, `ludileccion`, `ludiform` (`src/app/create/<type>/page.tsx`), wrapped by `src/app/create/layout.tsx` which renders `CreateNavbar` and provides `ActivityEditorProvider`.
+- **`ActivityEditorContext`** (`src/context/ActivityEditorContext.tsx`) is the single source of truth for the activity being edited (title, type, background, questions, `GamificationConfig`) — it is per-editor-session client state, reset via `resetEditor()`, not persisted until `SaveActivityButton` calls the relevant Server Action.
+- **`GamificationPanel`** (`src/features/gamification/components/GamificationPanel`) is rendered by every editor through `EditorGamificationColumn`. Its fields depend on the activity type: only LudiQuiz/Verdadero-Falso have a timer, LudiLección has no points, and each type has its own badge/mission catalog (`badgeCatalogFor`/`missionCatalogFor` in `achievementRules.ts`).
+- Left question-list sidebar, header, and the `GamificationPanel` are "chrome" around a central preview canvas that mimics what the student will see — the canvas is intentionally more saturated/playful than the chrome around it; keep that contrast when touching editor styling.
+- Shared editor UI pieces live in `src/components/editor` (barrel-exported via `index.ts`); gamification-specific pieces live in `src/features/gamification`.
+- The left column of every list-based editor is built from the kit in `src/components/editor/list` (`EditorSidebar`, `EditorAddButton`, `EditorFooterButton`, `EditorList`/`EditorListItem`, `moveItem`). New editors should compose these instead of styling their own list items, so select/reorder/delete look and behave the same everywhere. `EditorTypePicker` is the shared "add an item of type X" button.
+- Block-style editors (LudiLección, LudiForm, LudiMemory) build the center column from `src/components/editor/canvas` (`EditorCanvas`, `EditorCard`, `EditorPlaceholder`, `EditorNotice`, `EditorGamificationColumn`, `editorFieldStyles`). The LudiQuiz/Verdadero-Falso canvas is intentionally left as its own markup.
+- **LudiLección** (`src/features/lesson`): a lesson is a sequence of content blocks stored as `LudiPregunta` rows with `esContenido = true` (reading text in `contenidoTexto`, media via `LUDI_PREGUNTA_RECURSO`). Allowed block kinds depend on the grade (`isBlockAllowedForGrade`, enforced in both the editor and the Server Actions). Rewards are completion-based (`evaluateLessonBadges`/`evaluateLessonMissions` in `achievementRules.ts`), not answer-based.
+- Content slides/blocks (`esContenido`) are untimed and unscored in `GameEngine`, and `/api/play/submit-answer` rejects them.
+- **LudiForm** (`src/features/form`): third grade only (`isFormAvailableForGrade`, checked in Crear actividad, the editor and the Server Actions). Questions are `LudiPregunta` rows with `tipoPregunta` = `single` | `multiple` | `long`; no timer. Students submit the whole form once via `/api/play/submit-form`, which grades closed questions server-side (`gradeFormAnswer`) and stores long answers as `estadoRevision = PENDIENTE` until the teacher grades them in Reportes (`reviewWrittenAnswer`). Pending answers are excluded from report statistics (`isPendingReview`).
+- **LudiMemory** (`src/features/memory`): each image is a `LudiMemoriaPareja` with two `LudiMemoriaTarjeta` (sides A/B). 2-12 images (`validateMemoryForSave`). No timer; `MemoryEngine` shuffles on start and `/api/play/submit-memory` sets the score server-side (pairs x `puntajeBase`) once per participant. Misses only affect badges.
+- Players: `ActivityPlayer` (`src/features/play`) picks `FormEngine`, `MemoryEngine` or `GameEngine` by activity type; all share `usePlaySession` (settings, participant, voice, achievements) and `PlayScreens` (background, ready card, achievements recap, summary actions). Use `ActivityPlayer` wherever an activity is played or previewed.
+
+### Styling
+Bootstrap utility classes are used for layout (`row`/`col-*`/`d-flex`), CSS Modules for component-specific styling, plus two overlapping design-token sources — know which one is actually live before using either:
+- `src/styles/variables.css` (imported globally via `globals.css`) defines a generic `--primary-color`/`--spacing-*`/`--shadow-*` token set used by the reusable `src/styles/components/*.module.css` primitives (Button, Card, etc.) and by the `/create` editor.
+- `src/styles/pages/LudiDesign.module.css` is the *actual* brand identity seen across `/dashboard` (deep violet `#6a4bff`/`#140a2e`, cyan accent `#00d4ff`, per-activity-type gradients). New UI in `/dashboard` should match this file's palette, not `variables.css`.
+
+## Project conventions
+
+- TypeScript strict mode; avoid `any`, prefer early returns and functional style.
+- No emojis or decorative symbols in code, comments, or commit messages generated for this repo.
+- Comments should be short and explain *why*, not *what* — remove dead/redundant code rather than leaving it commented out.
+- Prioritize accessibility (ARIA roles/labels) on interactive/gamified UI — see `SelectableCard`/`QuestionListItem` for the existing `role="button"`/`aria-pressed` pattern used instead of native `<button>` where a custom toggle card is needed.
+- API routes should validate input with Yup (`yup` is a dependency) even though not every existing route does this yet — validate new routes rather than following an unvalidated one as precedent.

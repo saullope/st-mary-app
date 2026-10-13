@@ -1,0 +1,169 @@
+/* LudiForm: formulario completo en una sola página, sobre el fondo del juego */
+
+.formArea {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 820px;
+  padding: 2rem 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+}
+
+.questionCard {
+  margin: 0;
+  padding: 1.5rem;
+  border: none;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  color: #2d2640;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.questionLegend {
+  float: left;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.questionLegend + * {
+  clear: both;
+}
+
+.questionNumber {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.questionText {
+  line-height: 1.35;
+}
+
+.questionType {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #6a4bff;
+}
+
+.optionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.optionRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.optionRow:hover {
+  border-color: #b8aaff;
+}
+
+.optionRow[data-checked="true"] {
+  border-color: #6a4bff;
+  background: rgba(106, 75, 255, 0.07);
+}
+
+.optionRow input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: #6a4bff;
+  flex-shrink: 0;
+}
+
+.optionRow:focus-within {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+.longAnswer {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  resize: vertical;
+  color: #2d2640;
+}
+
+.longAnswer:focus {
+  outline: none;
+  border-color: #6a4bff;
+  box-shadow: 0 0 0 3px rgba(106, 75, 255, 0.15);
+}
+
+.wordCount {
+  align-self: flex-end;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.submitRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.submitRow button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.submitRow button:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.remaining {
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-weight: 600;
+}
+
+.summaryLine {
+  margin: 0.25rem 0;
+  font-size: 1.05rem;
+  color: #4a4266;
+}
+
+@media (max-width: 768px) {
+  .questionCard {
+    padding: 1.1rem;
+  }
+
+  .questionLegend {
+    font-size: 1.1rem;
+  }
+}

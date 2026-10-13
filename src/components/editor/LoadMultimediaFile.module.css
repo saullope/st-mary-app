@@ -1,0 +1,246 @@
+.zone {
+  position: relative;
+  margin: 0 auto 20px auto;
+  padding: 20px;
+  border: 2px dashed #c9bfff;
+  border-radius: var(--border-radius-2xl, 24px);
+  background: linear-gradient(180deg, #faf9ff 0%, #f3f0ff 100%);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.zone:hover,
+.zoneOpen {
+  border-color: #6a4bff;
+}
+
+/* Estado vacío: invita a abrir el menú con iconos en vez de solo texto */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 0 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+.emptyTitle {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1d153a;
+}
+
+.emptyHint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--gray-500, #6b7280);
+}
+
+/* Botón "+" que despliega las opciones; rota a "x" cuando está abierto */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px auto 0;
+  padding: 0;
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6a4bff, #8b73ff);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(106, 75, 255, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.2s ease;
+}
+
+.toggle:hover {
+  box-shadow: 0 10px 24px rgba(106, 75, 255, 0.45);
+}
+
+.toggle:focus-visible,
+.option:focus-visible,
+.empty:focus-visible,
+.removeBtn:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+.toggleIcon {
+  display: flex;
+  transition: transform 0.25s ease;
+}
+
+.toggleOpen .toggleIcon {
+  transform: rotate(45deg);
+}
+
+/* Variante compacta cuando ya hay un archivo cargado */
+.toggleWide {
+  width: auto;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: var(--border-radius-lg, 12px);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.toggleRow {
+  display: flex;
+  justify-content: center;
+}
+
+/* Panel de opciones desplegable */
+.options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: max-height 0.3s ease, opacity 0.25s ease, transform 0.25s ease, margin-top 0.25s ease;
+}
+
+.optionsOpen {
+  max-height: 480px;
+  margin-top: 16px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 10px 14px;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--border-radius-xl, 16px);
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.option:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--option-color);
+  box-shadow: 0 10px 22px rgba(29, 21, 58, 0.12);
+}
+
+.option:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.optionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1.35rem;
+  color: var(--option-color);
+  background: var(--option-bg);
+}
+
+.optionTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1d153a;
+}
+
+/* Subida en progreso */
+.uploading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0;
+  color: #4a4266;
+  font-weight: 600;
+}
+
+.error {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #dc3545;
+}
+
+/* Vista previa del archivo cargado */
+.preview {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.previewItem {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.previewContent {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: var(--border-radius-xl, 16px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.removeBtn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #dc3545;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease;
+}
+
+.removeBtn:hover {
+  transform: scale(1.1);
+}
+
+.sizeControl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: #4a4266;
+}
+
+.sizeControl input {
+  width: 160px;
+  accent-color: #6a4bff;
+}
+
+@media (max-width: 768px) {
+  .options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

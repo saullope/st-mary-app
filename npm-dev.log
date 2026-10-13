@@ -1,0 +1,47 @@
+
+> st-mary-app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.5.0.2:3000
+- Environments: .env
+✓ Ready in 8.2s
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+○ Compiling /api/auth/refresh ...
+ GET /api/auth/refresh 200 in 14.9s (next.js: 14.9s, application-code: 66ms)
+ GET /dashboard 200 in 19.6s (next.js: 15.3s, proxy.ts: 116ms, application-code: 4.2s)
+[browser] Image with src "/images/Logo-LudiGame.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /api/auth 200 in 651ms (next.js: 488ms, application-code: 163ms)
+ GET /api/auth/refresh 200 in 27ms (next.js: 4ms, application-code: 23ms)
+ GET /api/auth 200 in 169ms (next.js: 6ms, application-code: 163ms)
+ POST /api/auth/signout 200 in 367ms (next.js: 352ms, application-code: 15ms)
+ GET /api/common/themes 200 in 433ms (next.js: 413ms, application-code: 19ms)
+ GET /api/user/config 401 in 485ms (next.js: 471ms, application-code: 13ms)
+Error join API: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+ POST /api/play/join 500 in 380ms (next.js: 355ms, application-code: 26ms)
+ GET /api/auth/refresh 200 in 15ms (next.js: 4ms, application-code: 11ms)
+ POST /api/auth/signout 200 in 14ms (next.js: 5ms, application-code: 10ms)
+○ Compiling /auth/login ...
+ GET /auth/login 200 in 5.3s (next.js: 5.1s, proxy.ts: 10ms, application-code: 113ms)
+User updated in DB: 7b2621d7-d780-446f-80dc-421caf4048f9 (admin@ludigame.com)
+ POST /api/auth/login 200 in 1256ms (next.js: 266ms, application-code: 990ms)
+ GET /welcome-educator 200 in 1017ms (next.js: 797ms, proxy.ts: 6ms, application-code: 215ms)
+ GET /welcome-educator 200 in 370ms (next.js: 10ms, proxy.ts: 6ms, application-code: 354ms)
+ GET /dashboard 200 in 370ms (next.js: 7ms, proxy.ts: 5ms, application-code: 358ms)
+ GET /api/auth 200 in 173ms (next.js: 4ms, application-code: 168ms)
+ GET /api/auth 200 in 175ms (next.js: 5ms, application-code: 170ms)
+✓ Compiled in 27ms
+✓ Compiled in 23ms
+✓ Compiled in 19ms
+✓ Compiled in 27ms
+✓ Compiled in 16ms
+✓ Compiled in 35ms
+✓ Compiled in 18ms
+✓ Compiled in 9ms
+✓ Compiled in 20ms
+✓ Compiled in 21ms
+✓ Compiled in 15ms
+[?25h

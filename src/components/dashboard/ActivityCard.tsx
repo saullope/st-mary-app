@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FaEye, FaPenToSquare, FaShareNodes, FaGamepad, FaListCheck, FaBrain, FaCheck, FaRocket } from "react-icons/fa6";
+import { FaEye, FaPenToSquare, FaShareNodes, FaGamepad, FaListCheck, FaBrain, FaCheck, FaRocket, FaBookOpen, FaClipboardList } from "react-icons/fa6";
 import styles from "@/styles/pages/my-activities.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
 import { DeleteActivityButton } from "@/app/dashboard/my-activities/DeleteActivityButton";
 import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
+import { notify } from "@/components/ui";
+import { getEditorRoute } from "@/lib/editorTab";
+import { sessionPhase } from "@/lib/play/sessionState";
 import CreatorCard from "./CreatorCard";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -32,7 +35,7 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
     if (result.success) {
         router.push(`/dashboard/live/${result.sessionId}`);
     } else {
-        alert(result.error);
+        notify.error("No se pudo lanzar la partida", result.error || "Inténtalo de nuevo.");
         setIsLaunching(false);
     }
   };
@@ -54,20 +57,13 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
       case 1: return <FaListCheck size={28} />; // Quiz
       case 2: return <FaGamepad size={28} />; // Verdadero/Falso
       case 3: return <FaBrain size={28} />; // LudiMemory
+      case 4: return <FaBookOpen size={28} />; // LudiLección
+      case 5: return <FaClipboardList size={28} />; // LudiForm
       default: return <FaGamepad size={28} />;
     }
   };
 
-  const getEditRoute = (id: number) => {
-    switch(id) {
-      case 1: return `/create/ludiquiz?id=${activity.activityId}`;
-      case 2: return `/create/trueorfalse?id=${activity.activityId}`;
-      case 3: return `/create/ludimemory?id=${activity.activityId}`;
-      default: return `/create?id=${activity.activityId}`;
-    }
-  };
-
-  const isActivityFinalized = activity.LUDI_SESION?.some((s: any) => s.estado === 'FINALIZADA') || false;
+  const isActivityFinalized = activity.LUDI_SESION?.some((s: any) => sessionPhase(s.estado) === 'finished') || false;
 
   return (
     <div className={styles.activityCard}>
@@ -134,9 +130,10 @@ export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, ses
             <FaEye size={18} />
           </Link>
           <Link 
-            href={getEditRoute(activity.tipoActividadId)} 
+            href={getEditorRoute(activity.tipoActividadId, activity.activityId)} 
             className={`${styles.actionButtonIcon} ${styles.editIcon}`} 
             title={t('editButton')}
+            target="_blank" rel="noopener noreferrer"
           >
             <FaPenToSquare size={18} />
           </Link>

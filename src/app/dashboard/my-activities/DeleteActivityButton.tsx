@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FaTrash } from "react-icons/fa6";
 import { softDeleteActivity } from "./actions";
 import styles from "@/styles/pages/my-activities.module.css";
+import { notify } from "@/components/ui";
 
 export function DeleteActivityButton({ activityId, activityName, titleButton }: { activityId: number, activityName: string, titleButton: string }) {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -15,7 +16,7 @@ export function DeleteActivityButton({ activityId, activityName, titleButton }: 
       const result = await softDeleteActivity(activityId);
       
       if (!result.success) {
-        alert(result.error);
+        notify.error("No se pudo eliminar la actividad", result.error || "Inténtalo de nuevo.");
         setIsDeleting(false); // Restablecer si falla
       }
       // Si tiene éxito, Next.js revalidará la página y el componente desaparecerá

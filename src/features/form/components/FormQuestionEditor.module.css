@@ -1,0 +1,72 @@
+/* Opciones de una pregunta cerrada de LudiForm */
+
+.options {
+  margin: 0;
+  padding: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.options > button {
+  align-self: flex-start;
+}
+
+.optionRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+}
+
+.optionRow[data-correct="true"] {
+  border-color: rgba(25, 135, 84, 0.35);
+  background: rgba(25, 135, 84, 0.06);
+}
+
+.optionRow input[type="radio"],
+.optionRow input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: #198754;
+}
+
+.removeOption {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.removeOption:hover:not(:disabled) {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.removeOption:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.removeOption:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+.longInfo {
+  margin-top: 6px;
+  padding: 1rem 1.25rem;
+  border: 2px dashed #f3c9b2;
+  border-radius: 16px;
+  background: #fff8f3;
+  color: #7c3a14;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}

@@ -1,0 +1,2133 @@
+============================================================================
+HISTORIAS DE USUARIO - FORMATO TARJETA (DOS CARAS)
+Proyecto: LudiGame - St. Mary School
+Formato: Optimizado para Excel + Correspondencia Word
+============================================================================
+
+==============================
+EPIC 1: AUTENTICACION Y CUENTAS
+==============================
+
+--- HISTORIA HU-001 ---
+[CARA FRONTAL]
+Nombre: Registro de Educador con Email y Contraseña
+Como: Educador
+Puedo: Registrarme con mi correo electrónico y contraseña
+Para: Crear una cuenta y acceder a la plataforma
+Criterios de aceptación:
+  * Dado que estoy en la página de registro
+  * Cuando completo todos los campos válidos (email, contraseña, nombre) y envío el formulario
+  * Entonces se crea mi cuenta en Firebase, recibo email de verificación, me registro en SQL Server con rol EDUCADOR y soy redirigido a /welcome-educator
+
+  * Dado que ingreso un email que ya existe en el sistema
+  * Cuando envío el formulario de registro
+  * Entonces veo un mensaje de advertencia indicando que el correo ya está en uso
+
+  * Dado que mi contraseña no cumple los requisitos (mínimo 8 caracteres, mayúscula, minúscula, número)
+  * Cuando intento enviar el formulario
+  * Entonces veo errores de validación debajo del campo de contraseña
+
+[REVERSO]
+Detalles:
+  - Validación Yup: email válido, contraseña min 8 caracteres con mayúscula, minúscula y número
+  - Auto-login post-registro crea cookie HTTP-only de 5 días
+  - Email de verificación enviado pero no bloquea acceso si no está verificado
+  - Rol EDUCADOR asignado por defecto desde tabla LUDI_ROL
+  - Si tabla LUDI_ROL no tiene seed, retorna error 500
+  - Componente: SignUpForm.tsx
+
+--- HISTORIA HU-002 ---
+[CARA FRONTAL]
+Nombre: Inicio de Sesión con Email y Contraseña
+Como: Educador
+Puedo: Iniciar sesión con mi correo y contraseña
+Para: Acceder a mi panel de actividades
+Criterios de aceptación:
+  * Dado que tengo una cuenta verificada
+  * Cuando ingreso credenciales correctas y presiono "Acceder"
+  * Entonces se crea mi sesión, veo toast de bienvenida y soy redirigido a /welcome-educator
+
+  * Dado que ingreso email o contraseña incorrectos
+  * Cuando envío el formulario
+  * Entonces veo toast de error "Credenciales inválidas"
+
+  * Dado que excedo el número de intentos de login
+  * Cuando Firebase retorna auth/too-many-requests
+  * Entonces veo toast de warning sobre bloqueo temporal
+
+[REVERSO]
+Detalles:
+  - Cookie de sesión dura 5 días (AUTH_COOKIE_MAX_AGE = 432000 segundos)
+  - Manejo detallado de errores Firebase con toasts diferenciados
+  - router.refresh() post-login para invalidar caché del servidor
+  - Spinner de carga durante autenticación
+  - Componente: SignInForm.tsx
+
+--- HISTORIA HU-003 ---
+[CARA FRONTAL]
+Nombre: Inicio de Sesión con Google
+Como: Educador
+Puedo: Iniciar sesión con mi cuenta de Google
+Para: Acceder rápidamente sin recordar contraseña
+Criterios de aceptación:
+  * Dado que estoy en la página de login
+  * Cuando hago clic en "Iniciar sesión con Google" y selecciono mi cuenta
+  * Entonces me autentico, sincronizo con SQL Server y soy redirigido al dashboard
+
+  * Dado que se abre el popup de Google
+  * Cuando cierro el popup sin seleccionar cuenta
+  * Entonces no se muestra error (flujo cancelado silenciosamente)
+
+[REVERSO]
+Detalles:
+  - signInWithPopup con GoogleAuthProvider
+  - googleProvider.setCustomParameters({ prompt: 'select_account' }) fuerza selección de cuenta
+  - Sincronización automática con SQL Server (crea usuario si no existe)
+  - Manejo especial de auth/popup-closed-by-user (sin error)
+  - Componente: SignInForm.tsx (botón Google)
+
+--- HISTORIA HU-004 ---
+[CARA FRONTAL]
+Nombre: Recuperación de Contraseña por Email
+Como: Educador
+Puedo: Solicitar un enlace de recuperación de contraseña
+Para: Regresar a la plataforma si olvidé mi contraseña
+Criterios de aceptación:
+  * Dado que estoy en la página de recuperación
+  * Cuando ingreso mi email y presiono "Enviar correo de recuperación"
+  * Entonces veo toast de confirmación y se limpia el formulario
+
+  * Dado que ingreso un email que no existe
+  * Cuando envío la solicitud
+  * Entonces veo el mismo mensaje de éxito (prevención de enumeración de usuarios)
+
+[REVERSO]
+Detalles:
+  - Firebase Auth sendPasswordResetEmail
+  - Por seguridad, siempre muestra éxito independientemente de si email existe
+  - Debate en código: mostrar error vs éxito cuando usuario no existe
+  - Se optó por éxito para mejor seguridad (evita enumeración)
+  - Componente: ForgotPasswordForm.tsx
+
+--- HISTORIA HU-005 ---
+[CARA FRONTAL]
+Nombre: Cierre de Sesión Seguro
+Como: Educador
+Puedo: Cerrar sesión de forma segura
+Para: Proteger mi cuenta cuando no uso la plataforma
+Criterios de aceptación:
+  * Dado que estoy autenticado
+  * Cuando hago clic en "Cerrar sesión"
+  * Entonces se elimina cookie, se cierra Firebase, se limpian storages y soy redirigido a login
+
+[REVERSO]
+Detalles:
+  - signOut de Firebase Auth + POST /api/auth/signout
+  - Eliminación de cookie de sesión en servidor
+  - Limpieza de localStorage y sessionStorage
+  - Overlay de carga full-screen con spinner durante logout
+  - Redirect a /auth/login tras cierre exitoso
+  - Componentes: SignOutButton.tsx, NavbarDashboard.tsx
+
+--- HISTORIA HU-006 ---
+[CARA FRONTAL]
+Nombre: Protección de Rutas por Autenticación
+Como: Sistema
+Puedo: Proteger rutas sensibles verificando autenticación
+Para: Prevenir acceso no autorizado a funcionalidades privadas
+Criterios de aceptación:
+  * Dado que un usuario no autenticado intenta acceder a /dashboard
+  * Cuando el middleware intercepta la petición
+  * Entonces redirige a /auth/login?redirect=/dashboard
+
+  * Dado que un usuario autenticado visita /auth/login
+  * Cuando el middleware intercepta la petición
+  * Entonces redirige a /welcome-educator
+
+[REVERSO]
+Detalles:
+  - Middleware de Next.js (middleware.ts)
+  - Rutas protegidas: /dashboard, /welcome-educator, /create
+  - Rutas públicas: /, /auth/login, /auth/signup, /auth/forgot-password, /home
+  - Verificación de cookie de sesión (AUTH_COOKIE_NAME)
+  - Matcher solo cubre rutas específicas, no todas las rutas de la app
+  - Componente: middleware.ts
+
+--- HISTORIA HU-007 ---
+[CARA FRONTAL]
+Nombre: Renovación Automática de Sesión
+Como: Sistema
+Puedo: Renovar la sesión antes de que expire
+Para: Evitar interrupciones durante creación de actividades o sesiones de juego
+Criterios de aceptación:
+  * Dado que la sesión tiene menos de 1 hora restante
+  * Cuando el intervalo de verificación se ejecuta (cada 55 minutos)
+  * Entonces se obtiene nuevo token de Firebase y se crea nueva cookie de sesión
+
+  * Dado que Firebase no puede renovar el token (sesión expirada)
+  * Cuando se intenta la renovación
+  * Entonces se limpia sesión y se redirige a login
+
+[REVERSO]
+Detalles:
+  - Hook useTokenRefresh verifica cada 55 minutos
+  - TOKEN_REFRESH_THRESHOLD_MS = 1 hora
+  - POST /api/auth/refresh con ID token vigente
+  - Hook useCheckAuth escucha onAuthStateChanged de Firebase
+  - Sincroniza estado Redux con estado de Firebase
+  - Componentes: useTokenRefresh.ts, useCheckAuth.ts
+
+--- HISTORIA HU-008 ---
+[CARA FRONTAL]
+Nombre: Cambio de Contraseña
+Como: Educador
+Puedo: Cambiar mi contraseña desde configuración de seguridad
+Para: Mantener mi cuenta segura con contraseña actualizada
+Criterios de aceptación:
+  * Dado que estoy en Configuración > Seguridad
+  * Cuando ingreso nueva contraseña válida (min 6 caracteres) y confirmo
+  * Entonces se actualiza en Firebase y veo confirmación
+
+  * Dado que mi sesión es antigua
+  * Cuando Firebase retorna auth/requires-recent-login
+  * Entonces veo indicación de que debo cerrar sesión y volver a entrar
+
+[REVERSO]
+Detalles:
+  - Firebase Auth updatePassword
+  - Toggle mostrar/ocultar contraseña
+  - Validación mínimo 6 caracteres
+  - Manejo de auth/requires-recent-login (Firebase requiere sesión reciente)
+  - Componente: SecuritySettings.tsx
+
+--- HISTORIA HU-009 ---
+[CARA FRONTAL]
+Nombre: Verificación y Reenvío de Email
+Como: Educador
+Puedo: Verificar mi correo y reenviar email de verificación
+Para: Confirmar que soy propietario de la cuenta
+Criterios de aceptación:
+  * Dado que no he verificado mi email
+  * Cuando accedo a Información Personal
+  * Entonces veo banner de advertencia con botón "Enviar email de verificación"
+
+  * Dado que presiono "Enviar email de verificación"
+  * Cuando Firebase procesa la solicitud
+  * Entonces se envía correo y veo confirmación
+
+[REVERSO]
+Detalles:
+  - Firebase Auth sendEmailVerification
+  - Banner de advertencia si emailVerified = false
+  - No se bloquea acceso si email no está verificado
+  - Componente: PersonalInfo.tsx
+
+--- HISTORIA HU-010 ---
+[CARA FRONTAL]
+Nombre: Edición de Nombre de Perfil
+Como: Educador
+Puedo: Cambiar mi nombre visible en la plataforma
+Para: Personalizar cómo me ven otros usuarios
+Criterios de aceptación:
+  * Dado que estoy en Información Personal
+  * Cuando modifico mi nombre y guardo
+  * Entonces se actualiza displayName en Firebase
+
+[REVERSO]
+Detalles:
+  - Firebase Auth updateProfile
+  - Email es de solo lectura (no editable)
+  - Solo actualiza Firebase, no SQL Server (nombre en DB queda desincronizado)
+  - Deuda técnica: sincronizar nombre con SQL Server
+  - Componente: PersonalInfo.tsx
+
+==============================
+EPIC 2: DASHBOARD DEL EDUCADOR
+==============================
+
+--- HISTORIA HU-011 ---
+[CARA FRONTAL]
+Nombre: Centro de Mando del Dashboard
+Como: Educador
+Puedo: Ver un panel principal con accesos rápidos a funciones principales
+Para: Navegar eficientemente entre crear, gestionar y explorar actividades
+Criterios de aceptación:
+  * Dado que accedo a /dashboard
+  * Cuando se carga la página
+  * Entonces veo saludo con mi primer nombre, 3 tarjetas clickeables (Crear, Plantillas, Mis Actividades) y sección de borradores
+
+  * Dado que hago clic en la tarjeta "Crear"
+  * Cuando se procesa el clic
+  * Entonces navego a /dashboard/create-activity
+
+[REVERSO]
+Detalles:
+  - Saludo personalizado: "¡Hola, [Primer Nombre]!"
+  - 3 tarjetas de navegación: Crear, Plantillas, Mis Actividades
+  - Sección "Continuar Trabajando" con actividad más reciente
+  - Grado seleccionado almacenado en localStorage
+  - Componente: DashboardHub.tsx
+
+--- HISTORIA HU-012 ---
+[CARA FRONTAL]
+Nombre: Tour Guiado del Dashboard (Onboarding)
+Como: Educador nuevo
+Puedo: Recibir un recorrido guiado por las funciones del dashboard
+Para: Orientarme rápidamente en la plataforma
+Criterios de aceptación:
+  * Dado que accedo al dashboard por primera vez
+  * Cuando se carga la página (delay 1.5s)
+  * Entonces se inicia tour guiado de 5 pasos con overlay
+
+  * Dado que localStorage tiene "hasSeenDashboardTour" = true
+  * Cuando se carga la página
+  * Entonces no se muestra el tour
+
+[REVERSO]
+Detalles:
+  - driver.js con 5 steps: sidebar, saludo, tarjeta crear, tarjeta plantillas, sección borradores
+  - Overlay color rgba(29, 21, 58, 0.75)
+  - Botones: "Siguiente", "Anterior", "¡Entendido!"
+  - onDestroyed guarda flag en localStorage
+  - Componente: DashboardTour.tsx
+
+--- HISTORIA HU-013 ---
+[CARA FRONTAL]
+Nombre: Sidebar de Navegación del Dashboard
+Como: Educador
+Puedo: Navegar rápidamente entre secciones del dashboard
+Para: Acceder a diferentes funcionalidades sin perder tiempo
+Criterios de aceptación:
+  * Dado que estoy en el dashboard
+  * Cuando hago clic en "Mis Actividades"
+  * Entonces navego a /dashboard/my-activities y se resalta el enlace activo
+
+  * Dado que tengo rol ADMIN
+  * Cuando se monta el sidebar
+  * Entonces se muestra enlace adicional "Monitoreo" hacia /admin/reports
+
+[REVERSO]
+Detalles:
+  - Enlaces: Home, Crear Actividad, Mis Actividades, Reportes, Plantillas
+  - Enlace condicional "Reportes Admin" para ADMIN (fetch a /api/auth)
+  - Resaltado de ruta activa (usePathname)
+  - Logo LudiGame en parte superior
+  - Componente: SidebarDashboard.tsx
+
+--- HISTORIA HU-014 ---
+[CARA FRONTAL]
+Nombre: Navbar del Dashboard (Idioma, Perfil, Configuración)
+Como: Educador
+Puedo: Acceder a mi perfil, configuración, idioma y cierre de sesión
+Para: Personalizar mi experiencia y gestionar mi cuenta
+Criterios de aceptación:
+  * Dado que hago clic en el selector de idioma
+  * Cuando selecciono "English"
+  * Entonces la interfaz cambia a inglés via next-intl
+
+  * Dado que abro el dropdown de usuario
+  * Cuando hago clic en "Configuración"
+  * Entonces navego a /settings
+
+[REVERSO]
+Detalles:
+  - Selector de idioma (LanguageSelector)
+  - Dropdown de usuario: avatar, nombre, email
+  - Opciones: Mi Perfil, Configuración, Cerrar sesión
+  - Dropdown de react-bootstrap con CustomToggle
+  - Componente: NavbarDashboard.tsx
+
+--- HISTORIA HU-015 ---
+[CARA FRONTAL]
+Nombre: Sección de Borradores (Continuar Trabajando)
+Como: Educador
+Puedo: Retomar rápidamente una actividad que estaba editando
+Para: No perder mi progreso y continuar donde lo dejé
+Criterios de aceptación:
+  * Dado que tengo actividades recientes
+  * Cuando se carga el dashboard
+  * Entonces veo la actividad más reciente con botón "Retomar"
+
+  * Dado que no hay actividades recientes
+  * Cuando se carga el dashboard
+  * Entonces veo "No tienes borradores pendientes"
+
+[REVERSO]
+Detalles:
+  - Muestra actividad más reciente: tipo, nombre, botón "Retomar"
+  - Botón "Retomar" navega a /dashboard/create-activity
+  - Mensaje motivacional si no hay borradores
+  - Borradores obtenidos del servidor como actividades del usuario
+  - Componente: DashboardHub.tsx (sección drafts)
+
+==============================
+EPIC 3: GESTION DE ACTIVIDADES
+==============================
+
+--- HISTORIA HU-016 ---
+[CARA FRONTAL]
+Nombre: Listado de Actividades con Paginación
+Como: Educador
+Puedo: Ver mis actividades creadas organizadas en páginas
+Para: Gestionar eficientemente mi biblioteca de actividades
+Criterios de aceptación:
+  * Dado que tengo más de 6 actividades
+  * Cuando accedo a Mis Actividades
+  * Entonces veo 6 tarjetas con controles de paginación
+
+  * Dado que selecciono "10" en el selector de página
+  * Cuando se actualiza la URL
+  * Entonces veo hasta 10 actividades y se resetea a página 1
+
+[REVERSO]
+Detalles:
+  - Página server-side: my-activities/page.tsx
+  - Paginación: 6 por defecto, selector 5/10
+  - PaginationControls.tsx: cambiar tamaño, navegar páginas
+  - Excluye isTemplate:true
+  - Soft-delete con estatus:true
+  - URL params: page, limit
+
+--- HISTORIA HU-017 ---
+[CARA FRONTAL]
+Nombre: Filtrado de Actividades por Tipo y Búsqueda
+Como: Educador
+Puedo: Filtrar mis actividades por tipo de juego y buscar por nombre
+Para: Encontrar rápidamente actividades específicas
+Criterios de aceptación:
+  * Dado que selecciono "LudiQuiz" en el filtro
+  * Cuando la URL se actualiza con typeId
+  * Entonces solo veo actividades de tipo Quiz
+
+  * Dado que escribo "matemáticas" en el buscador
+  * Cuando pasan 300ms del último keystroke
+  * Entonces se filtran actividades cuyo nombre contiene el texto
+
+[REVERSO]
+Detalles:
+  - ActivityFilter.tsx: dropdown de tipo + búsqueda por nombre
+  - Debounce de 300ms implementado con setTimeout en useEffect
+  - URL params: typeId, search
+  - Filtrado server-side via Prisma where clause
+  - Componente: ActivityFilter.tsx
+
+--- HISTORIA HU-018 ---
+[CARA FRONTAL]
+Nombre: Tarjeta de Actividad con Acciones
+Como: Educador
+Puedo: Ver información de cada actividad con acciones rápidas
+Para: Gestionar actividades sin abrir vistas detalladas
+Criterios de aceptación:
+  * Dado que una actividad existe en el listado
+  * Cuando se renderiza la tarjeta
+  * Entonces veo icono, nombre, grado, tipo, fecha, creador y 5 botones de acción
+
+  * Dado que la actividad tiene una sesión FINALIZADA
+  * Cuando se renderiza la tarjeta
+  * Entonces el botón "Lanzar" aparece deshabilitado con opacidad reducida
+
+[REVERSO]
+Detalles:
+  - Iconos: FaListCheck (Quiz), FaGamepad (V/F), FaBrain (Memory)
+  - Footer con 5 botones: Compartir, Lanzar, Ver, Editar, Eliminar
+  - Badge de tipo, grado, código, fecha
+  - CreatorCard con popover al hover
+  - Componente: ActivityCard.tsx
+
+--- HISTORIA HU-019 ---
+[CARA FRONTAL]
+Nombre: Compartir Actividad (Copiar Enlace)
+Como: Educador
+Puedo: Compartir el enlace público de mi actividad
+Para: Que otros puedan verla o usarla
+Criterios de aceptación:
+  * Dado que hago clic en el botón Compartir
+  * Cuando se ejecuta navigator.clipboard.writeText
+  * Entonces la URL se copia al portapapeles y el icono cambia a FaCheck por 2 segundos
+
+[REVERSO]
+Detalles:
+  - Construye URL pública: origin/views/activity/[id]
+  - navigator.clipboard API con fallback try/catch
+  - Feedback visual: icono cambia a check por 2 segundos
+  - Componentes: ActivityCard.tsx (botón Share), ShareActivityButton.tsx
+
+--- HISTORIA HU-020 ---
+[CARA FRONTAL]
+Nombre: Lanzar Sesión de Juego desde Tarjeta
+Como: Educador
+Puedo: Iniciar una partida en vivo directamente desde mi lista de actividades
+Para: Comenzar rápidamente una sesión con mis estudiantes
+Criterios de aceptación:
+  * Dado que la actividad no está finalizada
+  * Cuando hago clic en el botón cohete
+  * Entonces se crea sesión con PIN único, veo spinner y soy redirigido al panel en vivo
+
+  * Dado que ocurre un error en el servidor
+  * Cuando createGameSession falla
+  * Entonces veo alert con el mensaje de error
+
+[REVERSO]
+Detalles:
+  - Llama createGameSession (server action)
+  - Genera PIN de 6 dígitos aleatorio
+  - Verifica unicidad en bucle while
+  - Crea LUDI_SESION con estado "lobby"
+  - Redirect a /dashboard/live/[sessionId]
+  - Componentes: ActivityCard.tsx (botón Rocket), LaunchSessionButton.tsx
+
+--- HISTORIA HU-021 ---
+[CARA FRONTAL]
+Nombre: Eliminar Actividad (Soft Delete)
+Como: Educador
+Puedo: Eliminar una actividad que ya no necesito
+Para: Mantener mi biblioteca organizada
+Criterios de aceptación:
+  * Dado que hago clic en Eliminar
+  * Cuando confirmo el diálogo de confirmación
+  * Entonces la actividad se marca inactiva y soy redirigido al listado
+
+  * Dado que hago clic en Eliminar
+  * Cuando cancelo el diálogo
+  * Entonces no ocurre ningún cambio
+
+[REVERSO]
+Detalles:
+  - Soft delete: estatus = false (no eliminación física)
+  - window.confirm() para confirmación
+  - revalidatePath para refrescar sin recarga
+  - Componentes: DeleteActivityButton.tsx, DeleteActivityViewButton.tsx
+
+--- HISTORIA HU-022 ---
+[CARA FRONTAL]
+Nombre: Exportar Actividades a Excel
+Como: Educador
+Puedo: Exportar mi listado de actividades a Excel
+Para: Compartir con coordinación académica o tener respaldo
+Criterios de aceptación:
+  * Dado que hay actividades visibles
+  * Cuando hago clic en "Exportar a Excel"
+  * Entonces se descarga archivo .xlsx con fecha en el nombre
+
+[REVERSO]
+Detalles:
+  - Columnas: Código, Nombre, Tipo, Grado, Creador, Email, Fecha
+  - Librería xlsx
+  - Nombre archivo: Mis_Actividades_YYYY-MM-DD.xlsx
+  - Solo exporta página actual, no todas las actividades
+  - Deshabilitado si no hay actividades
+  - Componente: ExportActivitiesButton.tsx
+
+--- HISTORIA HU-023 ---
+[CARA FRONTAL]
+Nombre: Creación Rápida desde Dropdown
+Como: Educador
+Puedo: Crear una nueva actividad seleccionando el tipo rápidamente
+Para: Comenzar a crear sin navegar a página intermedia
+Criterios de aceptación:
+  * Dado que abro el dropdown "Crear Actividad"
+  * Cuando selecciono "Ludi Quiz"
+  * Entonces se abre /create/ludiquiz en nueva pestaña
+
+[REVERSO]
+Detalles:
+  - Dropdown con 3 opciones: Ludi Quiz, Verdadero o Falso, Ludi Memory
+  - LudiQuiz y V/F abren en nueva pestaña (window.open)
+  - LudiMemory navega en misma pestaña (router.push)
+  - Componente: NewActivityButton.tsx
+
+--- HISTORIA HU-024 ---
+[CARA FRONTAL]
+Nombre: Tarjeta del Creador (Popover)
+Como: Educador
+Puedo: Ver quién creó una actividad al pasar el cursor sobre su nombre
+Para: Conocer al autor sin abrir vista detallada
+Criterios de aceptación:
+  * Dado que paso el cursor sobre el nombre del creador
+  * Cuando se activa el hover
+  * Entonces veo popover con avatar, nombre, rol y email via React Portal
+
+[REVERSO]
+Detalles:
+  - Hover-triggered popover
+  - Renderizado via createPortal al body
+  - Muestra: avatar, nombre, rol, email
+  - Botón "Ver Perfil" solo habilitado para admins
+  - Componente: CreatorCard.tsx
+
+==============================
+EPIC 4: EDITOR - GENERAL
+==============================
+
+--- HISTORIA HU-025 ---
+[CARA FRONTAL]
+Nombre: Nombrar Actividad (Modal Inicial)
+Como: Educador
+Puedo: Dar nombre a mi actividad al comenzar a crearla
+Para: Identificarla fácilmente en mi biblioteca
+Criterios de aceptación:
+  * Dado que creo una actividad nueva
+  * Cuando ingreso nombre y presiono "Comenzar"
+  * Entonces se establece el título y se cierra el modal
+
+  * Dado que no deseo nombrar aún
+  * Cuando presiono "Omitir"
+  * Entonces se cierra el modal con título por defecto "Nueva Actividad"
+
+[REVERSO]
+Detalles:
+  - Solo aparece si no hay ?id= en URL y título es default
+  - Input con placeholder "Ej. Fracciones Divertidas..."
+  - Botones: "Comenzar" (deshabilitado si vacío), "Omitir"
+  - Componente: InitialTitleModal.tsx
+
+--- HISTORIA HU-026 ---
+[CARA FRONTAL]
+Nombre: Edición Inline del Título
+Como: Educador
+Puedo: Editar el título de mi actividad directamente en la barra superior
+Para: Cambiar el nombre sin abrir modal
+Criterios de aceptación:
+  * Dado que hago clic en el título
+  * Cuando modifico el texto
+  * Entonces se actualiza el título en el contexto global del editor
+
+[REVERSO]
+Detalles:
+  - Input inline con icono de lápiz
+  - Auto-select all text on focus
+  - Actualiza ActivityEditorContext.title
+  - Componente: TitleActivity.tsx
+
+--- HISTORIA HU-027 ---
+[CARA FRONTAL]
+Nombre: Selección de Tema/Fondo Visual
+Como: Educador
+Puedo: Elegir un fondo temático para mi actividad
+Para: Personalizar la experiencia visual de mis estudiantes
+Criterios de aceptación:
+  * Dado que abro el selector de temas
+  * Cuando hago clic en una tarjeta de tema
+  * Entonces el fondo del editor cambia y se cierra el panel
+
+  * Dado que el panel de temas está abierto
+  * Cuando presiono ESC
+  * Entonces se cierra el panel
+
+[REVERSO]
+Detalles:
+  - ThemeButton abre ThemeContainer (panel deslizable)
+  - Fetch de temas desde GET /api/common/themes
+  - Grid de tarjetas con thumbnail y nombre traducido
+  - Selección cambia backgroundImage en contexto global
+  - Default: /images/theme/tema4.jpg
+  - Componentes: ThemeButton.tsx, ThemeContainer.tsx
+
+--- HISTORIA HU-028 ---
+[CARA FRONTAL]
+Nombre: Modo Pantalla Completa
+Como: Educador
+Puedo: Ocultar la barra lateral para tener más espacio de trabajo
+Para: Enfocarme en la pregunta actual sin distracciones
+Criterios de aceptación:
+  * Dado que el editor está en modo normal
+  * Cuando presiono el botón de expandir
+  * Entonces se oculta la sidebar y el editor ocupa todo el ancho
+
+[REVERSO]
+Detalles:
+  - Botón FaExpand/FaCompress en CreateNavbar
+  - Toggle de fullScreen en ActivityEditorContext
+  - Oculta sidebar de preguntas
+  - Editor expande a col-12
+  - Componente: CreateNavbar.tsx
+
+--- HISTORIA HU-029 ---
+[CARA FRONTAL]
+Nombre: Guardado de Actividad Nueva
+Como: Educador
+Puedo: Guardar mi actividad completa en la base de datos
+Para: Preservar mi trabajo y usarlo con estudiantes
+Criterios de aceptación:
+  * Dado que completo una actividad válida
+  * Cuando presiono "Guardar"
+  * Entonces se crea todo en transacción atómica, se descarga JSON y soy redirigido a Mis Actividades
+
+  * Dado que ocurre un error en la transacción
+  * Cuando se intenta guardar
+  * Entonces veo mensaje de error con detalle
+
+[REVERSO]
+Detalles:
+  - SaveActivityButton.tsx llama saveActivity (server action)
+  - Transacción SQL Server: ACTIVITY + LUDI_ACTIVIDAD + CONFIG + PREGUNTAS/OPCIONES/MEMORIA + RECURSOS
+  - prisma.$transaction() garantiza atomicidad
+  - Descarga respaldo JSON automáticamente
+  - Redirect a /dashboard/my-activities
+  - as any en ACTIVITY por tipos Prisma (deuda técnica)
+
+--- HISTORIA HU-030 ---
+[CARA FRONTAL]
+Nombre: Actualización de Actividad Existente
+Como: Educador
+Puedo: Guardar cambios en una actividad que estoy editando
+Para: Corregir errores o mejorar contenido
+Criterios de aceptación:
+  * Dado que la actividad tiene sesiones con respuestas
+  * Cuando modifico texto de pregunta existente y guardo
+  * Entonces se actualiza la pregunta sin eliminar respuestas asociadas
+
+  * Dado que otro educador intenta editar
+  * Cuando se ejecuta updateActivity
+  * Entonces retorna error "No tienes permiso para editar esta actividad"
+
+[REVERSO]
+Detalles:
+  - updateActivity.ts verifica propiedad (userId check)
+  - Smart content update: crea/actualiza/elimina preguntas y opciones
+  - Preserva respuestas de estudiantes existentes
+  - Convención id > 100 para distinguir registros existentes de nuevos (deuda técnica)
+  - Componente: SaveActivityButton.tsx (modo edición)
+
+--- HISTORIA HU-031 ---
+[CARA FRONTAL]
+Nombre: Indicador de Auto-Guardado
+Como: Educador
+Puedo: Ver que mis cambios se están guardando automáticamente
+Para: Tener confianza de que no perderé mi trabajo
+Criterios de aceptación:
+  * Dado que estoy editando preguntas
+  * Cuando hago un cambio
+  * Entonces veo "Guardando..." y luego "Borrador guardado" tras 800ms
+
+[REVERSO]
+Detalles:
+  - Muestra "Guardando..." (spinner) o "Borrador guardado" (check)
+  - Debounce de 800ms en useEffect
+  - Sincroniza preguntas al contexto global
+  - Páginas: ludiquiz/page.tsx, trueorfalse/page.tsx
+
+--- HISTORIA HU-032 ---
+[CARA FRONTAL]
+Nombre: Tour Guiado del Editor LudiQuiz
+Como: Educador nuevo
+Puedo: Recibir un recorrido guiado por las funciones del editor
+Para: Aprender a crear actividades rápidamente
+Criterios de aceptación:
+  * Dado que llego desde la tarjeta del dashboard
+  * Cuando se carga la página
+  * Entonces veo tour de 5 pasos y se auto-abre el panel lúdico al final
+
+[REVERSO]
+Detalles:
+  - driver.js con 5 steps: nombre actividad, input pregunta, dropzone multimedia, sección respuestas, panel lúdico
+  - Auto-abre panel lúdico en último paso
+  - localStorage flags para control de ejecución
+  - Componente: LudiQuizTour.tsx
+
+--- HISTORIA HU-033 ---
+[CARA FRONTAL]
+Nombre: Descarga de Respaldo JSON al Guardar
+Como: Educador
+Puedo: Recibir un respaldo local de mi actividad al guardarla
+Para: Tener copia de seguridad en mi computadora
+Criterios de aceptación:
+  * Dado que el guardado fue exitoso
+  * Cuando se completa la transacción
+  * Entonces se descarga un archivo JSON con los datos de la actividad
+
+[REVERSO]
+Detalles:
+  - Descarga automática via blob URL
+  - Contiene todos los datos de la actividad
+  - Nombre archivo: [nombre_actividad].json
+  - Componente: SaveActivityButton.tsx
+
+==============================
+EPIC 5: EDITOR LUDIQUIZ
+==============================
+
+--- HISTORIA HU-034 ---
+[CARA FRONTAL]
+Nombre: Crear Pregunta de Opción Múltiple
+Como: Educador
+Puedo: Crear preguntas con múltiples opciones de respuesta
+Para: Evaluar conocimiento de mis estudiantes
+Criterios de aceptación:
+  * Dado que escribo pregunta y al menos 2 respuestas
+  * Cuando marco una como correcta y presiono "Agregar Pregunta"
+  * Entonces la pregunta se agrega al panel lateral
+
+  * Dado que faltan respuestas o no hay correcta marcada
+  * Cuando intento agregar
+  * Entonces veo tooltip de error por 3 segundos
+
+[REVERSO]
+Detalles:
+  - Input de texto para pregunta + AnswerContainer con grid de respuestas
+  - Validaciones: pregunta no vacía, min 2 respuestas, todas con texto, una correcta
+  - Tooltips de error: "Falta escribir la pregunta", "Agrega al menos 2 respuestas", etc.
+  - Páginas: ludiquiz/page.tsx, AnswerContainer.tsx
+
+--- HISTORIA HU-035 ---
+[CARA FRONTAL]
+Nombre: Agregar y Eliminar Opciones de Respuesta
+Como: Educador
+Puedo: Agregar o quitar opciones de respuesta a mi pregunta
+Para: Adaptar la pregunta a mis necesidades
+Criterios de aceptación:
+  * Dado que hay menos de 4 respuestas
+  * Cuando presiono "+ Agregar respuesta"
+  * Entonces se añade nueva tarjeta de respuesta vacía
+
+  * Dado que hay más de 2 respuestas
+  * Cuando presiono el icono de basura
+  * Entonces se elimina la respuesta del grid
+
+[REVERSO]
+Detalles:
+  - Botón "+ Agregar respuesta" añade nueva opción
+  - Botón FaTrash elimina opción (solo visible si hay > 2)
+  - Enter en último input agrega nueva respuesta automáticamente
+  - Mínimo 2 respuestas
+  - Componente: AnswerContainer.tsx
+
+--- HISTORIA HU-036 ---
+[CARA FRONTAL]
+Nombre: Adjuntar Imagen a Opción de Respuesta
+Como: Educador
+Puedo: Agregar imágenes a las opciones de respuesta
+Para: Hacer preguntas más visuales y atractivas
+Criterios de aceptación:
+  * Dado que presiono el botón de imagen
+  * Cuando selecciono un archivo
+  * Entonces veo preview con blob URL
+
+  * Dado que se abre el modal de Unsplash
+  * Cuando selecciono una imagen
+  * Entonces se adjunta la URL de Unsplash a la respuesta
+
+[REVERSO]
+Detalles:
+  - Cada respuesta tiene botón FaImage (upload local) y FaSearch (Unsplash)
+  - Upload local crea blob URL temporal
+  - Preview de imagen con botón FaTimes para eliminar
+  - Unsplash usa ModalMultimedia
+  - Componente: AnswerContainer.tsx
+
+--- HISTORIA HU-037 ---
+[CARA FRONTAL]
+Nombre: Atajos de Teclado del Editor
+Como: Educador
+Puedo: Usar atajos de teclado para agilizar la creación
+Para: Crear actividades más rápido
+Criterios de aceptación:
+  * Dado que el cursor está en el input de pregunta
+  * Cuando presiono Enter
+  * Entonces el focus se mueve a la primera respuesta
+
+  * Dado que el formulario es válido
+  * Cuando presiono Ctrl+Enter
+  * Entonces se guarda la pregunta (agregar o actualizar)
+
+[REVERSO]
+Detalles:
+  - Enter en input de pregunta: mueve focus a primera respuesta
+  - Enter en respuesta: mueve a siguiente o agrega nueva
+  - Ctrl+Enter: guarda/marca correcta
+  - Hints visuales en parte inferior
+  - Páginas: ludiquiz/page.tsx, trueorfalse/page.tsx
+
+--- HISTORIA HU-038 ---
+[CARA FRONTAL]
+Nombre: Panel Lateral de Preguntas (Lista con Miniaturas)
+Como: Educador
+Puedo: Ver todas mis preguntas en un panel lateral con previsualizaciones
+Para: Navegar y gestionar preguntas fácilmente
+Criterios de aceptación:
+  * Dado que hay preguntas en el panel lateral
+  * Cuando hago clic en una pregunta
+  * Entonces se carga en el editor para edición
+
+  * Dado que presiono el icono de basura en una pregunta
+  * Cuando se confirma la acción
+  * Entonces se elimina del panel y del contexto global
+
+[REVERSO]
+Detalles:
+  - Sidebar izquierda con QuestionListItem por cada pregunta
+  - Miniatura 60x40px: imagen, thumbnail YouTube, o icono de tipo
+  - Badge con número de pregunta
+  - Click para editar, Trash para eliminar
+  - Oculto en modo fullScreen
+  - Selección resaltada con borde azul
+  - Componente: QuestionListItem.tsx
+
+--- HISTORIA HU-039 ---
+[CARA FRONTAL]
+Nombre: Editar y Cancelar Pregunta Existente
+Como: Educador
+Puedo: Modificar una pregunta existente o cancelar la edición
+Para: Corregir errores sin perder la pregunta original
+Criterios de aceptación:
+  * Dado que selecciono una pregunta del panel
+  * Cuando modifico y presiono "Guardar Cambios"
+  * Entonces se actualiza en la lista local
+
+  * Dado que estoy editando una pregunta
+  * Cuando presiono "Cancelar Edición"
+  * Entonces se resetea el staging area a nueva pregunta vacía
+
+[REVERSO]
+Detalles:
+  - Al clic en pregunta del panel, se carga en staging area
+  - Botón cambia a "Guardar Cambios"
+  - Botón "Cancelar Edición" resetea a nueva pregunta
+  - editingId controla el modo edición vs creación
+  - Páginas: ludiquiz/page.tsx, trueorfalse/page.tsx
+
+==============================
+EPIC 6: EDITOR VERDADERO O FALSO
+==============================
+
+--- HISTORIA HU-040 ---
+[CARA FRONTAL]
+Nombre: Crear Afirmación Verdadero/Falso
+Como: Educador
+Puedo: Crear afirmaciones donde el estudiante elija si son verdaderas o falsas
+Para: Evaluar comprensión de conceptos básicos
+Criterios de aceptación:
+  * Dado que escribo una afirmación
+  * Cuando selecciono "Verdadero" y presiono "Agregar Pregunta"
+  * Entonces se agrega al panel lateral con badge verde "Verdadero"
+
+  * Dado que no he seleccionado V o F
+  * Cuando intento agregar
+  * Entonces veo tooltip "Marca si es Verdadero o Falso"
+
+[REVERSO]
+Detalles:
+  - Input de texto para afirmación
+  - Dos botones grandes: Verdadero (verde) y Falso (rojo)
+  - Selección marca respuesta correcta con efecto de escala
+  - Hover translateY en botones no seleccionados
+  - Página: trueorfalse/page.tsx
+
+--- HISTORIA HU-041 ---
+[CARA FRONTAL]
+Nombre: Panel Lateral de Afirmaciones V/F
+Como: Educador
+Puedo: Ver mis afirmaciones con indicadores visuales de la respuesta correcta
+Para: Revisar rápidamente mis preguntas
+Criterios de aceptación:
+  * Dado que hay afirmaciones en el panel
+  * Cuando se renderiza la lista
+  * Entonces cada item muestra badge verde "Verdadero" o rojo "Falso" según respuesta correcta
+
+[REVERSO]
+Detalles:
+  - Sidebar con QuestionListItem mostrando badges "Verdadero" (verde) o "Falso" (rojo)
+  - Mismas funcionalidades de navegación, edición y eliminación que LudiQuiz
+  - activityType="trueorfalse" en QuestionListItem
+  - Componente: QuestionListItem.tsx
+
+==============================
+EPIC 7: EDITOR LUDIMEMORY
+==============================
+
+--- HISTORIA HU-042 ---
+[CARA FRONTAL]
+Nombre: Subir Imágenes desde PC (Multi-Archivo)
+Como: Educador
+Puedo: Subir múltiples imágenes desde mi computadora
+Para: Crear el juego de memoria con contenido personalizado
+Criterios de aceptación:
+  * Dado que presiono el botón de upload
+  * Cuando selecciono 3 archivos de imagen
+  * Entonces se suben en paralelo a Firebase y se muestran en el grid
+
+  * Dado que las imágenes se están subiendo
+  * Cuando uploading = true
+  * Entonces veo spinner de carga
+
+[REVERSO]
+Detalles:
+  - Upload card con botón FaUpload
+  - File picker: accept="image/*", multiple=true
+  - Sube a Firebase Storage via useFirebaseStorage
+  - URLs se agregan a memoryImages
+  - useFirebaseStorage hook con uploadFiles (Promise.all)
+  - Página: ludimemory/page.tsx
+
+--- HISTORIA HU-043 ---
+[CARA FRONTAL]
+Nombre: Buscar Imágenes en Unsplash
+Como: Educador
+Puedo: Buscar imágenes de alta calidad en Unsplash
+Para: Usar imágenes profesionales en mi juego de memoria
+Criterios de aceptación:
+  * Dado que el modal de Unsplash está abierto
+  * Cuando busco "animales" y hago clic en una imagen
+  * Entonces se agrega la URL regular al array de memoryImages
+
+[REVERSO]
+Detalles:
+  - Botón FaSearch abre ModalMultimedia con origin="unsplash"
+  - Input de búsqueda, grid de resultados
+  - Click para seleccionar imagen
+  - Unsplash API para búsqueda
+  - Componente: ModalMultimedia.tsx
+
+--- HISTORIA HU-044 ---
+[CARA FRONTAL]
+Nombre: Grid de Imágenes con Eliminación
+Como: Educador
+Puedo: Ver y gestionar las imágenes de mi juego de memoria
+Para: Organizar el contenido del juego
+Criterios de aceptación:
+  * Dado que hay imágenes en el grid
+  * Cuando presiono el botón de basura en una imagen
+  * Entonces se elimina del array y el grid se actualiza
+
+  * Dado que hay 5 imágenes
+  * Cuando se renderiza el grid
+  * Entonces veo "Total: 5 imágenes"
+
+[REVERSO]
+Detalles:
+  - Grid responsive de thumbnails cuadrados
+  - Cada imagen tiene botón FaTrash rojo para eliminar
+  - Contador "Total: X imágenes"
+  - Tip: "Sube al menos 2 imágenes. El juego generará los pares automáticamente"
+  - Página: ludimemory/page.tsx
+
+==============================
+EPIC 8: MULTIMEDIA EN PREGUNTAS
+==============================
+
+--- HISTORIA HU-045 ---
+[CARA FRONTAL]
+Nombre: Subir Archivo Multimedia a Pregunta
+Como: Educador
+Puedo: Adjuntar imagen, video o audio a una pregunta
+Para: Hacer preguntas más ricas y accesibles
+Criterios de aceptación:
+  * Dado que presiono "Subir Archivo"
+  * Cuando selecciono un video
+  * Entonces se sube a Firebase Storage y veo preview con controles
+
+[REVERSO]
+Detalles:
+  - LoadMultimediaFile.tsx con dropzone
+  - Menú flotante: "Subir Archivo", "Buscar en Unsplash", "Buscar en YouTube", "Buscar en Freesound"
+  - accept="image/*,video/*,audio/*"
+  - Upload via useFirebaseStorage
+  - Componente: LoadMultimediaFile.tsx
+
+--- HISTORIA HU-046 ---
+[CARA FRONTAL]
+Nombre: Buscar Video en YouTube
+Como: Educador
+Puedo: Adjuntar videos de YouTube a mis preguntas
+Para: Usar contenido educativo de YouTube
+Criterios de aceptación:
+  * Dado que se abre el modal de YouTube
+  * Cuando busco y selecciono un video
+  * Entonces se adjunta la URL embed como tipo "youtube"
+
+[REVERSO]
+Detalles:
+  - ModalMultimedia con origin="youtube"
+  - Búsqueda via YouTube Data API v3
+  - Thumbnails clickeables
+  - Preview con iframe embed
+  - Botón "Seleccionar Video"
+  - Extracción de video ID de múltiples formatos de URL
+  - Componente: ModalMultimedia.tsx
+
+--- HISTORIA HU-047 ---
+[CARA FRONTAL]
+Nombre: Buscar Audio en Freesound
+Como: Educador
+Puedo: Adjuntar efectos de sonido o audio a mis preguntas
+Para: Crear experiencias auditivas
+Criterios de aceptación:
+  * Dado que se abre el modal de Freesound
+  * Cuando busco y selecciono un audio
+  * Entonces se adjunta la URL del preview MP3 como tipo "audio"
+
+[REVERSO]
+Detalles:
+  - ModalMultimedia con origin="freesound"
+  - Búsqueda via Freesound API
+  - Cards con audio player inline
+  - Click para seleccionar preview MP3
+  - Componente: ModalMultimedia.tsx
+
+--- HISTORIA HU-048 ---
+[CARA FRONTAL]
+Nombre: Previsualización y Ajuste de Multimedia
+Como: Educador
+Puedo: Previsualizar y ajustar el tamaño del multimedia en mis preguntas
+Para: Asegurar que se vea bien en el juego
+Criterios de aceptación:
+  * Dado que adjunté un video a la pregunta
+  * Cuando se renderiza el dropzone
+  * Entonces veo video tag con controles nativos
+
+  * Dado que hay multimedia cargado
+  * Cuando muevo el slider al 75%
+  * Entonces el preview se escala via CSS transform
+
+[REVERSO]
+Detalles:
+  - Preview inline: imagen (img), video (video controls), audio (audio controls), YouTube (iframe)
+  - Slider de tamaño 50-100%
+  - Botón "x" para eliminar
+  - Range input 50-100%, CSS transform: scale()
+  - Componente: LoadMultimediaFile.tsx
+
+==============================
+EPIC 9: PANEL LUDICO (GAMIFICACION)
+==============================
+
+--- HISTORIA HU-049 ---
+[CARA FRONTAL]
+Nombre: Configurar Grado, Tiempo y Puntos
+Como: Educador
+Puedo: Configurar grado, tiempo y puntos para mi actividad
+Para: Adaptar la dificultad al nivel de mis estudiantes
+Criterios de aceptación:
+  * Dado que el panel lúdico está abierto
+  * Cuando selecciono 2do grado, 45 segundos y 20 puntos
+  * Entonces se actualiza config en contexto global y las misiones cambian a las de 2do grado
+
+[REVERSO]
+Detalles:
+  - GamificationPanel.tsx
+  - Dropdown de grado: 1ro, 2do, 3ro
+  - Input de tiempo: 10-300 segundos
+  - Input de puntos: 1-100
+  - Cambio de grado actualiza lista de misiones
+  - MISIONES_POR_GRADO hardcodeadas (deuda técnica: migrar a DB)
+  - Componente: GamificationPanel.tsx
+
+--- HISTORIA HU-050 ---
+[CARA FRONTAL]
+Nombre: Seleccionar Insignias de Recompensa
+Como: Educador
+Puedo: Elegir insignias que los estudiantes pueden ganar
+Para: Motivar a mis estudiantes con reconocimientos
+Criterios de aceptación:
+  * Dado que la voz está activada
+  * Cuando selecciono "Sabio"
+  * Entonces se dispara confetti, se reproduce la frase por voz y se agrega al config
+
+  * Dado que "Sabio" está seleccionada
+  * Cuando desmarco
+  * Entonces se elimina del config sin confetti
+
+[REVERSO]
+Detalles:
+  - 6 insignias como checkbox cards: Sabio, Veloz, Valiente, Mente Creativa, Ágil, Detective
+  - Cada una con imagen, descripción y color
+  - Seleccionar dispara confetti y voz
+  - INSIGNIAS hardcodeadas (deuda técnica: migrar a DB)
+  - Web Speech API con voz "Sofía"
+  - Componente: GamificationPanel.tsx
+
+--- HISTORIA HU-051 ---
+[CARA FRONTAL]
+Nombre: Seleccionar Misiones por Grado
+Como: Educador
+Puedo: Asignar retos/misiones adaptados al grado de mis estudiantes
+Para: Proporcionar desafíos apropiados al nivel
+Criterios de aceptación:
+  * Dado que selecciono 3er grado
+  * Cuando se renderiza la lista de misiones
+  * Entonces veo: "5 en raya", "Rapidez 10s", "45 puntos"
+
+  * Dado que marco una misión
+  * Cuando se procesa el cambio
+  * Entonces se dispara confetti y se reproduce la misión por voz
+
+[REVERSO]
+Detalles:
+  - Lista de 3 misiones por grado como checkboxes
+  - Seleccionar dispara confetti y voz
+  - Misiones cambian dinámicamente al cambiar grado
+  - MISIONES_POR_GRADO hardcodeadas (deberían migrarse a DB)
+  - Componente: GamificationPanel.tsx
+
+--- HISTORIA HU-052 ---
+[CARA FRONTAL]
+Nombre: Toggle de Voz y Validación de Configuración
+Como: Educador
+Puedo: Activar/desactivar la voz y validar mi configuración lúdica
+Para: Controlar el feedback auditivo y asegurar configuración válida
+Criterios de aceptación:
+  * Dado que todos los campos son válidos
+  * Cuando presiono "Guardar Configuración"
+  * Entonces veo toast de éxito y voz "Configuración guardada con éxito"
+
+  * Dado que no hay insignias seleccionadas
+  * Cuando presiono "Guardar"
+  * Entonces veo toast "Selecciona al menos una insignia"
+
+[REVERSO]
+Detalles:
+  - Checkbox "Voz activada"
+  - Botón "Guardar Configuración"
+  - Valida: tiempo > 0, puntos > 0, al menos 1 insignia
+  - Toast de feedback y voz de confirmación
+  - Toast auto-dismiss en 2 segundos
+  - Componente: GamificationPanel.tsx
+
+==============================
+EPIC 10: VISTA DETALLE DE ACTIVIDAD
+==============================
+
+--- HISTORIA HU-053 ---
+[CARA FRONTAL]
+Nombre: Visualizar Detalle Completo de Actividad
+Como: Educador
+Puedo: Ver toda la información de una actividad en una página de detalle
+Para: Revisar contenido antes de usarla o compartirla
+Criterios de aceptación:
+  * Dado que accedo a /views/activity/[id]
+  * Cuando se carga la página
+  * Entonces veo metadatos, contenido y botones de acción según permisos
+
+[REVERSO]
+Detalles:
+  - Muestra: tipo, nombre, descripción, creador, tiempo, puntos, grado, fecha, estado público/privado
+  - Contenido con preguntas y respuestas o parejas de memoria
+  - SEO metadata dinámica: "[Nombre] | LudiGame"
+  - Página: views/activity/[id]/page.tsx
+
+--- HISTORIA HU-054 ---
+[CARA FRONTAL]
+Nombre: Control de Acceso a Vista de Actividad
+Como: Sistema
+Puedo: Controlar quién puede ver una actividad según su visibilidad
+Para: Proteger actividades privadas
+Criterios de aceptación:
+  * Dado que la actividad es pública o plantilla
+  * Cuando cualquier usuario accede
+  * Entonces se muestra el contenido completo
+
+  * Dado que la actividad es privada y el usuario no es propietario
+  * Cuando se intenta acceder
+  * Entonces se muestra "Acceso denegado" o redirect a login
+
+[REVERSO]
+Detalles:
+  - Plantillas y públicas: accesibles sin login
+  - Privadas: solo propietario o login
+  - No-propietarios sin login: redirect a login o "Acceso denegado"
+  - isTemplate, isPublic, isOwner determinan acceso
+  - Página: views/activity/[id]/page.tsx
+
+--- HISTORIA HU-055 ---
+[CARA FRONTAL]
+Nombre: Visor de Contenido con Scroll Spy
+Como: Educador
+Puedo: Navegar el contenido de mi actividad con una barra lateral interactiva
+Para: Revisar preguntas específicas rápidamente
+Criterios de aceptación:
+  * Dado que scrolleo por las preguntas
+  * Cuando una pregunta entra en viewport
+  * Entonces se resalta automáticamente en la sidebar
+
+  * Dado que hago clic en una pregunta de la sidebar
+  * Cuando se procesa el click
+  * Entonces se hace scroll suave a la pregunta correspondiente
+
+[REVERSO]
+Detalles:
+  - ActivityContentViewer.tsx
+  - Preguntas con respuestas color-coded (verde=correcta, rojo=incorrecta)
+  - Sidebar sticky con lista de preguntas
+  - IntersectionObserver auto-rastrea pregunta activa
+  - Click en sidebar hace scroll suave
+  - IntersectionObserver con rootMargin "-20% 0px -80% 0px"
+  - Componente: ActivityContentViewer.tsx
+
+--- HISTORIA HU-056 ---
+[CARA FRONTAL]
+Nombre: Exportar Actividad a PDF
+Como: Educador
+Puedo: Exportar el contenido de mi actividad a PDF
+Para: Compartir con coordinación o tener respaldo físico
+Criterios de aceptación:
+  * Dado que visualizo un LudiQuiz
+  * Cuando presiono "Exportar Pdf"
+  * Entonces se descarga PDF con tabla de preguntas y respuestas correctas
+
+  * Dado que visualizo un LudiMemory
+  * Cuando presiono "Exportar Pdf"
+  * Entonces se descarga PDF con tabla de parejas
+
+[REVERSO]
+Detalles:
+  - Botón "Exportar Pdf" en ActivityContentViewer
+  - jsPDF + jspdf-autotable
+  - Quiz/V/F: tabla con preguntas y respuestas correctas
+  - Memoria: tabla con parejas
+  - Nombre archivo: "Actividad_[nombre].pdf"
+  - Componente: ActivityContentViewer.tsx
+
+==============================
+EPIC 11: PLANTILLAS
+==============================
+
+--- HISTORIA HU-057 ---
+[CARA FRONTAL]
+Nombre: Catálogo de Plantillas con Filtros
+Como: Educador
+Puedo: Explorar plantillas filtradas por grado y materia
+Para: Encontrar actividades listas para usar
+Criterios de aceptación:
+  * Dado que selecciono "2do Grado" y "Matemáticas"
+  * Cuando la página se recarga
+  * Entonces solo veo plantillas que coinciden con ambos filtros
+
+  * Dado que no hay plantillas para el filtro
+  * Cuando se renderiza la página
+  * Entonces veo estado vacío "Aún no hay plantillas para este filtro"
+
+[REVERSO]
+Detalles:
+  - templates/page.tsx muestra actividades isTemplate:true
+  - Filtros: grado (1ro/2do/3ro/Todos) y materia (Matemáticas, Lengua, Tecnología, Efemérides, Todas)
+  - Dropdowns con links
+  - Grado por defecto desde cookie "selectedGrade"
+  - Página: dashboard/templates/page.tsx
+
+--- HISTORIA HU-058 ---
+[CARA FRONTAL]
+Nombre: Clonar Plantilla (Crear Copia Editable)
+Como: Educador
+Puedo: Clonar una plantilla para personalizarla como mi actividad
+Para: Ahorrar tiempo creando actividades desde cero
+Criterios de aceptación:
+  * Dado que presiono "Usar plantilla"
+  * Cuando se completa la clonación
+  * Entonces soy redirigido al editor con la actividad clonada cargada
+
+  * Dado que ocurre un error
+  * Cuando intento clonar
+  * Entonces veo alert con el error
+
+[REVERSO]
+Detalles:
+  - UseTemplateButton.tsx llama cloneTemplateActivity (server action)
+  - Crea copia con isTemplate:false
+  - Redirige al editor correspondiente según tipo
+  - Spinner + "Preparando..." durante clonación
+  - Componente: UseTemplateButton.tsx
+
+--- HISTORIA HU-059 ---
+[CARA FRONTAL]
+Nombre: Lanzar Sesión desde Plantilla
+Como: Educador
+Puedo: Lanzar una sesión de juego directamente desde una plantilla
+Para: Usar plantillas sin clonarlas primero
+Criterios de aceptación:
+  * Dado que estoy logueado y veo una plantilla
+  * Cuando presiono "Lanzar"
+  * Entonces se crea sesión de juego y soy redirigido al panel en vivo
+
+[REVERSO]
+Detalles:
+  - LaunchSessionButton disponible en vista de plantilla para usuarios logueados
+  - Mismo createGameSession que actividades propias
+  - Componente: LaunchSessionButton.tsx
+
+--- HISTORIA HU-060 ---
+[CARA FRONTAL]
+Nombre: Vista Previa de Plantilla
+Como: Educador
+Puedo: Previsualizar el contenido de una plantilla antes de usarla
+Para: Evaluar si es adecuada para mis estudiantes
+Criterios de aceptación:
+  * Dado que hago clic en la tarjeta de plantilla
+  * Cuando navego a la vista detalle
+  * Entonces veo el contenido completo con preguntas/parejas
+
+[REVERSO]
+Detalles:
+  - TemplateCard.tsx con link a /views/activity/[id]
+  - Muestra nombre, tipo, grado y tema en tarjeta
+  - Componente: TemplateCard.tsx
+
+==============================
+EPIC 12: SESION DE JUEGO EN VIVO
+==============================
+
+--- HISTORIA HU-061 ---
+[CARA FRONTAL]
+Nombre: Crear Sesión de Juego con PIN Único
+Como: Educador
+Puedo: Generar un PIN único para que mis estudiantes se unan
+Para: Identificar la sesión de juego de forma única
+Criterios de aceptación:
+  * Dado que solicito crear sesión
+  * Cuando el PIN generado ya existe
+  * Entonces se genera otro PIN hasta encontrar uno único
+
+[REVERSO]
+Detalles:
+  - createGameSession (server action)
+  - Genera PIN de 6 dígitos aleatorio
+  - Verifica unicidad en bucle while
+  - Crea LUDI_SESION con estado "lobby"
+  - Math.floor(100000 + Math.random() * 900000)
+  - Componente: sessionActions.ts
+
+--- HISTORIA HU-062 ---
+[CARA FRONTAL]
+Nombre: Sala de Control del Educador (Live Dashboard)
+Como: Educador
+Puedo: Ver los participantes conectados y controlar el flujo del juego
+Para: Gestionar la sesión en tiempo real
+Criterios de aceptación:
+  * Dado que la sesión está en lobby
+  * Cuando se cargan los participantes
+  * Entonces los veo ordenados por puntaje descendente con avatar y nombre
+
+[REVERSO]
+Detalles:
+  - /dashboard/live/[id] muestra PIN, estado, participantes
+  - GET /api/live/[id] retorna estado y participantes
+  - Participantes ordenados por puntaje descendente
+  - Polling periódico via fetch (no WebSockets)
+  - Página: dashboard/live/[id]/page.tsx
+
+--- HISTORIA HU-063 ---
+[CARA FRONTAL]
+Nombre: Controlar Flujo del Juego (Iniciar, Siguiente, Finalizar)
+Como: Educador
+Puedo: Controlar cuándo iniciar, avanzar y terminar el juego
+Para: Dirigir la sesión según mi planificación
+Criterios de aceptación:
+  * Dado que la sesión está en lobby
+  * Cuando presiono "Iniciar"
+  * Entonces estado cambia a "activa" y se registra fecha de inicio
+
+  * Dado que la sesión está activa
+  * Cuando presiono "Siguiente"
+  * Entonces preguntaActualIndex se incrementa en 1
+
+  * Dado que la sesión está activa
+  * Cuando presiono "Finalizar"
+  * Entonces estado cambia a "finalizada" y se registra fecha de fin
+
+  * Dado que otro educador intenta controlar
+  * Cuando envía acción PATCH
+  * Entonces retorna 403 Forbidden
+
+[REVERSO]
+Detalles:
+  - PATCH /api/live/[id] con action: "start", "next", "end"
+  - "start": estado = "activa", iniciada_en = now()
+  - "next": preguntaActualIndex += 1
+  - "end": estado = "finalizada", finalizada_en = now()
+  - Valida session.userId === user.id
+  - API: live/[id]/route.ts
+
+--- HISTORIA HU-064 ---
+[CARA FRONTAL]
+Nombre: Feedback del Docente Post-Sesión (Modal Completo)
+Como: Educador
+Puedo: Evaluar la sesión al finalizar con múltiples dimensiones
+Para: Mejorar mis futuras actividades
+Criterios de aceptación:
+  * Dado que finalizo una sesión no-plantilla
+  * Cuando califico utilidad 4 estrellas, engagement "Smile" y objetivo "Thumbs Up"
+  * Entonces se envían todos los datos al servidor
+
+  * Dado que finalizo una sesión de plantilla
+  * Cuando califico utilidad y dificultad "Media"
+  * Entonces se envía teacherRating + templateDifficulty
+
+  * Dado que no deseo evaluar
+  * Cuando presiono "Saltar Encuesta"
+  * Entonces se cierra el modal sin enviar datos
+
+[REVERSO]
+Detalles:
+  - TeacherFeedbackModal.tsx
+  - Utilidad pedagógica: 5 estrellas
+  - Si plantilla: dificultad (Fácil/Medio/Difícil)
+  - Si actividad propia: engagement (caras Frown/Meh/Smile) + objetivo cumplido (thumbs up/down)
+  - POST /api/live/teacher-feedback
+  - Botón deshabilitado hasta completar todos los campos
+  - Componente: TeacherFeedbackModal.tsx
+
+==============================
+EPIC 13: LOBBY DEL ESTUDIANTE
+==============================
+
+--- HISTORIA HU-065 ---
+[CARA FRONTAL]
+Nombre: Ingresar PIN, Nombre y Avatar
+Como: Estudiante
+Puedo: Unirme al juego con mi PIN, nombre y avatar
+Para: Participar en la sesión de juego
+Criterios de aceptación:
+  * Dado que PIN válido, nombre y avatar seleccionados
+  * Cuando presiono "Unirse"
+  * Entonces me registro como participante, guardo en sessionStorage y veo pantalla "Listo"
+
+  * Dado que el PIN no corresponde a sesión activa
+  * Cuando intento unir
+  * Entonces veo "Código de juego no válido o sesión terminada"
+
+  * Dado que mismo nombre ya registrado en sesión
+  * Cuando intento unir de nuevo
+  * Entonces se actualiza registro via upsert (avatar, puntaje reseteado)
+
+  * Dado que el PIN corresponde a plantilla
+  * Cuando intento unir
+  * Entonces veo "No se puede jugar una plantilla directamente"
+
+[REVERSO]
+Detalles:
+  - StudentLobby.tsx
+  - Input PIN: 6 dígitos, solo números (replace /\D/g)
+  - Input nombre: max 12 caracteres
+  - Grid de avatares: 3 columnas
+  - POST /api/play/join
+  - sessionStorage para aislar datos por pestaña
+  - Componente: StudentLobby.tsx
+
+--- HISTORIA HU-066 ---
+[CARA FRONTAL]
+Nombre: Selección de Avatar del Estudiante
+Como: Estudiante
+Puedo: Elegir un avatar que me represente en el juego
+Para: Personalizar mi identidad en el juego
+Criterios de aceptación:
+  * Dado que hago clic en un avatar
+  * Cuando se procesa el click
+  * Entonces se resalta con borde cyan y glow, se habilita botón si formulario completo
+
+  * Dado que no hay avatar seleccionado
+  * Cuando se evalúa el formulario
+  * Entonces botón "Unirse" permanece deshabilitado
+
+[REVERSO]
+Detalles:
+  - Grid de avatares desde LudiAvatar (seed)
+  - Click selecciona con borde cyan brillante y scale
+  - Avatar obligatorio para habilitar botón "Unirse"
+  - Fallback hardcoded de 6 avatares si DB no tiene datos
+  - Componente: StudentLobby.tsx
+
+--- HISTORIA HU-067 ---
+[CARA FRONTAL]
+Nombre: Pantalla de Espera (Listo para Jugar)
+Como: Estudiante
+Puedo: Ver una pantalla de espera mientras el profesor inicia el juego
+Para: Saber que estoy listo y esperar el inicio
+Criterios de aceptación:
+  * Dado que me uní exitosamente
+  * Cuando se renderiza la pantalla ready
+  * Entonces veo confeti, mensaje y botón "Iniciar"
+
+  * Dado que presiono "Iniciar"
+  * Cuando hay sesionId almacenado
+  * Entonces navego a /play/student/[sessionId]
+
+[REVERSO]
+Detalles:
+  - Tras unirse exitosamente
+  - Imagen de confeti: /images/play/confeti.png
+  - Texto "¡Listo, el juego está por comenzar!"
+  - Botón "Iniciar" que navega a /play/student/[sessionId]
+  - Componente: StudentLobby.tsx (estado isReady)
+
+==============================
+EPIC 14: MOTOR DE JUEGO DEL ESTUDIANTE
+==============================
+
+--- HISTORIA HU-068 ---
+[CARA FRONTAL]
+Nombre: Pantalla de Preparación y Cuenta Regresiva
+Como: Estudiante
+Puedo: Ver una introducción motivadora antes de comenzar a jugar
+Para: Prepararme mentalmente para el juego
+Criterios de aceptación:
+  * Dado que entro al juego
+  * Cuando se renderiza estado READY
+  * Entonces veo saludo personalizado y botón de inicio
+
+  * Dado que presiono "¡SÍ, VAMOS!"
+  * Cuando countdown > 0
+  * Entonces veo números 3, 2, 1 y "¡YA!" con animación de pulso
+
+[REVERSO]
+Detalles:
+  - GameEngine.tsx
+  - Estado READY: "¿Estás listo, [nombre]?" con botón "¡SÍ, VAMOS!"
+  - Estado COUNTDOWN: 3-2-1-¡YA! con animación zoomPulse
+  - Countdown de 3 segundos con setTimeout recursivo
+  - Componente: GameEngine.tsx
+
+--- HISTORIA HU-069 ---
+[CARA FRONTAL]
+Nombre: Visualización de Pregunta con Multimedia
+Como: Estudiante
+Puedo: Ver la pregunta con su contenido multimedia
+Para: Comprender mejor la pregunta
+Criterios de aceptación:
+  * Dado que la pregunta tiene recurso de imagen
+  * Cuando se renderiza
+  * Entonces veo la imagen con Next/Image component
+
+  * Dado que la pregunta tiene recurso YouTube
+  * Cuando se renderiza
+  * Entonces veo iframe embed con aspect ratio 16:9
+
+[REVERSO]
+Detalles:
+  - Question card con enunciado grande
+  - MultimediaDisplay renderiza imagen, YouTube o audio
+  - Fondo temático de la actividad
+  - MultimediaDisplay detecta tipo por nombre o patrón de URL
+  - Componentes: GameEngine.tsx, MultimediaDisplay.tsx
+
+--- HISTORIA HU-070 ---
+[CARA FRONTAL]
+Nombre: Selección de Respuesta con Feedback Visual
+Como: Estudiante
+Puedo: Seleccionar mi respuesta y ver si es correcta
+Para: Saber inmediatamente si acerté
+Criterios de aceptación:
+  * Dado que selecciono la opción correcta
+  * Cuando se procesa
+  * Entonces botón se pone verde, veo confetti, toast "+X pts" y se actualiza score
+
+  * Dado que selecciono opción incorrecta
+  * Cuando se procesa
+  * Entonces botón se pone rojo con shake, opción correcta se ilumina verde, toast "Sigue intentándolo"
+
+  * Dado que el timer llega a 0
+  * Cuando no hay respuesta
+  * Entonces se registra como incorrecta con puntaje 0
+
+[REVERSO]
+Detalles:
+  - Grid 2x2 de botones de opción con símbolos
+  - Feedback toast: verde "¡Correcto! +X pts" o rojo "¡Oh no!"
+  - Opción correcta se ilumina verde, incorrecta rojo con shake
+  - Confetti en respuesta correcta (canvas-confetti)
+  - Shake animation CSS
+  - Componente: GameEngine.tsx
+
+--- HISTORIA HU-071 ---
+[CARA FRONTAL]
+Nombre: Cálculo de Puntaje Basado en Velocidad
+Como: Estudiante
+Puedo: Ganar más puntos por responder rápido y correctamente
+Para: Ser recompensado por rapidez y precisión
+Criterios de aceptación:
+  * Dado que tiempoLimite=30s y respondo en 5s (timeLeft=25s)
+  * Cuando se calcula el puntaje
+  * Entonces pointsEarned = basePoints * (0.5 + 0.5 * 25/30) = ~92% del máximo
+
+  * Dado que tiempoLimite=30s y respondo en 29s (timeLeft=1s)
+  * Cuando se calcula
+  * Entonces pointsEarned = basePoints * (0.5 + 0.5 * 1/30) = ~52% del máximo
+
+[REVERSO]
+Detalles:
+  - Fórmula: basePoints * (0.5 + 0.5 * timeFactor)
+  - timeFactor = timeLeft / totalTime
+  - Respuesta más rápida = más puntos
+  - Máximo = basePoints, mínimo = 50% de basePoints
+  - Puntaje calculado en cliente (deuda técnica: validar en servidor)
+  - Componente: GameEngine.tsx
+
+--- HISTORIA HU-072 ---
+[CARA FRONTAL]
+Nombre: HUD del Juego (Reloj, Puntaje, Progreso)
+Como: Estudiante
+Puedo: Ver mi progreso y tiempo restante en todo momento
+Para: Saber cómo voy en el juego
+Criterios de aceptación:
+  * Dado que el juego está en estado PLAYING
+  * Cuando se renderiza
+  * Entonces veo barra con tiempo, puntaje y progreso actualizados
+
+  * Dado que timeLeft llega a 0
+  * Cuando se ejecuta el timeout
+  * Entonces se dispara handleAnswer(null) automáticamente
+
+[REVERSO]
+Detalles:
+  - Barra HUD superior con backdrop blur
+  - FaClock + segundos restantes
+  - FaStar + puntaje acumulado
+  - Pregunta X/Y
+  - Timer decrementa cada segundo (setTimeout recursivo)
+  - Componente: GameEngine.tsx
+
+--- HISTORIA HU-073 ---
+[CARA FRONTAL]
+Nombre: Pantalla de Resumen y Trofeo
+Como: Estudiante
+Puedo: Ver mi resultado final con una celebración
+Para: Sentirme motivado por mi esfuerzo
+Criterios de aceptación:
+  * Dado que completé todas las preguntas
+  * Cuando se renderiza estado SUMMARY
+  * Entonces veo trofeo animado, puntaje final y botón de regreso
+
+  * Dado que enableStudentFeedback está habilitado
+  * Cuando se muestra el resumen
+  * Entonces se presenta el modal de calificación del estudiante
+
+[REVERSO]
+Detalles:
+  - Estado SUMMARY: trofeo dorado animado (bounce)
+  - "¡Increíble trabajo!"
+  - Puntaje final destacado
+  - Botón "Volver al inicio"
+  - Opcionalmente: modal de rating del estudiante
+  - Bounce animation CSS, trofeo FaTrophy dorado
+  - Componente: GameEngine.tsx
+
+--- HISTORIA HU-074 ---
+[CARA FRONTAL]
+Nombre: Sincronización de Respuestas con Servidor
+Como: Sistema
+Puedo: Registrar cada respuesta del estudiante en la base de datos
+Para: Generar reportes y análisis posteriores
+Criterios de aceptación:
+  * Dado que el estudiante respondió una pregunta
+  * Cuando se envía al servidor (background)
+  * Entonces se crea registro en LudiRespuestaEstudiante y se incrementa puntaje_total
+
+  * Dado que se completaron todas las preguntas
+  * Cuando se llama /api/play/finish
+  * Entonces se marca participante como completado
+
+[REVERSO]
+Detalles:
+  - POST /api/play/submit-answer: registra en LudiRespuestaEstudiante
+  - Actualiza puntaje_total del participante con increment
+  - POST /api/play/finish: marca completado=true
+  - Fetch en background (no bloquea UI)
+  - BigInt para IDs
+  - APIs: play/submit-answer/route.ts, play/finish/route.ts
+
+==============================
+EPIC 15: RETROALIMENTACION POST-JUEGO
+==============================
+
+--- HISTORIA HU-075 ---
+[CARA FRONTAL]
+Nombre: Evaluación del Estudiante (Emojis)
+Como: Estudiante
+Puedo: Dar mi opinión sobre diversión y aprendizaje
+Para: Que mi profesor sepa si me gustó y si aprendí
+Criterios de aceptación:
+  * Dado que selecciono diversión=4 y aprendizaje=3
+  * Cuando pasan 300ms
+  * Entonces se envía automáticamente al servidor (rating promedio, enjoyment, learning)
+
+  * Dado que selecciono un icono
+  * Cuando se procesa
+  * Entonces se resalta con borde primario, tinte de fondo y trazo más grueso
+
+[REVERSO]
+Detalles:
+  - ActivityRatingModal.tsx
+  - Dos dimensiones con 5 iconos emoji cada una
+  - Diversión: Frown a HeartPulse
+  - Aprendizaje: Frown a HeartPulse
+  - Auto-submit 300ms tras ambas selecciones
+  - POST /api/play/feedback
+  - enableStudentFeedback en LudiUserConfig controla visibilidad
+  - Componente: ActivityRatingModal.tsx
+
+--- HISTORIA HU-076 ---
+[CARA FRONTAL]
+Nombre: Evaluación Rápida del Docente en Reporte
+Como: Educador
+Puedo: Calificar rápidamente la efectividad de una actividad desde el reporte
+Para: Evaluar si la actividad fue útil pedagógicamente
+Criterios de aceptación:
+  * Dado que el reporte no tiene rating previo
+  * Cuando selecciono 4 estrellas
+  * Entonces se guarda teacherRating y se oculta el toast
+
+  * Dado que no deseo calificar
+  * Cuando presiono "Saltar" o cierro
+  * Entonces se oculta el toast sin enviar
+
+[REVERSO]
+Detalles:
+  - TeacherEvaluationToast.tsx
+  - Toast fijo bottom-right con 5 estrellas hover/click
+  - Solo si no hay rating previo y enableTeacherEvaluation=true
+  - POST /api/play/teacher-feedback
+  - Animación slideUp
+  - no-print class para exportación PDF
+  - Componente: TeacherEvaluationToast.tsx
+
+==============================
+EPIC 16: REPORTES Y ANALISIS
+==============================
+
+--- HISTORIA HU-077 ---
+[CARA FRONTAL]
+Nombre: Hub de Reportes con Métricas por Sesión
+Como: Educador
+Puedo: Ver un resumen de todas mis sesiones de juego
+Para: Evaluar el desempeño general de mis estudiantes
+Criterios de aceptación:
+  * Dado que hay sesiones creadas
+  * Cuando accedo a Reportes
+  * Entonces cada tarjeta muestra promedio, participantes e índice de efectividad con barra de progreso
+
+  * Dado que selecciono "Finalizada"
+  * Cuando se actualiza la URL
+  * Entonces solo veo sesiones FINALIZADA
+
+[REVERSO]
+Detalles:
+  - reports/page.tsx lista sesiones
+  - Métricas: nombre actividad, estado (badge), fecha, promedio de clase, participantes, índice de efectividad
+  - Filtros por estado y búsqueda
+  - Efectividad = (correctas/total)*100
+  - Colores: >=70% verde, >=50% amarillo, <50% rojo
+  - Página: dashboard/reports/page.tsx
+
+--- HISTORIA HU-078 ---
+[CARA FRONTAL]
+Nombre: Detalle de Reporte con Podio
+Como: Educador
+Puedo: Ver el podio de los mejores estudiantes de una sesión
+Para: Reconocer el esfuerzo de mis estudiantes
+Criterios de aceptación:
+  * Dado que la sesión tiene al menos 3 participantes
+  * Cuando se renderiza el podio
+  * Entonces veo 3 posiciones con avatares, nombres, puntajes y alturas diferentes
+
+  * Dado que hago clic en un estudiante del podio
+  * Cuando se procesa
+  * Entonces se abre sidebar con detalle individual
+
+[REVERSO]
+Detalles:
+  - ReportDetailClient.tsx
+  - Podio top 3 con avatares, coronas, medallas (oro/plata/bronce), puntajes
+  - Click en estudiante abre sidebar de detalle
+  - Gradientes CSS por posición
+  - Corona emoji para 1er lugar
+  - Componente: ReportDetailClient.tsx
+
+--- HISTORIA HU-079 ---
+[CARA FRONTAL]
+Nombre: Insights: Pregunta Más Difícil y Tiempo Promedio
+Como: Educador
+Puedo: Identificar la pregunta más difícil y el tiempo promedio de respuesta
+Para: Ajustar mi enseñanza según las dificultades detectadas
+Criterios de aceptación:
+  * Dado que hay respuestas registradas
+  * Cuando se calcula la tasa de fallos
+  * Entonces veo la pregunta con mayor % de respuestas incorrectas
+
+  * Dado que no hay respuestas
+  * Cuando se renderiza
+  * Entonces veo "No hay datos suficientes"
+
+[REVERSO]
+Detalles:
+  - Dos insight cards
+  - Pregunta con mayor tasa de fallos con porcentaje
+  - Tiempo promedio por respuesta en segundos
+  - Calculados server-side en page.tsx del reporte
+  - Página: dashboard/reports/[id]/page.tsx
+
+--- HISTORIA HU-080 ---
+[CARA FRONTAL]
+Nombre: Tabla de Desempeño Individual
+Como: Educador
+Puedo: Ver el desempeño de cada estudiante con indicadores visuales
+Para: Identificar estudiantes que necesitan apoyo
+Criterios de aceptación:
+  * Dado que hay participantes con respuestas
+  * Cuando se renderiza la tabla
+  * Entonces cada fila muestra avatar, puntaje, barra de efectividad y badge de tendencia
+
+  * Dado que hago clic en una fila
+  * Cuando se procesa
+  * Entonces se abre StudentDetailSidebar con datos del estudiante
+
+[REVERSO]
+Detalles:
+  - Tabla con: avatar+nombre, puntaje, efectividad% (barra progreso), tendencia (Sobre/Bajo Promedio)
+  - Click abre sidebar de detalle
+  - Efectividad coloreada: >=70% verde, >=50% amarillo, <50% rojo
+  - Componente: ReportDetailClient.tsx
+
+--- HISTORIA HU-081 ---
+[CARA FRONTAL]
+Nombre: Sidebar de Detalle del Estudiante
+Como: Educador
+Puedo: Ver el análisis profundo de un estudiante específico
+Para: Comprender el desempeño individual
+Criterios de aceptación:
+  * Dado que se abre la sidebar de un estudiante
+  * Cuando se renderiza
+  * Entonces veo métricas, comparación con clase, ritmo y bitácora de sesión
+
+  * Dado que el estudiante respondió más rápido que el 70% del promedio
+  * Cuando se calcula el ritmo
+  * Entonces veo etiqueta "Rápido" con icono amarillo
+
+[REVERSO]
+Detalles:
+  - StudentDetailSidebar.tsx
+  - Overlay con: avatar, nombre, score, tiempo total, efectividad global (barra), comparación con promedio de clase, ritmo de trabajo (Rápido/Promedio/Analítico), bitácora cronológica
+  - Ritmo: <70% del avg = Rápido, >130% = Analítico, else Promedio
+  - Componente: StudentDetailSidebar.tsx
+
+--- HISTORIA HU-082 ---
+[CARA FRONTAL]
+Nombre: Bitácora de Sesión del Estudiante
+Como: Educador
+Puedo: Ver cada respuesta del estudiante con contexto
+Para: Analizar el proceso de aprendizaje
+Criterios de aceptación:
+  * Dado que el estudiante respondió correctamente en 3 segundos
+  * Cuando se renderiza la bitácora
+  * Entonces veo badge verde "¡Dominado!"
+
+  * Dado que el estudiante respondió incorrectamente
+  * Cuando se renderiza
+  * Entonces veo badge rojo "Revisar" y la respuesta correcta
+
+[REVERSO]
+Detalles:
+  - StudentSessionLog.tsx
+  - Cronología de respuestas con badges
+  - "¡Dominado!" correcta <=5s
+  - "Reflexionado" correcta >5s
+  - "Revisar" incorrecta
+  - Muestra texto de pregunta, respuesta del estudiante, respuesta correcta (solo si falló)
+  - Manejo especial para tipo V/F (mapea a "Verdadero"/"Falso")
+  - Componente: StudentSessionLog.tsx
+
+--- HISTORIA HU-083 ---
+[CARA FRONTAL]
+Nombre: Exportar Reporte a PDF
+Como: Educador
+Puedo: Exportar el reporte de una sesión a PDF
+Para: Compartir con coordinación o archivar
+Criterios de aceptación:
+  * Dado que visualizo un reporte
+  * Cuando presiono "Exportar a PDF"
+  * Entonces se abre diálogo de impresión con formato optimizado (elementos interactivos ocultos)
+
+[REVERSO]
+Detalles:
+  - Botón "Exportar a PDF" usa window.print()
+  - CSS @media print
+  - Clase no-print oculta elementos interactivos (sidebar, toast, breadcrumb, botón)
+  - Componente: ReportDetailClient.tsx
+
+==============================
+EPIC 17: CONFIGURACION Y PREFERENCIAS
+==============================
+
+--- HISTORIA HU-084 ---
+[CARA FRONTAL]
+Nombre: Preferencias de Juego por Defecto
+Como: Educador
+Puedo: Configurar valores por defecto para no repetirlos cada vez
+Para: Agilizar la creación de actividades
+Criterios de aceptación:
+  * Dado que ajusto tiempo a 45s y desactivo voz
+  * Cuando guardo
+  * Entonces se persiste en LudiUserConfig y nuevas actividades usan estos valores
+
+  * Dado que nunca configuré
+  * Cuando accedo a preferencias
+  * Entonces veo defaults: 30s, 10pts, voz=true, público=false, feedback=true, evaluación=true
+
+[REVERSO]
+Detalles:
+  - GamePreferences.tsx
+  - Configurables: tiempo límite, puntos, voz, actividad pública
+  - Toggles para feedback estudiantil y evaluación docente
+  - GET/PUT /api/user/config
+  - Upsert en LudiUserConfig
+  - Componente: GamePreferences.tsx
+
+--- HISTORIA HU-085 ---
+[CARA FRONTAL]
+Nombre: Cambio de Idioma (Español/Inglés)
+Como: Educador
+Puedo: Usar la plataforma en español o inglés
+Para: Adaptar la interfaz a mi preferencia de idioma
+Criterios de aceptación:
+  * Dado que la plataforma está en español
+  * Cuando selecciono "English"
+  * Entonces los textos traducidos cambian a inglés
+
+[REVERSO]
+Detalles:
+  - LocaleSwitcherSelect.tsx cambia locale via next-intl
+  - Persiste preferencia
+  - Router refresh via startTransition
+  - Archivos messages/es.json y messages/en.json
+  - No todas las páginas usan traducciones (deuda técnica: completar i18n)
+  - Componente: LocaleSwitcherSelect.tsx
+
+--- HISTORIA HU-086 ---
+[CARA FRONTAL]
+Nombre: Sidebar de Navegación de Configuración
+Como: Educador
+Puedo: Navegar entre las secciones de configuración
+Para: Acceder rápidamente a diferentes ajustes
+Criterios de aceptación:
+  * Dado que estoy en /settings
+  * Cuando hago clic en "Seguridad"
+  * Entonces navego a /settings/security
+
+  * Dado que soy admin
+  * Cuando se renderiza la sidebar
+  * Entonces veo "Gestión de Usuarios"
+
+[REVERSO]
+Detalles:
+  - SidebarSettings.tsx
+  - Links: Información Personal, Seguridad, Apariencia, Preferencias de Juego, Gestión de Datos
+  - "Gestión de Usuarios" solo para admin (rolId=1)
+  - "Volver al Dashboard"
+  - Sidebar fija de 250px
+  - Resalta ruta activa
+  - Componente: SidebarSettings.tsx
+
+==============================
+EPIC 18: SEGURIDAD Y DATOS
+==============================
+
+--- HISTORIA HU-087 ---
+[CARA FRONTAL]
+Nombre: Exportación de Datos Personales (JSON)
+Como: Educador
+Puedo: Exportar todos mis datos para respaldo o portabilidad
+Para: Tener control sobre mi información
+Criterios de aceptación:
+  * Dado que presiono "Exportar mis datos"
+  * Cuando se procesa la solicitud
+  * Entonces se descarga JSON con toda la información del usuario
+
+[REVERSO]
+Detalles:
+  - DataSettings.tsx + GET /api/user/export-data
+  - Compila: perfil, config, actividades, preguntas, opciones, parejas, recursos
+  - Descarga JSON con Content-Disposition attachment
+  - BigInt replacer (toString)
+  - Sin opción de importar ni eliminar cuenta
+  - Componente: DataSettings.tsx
+
+==============================
+EPIC 19: ADMINISTRACION
+==============================
+
+--- HISTORIA HU-088 ---
+[CARA FRONTAL]
+Nombre: Listado y Eliminación de Usuarios (Admin)
+Como: Administrador IT
+Puedo: Gestionar los usuarios de la plataforma
+Para: Controlar acceso y dar soporte
+Criterios de aceptación:
+  * Dado que un admin accede a /settings/admin
+  * Cuando se carga la página
+  * Entonces veo tabla de educadores ordenados por fecha
+
+  * Dado que confirmo la eliminación
+  * Cuando se procesa
+  * Entonces se elimina de SQL Server y Firebase Auth
+
+  * Dado que intento eliminar otro admin
+  * Cuando envío la solicitud
+  * Entonces retorna 403 "No se puede eliminar a otro administrador"
+
+[REVERSO]
+Detalles:
+  - AdminUsers.tsx + /api/admin/users
+  - Tabla de educadores: nombre, email, rol, fecha
+  - Delete con modal de confirmación
+  - Elimina de SQL Server (cascade) y Firebase Auth
+  - Solo rolId=1
+  - rolId===1 hardcoded (deuda técnica: usar enum)
+  - Firebase delete puede fallar silenciosamente
+  - Componente: AdminUsers.tsx
+
+==============================
+EPIC 20: PAGINA PUBLICA (LANDING)
+==============================
+
+--- HISTORIA HU-089 ---
+[CARA FRONTAL]
+Nombre: Landing Page Informativa
+Como: Visitante
+Puedo: Conocer qué es LudiGame y cómo puede beneficiar mi enseñanza
+Para: Decidir si registrarme en la plataforma
+Criterios de aceptación:
+  * Dado que accedo a /home
+  * Cuando se carga la página
+  * Entonces veo todas las secciones informativas con CTAs y animaciones
+
+  * Dado que hago clic en "Ingresar código para jugar"
+  * Cuando se procesa
+  * Entonces se abre /play en nueva pestaña
+
+[REVERSO]
+Detalles:
+  - home/page.tsx
+  - Hero con CTA "Comenzar a crear" y "Ingresar código para jugar"
+  - Sección "¿Por qué usar ludificación?" con 3 cards
+  - Sección de tipos de juego (Quiz, Memory, V/F)
+  - Lottie animations (reading, rocket)
+  - CSS animations de fondo
+  - i18n con next-intl
+  - Página: home/page.tsx
+
+--- HISTORIA HU-090 ---
+[CARA FRONTAL]
+Nombre: Navegación Pública (Logo, Institución, Auth, Idioma)
+Como: Visitante
+Puedo: Navegar entre la página pública, login y registro
+Para: Acceder a diferentes secciones del sitio
+Criterios de aceptación:
+  * Dado que estoy en la landing
+  * Cuando hago clic en "Registrarse"
+  * Entonces navego a /auth/signup
+
+  * Dado que hago clic en botón de institución
+  * Cuando se procesa
+  * Entonces se abre stmary.edu.ni en nueva pestaña
+
+[REVERSO]
+Detalles:
+  - Sidebar.tsx (público)
+  - Logo LudiGame
+  - Botón institución: stmary.edu.ni (nueva pestaña)
+  - Iniciar Sesión, Registrarse
+  - Selector de idioma
+  - Navbar sky-blue (#7bcfff)
+  - i18n labels
+  - Componente: Sidebar.tsx
+
+============================================================================
+FIN DEL DOCUMENTO - 90 HISTORIAS DE USUARIO
+============================================================================

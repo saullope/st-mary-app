@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
 import DashboardTour from "./DashboardTour";
+import { useTranslations } from "next-intl";
 
 type GradeKey = 'firstGrade' | 'secondGrade' | 'thirdGrade';
 
@@ -19,6 +20,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
   const { setSelectedGrade } = useAuth();
   const [grade, setGrade] = useState<GradeKey>('firstGrade');
   const router = useRouter();
+  const t = useTranslations('textDashboard');
 
   const handleNavigation = (path: string) => {
     router.push(path);
@@ -44,61 +46,59 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
   return (
     <div className="container-fluid py-5 px-md-5" style={{ minHeight: '100vh' }}>
       <DashboardTour />
-      {/* Sección principal con Padding superior aumentado */}
-  <section className={`${designStyles.glassCardDark} mb-5 p-4 p-md-5`}>
-    
-    {/* Top Bar Context: Centrado vertical y mejor espaciado */}
-    <div className=" flex-md-row mb-5 pb-4 border-bottom border-light border-opacity-10">
-      <h2 id="dashboard-user-greeting" className={designStyles.titleLudi} style={{ marginBottom: 0, flex: 1, textAlign: 'center' }}>
-        <span className={designStyles.star}>★</span> ¡Hola, <span style={{ color: '#00d4ff' }}>{getFirstName(userName)}</span>! ¿Qué deseas hacer?
-      </h2>
-    
-    </div>
+      {/* Sección principal */}
+      <section className={`${designStyles.glassCardDark} mb-5 p-4 p-md-5`}>
 
-        <div className={designStyles.actionsContainer}>
-          {/* Tarjeta: Crear */}
+        <div className="flex-md-row mb-4 pb-3 border-bottom border-light border-opacity-10">
+          <h2 id="dashboard-user-greeting" className={designStyles.titleLudi} style={{ marginBottom: 0, textAlign: 'center' }}>
+            <span className={designStyles.star}>★</span> {t('whatYouCanDo')}
+          </h2>
+        </div>
+
+        <div className={designStyles.actionsGrid}>
+          {/* Tarjeta 1: #181130 */}
           <div
             id="card-create-activity"
             className={`${designStyles.ludiCard} ${designStyles.cardDark}`}
             onClick={() => handleNavigation('/dashboard/create-activity')}
           >
             <div className={designStyles.ludiContent}>
-              <span className={designStyles.ludiTag}><FaPlusCircle /> Crear</span>
-              <h3>Diseña experiencias educativas</h3>
+              <span className={designStyles.ludiTag}><FaPlusCircle /> {t('create')}</span>
+              <h3>{t('exprienceDescription')}</h3>
               <p>Ludi Quiz · Ludi Memory · True or False</p>
-              <button className={designStyles.ludiBtnSmall}>Comenzar</button>
+              <button className={designStyles.ludiBtnSmall}>{t('start')}</button>
             </div>
-            <img src="/images/crear.gif" alt="" className={designStyles.ludiGif} />
+            <img src="/images/crear.gif" alt="Crear" className={designStyles.ludiGifLarge} />
           </div>
 
-          {/* Tarjeta: Plantillas */}
+          {/* Tarjeta 2: #6A42E1 */}
           <div
             id="card-templates"
             className={`${designStyles.ludiCard} ${designStyles.cardPurple}`}
             onClick={() => handleNavigation('/dashboard/templates')}
           >
             <div className={designStyles.ludiContent}>
-              <span className={designStyles.ludiTag}><FaClone /> Explorar</span>
-              <h3>Plantillas Ludi</h3>
-              <p>Explora actividades lúdicas listas para usar</p>
-              <button className={designStyles.ludiBtnSmall}>Ver plantillas</button>
+              <span className={designStyles.ludiTag}><FaClone /> {t('explore')}</span>
+              <h3>{t('ludiTemplates')}</h3>
+              <p>{t('ludiTemplatesText')}</p>
+              <button className={designStyles.ludiBtnSmall}>{t('seeTemplates')}</button>
             </div>
-            <img src="/images/plantillas.gif" alt="" className={designStyles.ludiGif} />
+            <img src="/images/plantillas.gif" alt="Plantillas" className={designStyles.ludiGifLarge} />
           </div>
 
-          {/* Tarjeta: Gestionar */}
+          {/* Tarjeta 3: #4569D5 */}
           <div
             id="card-my-activities"
             className={`${designStyles.ludiCard} ${designStyles.cardBlue}`}
             onClick={() => handleNavigation('/dashboard/my-activities')}
           >
             <div className={designStyles.ludiContent}>
-              <span className={designStyles.ludiTag}><FaListOl /> Gestionar</span>
-              <h3>Mis actividades</h3>
-              <p>Guarda, organiza y reutiliza tus actividades cuando quieras</p>
-              <button className={designStyles.ludiBtnSmall}>Revisar</button>
+              <span className={designStyles.ludiTag}><FaListOl /> {t('manage')}</span>
+              <h3>{t('myActivities')}</h3>
+              <p>{t('myActivitiesDescription')}</p>
+              <button className={designStyles.ludiBtnSmall}>{t('check')}</button>
             </div>
-            <img src="/images/actividades.gif" alt="" className={designStyles.ludiGif} />
+            <img src="/images/actividades.gif" alt="Actividades" className={designStyles.ludiGifLarge} />
           </div>
         </div>
       </section>
@@ -109,7 +109,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
           {drafts && drafts.length > 0 ? (
             <div className="mb-4">
               <h5 className="fw-bold text-white mb-3 d-flex align-items-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-                <FaPen className="me-2" /> CONTINUAR TRABAJANDO
+                <FaPen className="me-2" /> {t('continueJob')}
               </h5>
               <div className={`${designStyles.glassCardDark} p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between`}>
                 <div>
@@ -117,14 +117,17 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
                     {drafts[0].tipoActividad?.nombre || "Actividad"}
                   </span>
                   <h4 className="fw-bold text-white mb-1">{drafts[0].activity?.activity_name || "Actividad sin título"}</h4>
-                  <p className="text-white opacity-75 small mb-0">Última edición hace poco</p>
+                  <p className="text-white opacity-75 small mb-0">{t('lastEdition')}</p>
                 </div>
                 <div className="mt-3 mt-md-0">
                   <button
                     className={designStyles.btnLudi}
-                    onClick={() => router.push(`/dashboard/create-activity`)}
+                    onClick={() => {
+                      const url = `/create/${drafts[0].tipo_activity_id}?id=${drafts[0].activity_id}`;
+                      window.open(url, '_blank', 'noopener,noreferrer');
+                    }}
                   >
-                    Retomar <FaArrowRight className="ms-2" />
+                    {t('resume')} <FaArrowRight className="ms-2" />
                   </button>
                 </div>
               </div>
@@ -132,10 +135,10 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
           ) : (
             <div className="mb-4">
               <h5 className="fw-bold text-white mb-3 d-flex align-items-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-                <FaPen className="me-2" /> CONTINUAR TRABAJANDO
+                <FaPen className="me-2" /> {t('continueJob')}
               </h5>
               <div className={`${designStyles.glassCardDark} p-4 text-center`}>
-                <p className="text-white opacity-75 mb-0 small">No tienes borradores pendientes. ¡Crea una nueva actividad para comenzar!</p>
+                <p className="text-white opacity-75 mb-0 small">{t('noDrafts')}</p>
               </div>
             </div>
           )}

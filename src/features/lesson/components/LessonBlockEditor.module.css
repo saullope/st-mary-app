@@ -1,0 +1,53 @@
+/* Editor de bloques de LudiLección: fuentes de contenido y vista previa */
+
+.sourceRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.previewArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.removeContentBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fff;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.emptyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 2.5rem 1rem;
+  margin-top: 8px;
+  border: 2px dashed #d9d3ff;
+  border-radius: 16px;
+  color: #6b6390;
+  font-size: 0.95rem;
+}
+
+.emptyContent svg {
+  font-size: 2rem;
+  opacity: 0.7;
+}
+
+.removeContentBtn:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}

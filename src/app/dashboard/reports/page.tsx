@@ -32,6 +32,8 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
     redirect("/auth/login");
   }
 
+  const tReports = await getTranslations("reports");
+
   const resolvedSearchParams = await searchParams;
   const statusFilter = resolvedSearchParams.status;
   const searchFilter = resolvedSearchParams.search?.toLowerCase();
@@ -80,9 +82,9 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
       <div className={styles.headerContainer} style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
         <div>
           <h1 className={designStyles.titleLudi} style={{ textAlign: 'left', marginBottom: '10px' }}>
-            <FaChartBar className="me-3" /> Reportes y Análisis
+            <FaChartBar className="me-3" /> {tReports('metaTitle')}
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.7)' }}>Revisa el progreso, resultados y estadísticas detalladas de las sesiones de tus estudiantes.</p>
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>{tReports('metaDescription')}</p>
         </div>
       </div>
 
@@ -155,11 +157,11 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
 
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                      <p className="mb-0 small" style={{ color: '#4a4266' }}>Promedio de Clase</p>
+                      <p className="mb-0 small" style={{ color: '#4a4266' }}>{tReports('avegrageScore')}</p>
                       <h4 className="fw-bold mb-0" style={{ color: '#1D153A' }}>{averageScore} pts</h4>
                     </div>
                     <div className="text-end">
-                      <p className="mb-0 small" style={{ color: '#4a4266' }}>Participantes</p>
+                      <p className="mb-0 small" style={{ color: '#4a4266' }}>{tReports('totalStudents')}</p>
                       <h4 className="fw-bold mb-0" style={{ color: '#1D153A' }}>
                         <FaUsers className="me-2" size={16} style={{ color: 'rgba(29, 21, 58, 0.5)' }} />
                         {totalParticipants}
@@ -169,7 +171,7 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
 
                   <div className="pt-3" style={{ borderTop: '1px dashed rgba(29, 21, 58, 0.1)' }}>
                     <div className="d-flex justify-content-between align-items-center mb-1">
-                      <span className="small fw-bold" style={{ color: '#4a4266' }}>Índice de Efectividad</span>
+                      <span className="small fw-bold" style={{ color: '#4a4266' }}>{tReports('efectIndex')}</span>
                       <span className="small fw-bold" style={{ color: reliabilityScore >= 70 ? '#198754' : reliabilityScore >= 50 ? '#e5b869' : '#dc3545' }}>
                         {reliabilityScore}%
                       </span>
@@ -193,8 +195,8 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
         {sessions.length === 0 && (
           <div className={styles.emptyStateCard}>
             <div className={styles.emptyStateIcon}>📊</div>
-            <h3><span className={designStyles.star}>★</span> No se encontraron sesiones</h3>
-            <p>Intenta ajustar los filtros o juega actividades con tus estudiantes para generar reportes.</p>
+            <h3><span className={designStyles.star}>★</span> {tReports('noSession')}</h3>
+            <p>{tReports('noSessionDesc')}</p>
           </div>
         )}
       </div>

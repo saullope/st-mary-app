@@ -2,17 +2,18 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FaListCheck, FaGamepad, FaBrain, FaClone, FaEye, FaRocket, FaCheck } from "react-icons/fa6";
+import { FaListCheck, FaGamepad, FaBrain, FaClone, FaEye, FaRocket, FaCheck, FaBookOpen, FaClipboardList } from "react-icons/fa6";
 import styles from "@/styles/pages/my-activities.module.css";
 import { cloneTemplateActivity } from "./actions";
 import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
+import { notify } from "@/components/ui";
+import { getEditorRoute, openPendingEditorTab } from "@/lib/editorTab";
 
 interface TemplateCardProps {
   template: any;
-  userId: string;
 }
 
-export default function TemplateCard({ template, userId }: TemplateCardProps) {
+export default function TemplateCard({ template }: TemplateCardProps) {
   const [cloning, setCloning] = useState(false);
   const [sessionPin, setSessionPin] = useState<string | null>(null);
   const [isLaunching, setIsLaunching] = useState(false);
@@ -23,7 +24,7 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
     if (result.success) {
         setSessionPin(result.pin || "");
     } else {
-        alert(result.error);
+        notify.error("No se pudo lanzar la partida", result.error || "Inténtalo de nuevo.");
     }
     setIsLaunching(false);
   };
@@ -33,6 +34,8 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
       case 1: return <FaListCheck size={28} />;
       case 2: return <FaGamepad size={28} />;
       case 3: return <FaBrain size={28} />;
+      case 4: return <FaBookOpen size={28} />;
+      case 5: return <FaClipboardList size={28} />;
       default: return <FaGamepad size={28} />;
     }
   };
@@ -42,6 +45,8 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
       case 1: return styles.badgeQuiz;
       case 2: return styles.badgeTF;
       case 3: return styles.badgeMemory;
+      case 4: return styles.badgeLesson;
+      case 5: return styles.badgeForm;
       default: return "bg-light text-dark";
     }
   };
@@ -50,53 +55,50 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
   const hasImage = !!template.activity?.image_url;
 
   const handleClone = async () => {
+    const editorTab = openPendingEditorTab();
     setCloning(true);
     try {
-      const result = await cloneTemplateActivity(template.activityId, userId);
+      const result = await cloneTemplateActivity(template.activityId);
       if (result.success && result.newActivityId) {
-        // Redirect to edit the newly cloned activity
-        const editRoute = template.tipoActividadId === 1 
-            ? `/create/ludiquiz?id=${result.newActivityId}`
-            : template.tipoActividadId === 2 
-                ? `/create/trueorfalse?id=${result.newActivityId}`
-                : `/create/ludimemory?id=${result.newActivityId}`;
-        
-        window.location.href = editRoute;
+        editorTab.navigate(getEditorRoute(template.tipoActividadId, result.newActivityId));
+        setCloning(false);
       } else {
-        alert(result.error || "Ocurrió un error al clonar la plantilla.");
+        editorTab.cancel();
+        notify.error("No se pudo usar la plantilla", result.error || "Ocurrió un error al clonar la plantilla.");
         setCloning(false);
       }
     } catch (error) {
       console.error(error);
-      alert("Error inesperado al usar la plantilla.");
+      editorTab.cancel();
+      notify.error("Error inesperado al usar la plantilla.");
       setCloning(false);
     }
   };
 
   return (
     <div className={`${styles.activityCard} position-relative`}>
-      <div 
-        className={styles.cardHeader} 
-        style={hasImage ? { 
-          padding: 0, 
-          position: "relative", 
-          height: "140px", 
-          display: "block" 
+      <div
+        className={styles.cardHeader}
+        style={hasImage ? {
+          padding: 0,
+          position: "relative",
+          height: "140px",
+          display: "block"
         } : {}}
       >
         {hasImage ? (
           <>
-            <Image 
-              src={template.activity.image_url} 
-              alt={template.activity.activity_name || "Template cover"} 
+            <Image
+              src={template.activity.image_url}
+              alt={template.activity.activity_name || "Template cover"}
               fill
               style={{ objectFit: "cover" }}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
-            <div style={{ 
-              position: "absolute", 
-              top: 0, left: 0, right: 0, bottom: 0, 
-              background: "linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6))" 
+            <div style={{
+              position: "absolute",
+              top: 0, left: 0, right: 0, bottom: 0,
+              background: "linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6))"
             }} />
             <div className={styles.cardBadges} style={{ position: "absolute", bottom: "12px", right: "12px", zIndex: 1, display: "flex", gap: "8px" }}>
               <span className={styles.gradeBadge} style={{ background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)', color: 'white', fontWeight: 'bold' }}>
@@ -124,7 +126,7 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
           </>
         )}
       </div>
-      
+
       <div className={styles.cardBody}>
         <h3 className={styles.cardTitle} title={template.activity.activity_name}>
           {template.activity.activity_name}
@@ -146,8 +148,8 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
             </div>
         )}
         <div className="d-flex w-100 gap-2">
-            <button 
-            onClick={handleClone} 
+            <button
+            onClick={handleClone}
             disabled={cloning}
             className="btn flex-grow-1 d-flex justify-content-center align-items-center gap-2"
             style={{
@@ -174,7 +176,7 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
             )}
             </button>
 
-            <button 
+            <button
                 onClick={handleLaunch}
                 disabled={isLaunching}
                 className="btn d-flex justify-content-center align-items-center"
@@ -194,7 +196,7 @@ export default function TemplateCard({ template, userId }: TemplateCardProps) {
                 {isLaunching ? <span className="spinner-border spinner-border-sm" /> : <FaRocket />}
             </button>
 
-            <a 
+            <a
             href={`/views/activity/${template.activityId}`}
             target="_blank"
             rel="noopener noreferrer"

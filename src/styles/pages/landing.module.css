@@ -100,22 +100,11 @@
 
 .login-container{
     height: 33.75em;
-    width: 45em;
-    margin: 3em auto;
+    width: 50em;
+    margin: 2em auto;
     display: flex;
-    justify-content: space-between;
     border-radius: 10px;
     overflow: hidden;
-}
-
-.login-info-container{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding-top: 0.5rem;
-    background-color: var(--login-bg);
 }
 
 .image-login{
@@ -125,19 +114,10 @@
     box-sizing: border-box;
 }
 
-.title-login{
-    text-transform: capitalize;
-    font-size: 2rem;
-    font-weight: 600;
-    padding: 8px;
-    letter-spacing: 1px;
-    color: #456ee3;
-}
 
 .social-login{
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
 }
 
 .social-login-element{

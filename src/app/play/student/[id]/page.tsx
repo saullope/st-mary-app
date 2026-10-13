@@ -1,12 +1,18 @@
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
-import { GameEngine } from "./GameEngine";
+import { ActivityPlayer } from "@/features/play/ActivityPlayer";
+import { WaitingRoom } from "@/features/play/WaitingRoom";
+import { sessionPhase } from "@/lib/play/sessionState";
+
+// La fase de la sesión cambia en vivo cuando el docente inicia o termina.
+export const dynamic = "force-dynamic";
 
 export default async function StudentGamePage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
+    if (!/^\d+$/.test(resolvedParams.id)) notFound();
     const sesionId = BigInt(resolvedParams.id);
 
-    const sesion = await (prisma as any).lUDI_SESION.findUnique({
+    const sesion = await prisma.lUDI_SESION.findUnique({
         where: { id: sesionId },
         include: {
             user: { include: { config: true } },
@@ -19,13 +25,13 @@ export default async function StudentGamePage({ params }: { params: Promise<{ id
                         where: { activo: true },
                         orderBy: { numero: 'asc' },
                         include: {
-                            opciones: { orderBy: { indice: 'asc' } },
-                            preguntaRecursos: { 
-                                include: { 
+                            opciones: { orderBy: { indice: 'asc' }, include: { opcionRecursos: { include: { recurso: true } } } },
+                            preguntaRecursos: {
+                                include: {
                                     recurso: {
                                         include: { tipo: true }
-                                    } 
-                                } 
+                                    }
+                                }
                             }
                         }
                     },
@@ -43,8 +49,15 @@ export default async function StudentGamePage({ params }: { params: Promise<{ id
         notFound();
     }
 
-    // Pass data to Client Component
-    return <GameEngine sesion={JSON.parse(JSON.stringify(sesion, (key, value) => 
+    const serialized = JSON.parse(JSON.stringify(sesion, (key, value) =>
         typeof value === 'bigint' ? value.toString() : value
-    ))} />;
+    ));
+
+    // Solo se juega cuando el docente inició la actividad desde el panel en vivo.
+    const phase = sessionPhase(sesion.estado);
+    if (phase !== "active") {
+        return <WaitingRoom sesion={serialized} phase={phase} />;
+    }
+
+    return <ActivityPlayer sesion={serialized} />;
 }

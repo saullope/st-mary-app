@@ -1,3 +1,5 @@
+import type { MediaType } from "./media";
+
 export type LudiQuizActivity = {
     activityName: string; // Nombre de la actividad
     activityType: string | null; // Tipo de actividad
@@ -15,8 +17,9 @@ export type LudiQuizQuestion = {
     id: number; // Identificador único de la pregunta
     text: string; // Texto de la pregunta
     answers: LudiQuizAnswer[]; // Array de respuestas posibles
-    mediaType: "image" | "video" | "audio" | "youtube" | null; // Tipo de archivo multimedia
+    mediaType: MediaType | null;
     mediaUrl: string | null; // URL del archivo multimedia
+    isSlide?: boolean; // Diapositiva de contenido: solo text + mediaUrl, sin respuestas ni tiempo
 };
 
 export type LudiQuizAnswer = {

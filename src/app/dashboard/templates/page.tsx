@@ -145,7 +145,7 @@ export default async function TemplatesPage({
       {templates.length > 0 ? (
         <div className={styles.activitiesGrid}>
           {templates.map((template: any) => (
-            <TemplateCard key={template.activityId} template={template} userId={user.id} />
+            <TemplateCard key={template.activityId} template={template} />
           ))}
         </div>
       ) : (

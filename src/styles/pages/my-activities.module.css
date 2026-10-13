@@ -170,6 +170,16 @@
   border: 1px solid rgba(255,255,255,0.2);
 }
 
+.badgeForm {
+  background: linear-gradient(135deg, #ff5c8a, #ffa36c); /* Ludi Form */
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.badgeLesson {
+  background: linear-gradient(135deg, #00b4e6, #6a4bff); /* Ludi Lección */
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
 .cardFooter {
   margin-top: auto;
   padding-top: 1.2rem;

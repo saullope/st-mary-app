@@ -4,16 +4,21 @@ import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { LudiQuizQuestion, TrueOrFalseQuestion } from "@/lib/types";
 import { GamificationConfig } from "@/context/ActivityEditorContext";
-import { getActivityTypeId, getThemeIdByUrl, getOrCreateResource } from "@/lib/activity-helpers";
+import { getActivityTypeId, getThemeIdByUrl, getOrCreateResource, setOptionImage, replaceLessonBlocks, validateLessonForSave, replaceFormQuestions, validateFormForSave } from "@/lib/activity-helpers";
+import { validateMemoryForSave } from "@/features/memory/memoryCards";
+import type { LessonBlock } from "@/features/lesson/lessonBlocks";
+import type { FormQuestion } from "@/features/form/formQuestions";
 
 interface UpdateActivityData {
   activityId: number;
   title: string;
-  type: "ludiquiz" | "ludimemory" | "trueorfalse";
+  type: "ludiquiz" | "ludimemory" | "trueorfalse" | "ludileccion" | "ludiform";
   questions: (LudiQuizQuestion | TrueOrFalseQuestion)[];
   config: GamificationConfig;
   backgroundImage?: string;
   memoryImages?: string[];
+  lessonBlocks?: LessonBlock[];
+  formQuestions?: FormQuestion[];
 }
 
 export async function updateActivity(data: UpdateActivityData) {
@@ -21,6 +26,21 @@ export async function updateActivity(data: UpdateActivityData) {
 
   if (!user) {
     return { error: "No autorizado. Debes iniciar sesión." };
+  }
+
+  if (data.type === "ludileccion") {
+    const problem = validateLessonForSave(data.lessonBlocks, data.config.gradeId);
+    if (problem) return { error: problem };
+  }
+
+  if (data.type === "ludiform") {
+    const problem = validateFormForSave(data.formQuestions, data.config.gradeId);
+    if (problem) return { error: problem };
+  }
+
+  if (data.type === "ludimemory") {
+    const problem = validateMemoryForSave(data.memoryImages);
+    if (problem) return { error: problem };
   }
 
   try {
@@ -39,7 +59,7 @@ export async function updateActivity(data: UpdateActivityData) {
       }
 
       const tipoActividadId = await getActivityTypeId(data.type);
-      
+
       // Obtener el tema por fondo. Fallback al primer activo si no existe.
       let temaId = data.backgroundImage ? await getThemeIdByUrl(data.backgroundImage) : null;
       if (!temaId) {
@@ -75,6 +95,7 @@ export async function updateActivity(data: UpdateActivityData) {
           ajustesJson: JSON.stringify({
             badges: data.config.selectedBadges,
             missions: data.config.selectedMissions,
+            voiceEnabled: data.config.voiceEnabled,
             backgroundImage: data.backgroundImage
           })
         },
@@ -85,13 +106,18 @@ export async function updateActivity(data: UpdateActivityData) {
           ajustesJson: JSON.stringify({
             badges: data.config.selectedBadges,
             missions: data.config.selectedMissions,
+            voiceEnabled: data.config.voiceEnabled,
             backgroundImage: data.backgroundImage
           })
         }
       });
 
       // 5. Smart Content Update
-      if (data.type === 'ludimemory' && data.memoryImages) {
+      if (data.type === 'ludileccion') {
+          await replaceLessonBlocks(tx, data.activityId, tipoActividadId, data.lessonBlocks ?? []);
+      } else if (data.type === 'ludiform') {
+          await replaceFormQuestions(tx, data.activityId, tipoActividadId, data.formQuestions ?? [], data.config.pointsPerCorrect);
+      } else if (data.type === 'ludimemory' && data.memoryImages) {
           // Explicitly delete tarjetas first to avoid FK constraints if CASCADE is not set in SQL Server
           const oldParejas = await tx.ludiMemoriaPareja.findMany({ where: { activityId: data.activityId } });
           const oldParejaIds = oldParejas.map(p => p.id);
@@ -136,16 +162,17 @@ export async function updateActivity(data: UpdateActivityData) {
 
           if (questionsToDelete.length > 0) {
               const qIds = questionsToDelete.map(q => q.id);
-              
+
               // 1. Clear related Student Answers (if any missed the CASCADE)
               await tx.ludiRespuestaEstudiante.deleteMany({ where: { preguntaId: { in: qIds } } });
-              
+
               // 2. Clear related Resources
               await tx.ludiPreguntaRecurso.deleteMany({ where: { preguntaId: { in: qIds } } });
-              
-              // 3. Clear Options
+
+              // 3. Clear Options (and their images)
+              await tx.ludiOpcionRecurso.deleteMany({ where: { opcion: { preguntaId: { in: qIds } } } });
               await tx.ludiOpcion.deleteMany({ where: { preguntaId: { in: qIds } } });
-              
+
               // 4. Finally delete the questions themselves
               await tx.ludiPregunta.deleteMany({
                   where: { id: { in: qIds } }
@@ -155,19 +182,22 @@ export async function updateActivity(data: UpdateActivityData) {
           let i = 1;
           for (const q of data.questions) {
               const isExisting = q.id && q.id > 100;
-              
+
               if (isExisting) {
                   const updatedQuestion = await tx.ludiPregunta.update({
                       where: { id: BigInt(q.id!) },
                       data: {
                           numero: i,
                           enunciado: q.text,
-                          puntaje: data.config.pointsPerCorrect,
-                          tiempoLimiteMs: data.config.timeLimit * 1000
+                          esContenido: Boolean(q.isSlide),
+                          puntaje: q.isSlide ? null : data.config.pointsPerCorrect,
+                          tiempoLimiteMs: q.isSlide ? null : data.config.timeLimit * 1000
                       }
                   });
 
-                  if ('answers' in q) {
+                  if (q.isSlide) {
+                      await tx.ludiOpcion.deleteMany({ where: { preguntaId: updatedQuestion.id } });
+                  } else if ('answers' in q) {
                       const quizQ = q as LudiQuizQuestion;
                       const incomingOptionIds = quizQ.answers.map(a => a.id).filter(id => id && id > 100);
 
@@ -175,26 +205,26 @@ export async function updateActivity(data: UpdateActivityData) {
                       const optionsToDelete = await tx.ludiOpcion.findMany({
                           where: { preguntaId: updatedQuestion.id, id: { notIn: incomingOptionIds as any } }
                       });
-                      
+
                       if (optionsToDelete.length > 0) {
                           const optIds = optionsToDelete.map(o => o.id);
                           await tx.ludiRespuestaEstudiante.deleteMany({ where: { opcionId: { in: optIds } } });
+                          await tx.ludiOpcionRecurso.deleteMany({ where: { opcionId: { in: optIds } } });
                           await tx.ludiOpcion.deleteMany({
                               where: { id: { in: optIds } }
                           });
                       }
 
                       for (const ans of quizQ.answers) {
-                          if (ans.id && ans.id > 100) {
-                              await tx.ludiOpcion.update({
+                          const opcion = ans.id && ans.id > 100
+                              ? await tx.ludiOpcion.update({
                                   where: { id: BigInt(ans.id) },
                                   data: { texto: ans.text, esCorrecta: ans.isCorrect }
-                              });
-                          } else {
-                              await tx.ludiOpcion.create({
+                              })
+                              : await tx.ludiOpcion.create({
                                   data: { preguntaId: updatedQuestion.id, indice: ans.id, texto: ans.text, esCorrecta: ans.isCorrect }
                               });
-                          }
+                          await setOptionImage(tx, opcion.id, ans.imageUrl);
                       }
                   } else {
                       const tfQ = q as TrueOrFalseQuestion;
@@ -225,8 +255,9 @@ export async function updateActivity(data: UpdateActivityData) {
                           numero: i,
                           enunciado: q.text,
                           tipoActividad: { connect: { id: tipoActividadId } },
-                          puntaje: data.config.pointsPerCorrect,
-                          tiempoLimiteMs: data.config.timeLimit * 1000
+                          esContenido: Boolean(q.isSlide),
+                          puntaje: q.isSlide ? null : data.config.pointsPerCorrect,
+                          tiempoLimiteMs: q.isSlide ? null : data.config.timeLimit * 1000
                       }
                   });
 
@@ -241,11 +272,14 @@ export async function updateActivity(data: UpdateActivityData) {
                     });
                   }
 
-                  if ('answers' in q) {
+                  if (q.isSlide) {
+                      // Sin opciones: la diapositiva no se responde.
+                  } else if ('answers' in q) {
                       for (const ans of (q as LudiQuizQuestion).answers) {
-                          await tx.ludiOpcion.create({
+                          const opcion = await tx.ludiOpcion.create({
                               data: { preguntaId: newQuestion.id, indice: ans.id, texto: ans.text, esCorrecta: ans.isCorrect }
                           });
+                          await setOptionImage(tx, opcion.id, ans.imageUrl);
                       }
                   } else {
                       const tfQ = q as TrueOrFalseQuestion;
@@ -264,9 +298,9 @@ export async function updateActivity(data: UpdateActivityData) {
       return ludiActivity;
     });
 
-    return { 
-        success: true, 
-        message: "Actividad actualizada exitosamente", 
+    return {
+        success: true,
+        message: "Actividad actualizada exitosamente",
         activityId: result.activityId
     };
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaUser, FaShieldAlt, FaGamepad, FaDatabase, FaPalette, FaArrowLeft, FaUsersCog } from 'react-icons/fa';
+import { FaUser, FaShieldAlt, FaGamepad, FaDatabase, FaPalette, FaArrowLeft, FaUsersCog, FaRoute } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import styles from './SidebarSettings.module.css';
 
@@ -14,6 +14,7 @@ export const SidebarSettings = ({ rolId }: { rolId?: number }) => {
         { href: '/settings/security', icon: FaShieldAlt, text: 'Seguridad' },
         { href: '/settings/appearance', icon: FaPalette, text: 'Apariencia e Idioma' },
         { href: '/settings/preferences', icon: FaGamepad, text: 'Gamificación' },
+        { href: '/settings/tours', icon: FaRoute, text: 'Visitas Guiadas' },
         { href: '/settings/data', icon: FaDatabase, text: 'Gestión de Datos' },
     ];
 

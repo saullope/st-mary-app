@@ -8,6 +8,7 @@ import { auth } from "@/firebase/firebase";
 import { BsGlobe } from 'react-icons/bs';
 import { FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import { LanguageSelector } from "@/components";
+import { notify } from "@/components/ui";
 import { AUTH_API_ROUTES } from "@/lib/auth/constants";
 import designStyles from '@/styles/pages/LudiDesign.module.css';
 
@@ -75,12 +76,12 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
             } else {
                 setIsLoggingOut(false);
                 const errorData = await response.json();
-                alert(`Error al cerrar sesion: ${errorData.error || "Error desconocido."}`);
+                notify.error("Error al cerrar sesión", errorData.error || "Error desconocido.");
             }
         } catch (error) {
             setIsLoggingOut(false);
             console.error("Error al cerrar sesion:", error);
-            alert(`Error al cerrar sesion: ${error}`);
+            notify.error("Error al cerrar sesión", String(error));
         }
     };
 
@@ -138,7 +139,10 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                 </div>
             )}
 
-            <nav className={`fixed navbar navbar-expand-lg bg-body-tertiary ${designStyles.darkNavbar}`}>
+            <nav 
+    className={`fixed navbar navbar-expand-lg bg-body-tertiary ${designStyles.darkNavbar}`}
+    style={{ zIndex: 1050, position: 'relative' }}
+>
                 <div className="container-fluid">
                     <div className="collapse navbar-collapse" id="navbarNav">
                     <div

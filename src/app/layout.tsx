@@ -2,6 +2,7 @@ import {NextIntlClientProvider} from 'next-intl';
 import {getLocale, getMessages} from 'next-intl/server';
 import { ReduxProvider } from '@/components/ReduxProvider';
 import { SessionInitializer } from '@/components/SessionInitializer';
+import { Toaster } from 'sonner';
 import Script from 'next/script';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/styles/globals.css";
@@ -27,7 +28,11 @@ export default async function LocaleLayout({
             <SessionInitializer />
             {children}
           </NextIntlClientProvider>
-          <Script 
+          {/* Único <Toaster/> de la app: accesible (role="status"/aria-live)
+              desde cualquier componente cliente vía notify() en
+              src/components/ui/notify.ts, sin volver a montarlo. */}
+          <Toaster richColors position="bottom-right" closeButton expand duration={5000} />
+          <Script
             src="https://cdn.userway.org/widget.js" 
             data-account="idtDhWyQBz"
             strategy="afterInteractive"

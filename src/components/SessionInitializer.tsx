@@ -1,23 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { useTokenRefresh } from '@/hooks/useTokenRefresh';
+import { useSessionTimeout } from '@/hooks/useSessionTimeout';
+import { SessionTimeoutDialog } from './SessionTimeoutDialog';
 
+/** Carga la sesión del usuario y aplica los límites de inactividad y duración. */
 export const SessionInitializer = () => {
     const { fetchUserSession, isAuthenticated, clearSession } = useAuth();
     const hasInitialized = useRef(false);
-
-    const handleRefreshError = useCallback((error: Error) => {
-        console.error('Session refresh failed:', error);
-        clearSession();
-    }, [clearSession]);
-
-    // Enable token refresh only when user is authenticated
-    useTokenRefresh({
-        enabled: isAuthenticated,
-        onRefreshError: handleRefreshError,
-    });
+    const { warning, stayConnected, endNow } = useSessionTimeout(isAuthenticated, clearSession);
 
     useEffect(() => {
         if (!hasInitialized.current) {
@@ -26,5 +18,5 @@ export const SessionInitializer = () => {
         }
     }, [fetchUserSession]);
 
-    return null;
+    return warning ? <SessionTimeoutDialog warning={warning} onStay={stayConnected} onLogout={endNow} /> : null;
 };

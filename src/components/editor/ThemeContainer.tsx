@@ -89,7 +89,7 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
                     <IoClose />
                 </button>
 
-                <h1 className={style.acth1}>Selecciona un Tema</h1>
+                <h1 className={style.acth1}>{t('selectTheme')}</h1>
                 <div className={style['theme-selector']} id="themeList">
                     {isLoading && (
                         <div className="d-flex justify-content-center align-items-center w-100 py-4">

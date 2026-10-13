@@ -3,31 +3,72 @@
 import { Modal } from "react-bootstrap";
 import style from '@/styles/pages/editor-activity.module.css';
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import { useFirebaseStorage } from "@/hooks/useFirebaseStorage";
+import { PIXABAY_FILE_PREFIX, uploadsPath } from "@/lib/mediaSources";
+import { notify } from "@/components/ui";
 
 interface ModalProps {
   show: boolean;
   handleClose: () => void;
-  origin: string; // Puede ser 'unsplash', 'youtube', o 'freesound'
+  origin: string; // 'unsplash' | 'pixabay' | 'youtube' | 'freesound'
   onSelectMedia: (type: string, url: string) => void; // Cambiado para manejar diferentes tipos de medios
+}
+
+type PixabayImageType = "illustration" | "vector" | "photo";
+
+interface PixabayHit {
+  id: number;
+  tags: string;
+  webformatURL: string;
+  largeImageURL: string;
 }
 
 const UNSPLASH_API_KEY = process.env.NEXT_PUBLIC_UNSPLASH_API_KEY;
 const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const FREESOUND_API_KEY = process.env.NEXT_PUBLIC_FREESOUND_API_KEY;
+const PIXABAY_API_KEY = process.env.NEXT_PUBLIC_PIXABY_API_KEY;
 
 export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: ModalProps) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [previewVideo, setPreviewVideo] = useState<string | null>(null); // Para previsualizar videos
+  // Ilustraciones por defecto: para 1.° a 3.° grado funcionan mejor que la fotografía.
+  const [pixabayType, setPixabayType] = useState<PixabayImageType>("illustration");
+  const { uploadFile, uploading: savingPixabay } = useFirebaseStorage();
 
   const t = useTranslations("modalMultimedia");
+  const locale = useLocale();
+
+  // Las URLs de Pixabay caducan y sus términos prohíben enlazarlas de forma
+  // permanente, así que la imagen elegida se copia a Firebase Storage.
+  const selectPixabayImage = async (hit: PixabayHit) => {
+    if (savingPixabay) return;
+    try {
+      const response = await fetch(hit.largeImageURL || hit.webformatURL);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
+      const extension = blob.type.split("/")[1] || "jpg";
+      const file = new File([blob], `pixabay_${hit.id}.${extension}`, { type: blob.type });
+      const storedUrl = await uploadFile(file, uploadsPath(PIXABAY_FILE_PREFIX, `${hit.id}.${extension}`));
+      if (!storedUrl) throw new Error("upload failed");
+      onSelectMedia("image", storedUrl);
+      handleClose();
+    } catch (error) {
+      console.error("Error saving Pixabay image:", error);
+      notify.error(t("pixabaySaveError"));
+    }
+  };
 
   const translationKeys: Record<string, { title: string; placeholder: string }> = {
     unsplash: {
       title: "searchUnsplash",
+      placeholder: "searchImage",
+    },
+    pixabay: {
+      title: "searchPixabay",
       placeholder: "searchImage",
     },
     youtube: {
@@ -62,6 +103,10 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
         url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
           searchQuery
         )}&per_page=20&client_id=${UNSPLASH_API_KEY}`;
+      } else if (origin === "pixabay") {
+        url = `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(
+          searchQuery
+        )}&image_type=${pixabayType}&safesearch=true&lang=${locale === "en" ? "en" : "es"}&per_page=24`;
       } else if (origin === "youtube") {
         url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=12&q=${encodeURIComponent(
           searchQuery
@@ -77,6 +122,8 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
 
       if (origin === "unsplash") {
         setResults(data.results || []);
+      } else if (origin === "pixabay") {
+        setResults(data.hits || []);
       } else if (origin === "youtube") {
         setResults(data.items || []);
       } else if (origin === "freesound") {
@@ -109,7 +156,20 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
               aria-label="Buscar contenido"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
             />
+            {origin === "pixabay" && (
+              <select
+                aria-label={t("pixabayTypeLabel")}
+                value={pixabayType}
+                onChange={(e) => setPixabayType(e.target.value as PixabayImageType)}
+                style={{ padding: "10px", borderRadius: "8px", border: "2px solid #ddd" }}
+              >
+                <option value="illustration">{t("pixabayIllustrations")}</option>
+                <option value="vector">{t("pixabayVectors")}</option>
+                <option value="photo">{t("pixabayPhotos")}</option>
+              </select>
+            )}
             <button
               id="modal-search-btn"
               type="button"
@@ -123,6 +183,35 @@ export const ModalMultimedia = ({ show, handleClose, origin, onSelectMedia }: Mo
           <div className={`${style["modal-right"]} ${style["results-grid"]}`}>
             {isLoading ? (
               <p>{t("loading")}</p>
+            ) : savingPixabay ? (
+              <p role="status">{t("pixabaySaving")}</p>
+            ) : origin === "pixabay" && results.length > 0 ? (
+              <>
+                {(results as PixabayHit[]).map((hit) => (
+                  <button
+                    key={hit.id}
+                    type="button"
+                    className={style["result-item"]}
+                    onClick={() => selectPixabayImage(hit)}
+                    style={{ border: "none" }}
+                  >
+                    <Image
+                      src={hit.webformatURL}
+                      alt={hit.tags}
+                      className={style["modal-image"]}
+                      width={300}
+                      height={200}
+                      style={{ objectFit: "contain", background: "#fff" }}
+                      unoptimized
+                    />
+                  </button>
+                ))}
+                {/* Pixabay exige mostrar la fuente junto a los resultados de búsqueda */}
+                <p style={{ gridColumn: "1 / -1", fontSize: "0.8rem", color: "#666", margin: 0 }}>
+                  {t("pixabayAttribution")}{" "}
+                  <a href="https://pixabay.com/" target="_blank" rel="noopener noreferrer">Pixabay</a>
+                </p>
+              </>
             ) : previewVideo ? (
               // Previsualización del video seleccionado
               <div className={style["video-preview"]}>

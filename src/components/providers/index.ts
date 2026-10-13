@@ -4,5 +4,4 @@
  */
 
 export { ReduxProvider } from './ReduxProvider';
-export { SessionInitializer } from './SessionInitializer';
 export { AuthProvider } from './AuthProvider';

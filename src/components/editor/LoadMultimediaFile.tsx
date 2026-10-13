@@ -1,20 +1,40 @@
 "use client";
 
-import { useState, useRef } from "react";
-import style2 from '@/styles/pages/editor-activity.module.css';
-import style3 from '@/styles/pages/ludiquiz.module.css';
-import Image from "next/image";
-import { useFirebaseStorage } from "@/hooks/useFirebaseStorage"; // Importar el hook
+import { useState, useRef, useId, CSSProperties } from "react";
+import {
+  FaPlus,
+  FaXmark,
+  FaMusic,
+  FaImages,
+  FaYoutube,
+  FaCloudArrowUp,
+  FaArrowsRotate,
+} from "react-icons/fa6";
+import { SiPixabay } from "react-icons/si";
+import { IconType } from "react-icons";
+import { useFirebaseStorage } from "@/hooks/useFirebaseStorage";
+import type { MediaType } from "@/lib/types";
+import styles from "./LoadMultimediaFile.module.css";
 
 interface LoadMultimediaProps {
-  type: "image" | "youtube" | "audio" | "video" | null; // Tipo de medio
-  url: string | null; // URL del medio
-  onUpload: (type: string, url: string) => void; // MODIFICADO: Recibe tipo y URL final
-  onUnsplash: () => void; // Función para abrir el modal de Unsplash
-  onYoutube: () => void; // Función para abrir el modal de YouTube
-  onFreesound: () => void; // Función para abrir el modal de Freesound
-  onRemove: () => void; // Función para eliminar el medio seleccionado
-  styleComponent: string; // Estilos del componente
+  type: MediaType | null;
+  url: string | null;
+  onUpload: (type: string, url: string) => void;
+  onUnsplash: () => void;
+  onPixabay: () => void;
+  onYoutube: () => void;
+  onFreesound: () => void;
+  onRemove: () => void;
+}
+
+interface MediaOption {
+  key: string;
+  title: string;
+  icon: IconType;
+  color: string;
+  background: string;
+  onSelect: () => void;
+  disabled?: boolean;
 }
 
 export const LoadMultimediaFile = ({
@@ -22,197 +42,245 @@ export const LoadMultimediaFile = ({
   url,
   onUpload,
   onUnsplash,
+  onPixabay,
   onYoutube,
   onFreesound,
   onRemove,
-  styleComponent
 }: LoadMultimediaProps) => {
-  const [showButtons, setShowButtons] = useState(false);
-  const [scale, setScale] = useState(100); // Para ajustar el tamaño del medio
-  
-  // Usar el hook de Firebase
+  const [showOptions, setShowOptions] = useState(false);
+  const [scale, setScale] = useState(100);
   const { uploadFile, uploading, error } = useFirebaseStorage();
-  
-  // Referencia al input de archivo oculto
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const optionsId = useId();
 
-  const handleShowButtons = () => setShowButtons(!showButtons);
+  const toggleOptions = () => setShowOptions((open) => !open);
 
-  // Función para disparar el click del input
-  const triggerFileSelect = () => {
-    // Es crítico usar un timeout o asegurarse que esto corre en el stack del evento
-    // para que algunos navegadores lo detecten como acción de usuario directa
-    if (fileInputRef.current) {
-        fileInputRef.current.click();
-    }
+  // El menú se cierra al elegir para que el modal o el selector de archivos
+  // quede como único foco de atención.
+  const selectAndClose = (action: () => void) => () => {
+    setShowOptions(false);
+    action();
   };
 
-  // Manejar el cambio del input (selección de archivo)
+  // Debe correr dentro del mismo evento de click para que el navegador lo
+  // acepte como acción directa del usuario.
+  const triggerFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      // Determinar tipo
-      const fileType = file.type.startsWith('image/')
-          ? 'image'
-          : file.type.startsWith('video/')
-              ? 'video'
-              : file.type.startsWith('audio/')
-                  ? 'audio'
-                  : null;
-
-      if (fileType) {
-          // Subir a Firebase Storage
-          const path = `uploads/${Date.now()}_${file.name}`;
-          const downloadURL = await uploadFile(file, path);
-
-          if (downloadURL) {
-              // Pasar la URL permanente al padre
-              onUpload(fileType, downloadURL);
-          }
-      }
-    }
-    // Limpiar el valor para permitir seleccionar el mismo archivo de nuevo si es necesario
     event.target.value = "";
+    if (!file) return;
+
+    const fileType = file.type.startsWith("image/")
+      ? "image"
+      : file.type.startsWith("video/")
+        ? "video"
+        : file.type.startsWith("audio/")
+          ? "audio"
+          : null;
+    if (!fileType) return;
+
+    const downloadURL = await uploadFile(file, `uploads/${Date.now()}_${file.name}`);
+    if (downloadURL) onUpload(fileType, downloadURL);
   };
+
+  const options: MediaOption[] = [
+    {
+      key: "upload",
+      title: "Subir archivo",
+      icon: FaCloudArrowUp,
+      color: "#6a4bff",
+      background: "rgba(106, 75, 255, 0.12)",
+      onSelect: selectAndClose(triggerFileSelect),
+      disabled: uploading,
+    },
+    {
+      key: "unsplash",
+      title: "Unsplash",
+      icon: FaImages,
+      color: "#0096b4",
+      background: "rgba(0, 184, 217, 0.14)",
+      onSelect: selectAndClose(onUnsplash),
+    },
+    {
+      key: "pixabay",
+      title: "Pixabay",
+      icon: SiPixabay,
+      color: "#1f9b55",
+      background: "rgba(43, 192, 107, 0.14)",
+      onSelect: selectAndClose(onPixabay),
+    },
+    {
+      key: "youtube",
+      title: "YouTube",
+      icon: FaYoutube,
+      color: "#e5002b",
+      background: "rgba(255, 0, 51, 0.1)",
+      onSelect: selectAndClose(onYoutube),
+    },
+    {
+      key: "freesound",
+      title: "Freesound",
+      icon: FaMusic,
+      color: "#e8692f",
+      background: "rgba(255, 138, 92, 0.16)",
+      onSelect: selectAndClose(onFreesound),
+    },
+  ];
+
+  const isImage =
+    type === "image" ||
+    (!!url &&
+      (url.includes("firebasestorage") || url.includes("unsplash")) &&
+      type !== "video" &&
+      type !== "audio");
 
   return (
     <>
-      {/* Input oculto para carga de archivos - Usamos visibilidad oculta en vez de display none para compatibilidad */}
-      <input 
-        type="file" 
+      <input
+        type="file"
         ref={fileInputRef}
         accept="image/*,video/*,audio/*"
-        style={{ position: 'absolute', top: 0, left: 0, opacity: 0, width: 0, height: 0 }}
+        style={{ position: "absolute", top: 0, left: 0, opacity: 0, width: 0, height: 0 }}
         onChange={handleFileChange}
+        tabIndex={-1}
+        aria-hidden="true"
       />
 
-      {/* Selector de Medios */}
-      <div 
-        className={`${styleComponent == "trueorfalse" ? style2["media-selector"] : style3["media-selector"]} media-upload-zone`}
+      <div
+        className={`${styles.zone} ${showOptions ? styles.zoneOpen : ""} media-upload-zone`}
         data-tour="media-dropzone"
       >
-        {/* Área de placeholder para mostrar o añadir medios */}
-        <div
-          className={styleComponent == "trueorfalse" ? style2["media-placeholder"] : style3["media-placeholder"]}
-          onClick={handleShowButtons}
-        >
-          {uploading ? (
-             <div className="text-center">
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
-                <p>Subiendo archivo...</p>
-             </div>
-          ) : (
-            <>
-              <span>+</span>
-              <p id="media-text">
-                {url ? "Archivo cargado:" : "Clic para cargar o buscar archivos multimedia"}
-              </p>
-            </>
-          )}
-          
-          {error && <p className="text-danger text-center small">{error}</p>}
-
-          {/* Aquí se mostrarán los medios agregados */}
-          {url && !uploading && (
-
-            <div id="media-preview" className={styleComponent == "trueorfalse" ? style2["media-preview"] : style3["media-preview"]}>
-              <div className={styleComponent == "trueorfalse" ? style2["media-item"] : style3["media-item"]}>
-                {(type === "image" || (url && (url.includes("firebasestorage") || url.includes("unsplash")) && type !== "video" && type !== "audio")) && url && (
+        {uploading ? (
+          <div className={styles.uploading} role="status">
+            <div className="spinner-border" style={{ color: "#6a4bff" }} aria-hidden="true" />
+            Subiendo archivo...
+          </div>
+        ) : url ? (
+          <>
+            <div className={styles.preview}>
+              <div className={styles.previewItem}>
+                {isImage && (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={url}
                     alt="Imagen seleccionada"
-                    className={styleComponent == "trueorfalse" ? style2["media-preview-content"] : style3["media-preview-content"]}
-                    style={{ transform: `scale(${scale / 100})`, maxWidth: '400px', maxHeight: '300px' }}
+                    className={styles.previewContent}
+                    style={{ transform: `scale(${scale / 100})`, maxWidth: "400px" }}
                   />
                 )}
                 {type === "video" && (
                   <video
                     src={url}
                     controls
-                    className={styleComponent == "trueorfalse" ? style2["media-preview-content"]: style3["media-preview-content"]}
+                    className={styles.previewContent}
                     style={{ transform: `scale(${scale / 100})` }}
                   />
                 )}
                 {type === "audio" && (
-                  <audio
-                    src={url}
-                    controls
-                    style={{ transform: `scale(${scale / 100})` }}
-                  />
+                  <audio src={url} controls style={{ transform: `scale(${scale / 100})` }} />
                 )}
                 {type === "youtube" && (
                   <iframe
                     src={url}
                     width="100%"
                     height="220"
+                    title="Video de YouTube seleccionado"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
+                    className={styles.previewContent}
                     style={{ transform: `scale(${scale / 100})` }}
-                    className={styleComponent == "trueorfalse" ? style2["media-preview-content"] : style3["media-preview-content"]}
-                  ></iframe>
+                  />
                 )}
                 <button
-                  className={styleComponent == "trueorfalse" ? style2["remove-media-btn"] : style3["remove-media-btn"]}
+                  type="button"
+                  className={styles.removeBtn}
                   onClick={onRemove}
+                  aria-label="Quitar archivo multimedia"
+                  title="Quitar archivo"
                 >
-                  ×
+                  <FaXmark />
                 </button>
               </div>
             </div>
-          )}
-          {/* Controles para ajustar el tamaño del medio */}
-          {url && (
-            <div className={styleComponent == "trueorfalse" ? style2["media-controls"] : style3["media-controls"]}>
-              <label className={styleComponent == "trueorfalse" ? style2.actlabel : style3.actlabel}>Ajustar tamaño:</label>
+
+            <label className={styles.sizeControl}>
+              Ajustar tamaño
               <input
                 type="range"
-                id="media-size-range"
                 min="50"
                 max="100"
                 value={scale}
                 onChange={(e) => setScale(Number(e.target.value))}
               />
+            </label>
+
+            <div className={styles.toggleRow}>
+              <button
+                type="button"
+                className={`${styles.toggle} ${styles.toggleWide} ${showOptions ? styles.toggleOpen : ""}`}
+                onClick={toggleOptions}
+                aria-expanded={showOptions}
+                aria-controls={optionsId}
+              >
+                {showOptions ? <FaXmark /> : <FaArrowsRotate />}
+                {showOptions ? "Cerrar opciones" : "Reemplazar"}
+              </button>
             </div>
-          )}
-        </div>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              className={styles.empty}
+              onClick={toggleOptions}
+              aria-expanded={showOptions}
+              aria-controls={optionsId}
+            >
+              <span className={styles.emptyTitle}>Agrega imagen, video o audio</span>
+              <span className={styles.emptyHint}>
+                {showOptions ? "Elige de dónde quieres traerlo" : "Pulsa + para ver las opciones"}
+              </span>
+            </button>
 
-        {/* Menú flotante (barra lateral emergente) */}
+            <div className={styles.toggleRow}>
+              <button
+                type="button"
+                className={`${styles.toggle} ${showOptions ? styles.toggleOpen : ""}`}
+                onClick={toggleOptions}
+                aria-expanded={showOptions}
+                aria-controls={optionsId}
+                aria-label={showOptions ? "Ocultar opciones multimedia" : "Mostrar opciones multimedia"}
+              >
+                <span className={styles.toggleIcon}><FaPlus /></span>
+              </button>
+            </div>
+          </>
+        )}
+
+        {error && <p className={styles.error}>{error}</p>}
+
         <div
-          className={`${styleComponent == "trueorfalse" ? style2["media-float"]: style3["media-float"]} ${showButtons ? style2.show : style2.hidden} `}
+          id={optionsId}
+          className={`${styles.options} ${showOptions ? styles.optionsOpen : ""}`}
+          aria-hidden={!showOptions}
         >
-          <button
-            className={`${style2.actbutton} ${styleComponent == "trueorfalse" ? style2["small-btn"] : style3["small-btn"] } m-1`}
-            onClick={triggerFileSelect} // Usamos nuestra nueva función interna con ref
-            type="button"
-            disabled={uploading}
-          >
-            Subir Archivo
-          </button>
-          <button
-
-            className={`${style2.actbutton} ${styleComponent == "trueorfalse" ? style2["small-btn"] : style3["small-btn"]} m-1`}
-            onClick={onUnsplash}
-            type="button"
-          >
-            Buscar en Unsplash
-          </button>
-          <button
-            className={`${style2.actbutton} ${styleComponent == "trueorfalse" ? style2["small-btn"] : style3["small-btn"]} m-1`}
-            onClick={onYoutube}
-            type="button"
-          >
-            Buscar en YouTube
-          </button>
-          <button
-            className={`${style2.actbutton} ${styleComponent == "trueorfalse" ? style2["small-btn"] : style3["small-btn"]} m-1`}
-            onClick={onFreesound}
-            type="button"
-          >
-            Buscar en Freesound
-          </button>
+          {options.map(({ key, title, icon: Icon, color, background, onSelect, disabled }) => (
+            <button
+              key={key}
+              type="button"
+              className={styles.option}
+              onClick={onSelect}
+              disabled={disabled}
+              tabIndex={showOptions ? 0 : -1}
+              style={{ "--option-color": color, "--option-bg": background } as CSSProperties}
+            >
+              <span className={styles.optionIcon} aria-hidden="true"><Icon /></span>
+              <span className={styles.optionTitle}>{title}</span>
+            </button>
+          ))}
         </div>
       </div>
     </>

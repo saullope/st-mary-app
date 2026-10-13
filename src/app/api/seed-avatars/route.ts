@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import getCurrentUser from "@/lib/auth/getCurrentUser";
+import { isAdmin } from "@/lib/auth/guards";
 
 export async function GET() {
   try {
+    const user = await getCurrentUser();
+    if (!user || !isAdmin(user)) {
+      return NextResponse.json({ error: "No autorizado." }, { status: 403 });
+    }
     const avatars = [
       { nombre: "Astro-Panda", urlImagen: "/images/avatars/avatar1.png" },
       { nombre: "Ciber-Gato", urlImagen: "/images/avatars/avatar2.png" },

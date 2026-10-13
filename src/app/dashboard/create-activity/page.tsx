@@ -11,6 +11,11 @@ import CreateActivityTour from "./CreateActivityTour";
 import LudiquizImg from "@/images/ludiquiz.png";
 import MemoryImg from "@/images/memory.png";
 import TrueOrFalseImg from "@/images/verdadero-falso.png";
+import LudiLeccionImg from "@/images/mejora-aprendizaje.png";
+import LudiFormImg from "@/images/fomenta-interes.png";
+import { cookies } from "next/headers";
+import { GRADE_COOKIE_NAME, gradeIdFromKey } from "@/lib/grades";
+import { isFormAvailableForGrade } from "@/features/form/formQuestions";
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("createActivityDashboard");
@@ -30,6 +35,7 @@ export default async function CreateActivity() {
     }
 
     const t = await getTranslations("createActivityDashboard");
+    const selectedGrade = gradeIdFromKey((await cookies()).get(GRADE_COOKIE_NAME)?.value);
 
     // Static definition of supported game templates
     const gameTemplates = [
@@ -50,12 +56,25 @@ export default async function CreateActivity() {
             image: TrueOrFalseImg,
             translationKey: 'trueorfalse',
             route: 'trueorfalse'
-        }
+        },
+        {
+            id: 'ludileccion',
+            image: LudiLeccionImg,
+            translationKey: 'ludileccion',
+            route: 'ludileccion'
+        },
+        // LudiForm solo se ofrece cuando el grado elegido en Bienvenida es tercero.
+        ...(isFormAvailableForGrade(selectedGrade) ? [{
+            id: 'ludiform',
+            image: LudiFormImg,
+            translationKey: 'ludiform',
+            route: 'ludiform'
+        }] : [])
     ];
 
     return (
         <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 0' }}>
-            <CreateActivityTour />
+            {/** <CreateActivityTour /> */}
             <section>
                 <h2 className={designStyles.titleLudi}>
                     <span className={designStyles.star}>★</span> {t('titlePage')}

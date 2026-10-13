@@ -1,0 +1,575 @@
+============================================================================
+ARTEFACTOS SCRUM - LUDIGAME / ST. MARY SCHOOL
+Sprint Duration: 3 semanas (21 dias naturales)
+Fecha: Junio 2026
+============================================================================
+
+==============================
+1. DEFINICION DE HECHO (DoD)
+==============================
+
+Criterios obligatorios para considerar una Historia de Usuario como "Done":
+
+[CODIGO Y COMPILACION]
+- Codigo compila sin errores: npm run build exitoso en Next.js 16 (App Router)
+- TypeScript strict mode sin errores: tsc --noEmit sin warnings
+- ESLint sin errores: npm run lint pasa sin violations
+- Sin uso de any en codigo nuevo (usar unknown para catch blocks)
+- Indentacion de 4 espacios (convencion del proyecto)
+- Semicolons obligatorios en todas las sentencias
+
+[TESTING]
+- Tests unitarios escritos para logica de negocio critica (Jest + RTL)
+- Tests de integracion para API routes (minimo happy path + error cases)
+- Todos los tests pasan: npm test sin failures
+- Cobertura minima del 70% en modulos nuevos
+
+[BASE DE DATOS]
+- Operaciones multi-tabla usan prisma.$transaction() para atomicidad
+- Migraciones de schema aplicadas y versionadas en prisma/migrations/
+- Queries optimizadas (sin N+1, includes selectivos)
+- Validacion de datos en capa de aplicacion (Yup schemas)
+
+[AUTENTICACION Y SEGURIDAD]
+- Rutas protegidas verifican sesion via getCurrentUser() o middleware
+- API routes retornan 401/403 cuando corresponde
+- Validacion de ownership en operaciones de escritura (userId check)
+- No exposicion de datos sensibles en cliente (passwordHash, firebaseUid)
+
+[INTERNACIONALIZACION]
+- Textos visibles al usuario usan next-intl (useTranslations/getTranslations)
+- No strings hardcodeados en componentes nuevos (excepto nombres propios)
+- Archivos messages/es.json y messages/en.json actualizados
+
+[ACCESIBILIDAD]
+- Componentes interactivos con atributos ARIA (role, aria-label)
+- Formularios con labels asociados (htmlFor)
+- Navegacion por teclado funcional (tabIndex, onKeyDown)
+- Contraste de colores cumple WCAG AA
+
+[RESPONSIVE Y UI]
+- Funcional en resoluciones desktop (1920x1080) y tablet (768x1024)
+- Bootstrap 5 grid system usado correctamente
+- Mobile-first approach en componentes nuevos
+- Estados de carga, error y vacio implementados
+
+[GAMIFICACION (para historias con enfoque ludico)]
+- Elementos ludicos configurables desde Panel Ludico
+- Feedback auditivo con Web Speech API cuando voiceEnabled=true
+- Animaciones de confetti en interacciones clave
+- Puntos calculados con formula de velocidad (si aplica)
+
+[DEPLOYMENT]
+- GitHub Actions pipeline pasa sin errores (build + deploy a Azure)
+- Variables de entorno documentadas en .env.example
+- Sin secretos commiteados al repositorio
+
+[DOCUMENTACION]
+- Comentarios en espanol explicando el "por que" (no el "que")
+- README actualizado si hay cambios arquitectonicos
+- API routes documentadas con JSDoc (params, response schema)
+
+[CODE REVIEW]
+- Pull Request aprobado por al menos 1 reviewer
+- Sin comentarios de "resolve before merge"
+- Convenciones de nombre seguidas (PascalCase componentes, camelCase funciones)
+
+==============================
+2. SPRINT GOAL SUGERIDO
+==============================
+
+SPRINT ACTUAL (Sprint N):
+"Completar internacionalizacion y estabilizar nomenclatura de sesiones"
+
+JUSTIFICACION:
+El analisis de ingenieria inversa revela que el producto esta funcionalmente 
+completo (89 de 90 historias en estado Done). Sin embargo, existen dos areas 
+de deuda tecnica critica que impactan la mantenibilidad y experiencia de usuario:
+
+1. Internacionalizacion incompleta (HU-085): Multiples paginas del dashboard, 
+   reportes y panel ludico tienen textos hardcodeados en espanol, rompiendo 
+   la promesa de soporte bilingue.
+
+2. Inconsistencia de estados de sesion: Los valores de estado en LUDI_SESION 
+   usan multiples convenciones ("ESPERANDO", "lobby", "activa", "ACTIVA", 
+   "finalizada", "FINALIZADA"), generando bugs de filtrado en reportes.
+
+HISTORIAS CANDIDATAS PARA ESTE SPRINT:
+- HU-085 (Completar i18n en dashboard, reportes, panel ludico)
+- Refactor: Normalizar estados de sesion a enum consistente
+- Refactor: Migrar misiones e insignias hardcodeadas a base de datos
+- Refactor: Eliminar uso de any en APIs y Server Actions
+
+CAPACIDAD SUGERIDA: 40-50 Story Points (pendiente estimacion Fibonacci)
+
+==============================
+3. DEUDA TECNICA IDENTIFICADA
+==============================
+
+[CRITICA - Alta Severidad]
+
+DT-01: Estados de sesion inconsistentes
+  - Descripcion: LUDI_SESION.estado usa strings inconsistentes: "ESPERANDO", 
+    "lobby", "activa", "ACTIVA", "finalizada", "FINALIZADA"
+  - Impacto: Bugs en filtrado de reportes, logica de negocio confusa
+  - Historias afectadas: HU-061, HU-062, HU-063, HU-077
+  - Solucion: Crear enum SessionState en TypeScript y migrar datos existentes
+  - Estimacion: 8 puntos
+
+DT-02: (prisma as any) en multiples APIs
+  - Descripcion: Uso de (prisma as any) para acceder a modelos con nombres 
+    en mayusculas (LUDI_SESION, LUDI_SESION_PARTICIPANTE)
+  - Impacto: Perdida de type safety, errores en runtime no detectados en compile
+  - Archivos: sessionActions.ts, play/join/route.ts, play/submit-answer/route.ts, 
+    play/finish/route.ts, live/[id]/route.ts, play/student/[id]/page.tsx
+  - Solucion: Usar @@map en schema.prisma para normalizar nombres de modelos
+  - Estimacion: 13 puntos
+
+DT-03: Puntaje calculado solo en cliente
+  - Descripcion: GameEngine.tsx calcula puntaje con formula de velocidad 
+    (basePoints * (0.5 + 0.5 * timeFactor)) y lo envia al servidor sin validacion
+  - Impacto: Vulnerabilidad de seguridad - estudiante puede manipular puntaje
+  - Historia afectada: HU-071
+  - Solucion: Validar y recalcular puntaje en servidor (submit-answer route)
+  - Estimacion: 5 puntos
+
+DT-04: Convencion id > 100 para distinguir registros
+  - Descripcion: updateActivity.ts usa id > 100 para distinguir registros 
+    existentes de nuevos (IDs temporales del cliente)
+  - Impacto: Fragil, depende de que IDs de DB sean siempre > 100
+  - Historia afectada: HU-030
+  - Solucion: Usar UUIDs temporales en cliente o flag isTemporary
+  - Estimacion: 8 puntos
+
+[MEDIA - Severidad Media]
+
+DT-05: Misiones e insignias hardcodeadas
+  - Descripcion: MISIONES_POR_GRADO e INSIGNIAS estan hardcodeadas en 
+    GamificationPanel.tsx en lugar de venir de base de datos
+  - Impacto: Dificil mantenimiento, no escalable
+  - Historia afectada: HU-050, HU-051
+  - Solucion: Crear tablas LUDI_MISION y LUDI_INSIGNIA en schema.prisma
+  - Estimacion: 13 puntos
+
+DT-06: Textos hardcodeados en espanol
+  - Descripcion: Dashboard, reportes, panel ludico tienen strings en espanol 
+    sin usar next-intl
+  - Impacto: HU-085 no puede completarse, soporte bilingue incompleto
+  - Historias afectadas: HU-085, HU-011, HU-077, HU-078
+  - Solucion: Extraer todos los strings a messages/es.json y usar useTranslations
+  - Estimacion: 21 puntos
+
+DT-07: Uso extensivo de any en catch blocks
+  - Descripcion: catch (error: any) en multiples archivos en lugar de unknown
+  - Impacto: Perdida de type safety, viola convencion de proyecto
+  - Archivos: authService.ts, saveActivity.ts, updateActivity.ts, 
+    getActivityForEdit.ts, play/join/route.ts, play/submit-answer/route.ts
+  - Solucion: Cambiar a catch (error: unknown) y usar type guards
+  - Estimacion: 5 puntos
+
+DT-08: Verificacion de admin con rolId === 1 hardcodeado
+  - Descripcion: AdminUsers.tsx y admin/users/route.ts verifican admin con 
+    rolId === 1 en lugar de usar constante o enum
+  - Impacto: Fragil si cambia el ID del rol admin
+  - Historia afectada: HU-088
+  - Solucion: Crear enum UserRole { ADMIN = 1, EDUCADOR = 2 } y usar constante
+  - Estimacion: 3 puntos
+
+[BAJA - Severidad Baja]
+
+DT-09: Dos endpoints de teacher feedback con logica duplicada
+  - Descripcion: /api/play/teacher-feedback y /api/live/teacher-feedback 
+    tienen logica similar pero diferente schema
+  - Impacto: Duplicacion de codigo, confusion
+  - Historia afectada: HU-064, HU-076
+  - Solucion: Unificar en un solo endpoint con schema flexible
+  - Estimacion: 5 puntos
+
+DT-10: No hay expiracion automatica de sesiones en lobby
+  - Descripcion: Sesiones en estado "lobby" no expiran automaticamente
+  - Impacto: Sesiones huerfanas acumulan en base de datos
+  - Historia afectada: HU-061
+  - Solucion: Cron job que marque como "expirada" sesiones > 2 horas en lobby
+  - Estimacion: 5 puntos
+
+DT-11: Preview button en editor no implementado
+  - Descripcion: CreateNavbar.tsx tiene boton de preview (FaEye) pero no 
+    tiene handler implementado
+  - Impacto: Funcionalidad faltante, UX incompleta
+  - Historia afectada: HU-028 (relacionada)
+  - Solucion: Implementar modal de preview o nueva pestana con vista de actividad
+  - Estimacion: 8 puntos
+
+DT-12: AuthProvider y ReduxProvider duplicados
+  - Descripcion: Ambos componentes hacen lo mismo (wrap con Redux Provider)
+  - Impacto: Confusion, codigo duplicado
+  - Archivos: src/components/providers/AuthProvider.tsx, ReduxProvider.tsx
+  - Solucion: Eliminar AuthProvider, usar solo ReduxProvider
+  - Estimacion: 2 puntos
+
+TOTAL DEUDA TECNICA: 96 Story Points
+  - Critica: 34 puntos
+  - Media: 42 puntos
+  - Baja: 20 puntos
+
+==============================
+4. RIESGOS IDENTIFICADOS
+==============================
+
+[RIESGO-01: Migracion de estados de sesion]
+  - Probabilidad: Media
+  - Impacto: Alto
+  - Descripcion: La normalizacion de estados de sesion (DT-01) puede romper 
+    sesiones activas en produccion si no se ejecuta correctamente
+  - Mitigacion: 
+    * Ejecutar migracion en ventana de mantenimiento (fuera de horario escolar)
+    * Script SQL con rollback plan
+    * Backup de base de datos antes de migracion
+    * Testing en staging environment primero
+
+[RIESGO-02: Internacionalizacion masiva]
+  - Probabilidad: Alta
+  - Impacto: Medio
+  - Descripcion: Extraer todos los strings hardcodeados (DT-06) es tedioso y 
+    propenso a errores, puede introducir bugs de renderizado
+  - Mitigacion:
+    * Dividir en 3 sub-tareas: dashboard, reportes, panel ludico
+    * Testing manual en ambos idiomas despues de cada sub-tarea
+    * Code review enfocado en verificar keys de traduccion
+    * No cambiar logica de negocio, solo extraer strings
+
+[RIESGO-03: Refactor de prisma as any]
+  - Probabilidad: Media
+  - Impacto: Alto
+  - Descripcion: Cambiar @@map en schema.prisma (DT-02) requiere regenerar 
+    cliente de Prisma y puede romper queries existentes
+  - Mitigacion:
+    * Crear rama especifica para este refactor
+    * Regenerar prisma client y ejecutar todos los tests
+    * Testing manual de flujos criticos (crear actividad, jugar, reportes)
+    * Rollback plan: revertir schema.prisma y regenerar client
+
+[RIESGO-04: Validacion de puntaje en servidor]
+  - Probabilidad: Baja
+  - Impacto: Alto
+  - Descripcion: Implementar validacion de puntaje (DT-03) puede cambiar la 
+    formula de calculo y afectar puntajes historicos
+  - Mitigacion:
+    * Mantener formula actual en servidor (no cambiar logica)
+    * Solo validar que puntaje enviado <= maximo teorico
+    * Log de advertencia si puntaje excede maximo (no rechazar)
+    * Monitorear logs despues de deploy
+
+[RIESGO-05: Migracion de misiones/insignias a DB]
+  - Probabilidad: Media
+  - Impacto: Medio
+  - Descripcion: Crear tablas nuevas (DT-05) y migrar datos hardcodeados puede 
+    romper el Panel Ludico si no se mapean correctamente
+  - Mitigacion:
+    * Seed script con datos actuales (mismos IDs y textos)
+    * Fallback a datos hardcodeados si query falla
+    * Testing manual del Panel Ludico con todos los grados
+    * Verificar que voz y confetti siguen funcionando
+
+==============================
+5. DEPENDENCIAS EXTERNAS
+==============================
+
+[DEPENDENCIA-01: Firebase Authentication]
+  - Servicio: Firebase Auth (email/password + Google OAuth)
+  - Uso: Autenticacion de usuarios, gestion de sesiones
+  - Criticidad: Alta (sin Firebase no hay login)
+  - Plan de contingencia: 
+    * Monitorear status de Firebase (status.firebase.google.com)
+    * Timeout de 10 segundos en llamadas a Firebase Admin SDK
+    * Mensaje de error amigable si Firebase esta caido
+
+[DEPENDENCIA-02: Firebase Storage]
+  - Servicio: Firebase Cloud Storage
+  - Uso: Almacenamiento de imagenes, videos, audio de actividades
+  - Criticidad: Media (actividades existentes siguen funcionando)
+  - Plan de contingencia:
+    * Fallback a URLs de Unsplash/YouTube/Freesound si upload falla
+    * Mensaje de error claro si Storage esta caido
+    * Cache de URLs en cliente para reducir llamadas
+
+[DEPENDENCIA-03: SQL Server (Azure)]
+  - Servicio: Azure SQL Database
+  - Uso: Base de datos principal (actividades, sesiones, usuarios)
+  - Criticidad: Alta (sin DB no hay aplicacion)
+  - Plan de contingencia:
+    * Connection pooling con Prisma (max 10 conexiones)
+    * Timeout de 30 segundos en queries
+    * Retry logic en operaciones criticas (3 intentos)
+    * Monitoreo de Azure SQL metrics
+
+[DEPENDENCIA-04: APIs de terceros (multimedia)]
+  - Servicios: Unsplash API, YouTube Data API v3, Freesound API
+  - Uso: Busqueda de imagenes, videos, audio para preguntas
+  - Criticidad: Baja (solo afecta creacion de actividades)
+  - Plan de contingencia:
+    * Fallback a upload local si API falla
+    * Rate limiting awareness (no exceder quotas)
+    * Mensaje de error si API key invalida o quota excedida
+
+[DEPENDENCIA-05: Azure Web App]
+  - Servicio: Azure App Service (Web App)
+  - Uso: Hosting de produccion
+  - Criticidad: Alta (sin hosting no hay acceso)
+  - Plan de contingencia:
+    * Health checks cada 5 minutos
+    * Auto-scaling configurado (min 1, max 3 instancias)
+    * Deployment slots para zero-downtime deployments
+    * Rollback automatico si health check falla post-deploy
+
+[DEPENDENCIA-06: GitHub Actions]
+  - Servicio: GitHub Actions (CI/CD)
+  - Uso: Build, test, deploy automatico
+  - Criticidad: Media (se puede deployar manualmente)
+  - Plan de contingencia:
+    * Scripts locales de build y deploy (npm run build, az webapp deploy)
+    * Documentacion de deploy manual en README
+    * Monitoreo de status de GitHub Actions
+
+==============================
+6. STAKEHOLDERS
+==============================
+
+[STAKEHOLDER-01: Product Owner]
+  - Rol: Responsable del Product Backlog y priorizacion
+  - Responsabilidades:
+    * Definir y ordenar historias por valor de negocio
+    * Aceptar o rechazar entregas en Sprint Review
+    * Comunicar vision del producto al equipo
+    * Tomar decisiones de scope y trade-offs
+  - Contacto: [Nombre del PO]
+
+[STAKEHOLDER-02: Equipo de Desarrollo]
+  - Rol: Implementacion de historias y refactors
+  - Composicion sugerida:
+    * 2 Full-stack developers (Next.js + SQL Server)
+    * 1 Frontend developer (React + gamificacion)
+    * 1 QA engineer (testing manual + automatizado)
+  - Responsabilidades:
+    * Estimar historias con Fibonacci en Planning
+    * Implementar codigo siguiendo DoD
+    * Code review entre pares
+    * Participar en Daily Scrums
+    * Demostrar funcionalidad en Sprint Review
+
+[STAKEHOLDER-03: St. Mary School (Cliente)]
+  - Rol: Beneficiario final del producto
+  - Representantes:
+    * Directora academica: [Nombre]
+    * Coordinadora de primaria: [Nombre]
+    * Educadores de 1ro, 2do y 3er grado (usuarios finales)
+    * Alumnos de 6-9 anos (usuarios finales)
+  - Responsabilidades:
+    * Proveer feedback en Sprint Reviews
+    * Validar que funcionalidades cumplen necesidades pedagogicas
+    * Participar en user testing con educadores y alumnos
+    * Aprobar releases para uso en produccion
+
+[STAKEHOLDER-04: Universidad Nacional de Ingenieria (UNI)]
+  - Rol: Supervisor academico de la monografia
+  - Representantes:
+    * Tutor de monografia: [Nombre del Ing.]
+    * Jurado evaluador: [Nombres]
+  - Responsabilidades:
+    * Evaluar calidad tecnica del codigo
+    * Verificar cumplimiento de objetivos de monografia
+    * Aprobar defensa de monografia
+  - Entregables requeridos:
+    * Codigo fuente documentado
+    * Manual de usuario (educadores)
+    * Manual tecnico (arquitectura, deployment)
+    * Reporte de testing y calidad
+
+[STAKEHOLDER-05: Administrador IT de St. Mary]
+  - Rol: Usuario admin del sistema, soporte tecnico
+  - Responsabilidades:
+    * Gestionar usuarios (crear, eliminar educadores)
+    * Monitorear uso del sistema
+    * Resolver incidencias de primer nivel
+    * Coordinar con equipo de desarrollo para bugs criticos
+  - Acceso: Panel de administracion (/settings/admin)
+
+==============================
+7. PLANIFICACION DE SPRINTS SUGERIDA
+==============================
+
+[SPRINT ACTUAL (Sprint N) - 3 semanas]
+Objetivo: Completar i18n y estabilizar nomenclatura de sesiones
+Capacidad: 40-50 Story Points
+
+Historias candidatas:
+  - HU-085 (Completar i18n) - 21 puntos
+  - DT-01 (Normalizar estados de sesion) - 8 puntos
+  - DT-07 (Eliminar any en catch blocks) - 5 puntos
+  - DT-08 (Enum para UserRole) - 3 puntos
+  Total: 37 puntos
+
+Distribucion semanal:
+  Semana 1: HU-085 (i18n dashboard + reportes) - 13 puntos
+  Semana 2: HU-085 (i18n panel ludico) + DT-01 - 11 puntos
+  Semana 3: DT-07 + DT-08 + Testing + Deploy - 13 puntos
+
+[SPRINT N+1 - 3 semanas]
+Objetivo: Eliminar deuda tecnica critica y mejorar seguridad
+Capacidad: 40-50 Story Points
+
+Historias candidatas:
+  - DT-02 (Eliminar prisma as any) - 13 puntos
+  - DT-03 (Validar puntaje en servidor) - 5 puntos
+  - DT-04 (Eliminar convencion id > 100) - 8 puntos
+  - DT-05 (Migrar misiones/insignias a DB) - 13 puntos
+  Total: 39 puntos
+
+Distribucion semanal:
+  Semana 1: DT-02 (refactor schema.prisma) - 13 puntos
+  Semana 2: DT-03 + DT-04 - 13 puntos
+  Semana 3: DT-05 + Testing + Deploy - 13 puntos
+
+[SPRINT N+2 - 3 semanas]
+Objetivo: Mejoras de UX y funcionalidades faltantes
+Capacidad: 30-40 Story Points
+
+Historias candidatas:
+  - DT-11 (Implementar preview button) - 8 puntos
+  - DT-09 (Unificar endpoints teacher feedback) - 5 puntos
+  - DT-10 (Expiracion automatica de sesiones) - 5 puntos
+  - DT-12 (Eliminar AuthProvider duplicado) - 2 puntos
+  - DT-06 (Completar i18n si quedo pendiente) - 8 puntos
+  - Nueva funcionalidad: Modo oscuro (si hay tiempo) - 13 puntos
+  Total: 41 puntos
+
+==============================
+8. METRICAS Y KPIS SUGERIDOS
+==============================
+
+[METRICAS DE CALIDAD]
+- Code coverage: Objetivo 70% minimo
+- Bugs en produccion: < 3 por sprint
+- Tiempo de resolucion de bugs criticos: < 24 horas
+- Deuda tecnica reducida: 30+ puntos por sprint
+
+[METRICAS DE VELOCIDAD]
+- Velocity promedio: 40-50 Story Points por sprint
+- Historias completadas vs planificadas: > 80%
+- Carry-over (historias no terminadas): < 20%
+
+[METRICAS DE PRODUCTO]
+- Numero de educadores registrados: Objetivo 20+ en 3 meses
+- Numero de actividades creadas: Objetivo 100+ en 3 meses
+- Numero de sesiones de juego: Objetivo 50+ en 3 meses
+- Satisfaccion de educadores (NPS): Objetivo > 8/10
+- Satisfaccion de estudiantes (emoji rating): Objetivo > 4/5
+
+[METRICAS DE RENDIMIENTO]
+- Tiempo de carga de pagina (LCP): < 2.5 segundos
+- Time to Interactive (TTI): < 3.5 segundos
+- API response time (p95): < 500ms
+- Database query time (p95): < 200ms
+
+==============================
+9. CEREMONIAS SCRUM SUGERIDAS
+==============================
+
+[DAILY SCRUM]
+- Frecuencia: Diario (Lunes a Viernes)
+- Duracion: 15 minutos maximo
+- Hora sugerida: 9:00 AM (inicio de jornada)
+- Formato: Cada miembro responde 3 preguntas:
+  1. Que hice ayer para avanzar el Sprint Goal?
+  2. Que hare hoy para avanzar el Sprint Goal?
+  3. Hay algun impedimento que me bloquee?
+- Lugar: Stand-up virtual (Zoom/Teams) o presencial
+
+[SPRINT PLANNING]
+- Frecuencia: Primer dia del sprint (cada 3 semanas)
+- Duracion: 4 horas
+- Participantes: PO + Equipo de Desarrollo + Scrum Master
+- Agenda:
+  1. PO presenta Sprint Goal y historias priorizadas (30 min)
+  2. Equipo hace preguntas y clarifica dudas (30 min)
+  3. Estimacion con Planning Poker (Fibonacci) (2 horas)
+  4. Equipo selecciona historias para el sprint (30 min)
+  5. Definicion de tareas tecnicas por historia (30 min)
+- Output: Sprint Backlog con historias estimadas y tareas
+
+[SPRINT REVIEW]
+- Frecuencia: Ultimo dia del sprint (cada 3 semanas)
+- Duracion: 2 horas
+- Participantes: PO + Equipo + Stakeholders (St. Mary, UNI)
+- Agenda:
+  1. Demo de funcionalidades completadas (45 min)
+  2. Feedback de stakeholders (30 min)
+  3. Revision de metricas del sprint (15 min)
+  4. Discusion de proximos pasos (30 min)
+- Output: Feedback documentado, ajustes al Product Backlog
+
+[SPRINT RETROSPECTIVE]
+- Frecuencia: Ultimo dia del sprint (despues de Review)
+- Duracion: 1.5 horas
+- Participantes: Equipo de Desarrollo + Scrum Master (PO opcional)
+- Agenda:
+  1. Que hicimos bien? (15 min)
+  2. Que podemos mejorar? (15 min)
+  3. Acciones concretas para el proximo sprint (30 min)
+  4. Review de acciones del sprint anterior (15 min)
+  5. Agradecimientos y cierre (15 min)
+- Output: 3-5 acciones de mejora con responsables y deadlines
+
+[BACKLOG REFINEMENT]
+- Frecuencia: Mitad del sprint (semana 2)
+- Duracion: 2 horas
+- Participantes: PO + Equipo de Desarrollo
+- Agenda:
+  1. Review de historias del proximo sprint (45 min)
+  2. Clarificacion de criterios de aceptacion (30 min)
+  3. Pre-estimacion con T-shirt sizes (S/M/L/XL) (30 min)
+  4. Identificacion de dependencias y riesgos (15 min)
+- Output: Historias refinadas y listas para proximo Planning
+
+==============================
+10. HERRAMIENTAS Y AMBIENTES
+==============================
+
+[HERRAMIENTAS DE DESARROLLO]
+- IDE: VS Code (recomendado) con extensiones:
+  * ESLint, Prettier, TypeScript, Tailwind CSS IntelliSense
+  * Prisma, GitLens, Error Lens
+- Control de versiones: Git + GitHub
+- Base de datos: SQL Server Management Studio (SSMS) o Azure Data Studio
+- API testing: Postman o Thunder Client (VS Code extension)
+- Diseño: Figma (si hay mockups)
+
+[AMBIENTES]
+- Desarrollo local:
+  * URL: http://localhost:3000
+  * DB: SQL Server local o Azure SQL (dev)
+  * Firebase: Proyecto de desarrollo
+  * Variables: .env.local
+
+- Staging (opcional):
+  * URL: https://staging.ludigame.azurewebsites.net
+  * DB: Azure SQL (staging)
+  * Firebase: Proyecto de staging
+  * Deploy: Manual o rama develop
+
+- Produccion:
+  * URL: https://ludigame.azurewebsites.net
+  * DB: Azure SQL (prod)
+  * Firebase: Proyecto de produccion
+  * Deploy: Automatico desde rama master via GitHub Actions
+
+[ACCESOS Y CREDENCIALES]
+- Azure Portal: [Email del admin]
+- Firebase Console: [Email del admin]
+- GitHub Repository: https://github.com/[org]/st-mary-app
+- Azure SQL Server: [server-name].database.windows.net
+- Variables de entorno: Ver .env.example en repositorio
+
+============================================================================
+FIN DEL DOCUMENTO DE ARTEFACTOS SCRUM
+============================================================================

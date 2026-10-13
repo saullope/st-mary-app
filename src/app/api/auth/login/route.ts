@@ -1,10 +1,10 @@
 import { adminAuth } from "@/firebase/firebase-admin";
-import { cookies, headers } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
-import { AUTH_COOKIE_NAME, AUTH_COOKIE_MAX_AGE, AUTH_COOKIE_MAX_AGE_MS } from "@/lib/auth/constants";
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { isRecentSignIn, issueSessionCookie } from "@/lib/auth/session";
 
-export async function POST(request: NextRequest) {
+export async function POST() {
     try {
         const authorization = (await headers()).get("Authorization");
 
@@ -21,6 +21,14 @@ export async function POST(request: NextRequest) {
         if (!decodedToken) {
             return NextResponse.json(
                 { error: "Invalid ID token." },
+                { status: 401 }
+            );
+        }
+
+        // Solo un inicio de sesión recién hecho (credenciales o Google) crea una sesión.
+        if (!isRecentSignIn(decodedToken.auth_time)) {
+            return NextResponse.json(
+                { error: "Vuelve a iniciar sesión.", reason: "stale" },
                 { status: 401 }
             );
         }
@@ -88,19 +96,7 @@ export async function POST(request: NextRequest) {
         }
         // -------------------------------
 
-        const sessionCookie = await adminAuth.createSessionCookie(idToken, {
-            expiresIn: AUTH_COOKIE_MAX_AGE_MS,
-        });
-
-        const cookieStore = await cookies();
-        cookieStore.set({
-            name: AUTH_COOKIE_NAME,
-            value: sessionCookie,
-            maxAge: AUTH_COOKIE_MAX_AGE,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            path: "/",
-        });
+        await issueSessionCookie(idToken);
 
         return NextResponse.json(
             { message: "Session created successfully." },

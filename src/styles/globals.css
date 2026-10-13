@@ -447,3 +447,62 @@ th {
 .driver-popover.driverjs-dashboard-theme .driver-popover-arrow-side-right { border-right-color: #E8E5F7 !important; }
 .driver-popover.driverjs-dashboard-theme .driver-popover-arrow-side-top { border-bottom-color: #E8E5F7 !important; }
 .driver-popover.driverjs-dashboard-theme .driver-popover-arrow-side-bottom { border-top-color: #E8E5F7 !important; }
+
+/* ========== DRIVER.JS HINTS MODE (Solo Sugerencias) ========== */
+.driver-popover.driverjs-hints-only {
+  background-color: #ffffff !important;
+  color: #1D153A !important;
+  border-radius: 0.75rem !important;
+  border: 2px solid #4285F4 !important;
+  box-shadow: 0 8px 24px rgba(66, 133, 244, 0.25) !important;
+  font-family: inherit !important;
+  padding: 1rem 1.25rem !important;
+  max-width: 320px !important;
+  animation: fadeInUp 0.3s ease-out !important;
+}
+
+.driver-popover.driverjs-hints-only .driver-popover-title {
+  color: #4285F4 !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.driver-popover.driverjs-hints-only .driver-popover-description {
+  color: #5f6368 !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: 0 !important;
+}
+
+.driver-popover.driverjs-hints-only .driver-popover-close-btn {
+  color: #5f6368 !important;
+  font-size: 1.2rem !important;
+  transition: color 0.2s ease !important;
+}
+
+.driver-popover.driverjs-hints-only .driver-popover-close-btn:hover {
+  color: #dc3545 !important;
+}
+
+.driver-popover.driverjs-hints-only .driver-popover-prev-btn,
+.driver-popover.driverjs-hints-only .driver-popover-next-btn,
+.driver-popover.driverjs-hints-only .driver-popover-done-btn {
+  display: none !important;
+}
+
+.driver-popover.driverjs-hints-only .driver-popover-progress-text {
+  display: none !important;
+}
+
+.driver-popover.driverjs-hints-only .driver-popover-arrow-side-left { border-left-color: #ffffff !important; }
+.driver-popover.driverjs-hints-only .driver-popover-arrow-side-right { border-right-color: #ffffff !important; }
+.driver-popover.driverjs-hints-only .driver-popover-arrow-side-top { border-bottom-color: #ffffff !important; }
+.driver-popover.driverjs-hints-only .driver-popover-arrow-side-bottom { border-top-color: #ffffff !important; }
+
+/* Ocultar overlay en modo hints */
+.driver-overlay.driverjs-hints-overlay {
+  background-color: transparent !important;
+  pointer-events: none !important;
+}

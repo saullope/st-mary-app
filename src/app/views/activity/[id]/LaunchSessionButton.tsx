@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FaRocket, FaCheck } from "react-icons/fa6";
 import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
+import { notify } from "@/components/ui";
 
 import { useRouter } from "next/navigation";
 
@@ -16,7 +17,7 @@ export function LaunchSessionButton({ activityId }: { activityId: number }) {
     if (result.success) {
       router.push(`/dashboard/live/${result.sessionId}`);
     } else {
-      alert(result.error);
+      notify.error("No se pudo lanzar la partida", result.error || "Inténtalo de nuevo.");
       setIsLaunching(false);
     }
   };

@@ -1,0 +1,82 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(20, 10, 46, 0.55);
+}
+
+.dialog {
+  width: 100%;
+  max-width: 400px;
+  padding: 28px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 20px 45px rgba(20, 10, 46, 0.3);
+  color: #1d153a;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #4a4266;
+}
+
+.countdown {
+  margin: 16px 0 20px;
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #6a4bff;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.primary,
+.secondary {
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  border: none;
+  background: #6a4bff;
+  color: #fff;
+}
+
+.primary:hover {
+  background: #5a3be6;
+}
+
+.secondary {
+  border: 1px solid #d9d3ff;
+  background: #fff;
+  color: #4a4266;
+}
+
+.secondary:hover {
+  background: #f6f4ff;
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}

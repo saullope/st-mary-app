@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { FaImage, FaSearch, FaTimes, FaTrash } from 'react-icons/fa';
-import Image from 'next/image';
+import { FaImage, FaTimes, FaTrash } from 'react-icons/fa';
 import styles from '@/styles/pages/ludiquiz.module.css';
 import { ModalMultimedia } from './ModalMultimedia';
+import { AnswerImageSearch, type ImageSearchSource } from './AnswerImageSearch';
+import { notify } from '@/components/ui';
+import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
+import { ANSWER_FILE_PREFIX, uploadsPath } from '@/lib/mediaSources';
 
 interface Answer {
     id: number;
@@ -35,17 +38,19 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
     onDeleteAnswer,
     onAnswerKeyDown,
 }) => {
-    const [showModal, setShowModal] = useState(false);
+    const [searchSource, setSearchSource] = useState<ImageSearchSource | null>(null);
     const [activeAnswerId, setActiveAnswerId] = useState<number | null>(null);
+    const [uploadingAnswerId, setUploadingAnswerId] = useState<number | null>(null);
+    const { uploadFile } = useFirebaseStorage();
 
-    const handleOpenUnsplash = useCallback((answerId: number) => {
+    const handleOpenSearch = useCallback((answerId: number, source: ImageSearchSource) => {
         setActiveAnswerId(answerId);
-        setShowModal(true);
+        setSearchSource(source);
     }, []);
 
     const handleCloseModal = useCallback(() => {
-        setShowModal(false);
-        setTimeout(() => setActiveAnswerId(null), 100);
+        setSearchSource(null);
+        setActiveAnswerId(null);
     }, []);
 
     const handleSelectMedia = useCallback((type: string, url: string) => {
@@ -62,13 +67,19 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
         }
     };
 
-    const handleFileChange = (answerId: number, event: React.ChangeEvent<HTMLInputElement>) => {
+    // Se sube a Storage: una URL blob: solo existiría en este navegador y no se podría guardar.
+    const handleFileChange = async (answerId: number, event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file && onUpdateAnswerImage) {
-            const fileURL = URL.createObjectURL(file);
-            onUpdateAnswerImage(answerId, fileURL);
-        }
         event.target.value = '';
+        if (!file || !onUpdateAnswerImage) return;
+        setUploadingAnswerId(answerId);
+        const url = await uploadFile(file, uploadsPath(ANSWER_FILE_PREFIX, file.name));
+        setUploadingAnswerId(null);
+        if (!url) {
+            notify.error('No se pudo subir la imagen', 'Revisa tu conexión e inténtalo de nuevo.');
+            return;
+        }
+        onUpdateAnswerImage(answerId, url);
     };
 
     const handleRemoveImage = (answerId: number) => {
@@ -131,45 +142,32 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                     onClick={() => handleFileSelect(answer.id)}
                                     type="button"
                                     title="Subir imagen"
+                                    aria-label={`Subir imagen para la respuesta ${index + 1}`}
+                                    disabled={uploadingAnswerId === answer.id}
                                 >
-                                    <FaImage />
+                                    {uploadingAnswerId === answer.id
+                                        ? <span className="spinner-border spinner-border-sm" style={{ width: 12, height: 12 }} aria-hidden="true" />
+                                        : <FaImage aria-hidden="true" />}
                                 </button>
 
-                                {/* Search Unsplash button */}
-                                <button
-                                    className={styles['answer-action-btn']}
-                                    onClick={() => handleOpenUnsplash(answer.id)}
-                                    type="button"
-                                    title="Buscar en Unsplash"
-                                >
-                                    <FaSearch />
-                                </button>
+                                <AnswerImageSearch
+                                    answerNumber={index + 1}
+                                    onPick={(source) => handleOpenSearch(answer.id, source)}
+                                />
                             </div>
 
                             {/* Image preview below - centered */}
                             {answer.imageUrl && (
                                 <div className={styles['answer-image-wrapper']}>
                                     <div className={styles['answer-image-container']}>
-                                        {/* Use img for blob URLs, Image for external URLs */}
-                                        {answer.imageUrl.startsWith('blob:') ? (
-                                            /* eslint-disable-next-line @next/next/no-img-element */
-                                            <img
-                                                src={answer.imageUrl}
-                                                alt={`Respuesta ${index + 1}`}
-                                                width={120}
-                                                height={90}
-                                                style={{ objectFit: 'cover', borderRadius: '8px' }}
-                                            />
-                                        ) : (
-                                            <Image
-                                                src={answer.imageUrl}
-                                                alt={`Respuesta ${index + 1}`}
-                                                width={120}
-                                                height={90}
-                                                style={{ objectFit: 'cover', borderRadius: '8px' }}
-                                                unoptimized
-                                            />
-                                        )}
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={answer.imageUrl}
+                                            alt={`Imagen de la respuesta ${index + 1}`}
+                                            width={120}
+                                            height={90}
+                                            style={{ objectFit: 'cover', borderRadius: '8px' }}
+                                        />
                                         <button
                                             className={styles['remove-answer-image']}
                                             onClick={() => handleRemoveImage(answer.id)}
@@ -204,12 +202,11 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                 </button>
             </div>
 
-            {/* Modal for Unsplash search */}
-            {showModal && (
+            {searchSource && (
                 <ModalMultimedia
-                    show={showModal}
+                    show
                     handleClose={handleCloseModal}
-                    origin="unsplash"
+                    origin={searchSource}
                     onSelectMedia={handleSelectMedia}
                 />
             )}

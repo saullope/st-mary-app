@@ -1,0 +1,296 @@
+/* Kit compartido de la columna izquierda de los editores (/create/*) */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--border-radius-xl, 16px);
+  box-shadow: var(--shadow-md);
+}
+
+.sidebarTitle {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary, #1d153a);
+}
+
+.sidebarFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* Botón de agregar: borde punteado, acción secundaria de la lista */
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  border: 1.5px dashed #6a4bff;
+  border-radius: var(--border-radius-lg, 12px);
+  background: #fff;
+  color: #6a4bff;
+  font-family: var(--font-family-primary);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.addButton:hover {
+  background: rgba(106, 75, 255, 0.06);
+}
+
+/* Botones de pie: confirmar (verde de éxito de la app) y cancelar */
+.footerButton {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--border-radius-lg, 12px);
+  font-family: var(--font-family-primary);
+  font-weight: 700;
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.footerPrimary {
+  background: #198754;
+}
+
+.footerPrimary:hover {
+  background: #157347;
+}
+
+.footerSecondary {
+  background: var(--gray-500, #6b7280);
+}
+
+.footerSecondary:hover {
+  background: #4b5563;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.item:hover {
+  border-color: #cbd5e1;
+}
+
+.item[aria-current="true"] {
+  border: 2px solid #6a4bff;
+  background: rgba(106, 75, 255, 0.06);
+}
+
+/* Borrador aún no agregado a la lista */
+.itemDraft {
+  border-style: dashed;
+}
+
+.select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.select:disabled {
+  cursor: default;
+}
+
+.number {
+  flex-shrink: 0;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(106, 75, 255, 0.12);
+  color: #6a4bff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leading {
+  flex-shrink: 0;
+  width: 40px;
+  height: 30px;
+  border-radius: 6px;
+  background: #f8f9fa;
+  color: #64748b;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.leading img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.leadingOverlay {
+  position: absolute;
+  display: inline-flex;
+  color: #ff0000;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1d153a;
+}
+
+.labelMuted {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.tag {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.tagViolet { background: rgba(106, 75, 255, 0.12); color: #6a4bff; }
+.tagCyan { background: rgba(0, 212, 255, 0.14); color: #0b7a93; }
+.tagSuccess { background: rgba(25, 135, 84, 0.12); color: #157347; }
+.tagDanger { background: rgba(220, 53, 69, 0.12); color: #b02a37; }
+
+.warning {
+  flex-shrink: 0;
+  color: #d97706;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: 0 6px 6px;
+}
+
+.actions button {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.actions button:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #1d153a;
+}
+
+.actions .deleteAction:hover:not(:disabled) {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.actions button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.emptyHint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.addButton:focus-visible,
+.footerButton:focus-visible,
+.select:focus-visible,
+.actions button:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+/* Selector de tipos de elemento (EditorTypePicker) */
+.picker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--border-radius-lg, 12px);
+  background: #faf9ff;
+}
+
+.pickerOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #fff;
+  color: #1d153a;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.pickerOption:hover {
+  border-color: #6a4bff;
+  transform: translateY(-1px);
+}
+
+.pickerIcon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.pickerHint {
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  color: #4a4266;
+  text-align: center;
+}
+
+.pickerOption:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
