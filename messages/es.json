@@ -53,6 +53,7 @@
     "clickHere": "Haz click aquí",
     "welcome": "Bienvenido",
     "errorLogionWithGoogle": "Error al iniciar sesión con Google",
+    "errorPopupBlocked": "Tu navegador bloqueó la ventana de Google. Vuelve a intentarlo o permite las ventanas emergentes para este sitio.",
     "errorLogionWithEmail": "Error al iniciar sesión con correo electrónico",
     "errorNotFindUser": "Usuario no encontrado",
     "genericError": "Ocurrió un error, por favor intente nuevamente más tarde",
@@ -942,23 +943,19 @@
     "copy": {
       "ludileccion": {
         "points": "",
-        "badges": "Selecciona las insignias que tus estudiantes podrán ganar al completar la lección.",
-        "grade": "de ahí dependen los bloques y misiones disponibles."
+        "badges": "Selecciona las insignias que tus estudiantes podrán ganar al completar la lección."
       },
       "ludiform": {
         "points": "Puntos por cada pregunta de opción acertada o respuesta escrita que apruebes.",
-        "badges": "Selecciona las insignias que tus estudiantes podrán ganar al entregar el formulario.",
-        "grade": "de ahí dependen las misiones disponibles."
+        "badges": "Selecciona las insignias que tus estudiantes podrán ganar al entregar el formulario."
       },
       "ludimemory": {
         "points": "Puntos que gana el estudiante por cada pareja que encuentra.",
-        "badges": "Selecciona las insignias que tus estudiantes podrán ganar mientras encuentran las parejas.",
-        "grade": "de ahí dependen las misiones disponibles."
+        "badges": "Selecciona las insignias que tus estudiantes podrán ganar mientras encuentran las parejas."
       },
       "default": {
         "points": "Define los puntos que el estudiante gana por cada respuesta correcta.",
-        "badges": "Selecciona las insignias que podrán ganar tus estudiantes.",
-        "grade": "de ahí dependen las misiones disponibles."
+        "badges": "Selecciona las insignias que podrán ganar tus estudiantes."
       }
     },
     "invalidTime": "Por favor, ingresa un valor válido de tiempo.",
@@ -967,16 +964,10 @@
     "saved": "¡Configuración guardada!",
     "regionLabel": "Panel de configuración lúdica",
     "title": "Configuración Lúdica",
+    "expand": "Expandir panel",
+    "expandedTitle": "Configuración lúdica ampliada",
+    "close": "Cerrar",
     "general": "Configuración general",
-    "grade": "Grado:",
-    "grades": {
-      "1": "Primer grado",
-      "2": "Segundo grado",
-      "3": "Tercer grado"
-    },
-    "gradeUndefined": "Sin definir",
-    "gradeFromWelcome": "Tomado del grado que seleccionaste en Bienvenida; {reason}",
-    "gradeMissing": "No se detectó un grado seleccionado. Ve a la pantalla de Bienvenida para elegir uno.",
     "timeLabel": "Tiempo por pregunta (segundos):",
     "timePlaceholder": "Ingresa el tiempo",
     "timeHint": "Ajusta el tiempo que tiene el estudiante para responder.",
@@ -1029,25 +1020,6 @@
       "next": {
         "title": "Creemos tu primera actividad",
         "description": "Te acompañamos paso a paso en Crear actividad. Puedes elegir \"Ver más tarde\" en cualquier momento."
-      }
-    },
-    "welcome": {
-      "buttons": {
-        "next": "Siguiente",
-        "previous": "Anterior",
-        "done": "¡A crear!"
-      },
-      "hello": {
-        "title": "¡Bienvenido, educador!",
-        "description": "¡Hola! Estamos felices de tenerte aquí. Vamos a preparar tu espacio de trabajo."
-      },
-      "grade": {
-        "title": "Elige tu grado",
-        "description": "Selecciona el grado con el que trabajarás. Así te mostraremos recursos pensados para tus estudiantes."
-      },
-      "done": {
-        "title": "¡Excelente elección!",
-        "description": "Al seleccionar, entrarás directamente a tu panel personalizado. ¡A crear!"
       }
     },
     "createActivity": {
@@ -1123,10 +1095,6 @@
       }
     },
     "registry": {
-      "welcome_tour": {
-        "name": "Bienvenida al educador",
-        "description": "Recorrido inicial por la página de bienvenida y la selección de grado."
-      },
       "dashboard_tour": {
         "name": "Panel principal",
         "description": "Conoce tu centro de mando: navegación, creación de actividades y borradores."
@@ -1208,7 +1176,7 @@
     "groups": {
       "onboarding": {
         "title": "Primeros pasos",
-        "hint": "El recorrido inicial: bienvenida, Inicio y Crear actividad."
+        "hint": "El recorrido inicial: Inicio y Crear actividad."
       },
       "activities": {
         "title": "Tutoriales de actividades",
@@ -1869,7 +1837,8 @@
     "stale": "Vuelve a iniciar sesión.",
     "configuration": "Error de configuración del sistema. Contacta al administrador.",
     "registerFailed": "No se pudieron registrar tus datos. Inténtalo de nuevo.",
-    "sessionFailed": "No se pudo iniciar la sesión. Inténtalo de nuevo."
+    "sessionFailed": "No se pudo iniciar la sesión. Inténtalo de nuevo.",
+    "emailNotVerified": "Verifica tu correo electrónico antes de iniciar sesión con esta cuenta."
   },
   "Collection": {
     "view": "Vista",
@@ -1893,6 +1862,7 @@
     "skip": "Omitir por ahora",
     "save": "Guardar y continuar",
     "continue": "Continuar",
+    "back": "Cambiar de grado",
     "saveFailed": "No se pudieron guardar tus clases. Inténtalo de nuevo."
   },
   "SubjectSettings": {

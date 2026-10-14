@@ -175,25 +175,23 @@ export const SaveActivityButton = () => {
         borderRadius: "var(--border-radius-lg)",
         padding: "10px 22px",
         boxShadow: "var(--shadow-sm)",
-        // Mismo verde que .btnLudiSuccess (LudiDesign.module.css), usado
-        // en el resto de la app para acciones de guardado/éxito. Es el
-        // único botón sólido del header en el editor de ludiquiz/trueorfalse,
-        // así que se refuerza un poco su elevación para que lea como el CTA
-        // principal.
-        background: "#198754",
+        // Acción primaria de los editores (--c-primary). Es el único botón sólido
+        // de la barra, así que se refuerza un poco su elevación para que lea
+        // como el CTA principal.
+        background: "var(--c-primary)",
         color: "var(--white)",
         border: "none",
         transition: "all 0.2s ease"
       }}
       onMouseOver={(e) => {
         if (loading) return;
-        e.currentTarget.style.background = "#157347";
-        e.currentTarget.style.boxShadow = "0 8px 18px rgba(25, 135, 84, 0.35)";
+        e.currentTarget.style.background = "var(--c-primary-hover)";
+        e.currentTarget.style.boxShadow = "0 8px 18px rgba(91, 63, 224, 0.35)";
         e.currentTarget.style.transform = "translateY(-1px)";
       }}
       onMouseOut={(e) => {
         if (loading) return;
-        e.currentTarget.style.background = "#198754";
+        e.currentTarget.style.background = "var(--c-primary)";
         e.currentTarget.style.boxShadow = "var(--shadow-sm)";
         e.currentTarget.style.transform = "translateY(0)";
       }}

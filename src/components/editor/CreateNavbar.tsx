@@ -89,7 +89,7 @@ export const CreateNavbar = () => {
                     </div>
 
                     {/* Separator */}
-                    <div style={{ width: 1, height: 24, background: '#e2e8f0' }}></div>
+                    <div style={{ width: 1, height: 24, background: 'var(--c-shell-border)' }}></div>
 
                     {/* Existing Controls */}
                     <div className={styles.themeBtnWrapper} data-tour="theme-button">

@@ -94,6 +94,23 @@
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
 
+  /* Paleta de los editores (/create/*), alineada con el panel docente.
+     El lienzo central y los temas seleccionables no la usan. */
+  --c-shell: #1B1240;          /* barra superior */
+  --c-shell-divider: #2E2463;  /* borde inferior de la barra */
+  --c-ground: #21174C;         /* fondo de página */
+  --c-shell-control: #2C2160;  /* botones sobre fondo oscuro */
+  --c-shell-border: #4A3D8F;
+  --c-shell-text: #FFFFFF;
+  --c-shell-muted: #C9C1F0;
+  --c-shell-accent: #C4B8FF;   /* icono de lápiz del título */
+  --c-primary: #5B3FE0;        /* acción primaria */
+  --c-primary-hover: #4B32C9;
+  --c-text: #1C1633;
+  --c-muted: #5E5878;          /* texto secundario sobre blanco (4.5:1) */
+  --c-focus-dark: #8B7CFF;     /* foco sobre fondo oscuro */
+  --c-focus-light: #5B3FE0;    /* foco sobre fondo blanco */
+
   /* Escala del panel docente (dashboard, reportes, plantillas, seguimiento).
      --text-meta es el mínimo absoluto: ningún texto del panel va por debajo. */
   --text-meta: 13px;     /* metadatos, fechas, etiquetas, encabezados de columna */

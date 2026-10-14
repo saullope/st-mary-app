@@ -1,7 +1,7 @@
 .navbar {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--c-shell);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--c-shell-divider);
     padding: 0.8rem 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     display: flex;
@@ -58,20 +58,21 @@
     gap: 8px;
     transition: all var(--transition-normal);
     cursor: pointer;
-    background: var(--white);
-    color: var(--gray-600);
+    background: var(--c-shell-control);
+    border-color: var(--c-shell-border);
+    color: var(--c-shell-text);
     box-shadow: var(--shadow-sm);
 }
 
 .navButton:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
-    border-color: #c9bfff;
-    color: #6a4bff;
+    border-color: var(--c-shell-muted);
+    color: var(--c-shell-text);
 }
 
 .navButton:hover .icon {
-    color: #6a4bff;
+    color: var(--c-shell-text);
 }
 
 .navButton:disabled {
@@ -82,12 +83,12 @@
 .navButton:disabled:hover {
     transform: none;
     box-shadow: var(--shadow-sm);
-    border-color: var(--gray-200);
-    color: var(--gray-600);
+    border-color: var(--c-shell-border);
+    color: var(--c-shell-text);
 }
 
 .navButton:disabled:hover .icon {
-    color: var(--gray-600);
+    color: var(--c-shell-text);
 }
 
 /* Specific Button Styles */
@@ -107,18 +108,17 @@
     box-shadow: 0 8px 20px rgba(106, 75, 255, 0.35);
 }
 
-/* Asistente IA: todavía sin funcionalidad real, así que se mantiene como
-   botón "ghost" (sin fondo/borde) para no competir visualmente con las
-   acciones reales del editor ni prometer algo que aún no existe. */
+/* Asistente IA: todavía sin funcionalidad real. Comparte el color de los demás
+   botones de la barra, pero sin sombra ni elevación al pasar el mouse. */
 .aiBtn {
-    background: transparent;
-    border-color: transparent;
+    background: var(--c-shell-control);
+    border-color: var(--c-shell-border);
     box-shadow: none;
-    color: var(--gray-500);
+    color: var(--c-shell-text);
 }
 
 .aiBtn:hover {
-    background: var(--gray-50);
+    background: var(--c-shell-control);
     box-shadow: none;
     transform: none;
 }
@@ -129,7 +129,7 @@
 .viewGroup {
     display: flex;
     align-items: stretch;
-    border: 1px solid var(--gray-200);
+    border: 1px solid var(--c-shell-border);
     border-radius: var(--border-radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
@@ -142,7 +142,7 @@
 }
 
 .viewGroup .navButton:not(:last-child) {
-    border-right: 1px solid var(--gray-200);
+    border-right: 1px solid var(--c-shell-border);
 }
 
 .viewGroup .navButton:hover {
@@ -157,6 +157,6 @@
 
 .icon {
     font-size: 1.2rem;
-    color: var(--gray-600);
+    color: var(--c-shell-text);
     transition: color var(--transition-normal);
 }

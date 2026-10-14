@@ -24,9 +24,9 @@ export const DEFAULT_TOUR_PREFERENCES: TourPreferences = {
   later: [],
 };
 
-/** Recorrido inicial: Bienvenida, Inicio, Crear actividad y el editor de LudiQuiz.
+/** Recorrido inicial: Inicio, Crear actividad y el editor de LudiQuiz.
  *  "Ver más tarde" en cualquiera de ellos pospone los que faltan. */
-export const ONBOARDING_JOURNEY = ["welcome_tour", "dashboard_tour", "create_activity_tour", "ludiquiz_tour"] as const;
+export const ONBOARDING_JOURNEY = ["dashboard_tour", "create_activity_tour", "ludiquiz_tour"] as const;
 
 /** Ofrecer el selector de clases para un grado cuenta como un paso más del recorrido. */
 export const subjectPromptId = (gradeId: number) => `subjects_grade_${gradeId}`;

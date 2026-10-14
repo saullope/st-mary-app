@@ -53,10 +53,11 @@
   color: var(--text-primary);
 }
 
+/* --c-muted: 4.5:1 sobre las subtarjetas claras del panel embebido. */
 .embedded .sectionHint,
 .embedded .desc,
 .embedded .badgeDescription {
-  color: var(--gray-500);
+  color: var(--c-muted);
 }
 
 .embedded .badgeName {
@@ -67,7 +68,6 @@
   grid-template-columns: 1fr;
 }
 
-.embedded .select,
 .embedded .inputNumber {
   background-color: var(--white);
   border-color: var(--gray-300);
@@ -206,11 +206,6 @@
   gap: 16px;
 }
 
-.configFieldFull {
-  grid-column: 1 / -1;
-}
-
-.configGrid .select,
 .configGrid .inputNumber {
   margin-bottom: 0;
 }
@@ -219,24 +214,6 @@
   margin-top: 6px;
   margin-bottom: 0;
   font-size: 12px;
-}
-
-.select {
-  width: 100%;
-  padding: 8px 10px;
-  border-radius: var(--border-radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background-color: rgba(255, 255, 255, 0.06);
-  color: #e0e7ff;
-  font-size: 14px;
-  margin-bottom: 14px;
-  font-family: var(--font-family-primary);
-  transition: border-color 0.2s ease;
-}
-
-.select:focus {
-  border-color: #8b73ff;
-  outline: none;
 }
 
 .inputNumber {
@@ -424,4 +401,75 @@
   .insigniasContainer { grid-template-columns: 1fr; gap: 10px; }
   .badgeCard { min-height: 120px; }
   .badgeDescription { font-size: 11px; }
+}
+
+/* Cabecera con el botón de ampliar arriba a la derecha. */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.header .headerGlow {
+  flex: 1;
+  text-align: left;
+}
+
+.expandBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-md);
+  background: var(--white);
+  color: var(--c-muted);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.expandBtn:hover {
+  color: var(--c-primary);
+  border-color: var(--c-primary);
+}
+
+.expandBtn:focus-visible {
+  outline: 2px solid var(--c-focus-light);
+  outline-offset: 2px;
+}
+
+/* Panel ampliado (modal): mismas tarjetas claras que en la columna, con más espacio
+   para ver las insignias y misiones de un vistazo. */
+.expandedTitle {
+  font-family: var(--font-family-primary);
+  font-size: 22px;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.expanded {
+  font-family: var(--font-family-primary);
+  color: var(--text-primary);
+  background: var(--white);
+}
+
+.expanded .configGrid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.expanded .insigniasContainer {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.expanded .missionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+@media (max-width: 575.98px) {
+  .expanded .configGrid {
+    grid-template-columns: 1fr;
+  }
 }

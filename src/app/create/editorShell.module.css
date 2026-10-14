@@ -1,0 +1,21 @@
+/* Colores comunes a todos los editores (/create/*). Solo colores: el layout lo
+   definen los componentes. Los modales se renderizan fuera y no los heredan. */
+/* Solo el contenido (main): el título de la barra oscura tiene su propio placeholder. */
+.shell main input::placeholder,
+.shell main textarea::placeholder {
+  color: var(--c-muted);
+}
+
+.shell :focus-visible {
+  outline: 2px solid var(--c-focus-light);
+  outline-offset: 2px;
+}
+
+/* La barra superior es oscura: allí el foco usa el tono claro. */
+.shell nav :focus-visible {
+  outline-color: var(--c-focus-dark);
+}
+
+.ground {
+  background-color: var(--c-ground);
+}

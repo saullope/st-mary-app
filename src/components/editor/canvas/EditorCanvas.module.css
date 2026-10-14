@@ -107,7 +107,7 @@
 .fieldHint {
   margin: 0;
   font-size: 0.82rem;
-  color: #64748b;
+  color: var(--c-muted);
 }
 
 .textInput,
@@ -135,7 +135,7 @@
 .charCount {
   align-self: flex-end;
   font-size: 0.78rem;
-  color: #64748b;
+  color: var(--c-muted);
 }
 
 .secondaryButton {

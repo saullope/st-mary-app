@@ -53,6 +53,7 @@
     "clickHere": "Click here",
     "welcome": "Welcome",
     "errorLogionWithGoogle": "Error logging in with Google",
+    "errorPopupBlocked": "Your browser blocked the Google window. Try again or allow pop-ups for this site.",
     "errorLogionWithEmail": "Error logging in with email",
     "errorNotFindUser": "User not found",
     "genericError": "An error occurred, please try again later",
@@ -942,23 +943,19 @@
     "copy": {
       "ludileccion": {
         "points": "",
-        "badges": "Choose the badges your students can earn by completing the lesson.",
-        "grade": "it sets the available blocks and missions."
+        "badges": "Choose the badges your students can earn by completing the lesson."
       },
       "ludiform": {
         "points": "Points for each correct choice question or written answer you approve.",
-        "badges": "Choose the badges your students can earn by submitting the form.",
-        "grade": "it sets the available missions."
+        "badges": "Choose the badges your students can earn by submitting the form."
       },
       "ludimemory": {
         "points": "Points the student earns for each pair found.",
-        "badges": "Choose the badges your students can earn while finding pairs.",
-        "grade": "it sets the available missions."
+        "badges": "Choose the badges your students can earn while finding pairs."
       },
       "default": {
         "points": "Set the points the student earns for each correct answer.",
-        "badges": "Choose the badges your students can earn.",
-        "grade": "it sets the available missions."
+        "badges": "Choose the badges your students can earn."
       }
     },
     "invalidTime": "Please enter a valid time.",
@@ -967,16 +964,10 @@
     "saved": "Settings saved!",
     "regionLabel": "Game settings panel",
     "title": "Game Settings",
+    "expand": "Expand panel",
+    "expandedTitle": "Expanded game settings",
+    "close": "Close",
     "general": "General settings",
-    "grade": "Grade:",
-    "grades": {
-      "1": "First grade",
-      "2": "Second grade",
-      "3": "Third grade"
-    },
-    "gradeUndefined": "Not set",
-    "gradeFromWelcome": "Taken from the grade you chose on the Welcome screen; {reason}",
-    "gradeMissing": "No grade was selected. Go to the Welcome screen to choose one.",
     "timeLabel": "Time per question (seconds):",
     "timePlaceholder": "Enter the time",
     "timeHint": "Set how long the student has to answer.",
@@ -1029,25 +1020,6 @@
       "next": {
         "title": "Let's create your first activity",
         "description": "We'll walk you through Create activity step by step. You can choose \"Remind me later\" at any time."
-      }
-    },
-    "welcome": {
-      "buttons": {
-        "next": "Next",
-        "previous": "Previous",
-        "done": "Let's create!"
-      },
-      "hello": {
-        "title": "Welcome, teacher!",
-        "description": "Hi! We are happy to have you here. Let's set up your workspace."
-      },
-      "grade": {
-        "title": "Choose your grade",
-        "description": "Select the grade you will work with, so we can show you resources designed for your students."
-      },
-      "done": {
-        "title": "Great choice!",
-        "description": "Once you choose, you will go straight to your personalized dashboard. Let's create!"
       }
     },
     "createActivity": {
@@ -1123,10 +1095,6 @@
       }
     },
     "registry": {
-      "welcome_tour": {
-        "name": "Teacher welcome",
-        "description": "First tour through the welcome page and grade selection."
-      },
       "dashboard_tour": {
         "name": "Main dashboard",
         "description": "Get to know your command center: navigation, creating activities and drafts."
@@ -1208,7 +1176,7 @@
     "groups": {
       "onboarding": {
         "title": "Getting started",
-        "hint": "The getting started tour: welcome, Home and Create activity."
+        "hint": "The getting started tour: Home and Create activity."
       },
       "activities": {
         "title": "Activity tutorials",
@@ -1869,7 +1837,8 @@
     "stale": "Please sign in again.",
     "configuration": "System configuration error. Contact the administrator.",
     "registerFailed": "Your details could not be registered. Please try again.",
-    "sessionFailed": "The session could not be started. Please try again."
+    "sessionFailed": "The session could not be started. Please try again.",
+    "emailNotVerified": "Verify your email address before signing in with this account."
   },
   "Collection": {
     "view": "View",
@@ -1893,6 +1862,7 @@
     "skip": "Skip for now",
     "save": "Save and continue",
     "continue": "Continue",
+    "back": "Change grade",
     "saveFailed": "Your subjects could not be saved. Please try again."
   },
   "SubjectSettings": {

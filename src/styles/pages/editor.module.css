@@ -103,7 +103,25 @@
     border: none;
     outline: none;
     text-decoration: underline;
-    text-decoration-color: #6a4bff;
+    text-decoration-color: var(--c-shell-muted);
+}
+
+/* Sobre la barra oscura; más específico que .form-control de Bootstrap (fondo blanco). */
+.contenedor-titulo .titulo-actividad {
+    background-color: transparent;
+    color: var(--c-shell-text);
+}
+
+/* Bootstrap aclara el fondo y pinta un anillo azul al enfocar; aquí el foco lo
+   marca el outline de los editores (editorShell.module.css). */
+.contenedor-titulo .titulo-actividad:focus {
+    background-color: transparent;
+    color: var(--c-shell-text);
+    box-shadow: none;
+}
+
+.contenedor-titulo .titulo-actividad::placeholder {
+    color: var(--c-shell-muted);
 }
 
 .contenedor-titulo {
@@ -113,7 +131,7 @@
 }
 
 .icono-titulo {
-  color: #6a4bff;
+  color: var(--c-shell-accent);
   font-size: 2rem;
 }
 

@@ -39,31 +39,35 @@ export async function POST() {
         // --- Sync User with SQL Server ---
         const { uid, email, name, picture } = decodedToken;
 
-        let user = await prisma.ludiUser.findFirst({
-            where: {
-                OR: [
-                    { firebaseUid: uid },
-                    ...(email ? [{ email }] : [])
-                ]
-            },
-        });
+        // Por uid; si no, por email: la misma persona puede tener otra cuenta de Firebase
+        // (otro proveedor), y getCurrentUser solo reconoce el uid guardado.
+        let user =
+            (await prisma.ludiUser.findFirst({ where: { firebaseUid: uid } })) ??
+            (email ? await prisma.ludiUser.findFirst({ where: { email } }) : null);
+
+        // Reasignar la fila a otro uid solo con el email verificado: si no, cualquiera
+        // podría registrar el email de otro docente y quedarse con su cuenta.
+        if (user && user.firebaseUid !== uid && !decodedToken.email_verified) {
+            return NextResponse.json(
+                { error: t("emailNotVerified") },
+                { status: 403 }
+            );
+        }
 
         if (user) {
-            // User exists: Update 'updatedAt'
+            // Sin el uid de este inicio de sesión, el panel no encuentra al usuario y vuelve al login.
             try {
                 user = await prisma.ludiUser.update({
                     where: { id: user.id },
-                    data: {
-                        updatedAt: new Date(),
-                        // Optionally update other fields if needed, e.g., name or email if changed in Firebase
-                        // nombre: name || user.nombre,
-                        // email: email || user.email
-                    },
+                    data: { updatedAt: new Date(), firebaseUid: uid },
                 });
                 console.log(`User updated in DB: ${user.id} (${user.email})`);
             } catch (dbError) {
                 console.error("Error updating user in DB:", dbError);
-                // Non-blocking error, we can still proceed with session creation
+                // Solo es tolerable si el uid ya era el correcto; si no, la sesión no serviría.
+                if (user.firebaseUid !== uid) {
+                    return NextResponse.json({ error: t("sessionFailed") }, { status: 500 });
+                }
             }
         } else {
             // New user: Assign default role 'EDUCADOR'

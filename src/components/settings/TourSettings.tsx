@@ -42,9 +42,9 @@ export const TourSettings = () => {
     return 'pending';
   };
 
-  // Vuelve a ofrecer el recorrido inicial y lo empieza en Inicio (el grado ya está elegido).
+  // Vuelve a ofrecer el recorrido inicial, que empieza en Inicio.
   const restartOnboarding = () => {
-    resetToursProgress(ONBOARDING_JOURNEY.filter((id) => id !== 'welcome_tour'));
+    resetToursProgress(ONBOARDING_JOURNEY);
     window.location.href = '/dashboard';
   };
 

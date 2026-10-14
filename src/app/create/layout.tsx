@@ -9,6 +9,7 @@ import { CreateNavbar } from "@/components/editor";
 import { AchievementCatalogLoader } from "@/features/gamification/AchievementCatalogLoader";
 import { getTranslations } from "next-intl/server";
 import { pageMetadata } from "@/lib/seo/metadata";
+import styles from "./editorShell.module.css";
 
 // add metadata to the page
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,14 +32,14 @@ export default async function CreateActivityLayout({
     return (
       <AchievementCatalogLoader>
       <ActivityEditorProvider>
-        <div className="d-flex flex-column vh-100">
+        <div className={`d-flex flex-column vh-100 ${styles.shell}`}>
           {/* Barra de navegación fija en la parte superior */}
           <CreateNavbar />
     
           {/* Contenedor principal */}
           <div className="d-flex flex-grow-1" style={{ marginTop: '80px' }}>
             {/* Área dinámica para editar preguntas o configuraciones */}
-            <main className="flex-grow-1 p-4 bg-light">
+            <main className={`flex-grow-1 p-4 ${styles.ground}`}>
               {children} {/* Aquí se renderizará el contenido dinámico */}
             </main>
           </div>

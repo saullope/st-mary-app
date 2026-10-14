@@ -64,7 +64,7 @@
   border: 1px dashed #cbd5e1;
   border-radius: 14px;
   text-align: center;
-  color: #64748b;
+  color: var(--c-muted);
   font-size: 0.92rem;
 }
 
@@ -72,5 +72,5 @@
   align-self: flex-end;
   margin: 0;
   font-size: 0.82rem;
-  color: #64748b;
+  color: var(--c-muted);
 }

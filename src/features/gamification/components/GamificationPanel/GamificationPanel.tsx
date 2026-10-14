@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { Modal } from "react-bootstrap";
+import { FaExpand } from "react-icons/fa6";
 import { SelectableCard } from "@/features/gamification/components/SelectableCard/SelectableCard";
 import styles from "./GamificationPanel.module.css";
 import { useActivityEditor } from "@/context/ActivityEditorContext";
@@ -8,7 +10,7 @@ import { badgesFor, catalogKeyForActivity, missionsFor, type BadgeDef, type Miss
 import { useAchievementCatalog } from "@/features/gamification/AchievementCatalogContext";
 import { useAchievementText } from "@/features/gamification/useAchievementText";
 import { BadgeArt } from "@/features/gamification/components/BadgeArt";
-import { useSelectedGrade, GRADE_LABELS } from "@/hooks/useSelectedGrade";
+import { useSelectedGrade } from "@/hooks/useSelectedGrade";
 import { useTranslations } from "next-intl";
 
 /** Los textos del panel cambian según cómo se gana en cada tipo de actividad (GamificationPanel.copy.*). */
@@ -24,7 +26,7 @@ export default function GamificationPanel() {
   const isMemory = activityType === "ludimemory";
   const t = useTranslations("GamificationPanel");
   const copyKey = activityType && COPY_KEYS.has(activityType) ? activityType : "default";
-  const copy = (field: "points" | "badges" | "grade") => t(`copy.${copyKey}.${field}`);
+  const copy = (field: "points" | "badges") => t(`copy.${copyKey}.${field}`);
   const catalog = useAchievementCatalog();
   const achievementText = useAchievementText();
   const catalogKey = catalogKeyForActivity(activityType);
@@ -40,6 +42,7 @@ export default function GamificationPanel() {
   }, [activityType, badges, config.selectedBadges, updateConfig]);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   // El grado ya no se elige aquí: se toma del grado que el docente
   // seleccionó en /welcome-educator, porque de eso dependen las misiones
@@ -104,41 +107,25 @@ export default function GamificationPanel() {
     setTimeout(() => setShowConfetti(false), 3000); // Duración de la animación
   };
 
-  return (
-    <>
-      <div
-        id="sidebar-panel-ludico"
-        data-tour="panel-ludico"
-        className={`${styles.gamificationPanel} ${styles.embedded}`}
-        role="region"
-        aria-label={t("regionLabel")}
-      >
-        <h3 className={styles.headerGlow}>{t("title")}</h3>
-
+  // El panel se dibuja en la columna y, ampliado, en un modal: los ids llevan el
+  // ámbito para no repetirse, y los marcadores de la visita solo van en la columna.
+  const renderSections = (scope: "panel" | "expanded") => {
+    const tour = (id: string) => (scope === "panel" ? id : undefined);
+    return (
+      <>
         {/* Configuración general */}
-        <section className={styles.sectionCard} aria-labelledby="panel-general-title" data-tour="panel-general">
-          <h4 id="panel-general-title" className={styles.sectionTitle}>{t("general")}</h4>
+        {(hasTimer || hasPoints) && (
+        <section className={styles.sectionCard} aria-labelledby={`${scope}-general-title`} data-tour={tour("panel-general")}>
+          <h4 id={`${scope}-general-title`} className={styles.sectionTitle}>{t("general")}</h4>
           <div className={styles.configGrid}>
-            <div className={styles.configFieldFull}>
-              <span className={styles.label}>{t("grade")}</span>
-              <div className={styles.select} aria-live="polite">
-                {GRADE_LABELS[config.gradeId] ? t(`grades.${config.gradeId as 1 | 2 | 3}`) : t("gradeUndefined")}
-              </div>
-              <div className={styles.desc}>
-                {selectedGradeId
-                  ? t("gradeFromWelcome", { reason: copy("grade") })
-                  : t("gradeMissing")}
-              </div>
-            </div>
-
             {hasTimer && (
             <div>
-              <label htmlFor="tiempo" className={styles.label}>
+              <label htmlFor={`${scope}-tiempo`} className={styles.label}>
                 {t("timeLabel")}
               </label>
               <input
                 type="number"
-                id="tiempo"
+                id={`${scope}-tiempo`}
                 min="10"
                 max="300"
                 placeholder={t("timePlaceholder")}
@@ -154,12 +141,12 @@ export default function GamificationPanel() {
 
             {hasPoints && (
             <div>
-              <label htmlFor="puntos" className={styles.label}>
+              <label htmlFor={`${scope}-puntos`} className={styles.label}>
                 {isMemory ? t("pointsPerPair") : t("pointsPerAnswer")}
               </label>
               <input
                 type="number"
-                id="puntos"
+                id={`${scope}-puntos`}
                 min="1"
                 max="100"
                 placeholder={t("pointsPlaceholder")}
@@ -172,10 +159,11 @@ export default function GamificationPanel() {
             )}
           </div>
         </section>
+        )}
 
         {/* Insignias */}
-        <section className={styles.sectionCard} aria-labelledby="panel-badges-title" data-tour="panel-badges">
-          <h4 id="panel-badges-title" className={styles.sectionTitle}>{t("badgesTitle")}</h4>
+        <section className={styles.sectionCard} aria-labelledby={`${scope}-badges-title`} data-tour={tour("panel-badges")}>
+          <h4 id={`${scope}-badges-title`} className={styles.sectionTitle}>{t("badgesTitle")}</h4>
           <p className={styles.sectionHint}>{copy("badges")}</p>
           <div className={styles.insigniasContainer}>
             {badges.map((badge) => {
@@ -198,10 +186,10 @@ export default function GamificationPanel() {
         </section>
 
         {/* Misiones */}
-        <section className={styles.sectionCard} aria-labelledby="panel-missions-title" data-tour="panel-missions">
-          <h4 id="panel-missions-title" className={styles.sectionTitle}>{t("missionsTitle")}</h4>
+        <section className={styles.sectionCard} aria-labelledby={`${scope}-missions-title`} data-tour={tour("panel-missions")}>
+          <h4 id={`${scope}-missions-title`} className={styles.sectionTitle}>{t("missionsTitle")}</h4>
           <p className={styles.sectionHint}>{t("missionsHint")}</p>
-          <div id="misiones-container" className={styles.missionsGrid}>
+          <div className={styles.missionsGrid}>
             {missions.map((mision) => (
               <SelectableCard
                 key={mision.code}
@@ -236,7 +224,46 @@ export default function GamificationPanel() {
             {t("save")}
           </button>
         </div>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <div
+        id="sidebar-panel-ludico"
+        data-tour="panel-ludico"
+        className={`${styles.gamificationPanel} ${styles.embedded}`}
+        role="region"
+        aria-label={t("regionLabel")}
+      >
+        <div className={styles.header}>
+          <h3 className={styles.headerGlow}>{t("title")}</h3>
+          <button
+            type="button"
+            className={styles.expandBtn}
+            onClick={() => setExpanded(true)}
+            aria-label={t("expand")}
+            title={t("expand")}
+            aria-haspopup="dialog"
+          >
+            <FaExpand aria-hidden="true" />
+          </button>
+        </div>
+
+        {renderSections("panel")}
       </div>
+
+      <Modal show={expanded} onHide={() => setExpanded(false)} size="xl" centered scrollable aria-labelledby="gamification-expanded-title">
+        <Modal.Header closeButton closeLabel={t("close")}>
+          <Modal.Title id="gamification-expanded-title" as="h2" className={styles.expandedTitle}>
+            {t("expandedTitle")}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className={`${styles.embedded} ${styles.expanded}`}>
+          {renderSections("expanded")}
+        </Modal.Body>
+      </Modal>
 
       {/* Feedback Toast */}
       <div className={`${styles.feedbackContainer} ${feedbackMsg ? styles.show : ""}`} role="status">

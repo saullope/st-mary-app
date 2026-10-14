@@ -49,9 +49,9 @@ describe("shouldAutoStart", () => {
 
 describe("progress updates", () => {
   it("'Remind me later' postpones the rest of the journey but keeps completed tours", () => {
-    const progress = postpone({ completed: ["welcome_tour"], later: [] }, ONBOARDING_JOURNEY);
-    expect(progress.completed).toEqual(["welcome_tour"]);
-    expect(progress.later).toEqual(["dashboard_tour", "create_activity_tour", "ludiquiz_tour"]);
+    const progress = postpone({ completed: ["dashboard_tour"], later: [] }, ONBOARDING_JOURNEY);
+    expect(progress.completed).toEqual(["dashboard_tour"]);
+    expect(progress.later).toEqual(["create_activity_tour", "ludiquiz_tour"]);
   });
 
   it("completing a postponed tour removes it from later", () => {

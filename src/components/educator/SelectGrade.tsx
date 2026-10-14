@@ -4,13 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from "@/hooks/useAuth";
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import styles from '@/styles/pages/bienvenida.module.css';
-import { useTranslations } from "next-intl";
-import SubjectPromptModal from '@/features/subjects/components/SubjectPromptModal';
-import type { Subject } from '@/features/subjects/subjectSchemas';
 
-interface Grade {
+export interface Grade {
     id: number;
     grade_type_name: string;
     grade_type_desc?: string | null; // Cambiado a string | null | undefined
@@ -22,20 +18,14 @@ interface Grade {
 
 interface SelectGradeProps {
     grades: Grade[];
-    /** Clases que se ofrecen en cada grado. */
-    subjectsByGrade?: Record<number, Subject[]>;
-    /** Grados para los que todavía no se le preguntó al educador qué clases imparte. */
-    pendingSubjectGrades?: number[];
+    /** Grados en los que, antes de ir al panel, hay que preguntar qué clases imparte. */
+    askSubjectsFor?: number[];
+    onAskSubjects?: (gradeId: number) => void;
 }
 
-export const SelectGrade = ({ grades, subjectsByGrade = {}, pendingSubjectGrades = [] }: SelectGradeProps) => {
-    const router = useRouter();
-    const [subjectPromptGrade, setSubjectPromptGrade] = useState<number | null>(null);
-
+export const SelectGrade = ({ grades, askSubjectsFor = [], onAskSubjects }: SelectGradeProps) => {
     const { setSelectedGrade } = useAuth();
     const [selectedGrade, setSelectedGradeState] = useState<string | null>(null);
-
-    const t = useTranslations("WelcomeTeacherView");
 
     const localImages: { [key: string]: string } = {
         'Primero.png': '/images/bienvenida/Primero.png',
@@ -81,9 +71,9 @@ export const SelectGrade = ({ grades, subjectsByGrade = {}, pendingSubjectGrades
                             onClick={(event) => {
                                 handleGradeSelected(grade.key_string || '');
                                 // La primera vez con este grado se ofrece elegir las clases antes de ir al panel.
-                                if (pendingSubjectGrades.includes(grade.id) && (subjectsByGrade[grade.id]?.length ?? 0) > 0) {
+                                if (onAskSubjects && askSubjectsFor.includes(grade.id)) {
                                     event.preventDefault();
-                                    setSubjectPromptGrade(grade.id);
+                                    onAskSubjects(grade.id);
                                 }
                             }}
                         >
@@ -99,12 +89,6 @@ export const SelectGrade = ({ grades, subjectsByGrade = {}, pendingSubjectGrades
                     </div>
                 );
             })}
-            <SubjectPromptModal
-                key={subjectPromptGrade ?? 'none'}
-                gradeId={subjectPromptGrade}
-                subjects={subjectPromptGrade ? subjectsByGrade[subjectPromptGrade] ?? [] : []}
-                onFinish={() => router.push('/dashboard')}
-            />
         </>
     )
 }

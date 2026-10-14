@@ -62,11 +62,11 @@
 }
 
 .footerPrimary {
-  background: #198754;
+  background: var(--c-primary);
 }
 
 .footerPrimary:hover {
-  background: #157347;
+  background: var(--c-primary-hover);
 }
 
 .footerSecondary {
@@ -144,7 +144,7 @@
   height: 30px;
   border-radius: 6px;
   background: #f8f9fa;
-  color: #64748b;
+  color: var(--c-muted);
   overflow: hidden;
   display: inline-flex;
   align-items: center;
@@ -176,7 +176,7 @@
 }
 
 .labelMuted {
-  color: #94a3b8;
+  color: var(--c-muted);
   font-style: italic;
 }
 
@@ -233,7 +233,7 @@
 .emptyHint {
   margin: 0;
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--c-muted);
   text-align: center;
 }
 

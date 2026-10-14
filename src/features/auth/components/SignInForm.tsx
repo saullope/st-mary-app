@@ -95,8 +95,14 @@ export const SignInForm = () => {
             }
         } catch (error: any) {
             // Handle Google popup closure gracefully
-            if (error?.code === 'auth/popup-closed-by-user') {
+            if (error?.code === 'auth/popup-closed-by-user' || error?.code === 'auth/cancelled-popup-request') {
                 return; // User cancelled, no need to show error
+            }
+            // La primera ventana de la sesión espera a que Firebase cargue su iframe y el
+            // navegador puede bloquearla; al reintentar ya abre en el mismo clic.
+            if (error?.code === 'auth/popup-blocked') {
+                toast.warning(t("errorPopupBlocked"));
+                return;
             }
 
             console.error(error);

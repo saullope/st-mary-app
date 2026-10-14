@@ -234,7 +234,7 @@
 }
 
 .answer .actinput::placeholder {
-    color: #666;
+    color: var(--c-muted);
 }
 
 /* Right side: action buttons */

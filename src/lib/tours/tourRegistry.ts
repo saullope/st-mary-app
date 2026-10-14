@@ -11,7 +11,6 @@ export interface TourDefinition {
 }
 
 export const TOUR_REGISTRY: TourDefinition[] = [
-  { id: "welcome_tour", group: "onboarding", route: "/welcome-educator" },
   { id: "dashboard_tour", group: "onboarding", route: "/dashboard" },
   { id: "create_activity_tour", group: "onboarding", route: "/dashboard/create-activity" },
   { id: "ludiquiz_tour", group: "activities", route: "/create/ludiquiz" },
