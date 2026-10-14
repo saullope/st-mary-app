@@ -116,7 +116,7 @@ export default function GamificationPanel() {
         <h3 className={styles.headerGlow}>{t("title")}</h3>
 
         {/* Configuración general */}
-        <section className={styles.sectionCard} aria-labelledby="panel-general-title">
+        <section className={styles.sectionCard} aria-labelledby="panel-general-title" data-tour="panel-general">
           <h4 id="panel-general-title" className={styles.sectionTitle}>{t("general")}</h4>
           <div className={styles.configGrid}>
             <div className={styles.configFieldFull}>
@@ -174,7 +174,7 @@ export default function GamificationPanel() {
         </section>
 
         {/* Insignias */}
-        <section className={styles.sectionCard} aria-labelledby="panel-badges-title">
+        <section className={styles.sectionCard} aria-labelledby="panel-badges-title" data-tour="panel-badges">
           <h4 id="panel-badges-title" className={styles.sectionTitle}>{t("badgesTitle")}</h4>
           <p className={styles.sectionHint}>{copy("badges")}</p>
           <div className={styles.insigniasContainer}>
@@ -198,7 +198,7 @@ export default function GamificationPanel() {
         </section>
 
         {/* Misiones */}
-        <section className={styles.sectionCard} aria-labelledby="panel-missions-title">
+        <section className={styles.sectionCard} aria-labelledby="panel-missions-title" data-tour="panel-missions">
           <h4 id="panel-missions-title" className={styles.sectionTitle}>{t("missionsTitle")}</h4>
           <p className={styles.sectionHint}>{t("missionsHint")}</p>
           <div id="misiones-container" className={styles.missionsGrid}>

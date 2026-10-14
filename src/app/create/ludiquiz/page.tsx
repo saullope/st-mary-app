@@ -375,7 +375,7 @@ export default function LudiQuiz() {
                         }
                         footer={
                             <>
-                                <EditorFooterButton variant="primary" onClick={editingId !== null ? handleUpdateQuestion : handleAddQuestion}>
+                                <EditorFooterButton variant="primary" data-tour="add-question" onClick={editingId !== null ? handleUpdateQuestion : handleAddQuestion}>
                                     {editingId !== null ? t("saveChanges") : t("addQuestion")}
                                 </EditorFooterButton>
                                 {editingId !== null && (
@@ -386,6 +386,7 @@ export default function LudiQuiz() {
                             </>
                         }
                     >
+                        <div data-tour="question-list">
                         <QuestionList
                             items={localQuestions.map(q => ({ ...q, tag: q.isSlide ? undefined : undefined }))}
                             draft={editingId === null ? { ...newQuestion, text: questionText, tag: undefined } : null}
@@ -394,6 +395,7 @@ export default function LudiQuiz() {
                             onMove={handleMoveQuestion}
                             onDelete={handleDeleteQuestion}
                         />
+                        </div>
                     </EditorSidebar>
                 )}
 

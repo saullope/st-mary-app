@@ -999,7 +999,8 @@
       "buttons": {
         "next": "Next",
         "previous": "Previous",
-        "done": "Got it!"
+        "done": "Got it!",
+        "toCreate": "Go to Create activity"
       },
       "command": {
         "title": "Your command center",
@@ -1020,6 +1021,14 @@
       "drafts": {
         "title": "Keep working",
         "description": "Never lose your progress. Pick up your drafts right where you left them."
+      },
+      "myActivities": {
+        "title": "Your activities",
+        "description": "Everything you created is here: launch it for your students, edit it or share it."
+      },
+      "next": {
+        "title": "Let's create your first activity",
+        "description": "We'll walk you through Create activity step by step. You can choose \"Remind me later\" at any time."
       }
     },
     "welcome": {
@@ -1043,35 +1052,74 @@
     },
     "createActivity": {
       "ludiquiz": {
-        "title": "LudiQuiz!",
-        "description": "Welcome to the activity creator! To start designing your interactive quiz, click LudiQuiz here."
+        "title": "Start with LudiQuiz",
+        "description": "Click LudiQuiz: the editor opens in a new tab and we'll continue there with your first activity."
+      },
+      "buttons": {
+        "done": "Got it"
+      },
+      "types": {
+        "title": "Activity types",
+        "description": "Each card is a kind of game: questions, true or false, memory, lessons and forms."
       }
     },
     "ludiquiz": {
       "buttons": {
         "next": "Next",
         "previous": "Previous",
-        "done": "Finish"
+        "done": "Let's create!"
       },
       "name": {
         "title": "Activity name",
-        "description": "The first step is giving your game an identity. Write a clear, descriptive name for your LudiQuiz here."
+        "description": "Give your activity a clear name so you can find it in My activities and your students know what it's about."
       },
       "question": {
-        "title": "Question",
-        "description": "You are now in the main editor. Use this space to write the question your students will answer."
+        "title": "Write the question",
+        "description": "Type the question your students will see. You can write it right now: the tour doesn't block you."
       },
       "media": {
-        "title": "Media files",
-        "description": "Make your questions more engaging: add images, videos or audio to go with the question."
+        "title": "Multimedia content",
+        "description": "Add an image, video, audio or a YouTube video to the question. You can also search images on Unsplash or Pixabay and sounds on Freesound."
       },
       "answers": {
-        "title": "Answers",
-        "description": "Write the possible answers and use the circle to mark the correct one before moving on."
+        "title": "Answer options",
+        "description": "Write the possible answers. You need at least two, and each one can have an image."
       },
       "panel": {
-        "title": "Game Panel",
-        "description": "The Game Panel is in the right column: set the time and points per question and choose the badges and missions your students can earn."
+        "title": "Game panel",
+        "description": "This is where gamification lives: what makes your students want to play and learn."
+      },
+      "correct": {
+        "title": "Mark the correct answer",
+        "description": "Tap the circle next to the correct option. You can mark more than one if the question allows it."
+      },
+      "add": {
+        "title": "Add the question",
+        "description": "When the question is ready, add it to the list. Repeat to add more questions."
+      },
+      "edit": {
+        "title": "Edit a question",
+        "description": "Click any question in the list to edit it; you can also reorder or delete them."
+      },
+      "theme": {
+        "title": "Choose a theme",
+        "description": "The theme changes the background your students will see. Pick one that fits your class."
+      },
+      "panelGeneral": {
+        "title": "Points, time and voice",
+        "description": "Set how many points each question is worth, how long students have to answer and whether a voice announces achievements."
+      },
+      "panelBadges": {
+        "title": "Badges",
+        "description": "Choose the badges your students can earn, for example for answering fast or getting it right the first time."
+      },
+      "panelMissions": {
+        "title": "Missions",
+        "description": "Missions are grade-based challenges, like a streak of correct answers or reaching a number of points."
+      },
+      "save": {
+        "title": "Save your activity",
+        "description": "Your draft saves itself, but this is where you save it to launch it for your students. You can replay this tour from Settings > Guided tours."
       }
     },
     "registry": {
@@ -1090,30 +1138,132 @@
       "ludiquiz_tour": {
         "name": "LudiQuiz editor",
         "description": "Full guide to the quiz editor: questions, answers and the Game Panel."
+      },
+      "trueorfalse_tour": {
+        "name": "True or False editor",
+        "description": "Write statements and set which ones are true."
+      },
+      "ludimemory_tour": {
+        "name": "LudiMemory editor",
+        "description": "Build image pairs for a memory game."
+      },
+      "ludileccion_tour": {
+        "name": "LudiLesson editor",
+        "description": "Build a lesson with reading and multimedia blocks."
+      },
+      "ludiform_tour": {
+        "name": "LudiForm editor",
+        "description": "Prepare a form with open and closed questions (3rd grade)."
+      },
+      "my_activities_tour": {
+        "name": "My activities",
+        "description": "Launch, edit, share and organize your activities."
+      },
+      "templates_tour": {
+        "name": "Templates",
+        "description": "Find ready-made activities and adapt them to your class."
+      },
+      "reports_tour": {
+        "name": "Reports",
+        "description": "Understand the results of each session and each student."
+      },
+      "live_session_tour": {
+        "name": "Live session",
+        "description": "Share the PIN, start the activity and follow your group's progress."
       }
+    },
+    "common": {
+      "next": "Next",
+      "previous": "Previous",
+      "done": "Got it",
+      "close": "Close tour",
+      "later": "Remind me later",
+      "progress": "{current} of {total}"
     }
   },
   "TourSettings": {
+    "loading": "Loading guided tours",
     "title": "Guided tours",
-    "subtitle": "Choose how and when you want interactive help in the app.",
-    "resetDone": "All guided tours were reset. They will show automatically the next time you visit each page.",
-    "starting": "Starting \"{name}\"... We will take you to the right page.",
+    "subtitle": "Short walkthroughs that show you each part of the app. They never block the screen and you can leave them for later.",
     "general": "General settings",
-    "enable": "Enable automatic guided tours",
-    "enableHint": "When off, tours will not show automatically when you visit new pages.",
-    "mode": "Help type",
-    "modeFull": "Full tour",
+    "enable": "Show guided tours automatically",
+    "enableHint": "If you turn this off, tours only open when you start them from here.",
+    "mode": "Type of assistance",
+    "modeFull": "Full walkthrough",
+    "modeFullHint": "Highlights each element with a soft overlay; the screen stays usable.",
     "modeHints": "Hints only",
-    "modeFullHint": "Step-by-step tour that dims the rest of the screen.",
-    "modeHintsHint": "Only highlights elements, without blocking interaction.",
-    "resetAll": "Reset all guided tours",
-    "resetAllHint": "Every tour will show again.",
-    "available": "Available tours",
-    "availableHint": "You can replay any tour whenever you want, even if you already completed it.",
-    "completed": "Completed",
-    "play": "Play",
+    "modeHintsHint": "Shows the tips without dimming the screen.",
+    "restartOnboarding": "Replay the getting started tour",
+    "resetAll": "Reset all tours",
+    "laterHint": "Tours you left with \"Remind me later\" stay pending here and don't open on their own again.",
+    "play": "Start",
+    "replay": "Replay",
+    "playTour": "Start the {name} tour",
+    "status": {
+      "completed": "Completed",
+      "later": "Postponed",
+      "pending": "Pending",
+      "soon": "Coming soon"
+    },
+    "groups": {
+      "onboarding": {
+        "title": "Getting started",
+        "hint": "The getting started tour: welcome, Home and Create activity."
+      },
+      "activities": {
+        "title": "Activity tutorials",
+        "hint": "How to use the editor of each activity type."
+      },
+      "views": {
+        "title": "View tutorials",
+        "hint": "How to get the most out of each section of the dashboard."
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "hint": "Quick answers to the most common questions, with their tutorial when available.",
+      "watch": "Watch tutorial: {name}",
+      "items": {
+        "firstActivity": {
+          "question": "How do I create my first activity?",
+          "answer": "Go to Create activity and pick a type, for example LudiQuiz. Write the name, add questions with their answers and save."
+        },
+        "correctAnswer": {
+          "question": "How do I mark the correct answer?",
+          "answer": "In the LudiQuiz editor, tap the circle next to the correct option. At least one must be marked to add the question."
+        },
+        "media": {
+          "question": "What multimedia content can I add?",
+          "answer": "Images, videos, audio and YouTube videos. You can also search images on Unsplash or Pixabay and sounds on Freesound."
+        },
+        "theme": {
+          "question": "How do I change the activity background?",
+          "answer": "Use the theme button in the editor's top bar and pick the one that best fits your class."
+        },
+        "gamification": {
+          "question": "What is the Game panel?",
+          "answer": "It's the right column of the editor: points, time, voice, badges and missions that motivate your students."
+        },
+        "drafts": {
+          "question": "Where do I resume an unfinished activity?",
+          "answer": "On Home, under Continue working, you'll see your latest draft. All your drafts are also in My activities."
+        },
+        "templates": {
+          "question": "Can I use a template and adapt it?",
+          "answer": "Yes. In Templates pick one and tap Use template: you get your own copy to edit without changing the original."
+        },
+        "launch": {
+          "question": "How do my students play an activity?",
+          "answer": "In My activities tap Launch. Share the PIN with your students and, once everyone is in the room, start the activity."
+        },
+        "gradeAndSubjects": {
+          "question": "Where do I change my grade or my subjects?",
+          "answer": "You choose the grade when you sign in. Your subjects for each grade are in Settings > Preferences, under My subjects."
+        }
+      }
+    },
     "confirmTitle": "Reset all guided tours?",
-    "confirmBody": "Every tour will show automatically the next time you visit each page.",
+    "confirmBody": "All tours, including postponed ones, will show again the next time you visit each page.",
     "cancel": "Cancel",
     "reset": "Reset"
   },
@@ -1725,5 +1875,33 @@
     "view": "View",
     "list": "List",
     "grid": "Grid"
+  },
+  "Subjects": {
+    "lengua-literatura": "Language and Literature",
+    "matematica": "Mathematics",
+    "conociendo-mi-mundo": "Knowing My World",
+    "creciendo-en-valores": "Growing in Values",
+    "educacion-fisica": "Physical Education and Sports",
+    "expresion-cultural-artistica": "Cultural and Artistic Expression",
+    "taller-arte-cultura": "Art and Culture Workshop",
+    "efemerides": "Nicaraguan Historic Dates"
+  },
+  "SubjectPrompt": {
+    "title": "Which subjects do you teach in {grade}?",
+    "description": "Pick your subjects and we'll suggest activities designed for them.",
+    "hint": "This is optional. You can change it anytime in Settings > Preferences.",
+    "skip": "Skip for now",
+    "save": "Save and continue",
+    "continue": "Continue",
+    "saveFailed": "Your subjects could not be saved. Please try again."
+  },
+  "SubjectSettings": {
+    "title": "My subjects",
+    "description": "The subjects you teach in each grade. We'll use them to suggest activities.",
+    "gradeLabel": "Grade",
+    "pickerLabel": "{grade} subjects",
+    "save": "Save subjects",
+    "saved": "{grade} subjects saved.",
+    "saveFailed": "Your subjects could not be saved. Please try again."
   }
 }

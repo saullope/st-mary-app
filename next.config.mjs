@@ -6,6 +6,12 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig = {
     reactStrictMode: true,
     output: 'standalone',
+    experimental: {
+        // La caché de Turbopack en disco (activa por defecto desde Next 16.1) restauraba
+        // al arrancar una lista de rutas vieja: /auth/* y rutas nuevas respondían 404
+        // hasta que se guardaba algún archivo. Sin ella el arranque es algo más lento.
+        turbopackFileSystemCacheForDev: false,
+    },
     images: {
         remotePatterns: [
             {

@@ -18,6 +18,8 @@ model LUDI_COMMON_GRADE {
   ludiactividades LudiActividad[]
   images          LUDI_COMMON_GRADE_IMAGES[]
   misiones        LudiMision[]
+  materias        LudiMateriaGrado[]
+  usuariosMateria LudiUsuarioMateria[]
 }
 
 model LUDI_COMMON_GRADE_IMAGES {
@@ -395,21 +397,63 @@ model LudiRol {
 }
 
 model LudiUser {
-  id           String          @id @default(uuid())
-  firebaseUid  String?         @map("firebase_uid") @db.NVarChar(128)
-  email        String?         @db.NVarChar(160)
-  nombre       String          @db.NVarChar(120)
-  username     String?         @db.NVarChar(50)
-  passwordHash String?         @map("password_hash") @db.NVarChar(256)
-  rolId        Int             @map("rol_id")
-  createdAt    DateTime        @default(now()) @map("created_at")
-  updatedAt    DateTime        @updatedAt @map("updated_at")
-  rol          LudiRol         @relation(fields: [rolId], references: [id], onUpdate: NoAction, map: "FK_LUDI_USER_ROL")
+  id           String               @id @default(uuid())
+  firebaseUid  String?              @map("firebase_uid") @db.NVarChar(128)
+  email        String?              @db.NVarChar(160)
+  nombre       String               @db.NVarChar(120)
+  username     String?              @db.NVarChar(50)
+  passwordHash String?              @map("password_hash") @db.NVarChar(256)
+  rolId        Int                  @map("rol_id")
+  createdAt    DateTime             @default(now()) @map("created_at")
+  updatedAt    DateTime             @updatedAt @map("updated_at")
+  rol          LudiRol              @relation(fields: [rolId], references: [id], onUpdate: NoAction, map: "FK_LUDI_USER_ROL")
   actividades  LudiActividad[]
   sesiones     LUDI_SESION[]
   config       LudiUserConfig?
+  materias     LudiUsuarioMateria[]
 
   @@map("LUDI_USERS")
+}
+
+// Clases (asignaturas) que imparte un educador. Catálogo como datos, igual que
+// insignias y misiones: prisma/seeds/subjectCatalog.ts. El texto se lee por
+// codigo en messages (Subjects.<codigo>), así que codigo no debe cambiar.
+model LudiMateria {
+  id     Int     @id @default(autoincrement())
+  codigo String  @unique(map: "UQ_LUDI_MATERIA_codigo") @db.NVarChar(40)
+  orden  Int     @default(0)
+  // Retirar una clase es activo = false: las FK impiden borrarla mientras esté elegida.
+  activo Boolean @default(true)
+
+  grados   LudiMateriaGrado[]
+  usuarios LudiUsuarioMateria[]
+
+  @@map("LUDI_MATERIA")
+}
+
+// En qué grados se ofrece cada clase.
+model LudiMateriaGrado {
+  materiaId Int               @map("materia_id")
+  gradoId   Int               @map("grado_id")
+  materia   LudiMateria       @relation(fields: [materiaId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  grado     LUDI_COMMON_GRADE @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([materiaId, gradoId])
+  @@map("LUDI_MATERIA_GRADO")
+}
+
+// Clases que el educador eligió para cada grado; base para proponerle actividades.
+model LudiUsuarioMateria {
+  userId    String            @map("user_id")
+  gradoId   Int               @map("grado_id")
+  materiaId Int               @map("materia_id")
+  creadoEn  DateTime          @default(now()) @map("creado_en")
+  user      LudiUser          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  grado     LUDI_COMMON_GRADE @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  materia   LudiMateria       @relation(fields: [materiaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([userId, gradoId, materiaId])
+  @@map("LUDI_USUARIO_MATERIA")
 }
 
 model LudiUserConfig {

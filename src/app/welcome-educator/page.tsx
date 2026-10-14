@@ -8,6 +8,9 @@ import { SelectGrade } from "@/components/educator";
 import WelcomeTour from "./WelcomeTour";
 import prisma from "@/lib/db";
 import { pageMetadata } from "@/lib/seo/metadata";
+import getCurrentUser from "@/lib/auth/getCurrentUser";
+import { getSubjectsByGrade, getUserSubjectIdsByGrade } from "@/features/subjects/subjects.server";
+import { parseTourProgress, subjectPromptId } from "@/lib/tours/tourProgress";
 
 
 interface Grade {
@@ -41,6 +44,23 @@ export default async function BienvenidaEducador() {
 
     const grades = await prisma.lUDI_COMMON_GRADE.findMany();
 
+    // Grados para los que aún no se ofreció elegir clases: sin clases guardadas y sin haberlo omitido.
+    const user = await getCurrentUser();
+    const [subjectsByGrade, userSubjects, config] = user
+        ? await Promise.all([
+            getSubjectsByGrade(),
+            getUserSubjectIdsByGrade(user.id),
+            prisma.ludiUserConfig.findUnique({ where: { userId: user.id }, select: { completedTours: true } }),
+        ])
+        : [{}, {}, null];
+    const progress = parseTourProgress(config?.completedTours);
+    const pendingSubjectGrades = user
+        ? grades
+            .map((grade) => grade.id)
+            .filter((gradeId) => !(userSubjects as Record<number, number[]>)[gradeId]?.length)
+            .filter((gradeId) => ![...progress.completed, ...progress.later].includes(subjectPromptId(gradeId)))
+        : [];
+
     // Si no hay un usuario autenticado, redirigir a la página de login
     
 
@@ -57,7 +77,7 @@ export default async function BienvenidaEducador() {
                 <div className="container">
                     <div id="grade-selection-container" className="d-flex flex-row flex-nowrap justify-content-center align-items-center mb-5 mt-4" 
                          style={{ gap: '20px', width: '100%' }}>
-                        <SelectGrade grades={grades} />
+                        <SelectGrade grades={grades} subjectsByGrade={subjectsByGrade} pendingSubjectGrades={pendingSubjectGrades} />
                     </div>
                     <div className={styles[`texto-grados`]}>
                         <h1>{t('text1')}</h1>

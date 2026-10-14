@@ -92,11 +92,13 @@ export const CreateNavbar = () => {
                     <div style={{ width: 1, height: 24, background: '#e2e8f0' }}></div>
 
                     {/* Existing Controls */}
-                    <div className={styles.themeBtnWrapper}>
+                    <div className={styles.themeBtnWrapper} data-tour="theme-button">
                         <ThemeButton onClick={() => setThemeModalOpen(true)} />
                     </div>
 
-                    <SaveActivityButton />
+                    <div data-tour="save-activity">
+                        <SaveActivityButton />
+                    </div>
                 </div>
             </nav>
 

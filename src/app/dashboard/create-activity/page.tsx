@@ -71,13 +71,13 @@ export default async function CreateActivity() {
 
     return (
         <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '20px 0' }}>
-            {/** <CreateActivityTour /> */}
+            <CreateActivityTour />
             <section>
                 <h2 className={designStyles.titleLudi}>
                     <span className={designStyles.star}>★</span> {t('titlePage')}
                 </h2>
 
-                    <div className={designStyles.createCards}>
+                    <div id="create-activity-cards" className={designStyles.createCards}>
                         {gameTemplates.map((game) => (
                             <CardGameActivity 
                                 key={game.id}

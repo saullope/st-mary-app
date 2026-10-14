@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { seedAchievementCatalog } from './seeds/achievementCatalog'
+import { seedSubjectCatalog } from './seeds/subjectCatalog'
 const prisma = new PrismaClient()
 
 async function main() {
@@ -172,6 +173,7 @@ async function main() {
 
   // Después de los grados: las misiones referencian LUDI_COMMON_GRADE.
   await seedAchievementCatalog(prisma)
+  await seedSubjectCatalog(prisma)
 
   console.log('Database seeded successfully: Roles, Types, Origins, Resources, Themes, Feedback, Scoring, Grades, Avatars, and Achievements.')
 }

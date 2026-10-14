@@ -1,106 +1,127 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useSyncExternalStore } from 'react';
+import {
+  DEFAULT_TOUR_PREFERENCES,
+  markCompleted,
+  postpone,
+  resetTours,
+  shouldAutoStart,
+  type TourMode,
+  type TourPreferences,
+} from '@/lib/tours/tourProgress';
 
-export type TourMode = 'full' | 'hints';
+export type { TourMode, TourPreferences };
 
-export interface TourPreferences {
-  toursEnabled: boolean;
-  tourMode: TourMode;
-  completedTours: string[];
+// El progreso vive en el servidor (/api/user/tours) para que siga al educador en
+// cualquier navegador. Un solo estado por pestaña: los tours y Configuración lo comparten.
+interface StoreState {
+  preferences: TourPreferences;
+  isLoaded: boolean;
 }
 
-export interface TourConfig {
-  id: string;
+// Versiones anteriores lo guardaban solo en este navegador; se importa una vez.
+const LEGACY_STORAGE_KEY = 'ludigame_tour_preferences';
+
+let state: StoreState = { preferences: DEFAULT_TOUR_PREFERENCES, isLoaded: false };
+let loading: Promise<void> | null = null;
+const listeners = new Set<() => void>();
+
+const setState = (next: StoreState) => {
+  state = next;
+  listeners.forEach((listener) => listener());
+};
+
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+};
+
+const getSnapshot = () => state;
+const getServerSnapshot = () => state;
+
+const save = (preferences: TourPreferences) =>
+  fetch('/api/user/tours', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(preferences),
+  }).catch((error) => console.error('Error saving tour preferences:', error));
+
+function readLegacyCompleted(): string[] {
+  try {
+    const raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (!raw) return [];
+    localStorage.removeItem(LEGACY_STORAGE_KEY);
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed?.completedTours) ? parsed.completedTours.filter((id: unknown) => typeof id === 'string') : [];
+  } catch {
+    return [];
+  }
 }
 
-const STORAGE_KEY = 'ludigame_tour_preferences';
+function load(): Promise<void> {
+  if (loading) return loading;
+  loading = fetch('/api/user/tours')
+    .then(async (response) => {
+      // Sin sesión (p. ej. una actividad pública) no hay visitas que mostrar.
+      if (!response.ok) {
+        setState({ preferences: { ...DEFAULT_TOUR_PREFERENCES, toursEnabled: false }, isLoaded: true });
+        return;
+      }
+      let preferences: TourPreferences = await response.json();
+      const legacy = readLegacyCompleted().filter((id) => !preferences.completed.includes(id));
+      if (legacy.length > 0) {
+        preferences = { ...preferences, completed: [...preferences.completed, ...legacy] };
+        save(preferences);
+      }
+      setState({ preferences, isLoaded: true });
+    })
+    .catch((error) => {
+      console.error('Error loading tour preferences:', error);
+      setState({ preferences: { ...DEFAULT_TOUR_PREFERENCES, toursEnabled: false }, isLoaded: true });
+    });
+  return loading;
+}
 
-const DEFAULT_PREFERENCES: TourPreferences = {
-  toursEnabled: true,
-  tourMode: 'full',
-  completedTours: [],
-};
-
-const loadPreferences = (): TourPreferences => {
-  if (typeof window === 'undefined') return DEFAULT_PREFERENCES;
-  
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return DEFAULT_PREFERENCES;
-    
-    const parsed = JSON.parse(stored);
-    return {
-      ...DEFAULT_PREFERENCES,
-      ...parsed,
-      completedTours: Array.isArray(parsed.completedTours) ? parsed.completedTours : [],
-    };
-  } catch (error) {
-    console.error('Error loading tour preferences:', error);
-    return DEFAULT_PREFERENCES;
-  }
-};
-
-const savePreferences = (prefs: TourPreferences): void => {
-  if (typeof window === 'undefined') return;
-  
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
-  } catch (error) {
-    console.error('Error saving tour preferences:', error);
-  }
-};
+function update(change: (prefs: TourPreferences) => TourPreferences) {
+  const preferences = change(state.preferences);
+  setState({ ...state, preferences });
+  save(preferences);
+}
 
 export function useTourPreferences() {
-  const [preferences, setPreferences] = useState<TourPreferences>(DEFAULT_PREFERENCES);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { preferences, isLoaded } = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   useEffect(() => {
-    const loaded = loadPreferences();
-    setPreferences(loaded);
-    setIsLoaded(true);
+    load();
   }, []);
 
   const updatePreferences = useCallback((updates: Partial<TourPreferences>) => {
-    setPreferences(prev => {
-      const updated = { ...prev, ...updates };
-      savePreferences(updated);
-      return updated;
-    });
+    update((prefs) => ({ ...prefs, ...updates }));
   }, []);
 
-  const setToursEnabled = useCallback((enabled: boolean) => {
-    updatePreferences({ toursEnabled: enabled });
-  }, [updatePreferences]);
-
-  const setTourMode = useCallback((mode: TourMode) => {
-    updatePreferences({ tourMode: mode });
-  }, [updatePreferences]);
+  const setToursEnabled = useCallback((enabled: boolean) => updatePreferences({ toursEnabled: enabled }), [updatePreferences]);
+  const setTourMode = useCallback((mode: TourMode) => updatePreferences({ tourMode: mode }), [updatePreferences]);
 
   const markTourAsCompleted = useCallback((tourId: string) => {
-    setPreferences(prev => {
-      if (prev.completedTours.includes(tourId)) return prev;
-      
-      const updated = {
-        ...prev,
-        completedTours: [...prev.completedTours, tourId],
-      };
-      savePreferences(updated);
-      return updated;
-    });
+    update((prefs) => ({ ...prefs, ...markCompleted(prefs, tourId) }));
   }, []);
 
-  const resetAllTours = useCallback(() => {
-    updatePreferences({ completedTours: [] });
-  }, [updatePreferences]);
+  /** "Ver más tarde": pospone una visita o todo un recorrido. */
+  const postponeTours = useCallback((tourIds: readonly string[]) => {
+    update((prefs) => ({ ...prefs, ...postpone(prefs, tourIds) }));
+  }, []);
 
-  const isTourCompleted = useCallback((tourId: string) => {
-    return preferences.completedTours.includes(tourId);
-  }, [preferences.completedTours]);
+  /** Vuelve a ofrecer visitas concretas; sin argumentos, todas. */
+  const resetToursProgress = useCallback((tourIds?: readonly string[]) => {
+    update((prefs) => ({ ...prefs, ...(tourIds ? resetTours(prefs, tourIds) : { completed: [], later: [] }) }));
+  }, []);
 
-  const shouldShowTour = useCallback((tourId: string) => {
-    return preferences.toursEnabled && !preferences.completedTours.includes(tourId);
-  }, [preferences.toursEnabled, preferences.completedTours]);
+  const resetAllTours = useCallback(() => resetToursProgress(), [resetToursProgress]);
+
+  const isTourCompleted = useCallback((tourId: string) => preferences.completed.includes(tourId), [preferences.completed]);
+  const isTourPostponed = useCallback((tourId: string) => preferences.later.includes(tourId), [preferences.later]);
+  const shouldShowTour = useCallback((tourId: string) => isLoaded && shouldAutoStart(preferences, tourId), [isLoaded, preferences]);
 
   return {
     preferences,
@@ -108,8 +129,11 @@ export function useTourPreferences() {
     setToursEnabled,
     setTourMode,
     markTourAsCompleted,
+    postponeTours,
+    resetToursProgress,
     resetAllTours,
     isTourCompleted,
+    isTourPostponed,
     shouldShowTour,
     updatePreferences,
   };

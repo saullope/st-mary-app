@@ -486,11 +486,6 @@ th {
   color: #dc3545 !important;
 }
 
-.driver-popover.driverjs-hints-only .driver-popover-prev-btn,
-.driver-popover.driverjs-hints-only .driver-popover-next-btn,
-.driver-popover.driverjs-hints-only .driver-popover-done-btn {
-  display: none !important;
-}
 
 .driver-popover.driverjs-hints-only .driver-popover-progress-text {
   display: none !important;
@@ -505,4 +500,49 @@ th {
 .driver-overlay.driverjs-hints-overlay {
   background-color: transparent !important;
   pointer-events: none !important;
+}
+
+/* ========== VISITAS GUIADAS NO BLOQUEANTES (useGuidedTour) ==========
+   useGuidedTour quita la clase driver-active del body, así la página sigue usable;
+   el velo solo ayuda a ubicar el elemento y deja pasar los clics. */
+body.ludi-tour-free .driver-overlay,
+body.ludi-tour-free .driver-overlay * {
+  pointer-events: none;
+}
+
+.driver-popover.ludi-tour .driver-popover-description,
+.driver-popover.ludi-tour .driver-popover-progress-text {
+  font-size: 14px !important;
+}
+
+.driver-popover.ludi-tour .driver-popover-footer {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.driver-popover.ludi-tour .driver-popover-footer button {
+  font-size: 13px !important;
+  text-shadow: none !important;
+}
+
+.driver-popover.ludi-tour .driver-popover-footer .ludi-tour-later {
+  order: -1;
+  margin-right: auto;
+  padding: 4px 8px !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #5E5878 !important;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.driver-popover.ludi-tour .driver-popover-footer .ludi-tour-later:hover,
+.driver-popover.ludi-tour .driver-popover-footer .ludi-tour-later:focus-visible {
+  color: #3B2A9E !important;
+}
+
+.driver-popover.ludi-tour button:focus-visible {
+  outline: 3px solid #00d4ff !important;
+  outline-offset: 2px;
 }

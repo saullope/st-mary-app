@@ -4,8 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from "@/hooks/useAuth";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import styles from '@/styles/pages/bienvenida.module.css';
 import { useTranslations } from "next-intl";
+import SubjectPromptModal from '@/features/subjects/components/SubjectPromptModal';
+import type { Subject } from '@/features/subjects/subjectSchemas';
 
 interface Grade {
     id: number;
@@ -19,9 +22,15 @@ interface Grade {
 
 interface SelectGradeProps {
     grades: Grade[];
+    /** Clases que se ofrecen en cada grado. */
+    subjectsByGrade?: Record<number, Subject[]>;
+    /** Grados para los que todavía no se le preguntó al educador qué clases imparte. */
+    pendingSubjectGrades?: number[];
 }
 
-export const SelectGrade = ({ grades }: SelectGradeProps) => {
+export const SelectGrade = ({ grades, subjectsByGrade = {}, pendingSubjectGrades = [] }: SelectGradeProps) => {
+    const router = useRouter();
+    const [subjectPromptGrade, setSubjectPromptGrade] = useState<number | null>(null);
 
     const { setSelectedGrade } = useAuth();
     const [selectedGrade, setSelectedGradeState] = useState<string | null>(null);
@@ -67,7 +76,17 @@ export const SelectGrade = ({ grades }: SelectGradeProps) => {
                 
                 return (
                     <div key={grade.id} className="col-12 col-sm-4 text-center">
-                        <Link href={`/dashboard`} onClick={() => handleGradeSelected(grade.key_string || '')}>
+                        <Link
+                            href={`/dashboard`}
+                            onClick={(event) => {
+                                handleGradeSelected(grade.key_string || '');
+                                // La primera vez con este grado se ofrece elegir las clases antes de ir al panel.
+                                if (pendingSubjectGrades.includes(grade.id) && (subjectsByGrade[grade.id]?.length ?? 0) > 0) {
+                                    event.preventDefault();
+                                    setSubjectPromptGrade(grade.id);
+                                }
+                            }}
+                        >
                             <Image
                                 className={`${imageStyle} img-fluid mx-auto d-block`}
                                 src={imagePath}
@@ -80,6 +99,12 @@ export const SelectGrade = ({ grades }: SelectGradeProps) => {
                     </div>
                 );
             })}
+            <SubjectPromptModal
+                key={subjectPromptGrade ?? 'none'}
+                gradeId={subjectPromptGrade}
+                subjects={subjectPromptGrade ? subjectsByGrade[subjectPromptGrade] ?? [] : []}
+                onFinish={() => router.push('/dashboard')}
+            />
         </>
     )
 }

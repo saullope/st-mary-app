@@ -999,7 +999,8 @@
       "buttons": {
         "next": "Siguiente",
         "previous": "Anterior",
-        "done": "¡Entendido!"
+        "done": "¡Entendido!",
+        "toCreate": "Ir a Crear actividad"
       },
       "command": {
         "title": "Tu centro de mando",
@@ -1020,6 +1021,14 @@
       "drafts": {
         "title": "Continuar trabajando",
         "description": "Nunca pierdas tu progreso. Retoma tus borradores exactamente donde los dejaste."
+      },
+      "myActivities": {
+        "title": "Tus actividades",
+        "description": "Aquí encuentras todo lo que creaste: lánzalo a tus estudiantes, edítalo o compártelo."
+      },
+      "next": {
+        "title": "Creemos tu primera actividad",
+        "description": "Te acompañamos paso a paso en Crear actividad. Puedes elegir \"Ver más tarde\" en cualquier momento."
       }
     },
     "welcome": {
@@ -1043,35 +1052,74 @@
     },
     "createActivity": {
       "ludiquiz": {
-        "title": "¡LudiQuiz!",
-        "description": "¡Bienvenido al creador de actividades! Para empezar a diseñar tu cuestionario interactivo, haz clic aquí en LudiQuiz."
+        "title": "Empieza con LudiQuiz",
+        "description": "Haz clic en LudiQuiz: el editor se abre en otra pestaña y allí seguimos juntos con tu primera actividad."
+      },
+      "buttons": {
+        "done": "Entendido"
+      },
+      "types": {
+        "title": "Tipos de actividad",
+        "description": "Cada tarjeta es un tipo de juego: preguntas, verdadero o falso, memoria, lecciones y formularios."
       }
     },
     "ludiquiz": {
       "buttons": {
         "next": "Siguiente",
         "previous": "Anterior",
-        "done": "Finalizar"
+        "done": "¡A crear!"
       },
       "name": {
         "title": "Nombre de la actividad",
-        "description": "El primer paso es darle identidad a tu juego. Escribe aquí un nombre claro y descriptivo para tu LudiQuiz."
+        "description": "Dale un nombre claro a tu actividad: así la reconocerás en Mis actividades y tus estudiantes sabrán de qué trata."
       },
       "question": {
-        "title": "Enunciado de la pregunta",
-        "description": "Ahora estás en el editor central. Usa este espacio para redactar la pregunta que responderán tus estudiantes."
+        "title": "Escribe la pregunta",
+        "description": "Redacta aquí la pregunta que verán tus estudiantes. Puedes escribirla ahora mismo: la visita no te bloquea."
       },
       "media": {
-        "title": "Archivos multimedia",
-        "description": "Haz tus preguntas más dinámicas: desde aquí puedes agregar imágenes, videos o audios que acompañen la pregunta."
+        "title": "Contenido multimedia",
+        "description": "Acompaña la pregunta con una imagen, video, audio o un video de YouTube. También puedes buscar imágenes en Unsplash o Pixabay y sonidos en Freesound."
       },
       "answers": {
-        "title": "Respuestas",
-        "description": "Escribe las posibles respuestas y marca con el círculo la que es correcta antes de continuar."
+        "title": "Opciones de respuesta",
+        "description": "Escribe las posibles respuestas. Necesitas al menos dos y puedes agregar imágenes a cada una."
       },
       "panel": {
         "title": "Panel Lúdico",
-        "description": "En la columna derecha está el Panel Lúdico: ajusta el tiempo y los puntos por pregunta y elige las insignias y misiones que podrán ganar tus estudiantes."
+        "description": "Aquí está la ludificación: lo que hace que tus estudiantes quieran jugar y aprender."
+      },
+      "correct": {
+        "title": "Marca la respuesta correcta",
+        "description": "Toca el círculo de la opción correcta. Puedes marcar más de una si la pregunta lo permite."
+      },
+      "add": {
+        "title": "Agrega la pregunta",
+        "description": "Cuando la pregunta esté lista, agrégala a la lista. Repite para sumar más preguntas."
+      },
+      "edit": {
+        "title": "Edita una pregunta creada",
+        "description": "Haz clic en cualquier pregunta de la lista para editarla; también puedes reordenarlas o eliminarlas."
+      },
+      "theme": {
+        "title": "Elige un tema",
+        "description": "El tema cambia el fondo que verán tus estudiantes. Elige uno acorde a tu clase."
+      },
+      "panelGeneral": {
+        "title": "Puntos, tiempo y voz",
+        "description": "Define cuántos puntos vale cada pregunta, cuánto tiempo hay para responder y si una voz anuncia los logros."
+      },
+      "panelBadges": {
+        "title": "Insignias",
+        "description": "Elige las insignias que tus estudiantes pueden ganar, por ejemplo por responder rápido o acertar a la primera."
+      },
+      "panelMissions": {
+        "title": "Misiones",
+        "description": "Las misiones son retos según el grado, como una racha de aciertos o alcanzar cierta cantidad de puntos."
+      },
+      "save": {
+        "title": "Guarda tu actividad",
+        "description": "Tu borrador se guarda solo, pero aquí la guardas para lanzarla a tus estudiantes. Puedes repetir esta visita desde Configuración > Visitas guiadas."
       }
     },
     "registry": {
@@ -1090,30 +1138,132 @@
       "ludiquiz_tour": {
         "name": "Editor de LudiQuiz",
         "description": "Guía completa del editor de cuestionarios: preguntas, respuestas y Panel Lúdico."
+      },
+      "trueorfalse_tour": {
+        "name": "Editor de Verdadero o Falso",
+        "description": "Crea afirmaciones y define cuáles son verdaderas."
+      },
+      "ludimemory_tour": {
+        "name": "Editor de LudiMemory",
+        "description": "Arma parejas de imágenes para un juego de memoria."
+      },
+      "ludileccion_tour": {
+        "name": "Editor de LudiLección",
+        "description": "Construye una lección con bloques de lectura y multimedia."
+      },
+      "ludiform_tour": {
+        "name": "Editor de LudiForm",
+        "description": "Prepara un formulario con preguntas abiertas y cerradas (3.er grado)."
+      },
+      "my_activities_tour": {
+        "name": "Mis actividades",
+        "description": "Lanza, edita, comparte y organiza tus actividades."
+      },
+      "templates_tour": {
+        "name": "Plantillas",
+        "description": "Encuentra actividades listas y adáptalas a tu clase."
+      },
+      "reports_tour": {
+        "name": "Reportes",
+        "description": "Interpreta los resultados de cada sesión y de cada estudiante."
+      },
+      "live_session_tour": {
+        "name": "Sesión en vivo",
+        "description": "Comparte el PIN, inicia la actividad y sigue el avance de tu grupo."
       }
+    },
+    "common": {
+      "next": "Siguiente",
+      "previous": "Anterior",
+      "done": "Entendido",
+      "close": "Cerrar visita",
+      "later": "Ver más tarde",
+      "progress": "{current} de {total}"
     }
   },
   "TourSettings": {
+    "loading": "Cargando visitas guiadas",
     "title": "Visitas guiadas",
-    "subtitle": "Configura cómo y cuándo quieres recibir ayuda interactiva en la aplicación.",
-    "resetDone": "Todas las visitas guiadas se reiniciaron. Se mostrarán automáticamente la próxima vez que visites cada página.",
-    "starting": "Iniciando \"{name}\"... Te llevaremos a la página correspondiente.",
+    "subtitle": "Recorridos cortos que te muestran cada parte de la aplicación. Nunca bloquean la pantalla y puedes dejarlos para más tarde.",
     "general": "Configuración general",
-    "enable": "Habilitar visitas guiadas automáticas",
-    "enableHint": "Si está desactivado, las visitas no se mostrarán automáticamente al visitar páginas nuevas.",
+    "enable": "Mostrar visitas guiadas automáticamente",
+    "enableHint": "Si lo desactivas, las visitas solo se abren cuando las inicias desde aquí.",
     "mode": "Tipo de asistencia",
     "modeFull": "Recorrido completo",
+    "modeFullHint": "Resalta cada elemento con un velo suave; la pantalla sigue usable.",
     "modeHints": "Solo sugerencias",
-    "modeFullHint": "Recorrido paso a paso que oscurece el resto de la pantalla.",
-    "modeHintsHint": "Solo destaca elementos, sin bloquear la interacción.",
-    "resetAll": "Reiniciar todas las visitas guiadas",
-    "resetAllHint": "Todas las visitas se mostrarán de nuevo.",
-    "available": "Visitas disponibles",
-    "availableHint": "Puedes reproducir cualquier visita cuando quieras, aunque ya la hayas completado.",
-    "completed": "Completada",
-    "play": "Reproducir",
+    "modeHintsHint": "Muestra los consejos sin oscurecer la pantalla.",
+    "restartOnboarding": "Repetir el recorrido inicial",
+    "resetAll": "Reiniciar todas las visitas",
+    "laterHint": "Las visitas que dejaste con \"Ver más tarde\" quedan pendientes aquí y no vuelven a abrirse solas.",
+    "play": "Iniciar",
+    "replay": "Repetir",
+    "playTour": "Iniciar la visita {name}",
+    "status": {
+      "completed": "Completada",
+      "later": "Pospuesta",
+      "pending": "Pendiente",
+      "soon": "Próximamente"
+    },
+    "groups": {
+      "onboarding": {
+        "title": "Primeros pasos",
+        "hint": "El recorrido inicial: bienvenida, Inicio y Crear actividad."
+      },
+      "activities": {
+        "title": "Tutoriales de actividades",
+        "hint": "Cómo usar el editor de cada tipo de actividad."
+      },
+      "views": {
+        "title": "Tutoriales de las vistas",
+        "hint": "Cómo sacar provecho de cada sección del panel."
+      }
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "hint": "Respuestas rápidas a las dudas más comunes, con su tutorial cuando está disponible.",
+      "watch": "Ver tutorial: {name}",
+      "items": {
+        "firstActivity": {
+          "question": "¿Cómo creo mi primera actividad?",
+          "answer": "Ve a Crear actividad y elige un tipo, por ejemplo LudiQuiz. Escribe el nombre, agrega preguntas con sus respuestas y guarda."
+        },
+        "correctAnswer": {
+          "question": "¿Cómo marco la respuesta correcta?",
+          "answer": "En el editor de LudiQuiz, toca el círculo junto a la opción correcta. Debe haber al menos una marcada para agregar la pregunta."
+        },
+        "media": {
+          "question": "¿Qué contenido multimedia puedo agregar?",
+          "answer": "Imágenes, videos, audios y videos de YouTube. También puedes buscar imágenes en Unsplash o Pixabay y sonidos en Freesound."
+        },
+        "theme": {
+          "question": "¿Cómo cambio el fondo de la actividad?",
+          "answer": "Usa el botón de tema en la barra superior del editor y elige el que mejor acompañe tu clase."
+        },
+        "gamification": {
+          "question": "¿Qué es el Panel Lúdico?",
+          "answer": "Es la columna derecha del editor: puntos, tiempo, voz, insignias y misiones que motivan a tus estudiantes."
+        },
+        "drafts": {
+          "question": "¿Dónde retomo una actividad sin terminar?",
+          "answer": "En Inicio, en la sección Continuar trabajando, aparece tu último borrador. Todos tus borradores también están en Mis actividades."
+        },
+        "templates": {
+          "question": "¿Puedo usar una plantilla y adaptarla?",
+          "answer": "Sí. En Plantillas elige una y toca Usar plantilla: se crea una copia tuya que puedes editar sin cambiar la original."
+        },
+        "launch": {
+          "question": "¿Cómo juegan mis estudiantes una actividad?",
+          "answer": "En Mis actividades toca Lanzar. Comparte el PIN con tus estudiantes y, cuando todos estén en la sala, inicia la actividad."
+        },
+        "gradeAndSubjects": {
+          "question": "¿Dónde cambio mi grado o mis clases?",
+          "answer": "El grado se elige al iniciar sesión. Tus clases de cada grado están en Configuración > Preferencias, en Mis clases."
+        }
+      }
+    },
     "confirmTitle": "¿Reiniciar todas las visitas guiadas?",
-    "confirmBody": "Todas las visitas se mostrarán automáticamente la próxima vez que visites cada página.",
+    "confirmBody": "Todas las visitas, incluidas las pospuestas, se volverán a mostrar la próxima vez que visites cada página.",
     "cancel": "Cancelar",
     "reset": "Reiniciar"
   },
@@ -1725,5 +1875,33 @@
     "view": "Vista",
     "list": "Lista",
     "grid": "Cuadrícula"
+  },
+  "Subjects": {
+    "lengua-literatura": "Lengua y Literatura",
+    "matematica": "Matemática",
+    "conociendo-mi-mundo": "Conociendo mi Mundo",
+    "creciendo-en-valores": "Creciendo en Valores",
+    "educacion-fisica": "Educación Física y Práctica Deportiva",
+    "expresion-cultural-artistica": "Expresión Cultural y Artística",
+    "taller-arte-cultura": "Taller de Arte y Cultura",
+    "efemerides": "Efemérides de Nicaragua"
+  },
+  "SubjectPrompt": {
+    "title": "¿Qué clases impartes en {grade}?",
+    "description": "Elige tus clases y te propondremos actividades pensadas para ellas.",
+    "hint": "Es opcional. Puedes cambiarlo cuando quieras en Configuración > Preferencias.",
+    "skip": "Omitir por ahora",
+    "save": "Guardar y continuar",
+    "continue": "Continuar",
+    "saveFailed": "No se pudieron guardar tus clases. Inténtalo de nuevo."
+  },
+  "SubjectSettings": {
+    "title": "Mis clases",
+    "description": "Las clases que impartes en cada grado. Las usaremos para proponerte actividades.",
+    "gradeLabel": "Grado",
+    "pickerLabel": "Clases de {grade}",
+    "save": "Guardar clases",
+    "saved": "Clases de {grade} guardadas.",
+    "saveFailed": "No se pudieron guardar tus clases. Inténtalo de nuevo."
   }
 }

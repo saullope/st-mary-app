@@ -125,6 +125,7 @@ export const AnswerContainer: React.FC<AnswersContainerProps> = ({
                                 {/* Check circle for correct answer */}
                                 <button
                                     className={`${styles['answer-action-btn']} ${styles['check-btn']} ${answer.isCorrect ? styles.active : ''}`}
+                                    data-tour="correct-toggle"
                                     onClick={() => onToggleCorrectAnswer(answer.id)}
                                     type="button"
                                     title={t("markCorrect")}
