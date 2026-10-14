@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import styles from "@/styles/pages/my-activities.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
 import ActivityCard from "@/components/dashboard/ActivityCard";
+import ActivityCollection from "@/components/dashboard/collection/ActivityCollection";
 import { getTranslations } from "next-intl/server";
 import { pageMetadata } from "@/lib/seo/metadata";
 
@@ -47,24 +48,9 @@ export default async function MyActivities({ searchParams }: PageProps) {
   const selectedTypeId = resolvedSearchParams.typeId ? parseInt(resolvedSearchParams.typeId) : undefined;
   const searchQuery = resolvedSearchParams.search;
   const page = resolvedSearchParams.page ? parseInt(resolvedSearchParams.page) : 1;
-  const limit = resolvedSearchParams.limit ? parseInt(resolvedSearchParams.limit) : 6; // Changed to 6 for a nicer grid
+  const limit = resolvedSearchParams.limit ? parseInt(resolvedSearchParams.limit) : 10;
   
   const { activities, total } = await getUserActivities(user.id, selectedTypeId, searchQuery, page, limit);
-
-  const tCommon = await getTranslations("Common");
-  const getGradeLabel = (gradoId: number | null) =>
-    gradoId === 1 || gradoId === 2 || gradoId === 3 ? tCommon(`grades.${gradoId}`) : tCommon("noGrade");
-
-  const getTypeBadgeClass = (id: number) => {
-    switch(id) {
-      case 1: return styles.badgeQuiz;
-      case 2: return styles.badgeTF;
-      case 3: return styles.badgeMemory;
-      case 4: return styles.badgeLesson;
-      case 5: return styles.badgeForm;
-      default: return "bg-light text-dark";
-    }
-  };
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 0' }}>
@@ -86,20 +72,12 @@ export default async function MyActivities({ searchParams }: PageProps) {
         <ActivityFilter types={types} />
       </div>
 
-      {/* Grid de Actividades */}
       {activities.length > 0 ? (
-        <div className={styles.activitiesGrid}>
+        <ActivityCollection storageKey="ludi.view.myActivities">
           {activities.map((act: any) => (
-            <ActivityCard 
-              key={act.activityId}
-              activity={act}
-              gradeLabel={getGradeLabel(act.gradoId)}
-              typeBadgeClass={getTypeBadgeClass(act.tipoActividadId)}
-              sessionPicture={session.picture}
-              isAdmin={user.rol.nombre === 'ADMIN'}
-            />
+            <ActivityCard key={act.activityId} activity={act} />
           ))}
-        </div>
+        </ActivityCollection>
       ) : (
         <div className={styles.emptyStateCard}>
           <div className={styles.emptyStateIcon} aria-hidden="true">🚀</div>

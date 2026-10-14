@@ -1,4 +1,6 @@
-import { NavbarDashboard, SidebarDashboard } from "@/components/dashboard";
+import { DashboardFrame, NavbarDashboard } from "@/components/dashboard";
+import { SIDEBAR_COLLAPSED_COOKIE } from "@/components/dashboard/sidebarPreference";
+import { cookies } from "next/headers";
 import getSession from '@/lib/auth/getSession';
 import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
@@ -73,6 +75,8 @@ export default async function ProfileLayout({
     delay: `${Math.random() * 5}s`
   }));
 
+  const sidebarCollapsed = (await cookies()).get(SIDEBAR_COLLAPSED_COOKIE)?.value === "1";
+
   return (
     <div className={styles['bodySidebar']} style={{ minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
       <div className={designStyles.bgAnimation} aria-hidden="true">
@@ -84,13 +88,9 @@ export default async function ProfileLayout({
           />
         ))}
       </div>
-      <SidebarDashboard />
-      <div style={{ marginLeft: '250px', position: 'relative', zIndex: 1 }}>
-        <NavbarDashboard sessionData={user} />
-        <div style={{ marginLeft: '20px', padding: '20px' }}>
-          {children}
-        </div>
-      </div>
+      <DashboardFrame defaultCollapsed={sidebarCollapsed} navbar={<NavbarDashboard sessionData={user} />}>
+        {children}
+      </DashboardFrame>
     </div>
   );
 }

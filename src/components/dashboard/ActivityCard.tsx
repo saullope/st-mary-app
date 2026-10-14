@@ -1,155 +1,93 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { FaEye, FaPenToSquare, FaShareNodes, FaGamepad, FaListCheck, FaBrain, FaCheck, FaRocket, FaBookOpen, FaClipboardList } from "react-icons/fa6";
-import styles from "@/styles/pages/my-activities.module.css";
-import designStyles from "@/styles/pages/LudiDesign.module.css";
-import { DeleteActivityButton } from "@/app/dashboard/my-activities/DeleteActivityButton";
-import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
-import { notify } from "@/components/ui";
-import { getEditorRoute } from "@/lib/editorTab";
-import { sessionPhase } from "@/lib/play/sessionState";
-import CreatorCard from "./CreatorCard";
+import { FaEye, FaPenToSquare, FaShareNodes, FaRocket, FaTrash } from "react-icons/fa6";
 import { useFormatter, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import styles from "./collection/ActivityCollection.module.css";
+import ActivityTypeIcon, { activityTypeClass } from "./collection/ActivityTypeIcon";
+import { useDeleteActivity } from "@/app/dashboard/my-activities/useDeleteActivity";
+import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
+import { ActionMenu, notify, type ActionMenuItem } from "@/components/ui";
+import { getEditorRoute } from "@/lib/editorTab";
+import { sessionPhase } from "@/lib/play/sessionState";
 
 interface ActivityCardProps {
-  activity: any;
-  gradeLabel: string;
-  typeBadgeClass: string;
-  sessionPicture?: string;
-  isAdmin: boolean;
+  activity: {
+    activityId: number;
+    tipoActividadId: number;
+    gradoId: number | null;
+    activity: { activity_name: string; created_date: string | Date };
+    LUDI_SESION?: Array<{ estado: string | null }>;
+  };
 }
 
-export default function ActivityCard({ activity, gradeLabel, typeBadgeClass, sessionPicture, isAdmin }: ActivityCardProps) {
+export default function ActivityCard({ activity }: ActivityCardProps) {
   const router = useRouter();
-  const [copied, setCopied] = useState(false);
-  const [isLaunching, setIsLaunching] = useState(false);
-  
   const t = useTranslations("activityCard");
   const tCommon = useTranslations("Common");
   const format = useFormatter();
+  const [isLaunching, setIsLaunching] = useState(false);
+
+  const name = activity.activity.activity_name;
+  const { deleteActivity, isDeleting } = useDeleteActivity(activity.activityId, name);
+  const isFinalized = activity.LUDI_SESION?.some((s) => sessionPhase(s.estado) === "finished") ?? false;
+  const gradeLabel =
+    activity.gradoId === 1 || activity.gradoId === 2 || activity.gradoId === 3
+      ? tCommon(`grades.${activity.gradoId}`)
+      : tCommon("noGrade");
 
   const handleLaunch = async () => {
     setIsLaunching(true);
     const result = await createGameSession(activity.activityId);
     if (result.success) {
-        router.push(`/dashboard/live/${result.sessionId}`);
-    } else {
-        notify.error(t("launchFailed"), result.error || t("tryAgain"));
-        setIsLaunching(false);
+      router.push(`/dashboard/live/${result.sessionId}`);
+      return;
     }
+    notify.error(t("launchFailed"), result.error || t("tryAgain"));
+    setIsLaunching(false);
   };
 
   const handleShare = async () => {
-    // Generate the URL to copy
-    const url = `${window.location.origin}/views/activity/${activity.activityId}`;
     try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy URL:", err);
+      await navigator.clipboard.writeText(`${window.location.origin}/views/activity/${activity.activityId}`);
+      notify.success(t("linkCopied"));
+    } catch {
+      notify.error(t("copyFailed"));
     }
   };
 
-  const getIcon = (id: number) => {
-    switch(id) {
-      case 1: return <FaListCheck size={28} />; // Quiz
-      case 2: return <FaGamepad size={28} />; // Verdadero/Falso
-      case 3: return <FaBrain size={28} />; // LudiMemory
-      case 4: return <FaBookOpen size={28} />; // LudiLección
-      case 5: return <FaClipboardList size={28} />; // LudiForm
-      default: return <FaGamepad size={28} />;
-    }
-  };
-
-  const isActivityFinalized = activity.LUDI_SESION?.some((s: any) => sessionPhase(s.estado) === 'finished') || false;
+  const menuItems: ActionMenuItem[] = [
+    { key: "view", label: t("viewButton"), icon: <FaEye />, href: `/views/activity/${activity.activityId}`, external: true },
+    { key: "edit", label: t("editButton"), icon: <FaPenToSquare />, href: getEditorRoute(activity.tipoActividadId, activity.activityId), external: true },
+    { key: "share", label: t("shareButton"), icon: <FaShareNodes />, onSelect: handleShare },
+    { key: "delete", label: t("deleteButton"), icon: <FaTrash />, onSelect: deleteActivity, danger: true, disabled: isDeleting },
+  ];
 
   return (
-    <div className={styles.activityCard}>
-      <div className={styles.cardHeader}>
-        <div className={`${styles.iconContainer} ${typeBadgeClass}`}>
-          {getIcon(activity.tipoActividadId)}
-        </div>
-        <div className={styles.cardBadges}>
-          <span className={styles.gradeBadge}>{gradeLabel}</span>
-          <span className={styles.codeBadge}>#{activity.activityId}</span>
-        </div>
-      </div>
-      
-      <div className={styles.cardBody}>
-        <h3 className={styles.cardTitle} title={activity.activity.activity_name}>
-          {activity.activity.activity_name}
-        </h3>
-        <p className={styles.cardDate}>
-          {t('createdAt')} {format.dateTime(new Date(activity.activity.created_date), { dateStyle: 'medium' })}
+    <article className={`${styles.item} ${activityTypeClass(activity.tipoActividadId)}`} aria-busy={isDeleting || undefined}>
+      <ActivityTypeIcon typeId={activity.tipoActividadId} />
+      <div className={styles.main}>
+        <h3 className={styles.title} title={name}>{name}</h3>
+        <p className={styles.meta}>
+          {tCommon(`activityTypes.${activity.tipoActividadId as 1 | 2 | 3 | 4 | 5}`)} · {gradeLabel} ·{" "}
+          {format.dateTime(new Date(activity.activity.created_date), { dateStyle: "medium" })}
         </p>
-        <div className="d-flex justify-content-between align-items-center w-100 mt-2">
-          <span className={`${styles.badgeType} ${typeBadgeClass}`}>
-            {tCommon(`activityTypes.${activity.tipoActividadId as 1 | 2 | 3 | 4 | 5}`)}
-          </span>
-          <div className={styles.creatorWrapper}>
-            <CreatorCard 
-              name={activity.user.nombre} 
-              email={activity.user.email} 
-              pictureUrl={sessionPicture}
-              isAdmin={isAdmin}
-            />
-          </div>
-        </div>
       </div>
-
-      <div className={styles.cardFooter}>
-        <div className={styles.actionGroup}>
-          <button 
-            className={`${styles.actionButtonIcon} ${styles.shareIcon}`} 
-            onClick={handleShare}
-            title={t('shareButton')}
-            aria-label={t('shareButton')}
-          >
-            {copied ? <FaCheck size={18} /> : <FaShareNodes size={18} />}
-          </button>
-          <button 
-            className={`${styles.actionButtonIcon} ${styles.rocketIcon}`} 
-            onClick={handleLaunch}
-            disabled={isLaunching || isActivityFinalized}
-            title={isActivityFinalized ? t("finalized") : t("launch")}
-            aria-label={isActivityFinalized ? t("finalized") : t("launch")}
-            style={isActivityFinalized ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
-          >
-            {isLaunching ? (
-                <span className="spinner-border spinner-border-sm" />
-            ) : (
-                <FaRocket size={18} />
-            )}
-          </button>
-          <Link 
-            href={`/views/activity/${activity.activityId}`} 
-            className={`${styles.actionButtonIcon} ${styles.playIcon}`} 
-            title={t('viewButton')}
-            aria-label={t('viewButton')}
-            target="_blank" rel="noopener noreferrer"
-          >
-            <FaEye size={18} />
-          </Link>
-          <Link 
-            href={getEditorRoute(activity.tipoActividadId, activity.activityId)} 
-            className={`${styles.actionButtonIcon} ${styles.editIcon}`} 
-            title={t('editButton')}
-            aria-label={t('editButton')}
-            target="_blank" rel="noopener noreferrer"
-          >
-            <FaPenToSquare size={18} />
-          </Link>
-          <DeleteActivityButton 
-            activityId={activity.activityId} 
-            activityName={activity.activity.activity_name} 
-            titleButton={t('deleteButton')}
-          />
-        </div>
+      <div className={styles.actions}>
+        <button
+          type="button"
+          className={styles.primary}
+          onClick={handleLaunch}
+          disabled={isLaunching || isFinalized}
+          aria-label={isFinalized ? t("finalized") : t("launch")}
+          title={isFinalized ? t("finalized") : t("launch")}
+        >
+          {isLaunching ? <span className="spinner-border spinner-border-sm" aria-hidden="true" /> : <FaRocket aria-hidden="true" />}
+          {isFinalized ? t("finalizedShort") : t("launchShort")}
+        </button>
+        <ActionMenu label={t("moreActions", { name })} items={menuItems} />
       </div>
-    </div>
+    </article>
   );
 }

@@ -452,6 +452,126 @@
     height: 70%; /* Altura de la línea al hacer hover/active */
 }
 
+.sidebarLogo {
+    margin-bottom: 2rem;
+}
+
+.navLabel {
+    white-space: nowrap;
+}
+
+/* Round handle sitting on the sidebar's right edge, next to the logo. */
+.sidebarToggle {
+    position: absolute;
+    top: 38px;
+    right: -14px;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 2px solid #6a4bff;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #6a4bff;
+    font-size: 11px;
+    box-shadow: 0 3px 0 #4327c9, 0 6px 14px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.1s ease;
+    z-index: 2;
+}
+
+.sidebarToggle svg {
+    transition: transform 0.3s ease;
+}
+
+.sidebarToggle:hover {
+    background: #6a4bff;
+    color: #ffffff;
+    transform: scale(1.12);
+}
+
+.sidebarToggle:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #4327c9, 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sidebarCollapsed .sidebarToggle svg {
+    transform: rotate(180deg);
+}
+
+.sidebarDark .navLink:focus-visible,
+.sidebarToggle:focus-visible {
+    outline: 3px solid #00d4ff;
+    outline-offset: 2px;
+}
+
+/* Collapsed: icons only; each label turns into a tooltip on hover or keyboard focus. */
+.sidebarDark.sidebarCollapsed {
+    width: 84px;
+    padding: 20px 12px;
+}
+
+.sidebarCollapsed .sidebarLogo {
+    margin-bottom: 1.5rem;
+}
+
+.sidebarCollapsed .navLink {
+    justify-content: center;
+    padding: 12px;
+    overflow: visible;
+}
+
+.sidebarDark.sidebarCollapsed .navLink .icon {
+    margin-right: 0;
+}
+
+.sidebarCollapsed .navLabel {
+    position: absolute;
+    left: calc(100% + 16px);
+    top: 50%;
+    transform: translate(-6px, -50%);
+    padding: 7px 14px;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #140a2e;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 4px 0 #6a4bff, 0 12px 28px rgba(0, 0, 0, 0.4);
+    /* Opacity, not visibility: hidden content would drop out of the link's accessible name. */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 1;
+}
+
+.sidebarCollapsed .navLabel::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    background: #ffffff;
+    border-radius: 2px;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.sidebarCollapsed .navLink:hover .navLabel,
+.sidebarCollapsed .navLink:focus-visible .navLabel {
+    opacity: 1;
+    transform: translate(0, -50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebarDark,
+    .sidebarCollapsed .navLabel,
+    .sidebarToggle,
+    .sidebarToggle svg {
+        transition: none;
+    }
+}
+
 .actionsContainer {
   display: flex;
   gap: 20px;

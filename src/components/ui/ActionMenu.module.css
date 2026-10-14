@@ -1,0 +1,111 @@
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+.trigger {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 2px solid #e3e0ef;
+  background: #ffffff;
+  color: #140a2e;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 0 #d6d1e8;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.trigger:hover,
+.trigger[aria-expanded="true"] {
+  background: #f3f1fb;
+  border-color: #c9c2ea;
+  color: #6a4bff;
+}
+
+.trigger:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #d6d1e8;
+}
+
+.trigger:focus-visible,
+.item:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  min-width: 210px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #ffffff;
+  border: 2px solid #ece9f7;
+  border-radius: 14px;
+  box-shadow: 0 6px 0 rgba(20, 10, 46, 0.12), 0 18px 40px rgba(20, 10, 46, 0.28);
+  animation: menuIn 0.14s ease-out;
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu { animation: none; }
+  .trigger { transition: none; }
+}
+
+.item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #140a2e;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.item:hover,
+.item:focus {
+  background: #f3f1fb;
+  color: #140a2e;
+}
+
+.item[aria-disabled="true"] {
+  color: #9a94b3;
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.danger,
+.danger:hover,
+.danger:focus {
+  color: #c62828;
+}
+
+.icon {
+  display: inline-flex;
+  width: 16px;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.8;
+}
+
+.danger:hover,
+.danger:focus {
+  background: #fdecec;
+}

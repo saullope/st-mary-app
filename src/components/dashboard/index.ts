@@ -5,3 +5,4 @@
 
 export { NavbarDashboard } from './NavBarDashboard';
 export { SidebarDashboard } from './SidebarDashboard';
+export { DashboardFrame } from './DashboardFrame';

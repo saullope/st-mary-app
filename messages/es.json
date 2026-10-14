@@ -5,13 +5,13 @@
     "institution": "Institución educativa",
     "signIn": "Iniciar Sesión",
     "signUp": "Registrarse",
-    "landingTextLevel1":"Crea actividades educativas",
-    "landingTextLevel2":"¡Incorpora la ludificación y transforma tu manera de enseñar!",
-    "landingTextLevel3":"¡Los niños aprenden jugando!",
-    "landingTextLevel4":"Juegos adaptados al nivel de cada grado",
+    "landingTextLevel1": "Crea actividades educativas",
+    "landingTextLevel2": "¡Incorpora la ludificación y transforma tu manera de enseñar!",
+    "landingTextLevel3": "¡Los niños aprenden jugando!",
+    "landingTextLevel4": "Juegos adaptados al nivel de cada grado",
     "rigths": "Todos Los Derechos Reservados",
     "startCreate": "Empieza a crear",
-    "startPlay":"Ingresa el código para jugar",
+    "startPlay": "Ingresa el código para jugar",
     "kidsExperience": "Experiencias educativas enfocadas en 1º, 2º y 3º grado",
     "textWhy": "¿Por qué usar ludificación en el aula?",
     "card1Title": "Fomenta el interés",
@@ -65,7 +65,7 @@
     "errorUserDisabled": "Esta cuenta ha sido deshabilitada",
     "errorTooManyRequests": "Demasiados intentos. Por favor, inténtalo más tarde",
     "errorNetwork": "Error de red. Verifica tu conexión a internet",
-   "errorInternal": "Error interno. Por favor, intenta de nuevo"
+    "errorInternal": "Error interno. Por favor, intenta de nuevo"
   },
   "SignUpForm": {
     "titleForm": "Registrate",
@@ -87,25 +87,24 @@
     "passwordRequired": "Contraseña es requerida",
     "confirmPasswordRequired": "Confirmar contraseña es requerida",
     "passwordsDontMatch": "Las contraseñas no coinciden",
-    "passwordMin":"La contraseña debe tener al menos 8 caracteres",
-    "passwordNumber":"La contraseña debe tener al menos un número",
-    "passwordLowercase":"La contraseña debe tener al menos una letra minúscula",
-    "passwordUppercase":"La contraseña debe tener al menos una letra mayúscula",
+    "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+    "passwordNumber": "La contraseña debe tener al menos un número",
+    "passwordLowercase": "La contraseña debe tener al menos una letra minúscula",
+    "passwordUppercase": "La contraseña debe tener al menos una letra mayúscula",
     "errorEmailAlreadyInUse": "El correo electrónico ya está en uso",
     "usercreate": "Usuario creado con éxito",
     "verifyEmailTitle": "Confirma tu correo electrónico",
     "verifyEmailDescription": "Por favor revisa tu bandeja de entrada y sigue el enlace para verificar tu cuenta."
-
   },
   "WelcomeTeacherView": {
-    "metaTitle":"Bienvenido Educador",
-    "metaDescription":"Bienvenida Educador",
+    "metaTitle": "Bienvenido Educador",
+    "metaDescription": "Bienvenida Educador",
     "welcomeText": "¡Bienvenido Educador!",
     "grade1": "Primer Grado",
     "grade2": "Segundo Grado",
     "grade3": "Tercer Grado",
-    "text1":"Selecciona el grado correspondiente",
-    "text2":"para acceder a tu espacio de trabajo"
+    "text1": "Selecciona el grado correspondiente",
+    "text2": "para acceder a tu espacio de trabajo"
   },
   "SidebarTranslation": {
     "home": "Inicio",
@@ -113,22 +112,25 @@
     "myActivities": "Mis Actividades",
     "reports": "Reportes",
     "templates": "Plantillas",
-    "watching": "Seguimiento de Actividades"
+    "watching": "Seguimiento de Actividades",
+    "collapse": "Contraer menú",
+    "expand": "Expandir menú",
+    "navigation": "Navegación principal"
   },
   "firstGradeItemDashboard": {
     "gradeName": "Primer Grado",
-    "createActivity":"Crear Actividad",
-    "myActivities":"Mis Actividades"  
+    "createActivity": "Crear Actividad",
+    "myActivities": "Mis Actividades"
   },
   "secondGradeItemDashboard": {
     "gradeName": "Segundo Grado",
-    "createActivity":"Crear Actividad",
-    "myActivities":"Mis Actividades"  
+    "createActivity": "Crear Actividad",
+    "myActivities": "Mis Actividades"
   },
   "thirdGradeItemDashboard": {
     "gradeName": "Tercer Grado",
-    "createActivity":"Crear Actividad",
-    "myActivities":"Mis Actividades"  
+    "createActivity": "Crear Actividad",
+    "myActivities": "Mis Actividades"
   },
   "textDashboard": {
     "ludiTemplates": "Plantillas Ludi",
@@ -155,20 +157,20 @@
     "titlePage": "Crear Actividad",
     "ludiquizTitle": "Ludi Quiz",
     "ludiquizSubTitle": "Aventura de Preguntas",
-  "ludiquiz_desc": "¡Diseña cuestionarios divertidos y desafiantes para tus estudiantes!",
-  "ludimemoryTitle": "Ludi Memory",
-  "ludimemorySubTitle": "Memoriza y Gana",
-  "ludimemory_desc": "¡Crea emocionantes juegos de memoria que pondrán a prueba las habilidades de tus estudiantes!",
-  "trueorfalseTitle": "True or False",
-  "trueorfalseSubTitle": "Verdadero o Falso: El Desafío",
-  "trueorfalse_desc": "¡Prepara juegos de verdadero o falso llenos de sorpresas y aprendizaje!",
+    "ludiquiz_desc": "¡Diseña cuestionarios divertidos y desafiantes para tus estudiantes!",
+    "ludimemoryTitle": "Ludi Memory",
+    "ludimemorySubTitle": "Memoriza y Gana",
+    "ludimemory_desc": "¡Crea emocionantes juegos de memoria que pondrán a prueba las habilidades de tus estudiantes!",
+    "trueorfalseTitle": "True or False",
+    "trueorfalseSubTitle": "Verdadero o Falso: El Desafío",
+    "trueorfalse_desc": "¡Prepara juegos de verdadero o falso llenos de sorpresas y aprendizaje!",
     "ludileccionTitle": "Ludi Lección",
     "ludileccionSubTitle": "Aprende y Descubre",
     "ludileccion_desc": "¡Arma lecciones con presentaciones, videos, imágenes y lecturas que tus estudiantes recorren para ganar insignias!",
     "ludiformTitle": "Ludi Form",
     "ludiformSubTitle": "Piensa y Responde",
     "ludiform_desc": "¡Crea formularios con preguntas de opción y respuestas escritas, sin límite de tiempo, para tercer grado!",
-  "createText": "Empezar a Crear"
+    "createText": "Empezar a Crear"
   },
   "ludiMemoryComponent": {
     "uploadSpace": "Clic para Cargar o Buscar Archivos Multimedia",
@@ -180,7 +182,7 @@
   "configurations": {
     "titleActivity": "Escribe un titulo..."
   },
-  "modalMultimedia" : {
+  "modalMultimedia": {
     "searchUnsplash": "Buscar Imagen en Unsplash",
     "searchYoutube": "Buscar Video en Youtube",
     "searchFreesound": "Buscar Audio en Freesound",
@@ -254,7 +256,7 @@
     "metaTitle": "Mis actividades",
     "metaDescription": "Gestiona y organiza tus recursos educativos",
     "titlePage": "Mis Actividades",
-    "descPage":"Gestiona y organiza tus recursos educativos",
+    "descPage": "Gestiona y organiza tus recursos educativos",
     "noActivities": "No has creado ninguna actividad aún. ¡Empieza a crear tu primera actividad!",
     "createActivityButton": "Crear Actividad",
     "exportToExcel": "Exportar a Excel",
@@ -265,7 +267,7 @@
     "emptyBody": "Aún no has creado ninguna actividad. Crea tu primer desafío y sorprende a tus estudiantes con una experiencia de aprendizaje inolvidable."
   },
   "activityCard": {
-    "viewButton": "ver",
+    "viewButton": "Ver",
     "editButton": "Editar",
     "deleteButton": "Eliminar",
     "sessionButton": "Sesión",
@@ -280,9 +282,11 @@
     "launch": "Lanzar partida (panel en vivo)",
     "copyCode": "Copiar código",
     "copied": "¡Copiado!",
-    "teacherRole": "Educador",
-    "noEmail": "Sin correo",
-    "viewProfile": "Ver perfil"
+    "launchShort": "Lanzar",
+    "finalizedShort": "Finalizada",
+    "linkCopied": "Enlace copiado",
+    "copyFailed": "No se pudo copiar el enlace",
+    "moreActions": "Más acciones para {name}"
   },
   "reports": {
     "metaTitle": "Reportes",
@@ -291,8 +295,16 @@
     "efectIndex": "Índice de Efectividad",
     "totalStudents": "Participantes",
     "noSession": "No se encontraron sesiones",
-    "noSessionDesc": "Intenta ajustar los filtros o juega actividades con tus estudiantes para generar reportes."
-},
+    "noSessionDesc": "Intenta ajustar los filtros o juega actividades con tus estudiantes para generar reportes.",
+    "status": {
+      "waiting": "En espera",
+      "active": "En curso",
+      "finished": "Finalizada"
+    },
+    "points": "{value} pts",
+    "viewReport": "Ver reporte",
+    "viewReportOf": "Ver reporte de {name}"
+  },
   "reportsFilters": {
     "searchPlaceholder": "Buscar por nombre de actividad...",
     "status": "Estado",
@@ -512,9 +524,9 @@
       },
       "objective": "¿La actividad te ayudó a cumplir el objetivo de aprendizaje de la clase?",
       "objectiveOptions": {
-        "2": "Sí",
+        "0": "No",
         "1": "Parcialmente",
-        "0": "No"
+        "2": "Sí"
       },
       "difficulty": "¿La dificultad de la plantilla fue acorde al grado?",
       "difficultyOptions": {
@@ -1454,7 +1466,8 @@
     "preparing": "Preparando...",
     "use": "Usar plantilla",
     "launch": "Lanzar partida inmediata",
-    "preview": "Previsualizar"
+    "preview": "Previsualizar",
+    "moreActions": "Más acciones para {name}"
   },
   "MyActivities": {
     "confirmDelete": "¿Seguro que quieres eliminar la actividad \"{name}\"?",
@@ -1703,5 +1716,10 @@
     "configuration": "Error de configuración del sistema. Contacta al administrador.",
     "registerFailed": "No se pudieron registrar tus datos. Inténtalo de nuevo.",
     "sessionFailed": "No se pudo iniciar la sesión. Inténtalo de nuevo."
+  },
+  "Collection": {
+    "view": "Vista",
+    "list": "Lista",
+    "grid": "Cuadrícula"
   }
 }

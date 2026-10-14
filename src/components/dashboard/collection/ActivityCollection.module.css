@@ -1,0 +1,318 @@
+/* Each type sets its colors once; stripe, tile, cover and shadows read them. */
+.typeQuiz {
+  --type-color: #7c5cff;
+  --type-dark: #5a3be0;
+  --type-gradient: linear-gradient(135deg, #6a4bff 0%, #a18bff 100%);
+}
+
+.typeTrueFalse {
+  --type-color: #ff8a5c;
+  --type-dark: #e0602f;
+  --type-gradient: linear-gradient(135deg, #ff7a45 0%, #ffc27a 100%);
+}
+
+.typeMemory {
+  --type-color: #00b89c;
+  --type-dark: #008f79;
+  --type-gradient: linear-gradient(135deg, #00a88e 0%, #00e0c0 100%);
+}
+
+.typeLesson {
+  --type-color: #0096c7;
+  --type-dark: #006f96;
+  --type-gradient: linear-gradient(135deg, #00b4e6 0%, #6a4bff 100%);
+}
+
+.typeForm {
+  --type-color: #ff5c8a;
+  --type-dark: #d93a68;
+  --type-gradient: linear-gradient(135deg, #ff4f7e 0%, #ffa36c 100%);
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.toggleButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.toggleButton:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.toggleButton[aria-pressed="true"] {
+  background: #ffffff;
+  color: #6a4bff;
+  box-shadow: 0 3px 0 rgba(20, 10, 46, 0.35);
+}
+
+.toggleButton:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+/* Containers */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* One markup for both views: the container decides row vs card. */
+.item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  background: #ffffff;
+  color: #140a2e;
+  border-radius: 18px;
+  box-shadow: 0 6px 0 rgba(20, 10, 46, 0.25), 0 12px 24px rgba(20, 10, 46, 0.18);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.item:hover,
+.item:focus-within {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 0 var(--type-dark), 0 16px 30px rgba(20, 10, 46, 0.25);
+}
+
+/* Keep an open actions menu above the next items. */
+.item:hover {
+  z-index: 1;
+}
+
+.item:focus-within {
+  z-index: 2;
+}
+
+.item[aria-busy="true"] {
+  opacity: 0.6;
+}
+
+.list .item {
+  align-items: center;
+  padding: 14px 18px 14px 24px;
+  overflow: visible;
+}
+
+/* Colored stripe on the left edge of each row. */
+.list .item::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 8px;
+  border-radius: 18px 0 0 18px;
+  background: var(--type-gradient);
+}
+
+.grid .item {
+  flex-direction: column;
+  gap: 14px;
+  padding: 12px 12px 16px;
+}
+
+/* Type tile (list) that grows into a cover (grid). */
+.typeIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--type-gradient);
+  color: #ffffff;
+  font-size: 1.4rem;
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.18);
+  transition: transform 0.25s ease;
+}
+
+.list .item:hover .typeIcon {
+  transform: rotate(-8deg) scale(1.06);
+}
+
+.grid .typeIcon {
+  width: 100%;
+  height: 120px;
+  border-radius: 12px;
+  font-size: 3rem;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.22) 2px, transparent 2.5px),
+    var(--type-gradient);
+  background-size: 18px 18px, cover;
+  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.15);
+}
+
+.grid .typeIcon svg {
+  filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.18));
+  transition: transform 0.25s ease;
+}
+
+.grid .item:hover .typeIcon svg {
+  transform: scale(1.12) rotate(-6deg);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.grid .main {
+  padding: 0 6px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #140a2e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grid .title {
+  font-size: 1.15rem;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.meta {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5c5677;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notice {
+  display: inline-block;
+  margin: 8px 0 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #e3f8ec;
+  color: #146c3c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.grid .actions {
+  margin-top: auto;
+  padding: 0 6px;
+}
+
+.grid .actions .primary {
+  flex: 1;
+}
+
+/* Chunky button that sinks when pressed. */
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 12px;
+  background: #6a4bff;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  box-shadow: 0 4px 0 #4327c9;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.15s ease;
+}
+
+.primary:hover:not(:disabled) {
+  background: #7a5dff;
+}
+
+.primary:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #4327c9;
+}
+
+.primary:disabled {
+  background: #ebe8f5;
+  color: #8a84a3;
+  box-shadow: 0 4px 0 #d6d1e8;
+  cursor: not-allowed;
+}
+
+.primary:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 576px) {
+  .list .item {
+    flex-wrap: wrap;
+  }
+
+  .list .actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .typeIcon,
+  .typeIcon svg,
+  .primary {
+    transition: none;
+  }
+
+  .item:hover,
+  .item:focus-within,
+  .list .item:hover .typeIcon,
+  .grid .item:hover .typeIcon svg {
+    transform: none;
+  }
+}

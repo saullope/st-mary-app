@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import TemplateCard from "./TemplateCard";
+import ActivityCollection from "@/components/dashboard/collection/ActivityCollection";
 import styles from "@/styles/pages/my-activities.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
 import { FaShapes } from "react-icons/fa6";
@@ -147,11 +148,11 @@ export default async function TemplatesPage({
       </div>
 
       {templates.length > 0 ? (
-        <div className={styles.activitiesGrid}>
-          {templates.map((template: any) => (
+        <ActivityCollection storageKey="ludi.view.templates">
+          {templates.map((template) => (
             <TemplateCard key={template.activityId} template={template} />
           ))}
-        </div>
+        </ActivityCollection>
       ) : (
         <div className={styles.emptyStateCard}>
           <div className={styles.emptyStateIcon} aria-hidden="true">📚</div>

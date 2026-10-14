@@ -1,5 +1,5 @@
 import "@/styles/pages/reports.css";
-import { FaCalendarAlt, FaUsers, FaChartBar } from "react-icons/fa";
+import { FaChartBar } from "react-icons/fa";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -8,6 +8,8 @@ import getCurrentUser from "@/lib/auth/getCurrentUser";
 import Link from "next/link";
 import prisma from "@/lib/db";
 import ReportFilter from "@/components/dashboard/ReportFilter";
+import ActivityCollection from "@/components/dashboard/collection/ActivityCollection";
+import SessionReportCard from "@/components/dashboard/reports/SessionReportCard";
 import styles from "@/styles/pages/my-activities.module.css";
 import { pageMetadata } from "@/lib/seo/metadata";
 
@@ -89,114 +91,27 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
         <ReportFilter />
       </div>
 
-      <div className="row g-4 mt-2">
-        {sessions.map((session: any) => {
-          const totalParticipants = session.LUDI_SESION_PARTICIPANTE.length;
-          
-          // Calculate Reliability Score (Average Score)
-          let totalScore = 0;
-          let correctAnswers = 0;
-          let totalAnswers = 0;
-
-          session.LUDI_SESION_PARTICIPANTE.forEach((p: any) => {
-            totalScore += p.puntaje_total;
-            p.respuestas.forEach((r: any) => {
-              totalAnswers++;
-              if (r.esCorrecta) correctAnswers++;
-            });
-          });
-
-          const averageScore = totalParticipants > 0 ? Math.round(totalScore / totalParticipants) : 0;
-          const reliabilityScore = totalAnswers > 0 ? Math.round((correctAnswers / totalAnswers) * 100) : 0;
-
-          // Normalize badge logic
-          let statusLabel = session.estado.toUpperCase();
-          let badgeColor = "#4a4266";
-          let badgeBg = "rgba(29, 21, 58, 0.08)";
-          if (["ESPERANDO", "LOBBY"].includes(statusLabel)) {
-             statusLabel = "EN ESPERA";
-             badgeColor = "#e5b869"; // Gold
-             badgeBg = "rgba(220, 165, 80, 0.2)";
-          } else if (["ACTIVA", "EN_CURSO"].includes(statusLabel)) {
-             statusLabel = "EN CURSO";
-             badgeColor = "#1D153A"; 
-             badgeBg = "rgba(29, 21, 58, 0.1)";
-          } else if (statusLabel === "FINALIZADA") {
-             badgeColor = "#198754"; // Success
-             badgeBg = "rgba(25, 135, 84, 0.15)";
-          }
-
-          return (
-            <div key={session.id.toString()} className="col-12 col-md-6 col-lg-4">
-              <Link href={`/dashboard/reports/${session.id}`} className="text-decoration-none h-100 d-block">
-                <div className={styles.activityCard}>
-                  <div className="d-flex justify-content-between align-items-start mb-3">
-                    <h5 className="fw-bold mb-0 text-truncate" style={{ maxWidth: '70%', color: '#1D153A' }} title={session.LUDI_ACTIVIDAD.activity.activity_name}>
-                      {session.LUDI_ACTIVIDAD.activity.activity_name}
-                    </h5>
-                    <span style={{ 
-                        background: badgeBg, 
-                        color: badgeColor, 
-                        padding: '0.3rem 0.8rem', 
-                        borderRadius: '1rem', 
-                        fontSize: '0.75rem', 
-                        fontWeight: 700, 
-                        border: `1px solid ${badgeColor}` 
-                    }}>
-                      {statusLabel}
-                    </span>
-                  </div>
-                  
-                  <p className="small mb-4" style={{ color: '#4a4266' }}>
-                    <FaCalendarAlt className="me-2" />
-                    {new Date(session.creada_en).toLocaleDateString()}
-                  </p>
-
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <div>
-                      <p className="mb-0 small" style={{ color: '#4a4266' }}>{tReports('avegrageScore')}</p>
-                      <h4 className="fw-bold mb-0" style={{ color: '#1D153A' }}>{averageScore} pts</h4>
-                    </div>
-                    <div className="text-end">
-                      <p className="mb-0 small" style={{ color: '#4a4266' }}>{tReports('totalStudents')}</p>
-                      <h4 className="fw-bold mb-0" style={{ color: '#1D153A' }}>
-                        <FaUsers className="me-2" size={16} style={{ color: 'rgba(29, 21, 58, 0.5)' }} />
-                        {totalParticipants}
-                      </h4>
-                    </div>
-                  </div>
-
-                  <div className="pt-3" style={{ borderTop: '1px dashed rgba(29, 21, 58, 0.1)' }}>
-                    <div className="d-flex justify-content-between align-items-center mb-1">
-                      <span className="small fw-bold" style={{ color: '#4a4266' }}>{tReports('efectIndex')}</span>
-                      <span className="small fw-bold" style={{ color: reliabilityScore >= 70 ? '#198754' : reliabilityScore >= 50 ? '#e5b869' : '#dc3545' }}>
-                        {reliabilityScore}%
-                      </span>
-                    </div>
-                    <div className="progress shadow-sm" style={{ height: '8px', backgroundColor: 'rgba(29, 21, 58, 0.1)' }}>
-                      <div 
-                        className="progress-bar" 
-                        style={{ 
-                            width: `${reliabilityScore}%`, 
-                            backgroundColor: reliabilityScore >= 70 ? '#198754' : reliabilityScore >= 50 ? '#e5b869' : '#dc3545' 
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          );
-        })}
-
-        {sessions.length === 0 && (
-          <div className={styles.emptyStateCard}>
-            <div className={styles.emptyStateIcon}>📊</div>
-            <h3><span className={designStyles.star}>★</span> {tReports('noSession')}</h3>
-            <p>{tReports('noSessionDesc')}</p>
-          </div>
-        )}
-      </div>
+      {sessions.length > 0 ? (
+        <ActivityCollection storageKey="ludi.view.reports">
+          {sessions.map((session) => (
+            <SessionReportCard
+              key={session.id.toString()}
+              sessionId={session.id.toString()}
+              activityName={session.LUDI_ACTIVIDAD.activity.activity_name}
+              typeId={session.LUDI_ACTIVIDAD.tipoActividadId}
+              estado={session.estado}
+              createdAt={session.creada_en}
+              participants={session.LUDI_SESION_PARTICIPANTE}
+            />
+          ))}
+        </ActivityCollection>
+      ) : (
+        <div className={styles.emptyStateCard}>
+          <div className={styles.emptyStateIcon} aria-hidden="true">📊</div>
+          <h3><span className={designStyles.star} aria-hidden="true">★</span> {tReports('noSession')}</h3>
+          <p>{tReports('noSessionDesc')}</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,9 +2,9 @@
 
 Estado al 2026-10-13, rama `slopez-dev`.
 
-## 1. Cambios sin commit
+## 1. Configuraciones (commit `953c971`)
 
-Están hechos y verificados (`tsc` limpio, Jest 125/125, ESLint sin errores; queda un aviso previo en `AdminUsers.tsx`), pero sin commit:
+Hechos, verificados (`tsc` limpio, Jest 125/125, ESLint sin errores; queda un aviso previo en `AdminUsers.tsx`) y con commit:
 
 - **Perfil de voz**
   - Columnas `LUDI_USER_CONFIG.voice_gender` (female/male) y `voice_speed` (slow/normal/fast).
@@ -24,14 +24,16 @@ Antes de probar: reiniciar el servidor de desarrollo y correr `npx prisma genera
 
 Antes de desplegar: aplicar `prisma/sql/2026-10-13_voice_profile.sql` en cada entorno.
 
-## 2. Bloqueo para el rediseño de tablas y tarjetas
+## 2. Avance del rediseño
 
-El plugin **caveman** oculta el cuerpo de las funciones al leer archivos (con Read, `cat` o por rangos de líneas) y devuelve un identificador `ccr_...` en su lugar. El modo automático bloqueó `mcp__caveman__caveman_retrieve` para `ActivityCard.tsx` y `TemplateCard.tsx`.
-
-Para desbloquearlo, cualquiera de estas opciones:
-
-- agregar `"mcp__caveman__caveman_retrieve"` a `permissions.allow` en `.claude/settings.json`;
-- desactivar el plugin caveman en la sesión.
+- Bloqueo de caveman resuelto: `mcp__caveman__caveman_retrieve` está permitido en `.claude/settings.json`.
+- Hecho (sin commit):
+  - menú de acciones compartido `ActionMenu` (`src/components/ui`);
+  - `ActivityCollection` + `ActivityTypeIcon` (`src/components/dashboard/collection`);
+  - `ActivityCard` y `TemplateCard` rediseñadas;
+  - `DeleteActivityButton` pasó a ser el hook `useDeleteActivity`;
+  - se eliminó `CreatorCard`.
+- Falta: la tabla de datos compartida y el paso 3 (tablas). Falta también revisar visualmente las tarjetas en el navegador.
 
 ## 3. Rediseño acordado (pendiente de implementar)
 

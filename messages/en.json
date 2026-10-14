@@ -11,7 +11,7 @@
     "landingTextLevel4": "Games adapted to the level of each grade",
     "rigths": "All Rights Reserved",
     "startCreate": "Start Creating",
-    "startPlay":"Enter the code to play",
+    "startPlay": "Enter the code to play",
     "kidsExperience": "Educational experiences focused on 1st, 2nd, and 3rd grade",
     "textWhy": "Why use gamification in the classroom?",
     "card1Title": "Fosters Interest",
@@ -87,25 +87,24 @@
     "passwordRequired": "Password is required",
     "confirmPasswordRequired": "Confirm Password is required",
     "passwordsDontMatch": "Passwords don't match",
-    "passwordMin":"Password must be at least 8 characters long",
-    "passwordNumber":"Password must have at least one number",
-    "passwordLowercase":"Password must have at least one lowercase letter",
-    "passwordUppercase":"Password must have at least one uppercase letter",
+    "passwordMin": "Password must be at least 8 characters long",
+    "passwordNumber": "Password must have at least one number",
+    "passwordLowercase": "Password must have at least one lowercase letter",
+    "passwordUppercase": "Password must have at least one uppercase letter",
     "errorEmailAlreadyInUse": "Email already in use",
     "usercreate": "User created successfully",
     "verifyEmailTitle": "Verify your email",
     "verifyEmailDescription": "A verification email has been sent to your email address. Please check your inbox and click the link to verify your account."
-
   },
   "WelcomeTeacherView": {
-    "metaTitle":"Welcome Teacher",
-    "metaDescription":"Welcome Teacher",
+    "metaTitle": "Welcome Teacher",
+    "metaDescription": "Welcome Teacher",
     "welcomeText": "Welcome Teacher!",
     "grade1": "First Grade",
     "grade2": "Second Grade",
     "grade3": "Third Grade",
-    "text1":"Select the corresponding grade",
-    "text2":"to access your workspace"
+    "text1": "Select the corresponding grade",
+    "text2": "to access your workspace"
   },
   "SidebarTranslation": {
     "home": "Home",
@@ -113,22 +112,25 @@
     "myActivities": "My Activities",
     "reports": "Reports",
     "templates": "Templates",
-    "watching": "Activity Evaluation"
+    "watching": "Activity Evaluation",
+    "collapse": "Collapse menu",
+    "expand": "Expand menu",
+    "navigation": "Main navigation"
   },
   "firstGradeItemDashboard": {
     "gradeName": "First Grade",
-    "createActivity":"Create Activity",
-    "myActivities":"My Activities"  
+    "createActivity": "Create Activity",
+    "myActivities": "My Activities"
   },
   "secondGradeItemDashboard": {
     "gradeName": "Second Grade",
-    "createActivity":"Create Activity",
-    "myActivities":"My Activities"  
+    "createActivity": "Create Activity",
+    "myActivities": "My Activities"
   },
   "thirdGradeItemDashboard": {
     "gradeName": "Third Grade",
-    "createActivity":"Create Activity",
-    "myActivities":"My Activities"  
+    "createActivity": "Create Activity",
+    "myActivities": "My Activities"
   },
   "textDashboard": {
     "ludiTemplates": "Ludi Templates",
@@ -153,22 +155,22 @@
     "metaTitle": "Create activity",
     "metaDescription": "Create playful games divided by subjects",
     "titlePage": "Create Activity",
-      "ludiquizTitle": "Ludi Quiz",
-      "ludiquizSubTitle": "Question Adventure",
-      "ludiquiz_desc": "Design fun and challenging quizzes for your students!",
-      "ludimemoryTitle": "Ludi Memory",
-      "ludimemorySubTitle": "Memorize and Win",
-      "ludimemory_desc": "Create exciting memory games that will test your students' skills!",
-      "trueorfalseTitle": "True or False",
-      "trueorfalseSubTitle": "True or False: The Challenge",
-      "trueorfalse_desc": "Prepare true or false games full of surprises and learning!",
+    "ludiquizTitle": "Ludi Quiz",
+    "ludiquizSubTitle": "Question Adventure",
+    "ludiquiz_desc": "Design fun and challenging quizzes for your students!",
+    "ludimemoryTitle": "Ludi Memory",
+    "ludimemorySubTitle": "Memorize and Win",
+    "ludimemory_desc": "Create exciting memory games that will test your students' skills!",
+    "trueorfalseTitle": "True or False",
+    "trueorfalseSubTitle": "True or False: The Challenge",
+    "trueorfalse_desc": "Prepare true or false games full of surprises and learning!",
     "ludileccionTitle": "Ludi Lesson",
     "ludileccionSubTitle": "Learn and Discover",
     "ludileccion_desc": "Build lessons with presentations, videos, images and readings that your students go through to earn badges!",
     "ludiformTitle": "Ludi Form",
     "ludiformSubTitle": "Think and Answer",
     "ludiform_desc": "Build forms with choice questions and written answers, with no time limit, for third grade!",
-      "createText": "Start Creating"
+    "createText": "Start Creating"
   },
   "ludiMemoryComponent": {
     "uploadSpace": "Click to Upload or Search Multimedia Files",
@@ -254,7 +256,7 @@
     "metaTitle": "My Activities",
     "metaDescription": "Manage and organize your educational resources",
     "titlePage": "My Activities",
-    "descPage":"Manage and organize your educational resources",
+    "descPage": "Manage and organize your educational resources",
     "noActivities": "You haven't created any activities yet. Start by creating your first activity!",
     "createActivityButton": "New Activity",
     "exportToExcel": "Export to Excel",
@@ -264,7 +266,7 @@
     "emptyTitle": "Your adventure is about to begin!",
     "emptyBody": "You have not created any activities yet. Create your first challenge and surprise your students with an unforgettable learning experience."
   },
-   "activityCard": {
+  "activityCard": {
     "viewButton": "View",
     "editButton": "Edit",
     "deleteButton": "Delete",
@@ -280,9 +282,11 @@
     "launch": "Launch game (live panel)",
     "copyCode": "Copy code",
     "copied": "Copied!",
-    "teacherRole": "Teacher",
-    "noEmail": "No email",
-    "viewProfile": "View profile"
+    "launchShort": "Launch",
+    "finalizedShort": "Finished",
+    "linkCopied": "Link copied",
+    "copyFailed": "Could not copy the link",
+    "moreActions": "More actions for {name}"
   },
   "reports": {
     "metaTitle": "Reports",
@@ -291,8 +295,16 @@
     "efectIndex": "Effectiveness Index",
     "totalStudents": "Participants",
     "noSession": "No sessions found",
-    "noSessionDesc": "Try adjusting the filters or play activities with your students to generate reports."
-},
+    "noSessionDesc": "Try adjusting the filters or play activities with your students to generate reports.",
+    "status": {
+      "waiting": "Waiting",
+      "active": "In progress",
+      "finished": "Finished"
+    },
+    "points": "{value} pts",
+    "viewReport": "View report",
+    "viewReportOf": "View report for {name}"
+  },
   "reportsFilters": {
     "searchPlaceholder": "Search by activity name...",
     "status": "Status",
@@ -512,9 +524,9 @@
       },
       "objective": "Did the activity help you meet the class learning objective?",
       "objectiveOptions": {
-        "2": "Yes",
+        "0": "No",
         "1": "Partially",
-        "0": "No"
+        "2": "Yes"
       },
       "difficulty": "Was the template's difficulty right for the grade?",
       "difficultyOptions": {
@@ -1454,7 +1466,8 @@
     "preparing": "Preparing...",
     "use": "Use template",
     "launch": "Launch a game now",
-    "preview": "Preview"
+    "preview": "Preview",
+    "moreActions": "More actions for {name}"
   },
   "MyActivities": {
     "confirmDelete": "Are you sure you want to delete the activity \"{name}\"?",
@@ -1703,5 +1716,10 @@
     "configuration": "System configuration error. Contact the administrator.",
     "registerFailed": "Your details could not be registered. Please try again.",
     "sessionFailed": "The session could not be started. Please try again."
+  },
+  "Collection": {
+    "view": "View",
+    "list": "List",
+    "grid": "Grid"
   }
 }

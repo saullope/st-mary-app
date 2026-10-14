@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Card, Badge, Container, Row, Col } from 'react-bootstrap';
 import { FaUserGraduate, FaCalendarAlt, FaEnvelope, FaArrowLeft } from 'react-icons/fa';
 import ActivityCard from '@/components/dashboard/ActivityCard';
+import ActivityCollection from '@/components/dashboard/collection/ActivityCollection';
 import PaginationControls from '@/components/dashboard/PaginationControls';
 import ActivityFilter from '@/components/dashboard/ActivityFilter';
 import styles from '@/styles/pages/my-activities.module.css';
@@ -45,22 +46,9 @@ export default function ProfileClient({
 }: ProfileClientProps) {
 
   const t = useTranslations("Profile");
-  const tCommon = useTranslations("Common");
   const tRoles = useTranslations("AdminUsers.roles");
   const format = useFormatter();
   const totalPages = Math.ceil(totalActivities / searchParams.limit);
-
-  const getGradeLabel = (gradoId: number | null) =>
-    gradoId === 1 || gradoId === 2 || gradoId === 3 ? tCommon(`grades.${gradoId}`) : tCommon("noGrade");
-
-  const getTypeBadgeClass = (id: number) => {
-    switch (id) {
-      case 1: return styles.quizBadge;
-      case 2: return styles.trueFalseBadge;
-      case 3: return styles.memoryBadge;
-      default: return styles.quizBadge;
-    }
-  };
 
   return (
     <Container fluid className="py-4" style={{ maxWidth: '1200px' }}>
@@ -148,20 +136,12 @@ export default function ProfileClient({
         <ActivityFilter types={types} />
       </div>
 
-      {/* Grid de Actividades */}
       {activities.length > 0 ? (
-        <div className={styles.activitiesGrid}>
+        <ActivityCollection storageKey="ludi.view.profile">
           {activities.map((act: any) => (
-            <ActivityCard 
-              key={act.activityId}
-              activity={act}
-              gradeLabel={getGradeLabel(act.gradoId)}
-              typeBadgeClass={getTypeBadgeClass(act.tipoActividadId)}
-              sessionPicture={profilePicture}
-              isAdmin={isAdmin || isOwnProfile} 
-            />
+            <ActivityCard key={act.activityId} activity={act} />
           ))}
-        </div>
+        </ActivityCollection>
       ) : (
         <div className={styles.emptyStateCard}>
           <div className={styles.emptyStateIcon} aria-hidden="true">🌱</div>
