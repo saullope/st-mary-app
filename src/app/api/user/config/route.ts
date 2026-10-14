@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
+import * as yup from "yup";
+import { DEFAULT_VOICE_PROFILE, VOICE_GENDERS, VOICE_SPEEDS } from "@/features/gamification/voiceProfile";
+
+// Campos omitidos conservan su valor por defecto, como hacía la versión sin validar.
+const configSchema = yup.object({
+  defaultTimeLimitMs: yup.number().integer().min(1000).max(600000).default(30000),
+  defaultPoints: yup.number().integer().min(1).max(10000).default(10),
+  defaultVoiceEnabled: yup.boolean().default(true),
+  defaultIsPublic: yup.boolean().default(false),
+  enableStudentFeedback: yup.boolean().default(true),
+  enableTeacherEvaluation: yup.boolean().default(true),
+  voiceGender: yup.string().oneOf([...VOICE_GENDERS]).default(DEFAULT_VOICE_PROFILE.gender),
+  voiceSpeed: yup.string().oneOf([...VOICE_SPEEDS]).default(DEFAULT_VOICE_PROFILE.speed),
+});
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,7 +34,9 @@ export async function GET(request: NextRequest) {
         defaultVoiceEnabled: true,
         defaultIsPublic: false,
         enableStudentFeedback: true,
-        enableTeacherEvaluation: true
+        enableTeacherEvaluation: true,
+        voiceGender: DEFAULT_VOICE_PROFILE.gender,
+        voiceSpeed: DEFAULT_VOICE_PROFILE.speed,
       });
     }
 
@@ -38,24 +54,12 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { 
-        defaultTimeLimitMs, 
-        defaultPoints, 
-        defaultVoiceEnabled, 
-        defaultIsPublic,
-        enableStudentFeedback,
-        enableTeacherEvaluation
-    } = body;
-
-    const updateData = {
-        defaultTimeLimitMs: Number(defaultTimeLimitMs) || 30000,
-        defaultPoints: Number(defaultPoints) || 10,
-        defaultVoiceEnabled: Boolean(defaultVoiceEnabled),
-        defaultIsPublic: Boolean(defaultIsPublic),
-        enableStudentFeedback: enableStudentFeedback !== undefined ? Boolean(enableStudentFeedback) : true,
-        enableTeacherEvaluation: enableTeacherEvaluation !== undefined ? Boolean(enableTeacherEvaluation) : true,
-    };
+    let updateData: yup.InferType<typeof configSchema>;
+    try {
+      updateData = await configSchema.validate(await request.json(), { abortEarly: true, stripUnknown: true });
+    } catch {
+      return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
+    }
 
     const config = await prisma.ludiUserConfig.upsert({
       where: { userId: user.id },

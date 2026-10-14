@@ -423,6 +423,9 @@ model LudiUserConfig {
   toursEnabled            Boolean @default(true) @map("tours_enabled")
   tourMode                String  @default("full") @map("tour_mode") @db.NVarChar(20)
   completedTours          String  @default("[]") @map("completed_tours") @db.NVarChar(Max)
+  // Voz que narra los logros al estudiante: female | male y slow | normal | fast (ver voiceProfile.ts).
+  voiceGender             String  @default("female") @map("voice_gender") @db.NVarChar(10)
+  voiceSpeed              String  @default("normal") @map("voice_speed") @db.NVarChar(10)
 
   user LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 

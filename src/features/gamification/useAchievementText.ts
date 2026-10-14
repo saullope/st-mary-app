@@ -44,8 +44,6 @@ export function useAchievementText() {
       badge,
       mission,
       badgeUnlocked: (def: BadgeDef) => t("voice.badgeUnlocked", { name: badge(def).name, phrase: badge(def).phrase }),
-      badgeSelected: (def: BadgeDef) => t("voice.badgeSelected", { name: badge(def).name, phrase: badge(def).phrase }),
-      missionSelected: (def: MissionDef) => t("voice.missionSelected", { text: mission(def).studentText }),
     };
   }, [t]);
 }

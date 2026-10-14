@@ -1,69 +1,62 @@
+/* Barra lateral de Configuración: mantiene el violeta de la marca, sin animaciones. */
+
 .sidebar {
     height: 100vh;
-    background: linear-gradient(180deg, #140a2e, #1f1147);
+    background: #1a1036;
     width: 250px;
-    padding: 20px 15px;
+    padding: 20px 12px;
     position: fixed;
-    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.5);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     flex-direction: column;
     z-index: 1040;
-    transition: width 0.3s ease;
 }
 
 .logo {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .image {
-    max-width: 45px;
+    max-width: 40px;
     height: auto;
 }
 
 .backLink {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
-.backItem {
+.backItem,
+.navItem {
     display: flex;
     align-items: center;
-    padding: 12px 20px;
-    color: #cfcfff;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    padding: 10px 14px;
+    color: #d6d3ea;
+    border-radius: 6px;
     font-weight: 500;
-    position: relative;
-    overflow: hidden;
+    font-size: 0.95rem;
+    border-left: 3px solid transparent;
 }
 
-.backItem:hover {
-    background: rgba(106, 75, 255, 0.25);
-    color: white;
+.navItem {
+    margin-bottom: 2px;
 }
 
-.backItem::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 0%;
-    border-radius: 0 3px 3px 0;
-    background: #00d4ff;
-    transition: 0.3s ease;
+.backItem:hover,
+.navItem:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
 }
 
-.backItem:hover::after {
-    height: 70%;
+.navItem.active {
+    background: rgba(106, 75, 255, 0.22);
+    border-left-color: #00d4ff;
+    color: #ffffff;
 }
 
 .divider {
-    border-color: rgba(255, 255, 255, 0.1);
-    margin: 10px 0 20px 0;
+    border-color: rgba(255, 255, 255, 0.12);
+    margin: 8px 0 16px;
 }
 
 .navLinks {
@@ -71,58 +64,22 @@
 }
 
 .headerTitle {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    color: rgba(207, 207, 255, 0.6);
-    font-weight: 700;
-    margin-left: 15px;
-    margin-bottom: 15px;
-    letter-spacing: 0.5px;
-}
-
-.navItem {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    color: #cfcfff;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    margin-bottom: 4px;
-    font-weight: 500;
-    position: relative;
-    overflow: hidden;
-}
-
-.navItem:hover,
-.navItem.active {
-    background: rgba(106, 75, 255, 0.25);
-    color: white;
-}
-
-.navItem::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 0%;
-    border-radius: 0 3px 3px 0;
-    background: #00d4ff;
-    transition: 0.3s ease;
-}
-
-.navItem:hover::after,
-.navItem.active::after {
-    height: 70%;
+    color: rgba(214, 211, 234, 0.6);
+    font-weight: 600;
+    margin: 0 0 10px 14px;
+    letter-spacing: 0.05em;
 }
 
 .icon {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-right: 12px;
     flex-shrink: 0;
 }
 
-.navItem.active .icon {
-    color: white;
+.backItem:focus-visible,
+.navItem:focus-visible {
+    outline: 2px solid #00d4ff;
+    outline-offset: 2px;
 }

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaUser, FaShieldAlt, FaGamepad, FaDatabase, FaPalette, FaArrowLeft, FaUsersCog, FaRoute } from 'react-icons/fa';
+import { FaUser, FaShieldAlt, FaGamepad, FaPalette, FaArrowLeft, FaUsersCog, FaRoute } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import styles from './SidebarSettings.module.css';
 import { useTranslations } from 'next-intl';
@@ -17,7 +17,6 @@ export const SidebarSettings = ({ rolId }: { rolId?: number }) => {
         { href: '/settings/appearance', icon: FaPalette, text: t('appearance') },
         { href: '/settings/preferences', icon: FaGamepad, text: t('gamification') },
         { href: '/settings/tours', icon: FaRoute, text: t('tours') },
-        { href: '/settings/data', icon: FaDatabase, text: t('data') },
     ];
 
     if (rolId === 1) {
@@ -25,7 +24,7 @@ export const SidebarSettings = ({ rolId }: { rolId?: number }) => {
     }
 
     return (
-        <div className={styles.sidebar}>
+        <nav className={styles.sidebar} aria-label={t('title')}>
             <div className={styles.logo}>
                 <Image
                     src="/images/PartialLogo.png"
@@ -38,30 +37,31 @@ export const SidebarSettings = ({ rolId }: { rolId?: number }) => {
             </div>
             
             <div className={styles.backLink}>
-                <Link href="/dashboard" className="text-decoration-none">
-                    <div className={styles.backItem}>
-                        <FaArrowLeft className={styles.icon} />
-                        <span>{t('back')}</span>
-                    </div>
+                <Link href="/dashboard" className={`${styles.backItem} text-decoration-none`}>
+                    <FaArrowLeft className={styles.icon} aria-hidden="true" />
+                    <span>{t('back')}</span>
                 </Link>
             </div>
 
             <hr className={styles.divider} />
 
             <div className={styles.navLinks}>
-                <h5 className={styles.headerTitle}>{t('title')}</h5>
+                <h2 className={styles.headerTitle}>{t('title')}</h2>
                 {links.map((link, index) => {
                     const isActive = pathname === link.href;
                     return (
-                        <Link key={index} href={link.href} className="text-decoration-none">
-                            <div className={`${styles.navItem} ${isActive ? styles.active : ''}`}>
-                                <link.icon className={styles.icon} />
-                                <span>{link.text}</span>
-                            </div>
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={`${styles.navItem} ${isActive ? styles.active : ''} text-decoration-none`}
+                            aria-current={isActive ? 'page' : undefined}
+                        >
+                            <link.icon className={styles.icon} aria-hidden="true" />
+                            <span>{link.text}</span>
                         </Link>
                     );
                 })}
             </div>
-        </div>
+        </nav>
     );
 };

@@ -471,9 +471,7 @@
       }
     },
     "voice": {
-      "badgeUnlocked": "Badge unlocked: {name}. {phrase}",
-      "badgeSelected": "You selected the badge {name}. {phrase}",
-      "missionSelected": "Mission selected: {text}"
+      "badgeUnlocked": "Badge unlocked: {name}. {phrase}"
     }
   },
   "FollowUp": {
@@ -636,10 +634,6 @@
       "appearance": {
         "title": "Appearance and language",
         "description": "LudiGame display and language settings."
-      },
-      "data": {
-        "title": "Data management",
-        "description": "Export your information and manage your account data."
       },
       "preferences": {
         "title": "Game preferences",
@@ -959,7 +953,6 @@
     "invalidPoints": "Please enter a valid number of points.",
     "selectBadge": "Please choose at least one badge.",
     "saved": "Settings saved!",
-    "savedVoice": "Settings saved successfully!",
     "regionLabel": "Game settings panel",
     "title": "Game Settings",
     "general": "General settings",
@@ -984,9 +977,9 @@
     "missionsHint": "Turn on the optional challenges students can complete.",
     "missionLabel": "Mission: {text}",
     "accessibility": "Accessibility options",
-    "voiceLabel": "Feedback voice",
-    "voiceOn": "Voice on",
-    "voiceOff": "Voice off",
+    "voiceLabel": "Read achievements aloud to students",
+    "voiceOn": "Student voice on",
+    "voiceOff": "Student voice off",
     "save": "Save settings"
   },
   "Tours": {
@@ -1118,7 +1111,6 @@
     "appearance": "Appearance and language",
     "gamification": "Gamification",
     "tours": "Guided tours",
-    "data": "Data management",
     "users": "User management",
     "back": "Back to dashboard",
     "title": "Settings"
@@ -1134,16 +1126,6 @@
     "lightHint": "Standard light theme. Currently active.",
     "darkSoon": "Dark mode (coming soon)"
   },
-  "DataSettings": {
-    "title": "Data management",
-    "subtitle": "Control, download and manage the information you keep in LudiGame.",
-    "exported": "Your data was exported and downloaded successfully.",
-    "exportFailed": "The information could not be exported. Please try again.",
-    "exportTitle": "Export my information",
-    "exportHint": "Download a copy of every activity you created, with its questions, options and settings, as JSON.",
-    "exporting": "Processing and downloading...",
-    "download": "Download data (JSON)"
-  },
   "GamePreferences": {
     "saved": "Preferences saved successfully.",
     "saveFailed": "Your preferences could not be saved.",
@@ -1155,7 +1137,7 @@
     "pointsLabel": "Points per correct answer",
     "pointsHint": "Default points for each correct answer.",
     "voiceLabel": "Turn on voice narration by default",
-    "voiceHint": "When on, games read the questions aloud.",
+    "voiceHint": "When on, students hear the badges and missions they earn while playing read aloud.",
     "publicLabel": "Make my activities public by default",
     "publicHint": "When on, other teachers can see and use your activities.",
     "evaluationTitle": "Activity follow-up",
@@ -1164,7 +1146,22 @@
     "teacherLabel": "Ask for my teacher evaluation",
     "teacherHint": "When you close a live session, and later from the report, we will ask how effective the activity was for your class objective.",
     "saving": "Saving",
-    "save": "Save preferences"
+    "save": "Save preferences",
+    "voiceProfileTitle": "Voice for students",
+    "voiceProfileHint": "Each student's device uses its installed voice closest to your choice; the “natural” voices in Edge, Chrome or Windows sound best.",
+    "voiceGender": "Voice type",
+    "voiceGenders": {
+      "female": "Female",
+      "male": "Male"
+    },
+    "voiceSpeed": "Speed",
+    "voiceSpeeds": {
+      "slow": "Slow",
+      "normal": "Normal",
+      "fast": "Fast"
+    },
+    "voiceTest": "Test voice",
+    "voiceSample": "Great job! You earned the Unstoppable badge. You found three pairs in a row."
   },
   "PersonalInfo": {
     "updated": "Profile updated successfully.",
@@ -1601,7 +1598,8 @@
     "otherHint": "Explore the public activities created by this teacher.",
     "emptyTitle": "No activities here yet",
     "emptyOwn": "Create your first activity from the dashboard to start filling this space.",
-    "emptyOther": "This user has not published any activities yet."
+    "emptyOther": "This user has not published any activities yet.",
+    "activityCount": "{count, plural, one {# activity} other {# activities}}"
   },
   "AdminGuide": {
     "open": "How to read this report",

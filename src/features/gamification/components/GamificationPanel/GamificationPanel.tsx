@@ -8,7 +8,6 @@ import { badgesFor, catalogKeyForActivity, missionsFor, type BadgeDef, type Miss
 import { useAchievementCatalog } from "@/features/gamification/AchievementCatalogContext";
 import { useAchievementText } from "@/features/gamification/useAchievementText";
 import { BadgeArt } from "@/features/gamification/components/BadgeArt";
-import { useGameVoice } from "@/features/gamification/useGameVoice";
 import { useSelectedGrade, GRADE_LABELS } from "@/hooks/useSelectedGrade";
 import { useTranslations } from "next-intl";
 
@@ -42,8 +41,6 @@ export default function GamificationPanel() {
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  const { speak } = useGameVoice(config.voiceEnabled);
-
   // El grado ya no se elige aquí: se toma del grado que el docente
   // seleccionó en /welcome-educator, porque de eso dependen las misiones
   // disponibles. Se mantiene sincronizado en el estado del editor apenas
@@ -61,9 +58,8 @@ export default function GamificationPanel() {
       currentBadges.delete(badge.code);
     } else {
       currentBadges.add(badge.code);
-      // Feedback visual y auditivo al seleccionar
+      // Solo confeti: la voz es para el estudiante cuando gana el logro jugando.
       triggerConfetti();
-      if (config.voiceEnabled) speak(achievementText.badgeSelected(badge));
     }
     updateConfig({ selectedBadges: Array.from(currentBadges) });
   };
@@ -76,7 +72,6 @@ export default function GamificationPanel() {
     } else {
       currentMissions.add(missionId);
       triggerConfetti();
-      if (config.voiceEnabled) speak(achievementText.missionSelected(mission));
     }
     updateConfig({ selectedMissions: Array.from(currentMissions) });
   };
@@ -95,9 +90,8 @@ export default function GamificationPanel() {
       return;
     }
 
-    showFeedback(t("saved"));
     // El estado ya está en el contexto del editor: guardar aquí solo confirma.
-    if (config.voiceEnabled) speak(t("savedVoice"));
+    showFeedback(t("saved"));
   };
 
   const showFeedback = (msg: string) => {

@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Form, Button, Alert, Card, Spinner } from 'react-bootstrap';
-import { FaGamepad, FaUsers } from 'react-icons/fa';
+import { FaGamepad, FaUsers, FaVolumeUp } from 'react-icons/fa';
 import styles from './Settings.module.css';
 import { useTranslations } from 'next-intl';
+import { useGameVoice } from '@/features/gamification/useGameVoice';
+import { DEFAULT_VOICE_PROFILE, VOICE_GENDERS, VOICE_SPEEDS, toVoiceProfile, type VoiceProfile } from '@/features/gamification/voiceProfile';
 
 export const GamePreferences = () => {
     const [loading, setLoading] = useState(true);
@@ -19,6 +21,9 @@ export const GamePreferences = () => {
     const t = useTranslations('GamePreferences');
     const [enableStudentFeedback, setEnableStudentFeedback] = useState<boolean>(true);
     const [enableTeacherEvaluation, setEnableTeacherEvaluation] = useState<boolean>(true);
+    const [voiceProfile, setVoiceProfile] = useState<VoiceProfile>(DEFAULT_VOICE_PROFILE);
+    // La prueba suena aunque la narración esté apagada: es para que el docente escuche antes de activarla.
+    const { speak } = useGameVoice(true, voiceProfile);
 
     useEffect(() => {
         const fetchPreferences = async () => {
@@ -38,6 +43,7 @@ export const GamePreferences = () => {
                         if (data.enableTeacherEvaluation !== undefined) {
                             setEnableTeacherEvaluation(data.enableTeacherEvaluation);
                         }
+                        setVoiceProfile(toVoiceProfile(data.voiceGender, data.voiceSpeed));
                     }
                 }
             } catch (error) {
@@ -69,7 +75,9 @@ export const GamePreferences = () => {
                     defaultVoiceEnabled,
                     defaultIsPublic,
                     enableStudentFeedback,
-                    enableTeacherEvaluation
+                    enableTeacherEvaluation,
+                    voiceGender: voiceProfile.gender,
+                    voiceSpeed: voiceProfile.speed
                 })
             });
 
@@ -154,6 +162,36 @@ export const GamePreferences = () => {
                                         {t('voiceHint')}
                                     </Form.Text>
                                 </Form.Group>
+
+                                {defaultVoiceEnabled && (
+                                    <fieldset className="mb-4 p-3 rounded border">
+                                        <legend className="fs-6 fw-semibold mb-1 float-none w-auto">{t('voiceProfileTitle')}</legend>
+                                        <Form.Text className="text-muted d-block mb-3">{t('voiceProfileHint')}</Form.Text>
+                                        <div className="d-flex flex-wrap gap-3 align-items-end">
+                                            <Form.Group controlId="voice-gender">
+                                                <Form.Label>{t('voiceGender')}</Form.Label>
+                                                <Form.Select
+                                                    value={voiceProfile.gender}
+                                                    onChange={(e) => setVoiceProfile((p) => toVoiceProfile(e.target.value, p.speed))}
+                                                >
+                                                    {VOICE_GENDERS.map((g) => <option key={g} value={g}>{t(`voiceGenders.${g}`)}</option>)}
+                                                </Form.Select>
+                                            </Form.Group>
+                                            <Form.Group controlId="voice-speed">
+                                                <Form.Label>{t('voiceSpeed')}</Form.Label>
+                                                <Form.Select
+                                                    value={voiceProfile.speed}
+                                                    onChange={(e) => setVoiceProfile((p) => toVoiceProfile(p.gender, e.target.value))}
+                                                >
+                                                    {VOICE_SPEEDS.map((s) => <option key={s} value={s}>{t(`voiceSpeeds.${s}`)}</option>)}
+                                                </Form.Select>
+                                            </Form.Group>
+                                            <Button type="button" variant="outline-primary" onClick={() => speak(t('voiceSample'))}>
+                                                <FaVolumeUp className="me-2" aria-hidden="true" />{t('voiceTest')}
+                                            </Button>
+                                        </div>
+                                    </fieldset>
+                                )}
 
                                 <Form.Group className="mb-4">
                                     <Form.Check 

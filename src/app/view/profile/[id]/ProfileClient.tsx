@@ -73,8 +73,8 @@ export default function ProfileClient({
       </div>
 
       {/* Tarjeta de Perfil Superior */}
-      <Card className="border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
-        <div style={{ height: '120px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}></div>
+      <Card className="border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style={{ background: '#E8E5F7' }}>
+        <div style={{ height: '120px', background: 'linear-gradient(135deg, #6a4bff 0%, #2a1a6e 100%)' }} aria-hidden="true"></div>
         <Card.Body className="position-relative px-4 pb-4 pt-0">
           <Row>
             <Col xs={12} md={3} className="text-center text-md-start">
@@ -83,7 +83,7 @@ export default function ProfileClient({
                   marginTop: '-60px',
                   display: 'inline-block',
                   padding: '5px',
-                  backgroundColor: 'white',
+                  backgroundColor: '#E8E5F7',
                   borderRadius: '50%',
                   boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
                 }}
@@ -102,7 +102,7 @@ export default function ProfileClient({
             <Col xs={12} md={9} className="pt-3 pt-md-4">
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start">
                 <div>
-                  <h2 className="fw-bold mb-1" style={{ color: '#2c3e50', fontFamily: 'Comic Sans MS, cursive' }}>
+                  <h2 className="fw-bold mb-1" style={{ color: '#1D153A' }}>
                     {targetUser.nombre}
                   </h2>
                   <div className="d-flex flex-wrap gap-3 mt-2 text-muted">
@@ -123,8 +123,8 @@ export default function ProfileClient({
                   </div>
                 </div>
                 <div className="mt-3 mt-md-0">
-                  <Badge bg="primary" className="px-3 py-2 rounded-pill fs-6 shadow-sm">
-                    {totalActivities} Actividades
+                  <Badge className="px-3 py-2 rounded-pill fs-6 shadow-sm" style={{ background: '#6a4bff' }} bg="">
+                    {t("activityCount", { count: totalActivities })}
                   </Badge>
                 </div>
               </div>
@@ -135,10 +135,10 @@ export default function ProfileClient({
 
       {/* Título de Sección */}
       <div className="mb-4">
-        <h4 className="fw-bold" style={{ color: '#34495e' }}>
+        <h2 className="h4 fw-bold" style={{ color: '#E8E5F7' }}>
           {isOwnProfile ? t("myActivities") : t("activitiesOf", { name: targetUser.nombre })}
-        </h4>
-        <p className="text-muted">
+        </h2>
+        <p style={{ color: 'rgba(255,255,255,0.7)' }}>
           {isOwnProfile ? t("ownHint") : t("otherHint")}
         </p>
       </div>

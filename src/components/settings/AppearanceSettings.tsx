@@ -1,8 +1,11 @@
 'use client';
 
+import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, Form } from 'react-bootstrap';
 import { FaGlobe, FaPalette } from 'react-icons/fa';
-import { LocaleSwitcherSelect } from '@/components/LocaleSwitcherSelect';
+import { setUserLocale } from '@/services/locale';
+import type { Locale } from '@/config';
 import { useTranslations, useLocale } from 'next-intl';
 import styles from './Settings.module.css';
 
@@ -10,6 +13,14 @@ export const AppearanceSettings = () => {
     const t = useTranslations('LocaleSwitcher');
     const locale = useLocale();
     const ta = useTranslations('AppearanceSettings');
+    const router = useRouter();
+    const [changingLocale, startTransition] = useTransition();
+
+    // Mismo efecto que el selector de la barra superior, con un campo de formulario estándar.
+    const changeLocale = async (value: string) => {
+        await setUserLocale(value as Locale);
+        startTransition(() => router.refresh());
+    };
 
     return (
         <div className={styles.container}>
@@ -27,16 +38,17 @@ export const AppearanceSettings = () => {
                                 {ta('languageHint')}
                             </p>
                             
-                            <div style={{ maxWidth: '250px' }}>
-                                <LocaleSwitcherSelect
+                            <Form.Group controlId="settings-language" style={{ maxWidth: '280px' }}>
+                                <Form.Label>{t('label')}</Form.Label>
+                                <Form.Select
                                     defaultValue={locale}
-                                    items={[
-                                        { value: 'en', label: t('en') },
-                                        { value: 'es', label: t('es') }
-                                    ]}
-                                    label={t('label')}
-                                />
-                            </div>
+                                    onChange={(e) => changeLocale(e.target.value)}
+                                    disabled={changingLocale}
+                                >
+                                    <option value="es">{t('es')}</option>
+                                    <option value="en">{t('en')}</option>
+                                </Form.Select>
+                            </Form.Group>
                         </Card.Body>
                     </Card>
                 </div>

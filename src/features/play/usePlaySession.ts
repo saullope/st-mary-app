@@ -9,6 +9,7 @@ import { useGameVoice } from "@/features/gamification/useGameVoice";
 import { selectedAchievementCodes } from "@/features/gamification/activityAchievements";
 import type { AchievementItem } from "./AchievementToast";
 import { postPlay, type PlayParticipant } from "./playApi";
+import { toVoiceProfile } from "@/features/gamification/voiceProfile";
 
 export type { PlayParticipant };
 
@@ -41,7 +42,9 @@ export function usePlaySession({ sesion, previewMode, previewName }: UsePlaySess
   const backgroundImage: string = settings.backgroundImage || "/images/theme/tema1.jpg";
   const gradeId: number = sesion.LUDI_ACTIVIDAD.gradoId || 1;
   const voiceEnabled: boolean = settings.voiceEnabled ?? true;
-  const { speak } = useGameVoice(voiceEnabled);
+  // Perfil de voz del docente que lanzó la sesión (Configuración > Preferencias).
+  const voiceProfile = toVoiceProfile(sesion.user?.config?.voiceGender, sesion.user?.config?.voiceSpeed);
+  const { speak } = useGameVoice(voiceEnabled, voiceProfile);
   const achievementText = useAchievementText();
 
   // Solo cuentan los logros del catálogo de esta actividad y de su grado.

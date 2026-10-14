@@ -1,46 +1,87 @@
+/* Configuración: estilo sobrio y funcional, distinto del tono lúdico del resto del panel. */
+
 .container {
-    padding: 20px;
-    max-width: 1200px;
+    max-width: 960px;
     margin: 0 auto;
+    padding: 8px 0 32px;
 }
 
 .title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #649eff, #c17bff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1d153a;
+    margin-bottom: 4px;
 }
 
 .subtitle {
-    color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 30px;
-    font-size: 1.1rem;
-    font-weight: 500;
+    color: #5b5670;
+    margin-bottom: 24px;
+    font-size: 0.95rem;
 }
 
 .card {
-    background: #E8E5F7;
-    border-radius: 1.5rem;
-    border: 1px solid rgba(29, 21, 58, 0.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e1ea;
+    box-shadow: none;
     height: 100%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(29, 21, 58, 0.1);
 }
 
 .cardTitle {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #1D153A;
-    margin-bottom: 25px;
-    border-bottom: 2px dashed rgba(29, 21, 58, 0.1);
-    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1d153a;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #ecebf2;
+}
+
+.cardTitle svg {
+    color: #6a4bff;
+}
+
+/* Bootstrap: etiquetas y textos de ayuda con más contraste que el gris por defecto. */
+.container :global(.form-label) {
+    font-weight: 500;
+    color: #2b2540;
+}
+
+.container :global(.form-text),
+.container :global(.text-muted) {
+    color: #5b5670 !important;
+}
+
+/* Controles de Bootstrap con el violeta de la marca en vez del azul por defecto. */
+.container :global(.btn-primary) {
+    --bs-btn-bg: #6a4bff;
+    --bs-btn-border-color: #6a4bff;
+    --bs-btn-hover-bg: #5838e6;
+    --bs-btn-hover-border-color: #5838e6;
+    --bs-btn-active-bg: #4b2fcc;
+    --bs-btn-active-border-color: #4b2fcc;
+    --bs-btn-disabled-bg: #6a4bff;
+    --bs-btn-disabled-border-color: #6a4bff;
+}
+
+.container :global(.btn-outline-primary) {
+    --bs-btn-color: #6a4bff;
+    --bs-btn-border-color: #6a4bff;
+    --bs-btn-hover-bg: #6a4bff;
+    --bs-btn-hover-border-color: #6a4bff;
+    --bs-btn-active-bg: #5838e6;
+    --bs-btn-active-border-color: #5838e6;
+}
+
+.container :global(.form-check-input:checked) {
+    background-color: #6a4bff;
+    border-color: #6a4bff;
+}
+
+.container :global(.form-control:focus),
+.container :global(.form-select:focus),
+.container :global(.form-check-input:focus) {
+    border-color: #a594ff;
+    box-shadow: 0 0 0 0.2rem rgba(106, 75, 255, 0.2);
 }

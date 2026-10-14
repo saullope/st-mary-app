@@ -3,6 +3,7 @@ import getSession from '@/lib/auth/getSession';
 import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import styles from '@/styles/pages/sidebar.module.css';
+import designStyles from '@/styles/pages/LudiDesign.module.css';
 
 interface FirebaseSession {
   s: string;
@@ -64,15 +65,32 @@ export default async function ProfileLayout({
 
   const user: FirebaseSession = mapDecodedIdTokenToFirebaseSession(token);
 
+  // Mismo fondo y márgenes que dashboard/layout.tsx: el perfil es parte del panel.
+  const particles = Array.from({ length: 8 }).map((_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    duration: `${16 + Math.random() * 6}s`,
+    delay: `${Math.random() * 5}s`
+  }));
+
   return (
-    <div className={styles['bodySidebar']}>
-        <SidebarDashboard />
-        <div style={{ marginLeft: '80px' }}>
-          <NavbarDashboard sessionData={user} />
-          <div style={{ padding: '80px 20px 20px' }}>
+    <div className={styles['bodySidebar']} style={{ minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
+      <div className={designStyles.bgAnimation} aria-hidden="true">
+        {particles.map((p) => (
+          <span
+            key={p.id}
+            className={designStyles.particle}
+            style={{ left: p.left, animationDuration: p.duration, animationDelay: p.delay }}
+          />
+        ))}
+      </div>
+      <SidebarDashboard />
+      <div style={{ marginLeft: '250px', position: 'relative', zIndex: 1 }}>
+        <NavbarDashboard sessionData={user} />
+        <div style={{ marginLeft: '20px', padding: '20px' }}>
           {children}
-          </div>
         </div>
+      </div>
     </div>
   );
 }

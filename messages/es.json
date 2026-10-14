@@ -471,9 +471,7 @@
       }
     },
     "voice": {
-      "badgeUnlocked": "Insignia desbloqueada: {name}. {phrase}",
-      "badgeSelected": "Has seleccionado la insignia {name}. {phrase}",
-      "missionSelected": "Misión seleccionada: {text}"
+      "badgeUnlocked": "Insignia desbloqueada: {name}. {phrase}"
     }
   },
   "FollowUp": {
@@ -636,10 +634,6 @@
       "appearance": {
         "title": "Apariencia e idioma",
         "description": "Configuración visual e idioma de LudiGame."
-      },
-      "data": {
-        "title": "Gestión de datos",
-        "description": "Exporta tu información y administra los datos de tu cuenta."
       },
       "preferences": {
         "title": "Preferencias de juego",
@@ -959,7 +953,6 @@
     "invalidPoints": "Por favor, ingresa un valor válido de puntos.",
     "selectBadge": "Por favor, selecciona al menos una insignia.",
     "saved": "¡Configuración guardada!",
-    "savedVoice": "¡Configuración guardada con éxito!",
     "regionLabel": "Panel de configuración lúdica",
     "title": "Configuración Lúdica",
     "general": "Configuración general",
@@ -984,9 +977,9 @@
     "missionsHint": "Activa los retos opcionales que los estudiantes podrán completar.",
     "missionLabel": "Misión: {text}",
     "accessibility": "Opciones de accesibilidad",
-    "voiceLabel": "Voz de retroalimentación",
-    "voiceOn": "Voz activada",
-    "voiceOff": "Voz desactivada",
+    "voiceLabel": "Narrar los logros al estudiante",
+    "voiceOn": "Voz para el estudiante activada",
+    "voiceOff": "Voz para el estudiante desactivada",
     "save": "Guardar configuración"
   },
   "Tours": {
@@ -1118,7 +1111,6 @@
     "appearance": "Apariencia e idioma",
     "gamification": "Gamificación",
     "tours": "Visitas guiadas",
-    "data": "Gestión de datos",
     "users": "Gestión de usuarios",
     "back": "Volver al panel",
     "title": "Ajustes"
@@ -1134,16 +1126,6 @@
     "lightHint": "Tema claro estándar. Activo actualmente.",
     "darkSoon": "Modo oscuro (próximamente)"
   },
-  "DataSettings": {
-    "title": "Gestión de datos",
-    "subtitle": "Controla, descarga y gestiona la información que guardas en LudiGame.",
-    "exported": "Tus datos se exportaron y descargaron correctamente.",
-    "exportFailed": "No se pudo exportar la información. Inténtalo de nuevo.",
-    "exportTitle": "Exportar mi información",
-    "exportHint": "Descarga una copia de todas las actividades que creaste, con sus preguntas, opciones y configuración, en formato JSON.",
-    "exporting": "Procesando y descargando...",
-    "download": "Descargar datos (JSON)"
-  },
   "GamePreferences": {
     "saved": "Preferencias guardadas correctamente.",
     "saveFailed": "No se pudieron guardar tus preferencias.",
@@ -1155,7 +1137,7 @@
     "pointsLabel": "Puntos por respuesta correcta",
     "pointsHint": "Puntos predeterminados por cada acierto.",
     "voiceLabel": "Activar la narración por voz por defecto",
-    "voiceHint": "Si está activa, los juegos leen en voz alta los enunciados.",
+    "voiceHint": "Si está activa, el estudiante escucha en voz alta las insignias y misiones que gana mientras juega.",
     "publicLabel": "Hacer públicas mis actividades por defecto",
     "publicHint": "Si está activo, otros educadores podrán ver y usar tus actividades.",
     "evaluationTitle": "Seguimiento de actividades",
@@ -1164,7 +1146,22 @@
     "teacherLabel": "Pedir mi evaluación docente",
     "teacherHint": "Al cerrar una sesión en vivo, y después desde el reporte, te preguntaremos qué tan efectiva fue la actividad para el objetivo de tu clase.",
     "saving": "Guardando",
-    "save": "Guardar preferencias"
+    "save": "Guardar preferencias",
+    "voiceProfileTitle": "Voz para el estudiante",
+    "voiceProfileHint": "Se usa la voz instalada en el equipo del estudiante que más se parezca a la que elijas; las voces “naturales” de Edge, Chrome o Windows suenan mejor.",
+    "voiceGender": "Tipo de voz",
+    "voiceGenders": {
+      "female": "Femenina",
+      "male": "Masculina"
+    },
+    "voiceSpeed": "Velocidad",
+    "voiceSpeeds": {
+      "slow": "Lenta",
+      "normal": "Normal",
+      "fast": "Rápida"
+    },
+    "voiceTest": "Probar voz",
+    "voiceSample": "¡Muy bien! Ganaste la insignia Imparable. Encontraste tres parejas seguidas."
   },
   "PersonalInfo": {
     "updated": "Perfil actualizado correctamente.",
@@ -1601,7 +1598,8 @@
     "otherHint": "Explora las actividades públicas creadas por este educador.",
     "emptyTitle": "Aún no hay actividades aquí",
     "emptyOwn": "Crea tu primera actividad desde el panel para empezar a llenar este espacio.",
-    "emptyOther": "Este usuario aún no ha publicado actividades."
+    "emptyOther": "Este usuario aún no ha publicado actividades.",
+    "activityCount": "{count, plural, one {# actividad} other {# actividades}}"
   },
   "AdminGuide": {
     "open": "Guía de interpretación",
