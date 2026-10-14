@@ -456,8 +456,11 @@
     margin-bottom: 2rem;
 }
 
+/* Expanded: long labels wrap so the link (and its highlight) stays inside the sidebar. */
 .navLabel {
-    white-space: nowrap;
+    min-width: 0;
+    line-height: 1.25;
+    overflow-wrap: break-word;
 }
 
 /* Round handle sitting on the sidebar's right edge, next to the logo. */
@@ -527,6 +530,7 @@
 }
 
 .sidebarCollapsed .navLabel {
+    white-space: nowrap;
     position: absolute;
     left: calc(100% + 16px);
     top: 50%;
@@ -541,7 +545,7 @@
     /* Opacity, not visibility: hidden content would drop out of the link's accessible name. */
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    /* No transition here: when the sidebar collapses the labels must vanish at once, not fade as floating tooltips. */
     z-index: 1;
 }
 
@@ -561,11 +565,13 @@
 .sidebarCollapsed .navLink:focus-visible .navLabel {
     opacity: 1;
     transform: translate(0, -50%);
+    transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .sidebarDark,
-    .sidebarCollapsed .navLabel,
+    .sidebarCollapsed .navLink:hover .navLabel,
+    .sidebarCollapsed .navLink:focus-visible .navLabel,
     .sidebarToggle,
     .sidebarToggle svg {
         transition: none;
