@@ -1,0 +1,92 @@
+/* Shared table container for the teacher panel: wide tables scroll inside it. */
+.container {
+  background: #FFFFFF;
+  border: 1px solid #E4E0F5;
+  border-radius: 14px;
+  overflow-x: auto;
+}
+
+/* Overrides Bootstrap's .table cell colors and padding for this container only. */
+.table {
+  width: 100%;
+  margin: 0;
+  --bs-table-bg: transparent;
+  --bs-table-hover-bg: #FAF9FF;
+  border-collapse: collapse;
+  font-size: var(--text-ui);
+  color: #1D153A;
+}
+
+.table > thead > tr > th {
+  height: 40px;
+  padding: 0 16px;
+  background: #FAF9FF;
+  border-bottom: 1px solid #E4E0F5;
+  font-size: var(--text-meta);
+  font-weight: 700;
+  color: #5E5878;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.table > tbody > tr > td,
+.table > tbody > tr > th {
+  height: 60px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #EFECF9;
+  background: transparent;
+  font-size: var(--text-ui);
+  color: #1D153A;
+  vertical-align: middle;
+  box-shadow: none;
+}
+
+.table > tbody > tr:last-child > td,
+.table > tbody > tr:last-child > th {
+  border-bottom: 0;
+}
+
+.table > caption {
+  padding: 10px 16px;
+  font-size: var(--text-meta);
+  color: #5E5878;
+}
+
+/* Buttons inside rows. */
+.rowButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #E4E0F5;
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: #1D153A;
+  font-size: var(--text-ui);
+}
+
+.rowButton:hover {
+  background: #F3F1FB;
+}
+
+.rowButton:focus-visible {
+  outline: 3px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+/* Sort buttons in headers read as header text, not as panel buttons. */
+.table > thead > tr > th :global(.btn) {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+/* Pagination below the rows, inside the same container. */
+.footer {
+  padding: 10px 16px;
+  border-top: 1px solid #EFECF9;
+  font-size: var(--text-meta);
+  color: #5E5878;
+}

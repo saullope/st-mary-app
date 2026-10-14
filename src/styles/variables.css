@@ -93,6 +93,15 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
+
+  /* Escala del panel docente (dashboard, reportes, plantillas, seguimiento).
+     --text-meta es el mínimo absoluto: ningún texto del panel va por debajo. */
+  --text-meta: 13px;     /* metadatos, fechas, etiquetas, encabezados de columna */
+  --text-ui: 14px;       /* items del sidebar, botones, inputs, selects, celdas */
+  --text-base: 15px;     /* texto general y descripciones */
+  --text-section: 16px;  /* títulos de sección */
+  --text-card: 18px;     /* títulos dentro de tarjetas */
+  --text-title: 26px;    /* título de página (h1) */
   
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;

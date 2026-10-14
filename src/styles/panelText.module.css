@@ -1,0 +1,23 @@
+/* Base size of every teacher panel view, and a floor for Bootstrap's shrinking
+   helpers (.small, .badge are em-based and compound when nested): nothing in the
+   panel goes below --text-meta. Used by DashboardFrame and by panel pages that
+   render outside it (the activity view). */
+.panelText {
+  font-size: var(--text-base);
+}
+
+.panelText :global(.small),
+.panelText small {
+  font-size: max(var(--text-meta), 0.875em);
+}
+
+.panelText :global(.badge) {
+  font-size: var(--text-meta);
+}
+
+.panelText :global(.btn),
+.panelText :global(.form-control),
+.panelText :global(.form-select),
+.panelText :global(.dropdown-item) {
+  font-size: var(--text-ui);
+}

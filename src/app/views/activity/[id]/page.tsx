@@ -10,6 +10,7 @@ import { DeleteActivityViewButton } from "./DeleteActivityViewButton";
 import { LaunchSessionButton } from "./LaunchSessionButton";
 import styles from "@/styles/pages/view-activity.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
+import textStyles from "@/styles/panelText.module.css";
 import ActivityContentViewer from "./ActivityContentViewer";
 import { getEditorRoute } from "@/lib/editorTab";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -50,8 +51,8 @@ export default async function ActivityDetailView({ params }: PageProps) {
 
   if (!activity) {
     return (
-      <div className="container p-5 text-center">
-        <h1>{t("notFound")}</h1>
+      <div className={`container p-5 text-center ${textStyles.panelText}`}>
+        <h1 style={{ fontSize: 'var(--text-title)' }}>{t("notFound")}</h1>
         <Link href="/dashboard/my-activities" className="btn btn-primary mt-3">{t("back")}</Link>
       </div>
     );
@@ -65,8 +66,8 @@ export default async function ActivityDetailView({ params }: PageProps) {
   if (!isTemplate && !isPublic && !isOwner) {
     if (!user) redirect("/auth/login");
     return (
-      <div className="container p-5 text-center">
-        <h1 style={{ color: 'white' }}>{t("accessDenied")}</h1>
+      <div className={`container p-5 text-center ${textStyles.panelText}`}>
+        <h1 style={{ color: 'white', fontSize: 'var(--text-title)' }}>{t("accessDenied")}</h1>
         <p style={{ color: 'rgba(255,255,255,0.7)' }}>{t("privateBody")}</p>
         <Link href="/dashboard/my-activities" className="btn btn-primary mt-3">{t("backToActivities")}</Link>
       </div>
@@ -76,7 +77,7 @@ export default async function ActivityDetailView({ params }: PageProps) {
   const editRoute = getEditorRoute(activity.tipoActividadId, activity.activityId);
 
   return (
-    <div className={styles.pageContainer} style={{ position: 'relative', overflowX: 'hidden' }}>
+    <div className={`${styles.pageContainer} ${textStyles.panelText}`} style={{ position: 'relative', overflowX: 'hidden' }}>
         {/* Animated Background from Main Layout */}
         <div className={designStyles.bgAnimation}>
           {Array.from({ length: 8 }).map((_, i) => (
@@ -94,7 +95,7 @@ export default async function ActivityDetailView({ params }: PageProps) {
 
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="mb-4">
-          <Link href={isTemplate ? "/dashboard/templates" : "/dashboard/my-activities"} className="badge d-inline-flex align-items-center shadow-sm" style={{ background: '#E8E5F7', color: '#1D153A', padding: '0.6rem 1.2rem', borderRadius: '2rem', fontSize: '0.9rem', textDecoration: 'none', border: '1px solid rgba(29, 21, 58, 0.1)', transition: 'all 0.2s ease' }}>
+          <Link href={isTemplate ? "/dashboard/templates" : "/dashboard/my-activities"} className="badge d-inline-flex align-items-center shadow-sm" style={{ background: '#E8E5F7', color: '#1D153A', padding: '0.6rem 1.2rem', borderRadius: '2rem', fontSize: 'var(--text-ui)', textDecoration: 'none', border: '1px solid rgba(29, 21, 58, 0.1)', transition: 'all 0.2s ease' }}>
             <FaArrowLeft className="me-2" /> 
             {isTemplate ? t("templates") : t("myActivities")} <span className="mx-2" style={{ opacity: 0.5 }}>/</span> <span className="fw-bold">{activity.activity.activity_name}</span>
           </Link>

@@ -118,7 +118,12 @@
 }
 
 .teacherForm .legend {
-  font-size: 0.95rem;
+  font-size: var(--text-base);
+}
+
+/* Teacher panel floor: the student cards keep their own sizes. */
+.teacherForm .choice {
+  font-size: var(--text-meta);
 }
 
 .intro {

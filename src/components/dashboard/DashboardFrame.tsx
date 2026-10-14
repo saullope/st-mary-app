@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { SidebarDashboard } from "./SidebarDashboard";
 import { SIDEBAR_COLLAPSED_COOKIE, SIDEBAR_WIDTH } from "./sidebarPreference";
+import textStyles from "@/styles/panelText.module.css";
 
 interface DashboardFrameProps {
   defaultCollapsed: boolean;
@@ -32,7 +33,7 @@ export function DashboardFrame({ defaultCollapsed, navbar, children }: Dashboard
         }}
       >
         {navbar}
-        <div style={{ marginLeft: "20px", padding: "20px" }}>{children}</div>
+        <div className={textStyles.panelText} style={{ marginLeft: "20px", padding: "20px" }}>{children}</div>
       </div>
     </>
   );

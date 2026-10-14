@@ -131,37 +131,30 @@ export default function ProfileClient({
         </p>
       </div>
 
-      {/* Filtros */}
-      <div className={styles.filterCard}>
-        <ActivityFilter types={types} />
-      </div>
-
-      {activities.length > 0 ? (
-        <ActivityCollection storageKey="ludi.view.profile">
-          {activities.map((act: any) => (
-            <ActivityCard key={act.activityId} activity={act} />
-          ))}
-        </ActivityCollection>
-      ) : (
-        <div className={styles.emptyStateCard}>
-          <div className={styles.emptyStateIcon} aria-hidden="true">🌱</div>
-          <h3>{t("emptyTitle")}</h3>
-          <p>
-            {isOwnProfile ? t("emptyOwn") : t("emptyOther")}
-          </p>
-        </div>
-      )}
-      
-      {/* Paginación */}
-      {activities.length > 0 && totalPages > 1 && (
-        <div className={styles.paginationCard}>
-          <PaginationControls 
-            currentPage={searchParams.page} 
+      <ActivityCollection
+        storageKey="ludi.view.profile"
+        filters={<ActivityFilter types={types} />}
+        footer={totalPages > 1 ? (
+          <PaginationControls
+            currentPage={searchParams.page}
             totalCount={totalActivities}
             pageSize={searchParams.limit}
           />
-        </div>
-      )}
+        ) : undefined}
+        emptyState={
+          <div className={styles.emptyStateCard}>
+            <div className={styles.emptyStateIcon} aria-hidden="true">🌱</div>
+            <h3>{t("emptyTitle")}</h3>
+            <p>
+              {isOwnProfile ? t("emptyOwn") : t("emptyOther")}
+            </p>
+          </div>
+        }
+      >
+        {activities.map((act: any) => (
+          <ActivityCard key={act.activityId} activity={act} />
+        ))}
+      </ActivityCollection>
     </Container>
   );
 }

@@ -153,23 +153,28 @@
 }
 
 .titleLudi {
-    text-align: center;
-    font-size: 32px;
+    text-align: left;
+    font-size: var(--text-title);
     margin-bottom: 30px;
     position: relative;
     animation: fadeInUp 0.8s ease;
     color: white;
 }
 
+/* Glow line under the title, as a base it rests on. Absolutely positioned because
+   .titleLudi is a flex row (icon + text, see below): a normal block ::after would
+   become another flex item and show up to the right of the text. */
 .titleLudi::after {
     content: "";
-    display: block;
-    width: 80px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -8px;
     height: 3px;
-    margin: 10px auto 0;
     border-radius: 10px;
     background: linear-gradient(90deg, transparent, #00d4ff, transparent);
     opacity: 0.6;
+    pointer-events: none;
 }
 
 .star {
@@ -278,7 +283,7 @@
 }
 
 .createBody h3 {
-    font-size: 22px;
+    font-size: var(--text-card);
     font-weight: bold;
     text-shadow: 0 2px 6px rgba(0,0,0,0.6);
     margin-bottom: 10px;
@@ -286,7 +291,7 @@
 }
 
 .createBody p {
-    font-size: 15px;
+    font-size: var(--text-base);
     color: #fff;
     text-shadow: 0 2px 6px rgba(0,0,0,0.6);
     opacity: 0.9;
@@ -300,6 +305,7 @@
     background: white;
     color: #333;
     font-weight: bold;
+    font-size: var(--text-ui);
     cursor: pointer;
     transition: 0.3s;
     display: inline-block;
@@ -314,6 +320,7 @@
 
 /* NAVBAR DARK OVERRIDE */
 .darkNavbar {
+    font-size: var(--text-ui);
     background: rgba(20, 10, 46, 0.85) !important;
     backdrop-filter: blur(12px) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -355,6 +362,7 @@
     position: relative;
     overflow: hidden;
     font-weight: bold;
+    font-size: var(--text-ui);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -383,6 +391,7 @@
     align-items: center;
     justify-content: center;
     transition: transform 0.2s, background-color 0.2s;
+    font-size: var(--text-ui);
 }
 
 .btnLudiSuccess:hover {
@@ -406,7 +415,7 @@
 }
 
 .sidebarDark .navLink {
-    font-size: 15px; /* Aumentar tamaño de fuente */
+    font-size: var(--text-ui);
     color: #cfcfff !important;
     padding: 12px 20px; /* Más padding horizontal */
     margin: 4px 0;
@@ -539,7 +548,7 @@
     border-radius: 10px;
     background: #ffffff;
     color: #140a2e;
-    font-size: 14px;
+    font-size: var(--text-ui);
     font-weight: 700;
     box-shadow: 0 4px 0 #6a4bff, 0 12px 28px rgba(0, 0, 0, 0.4);
     /* Opacity, not visibility: hidden content would drop out of the link's accessible name. */
@@ -640,7 +649,7 @@
   padding: 8px 18px;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: var(--text-ui);
   width: fit-content;
   backdrop-filter: blur(4px);
   transition: background-color 0.2s ease, transform 0.2s ease;
@@ -661,12 +670,13 @@
 
 /* Centrado del título de bienvenida */
 .titleLudi {
-  font-size: 2rem;
+  font-size: var(--text-title);
   font-weight: 700;
   color: white;
-  display: flex;
+  /* inline-flex: the title hugs its text, so the glow line under it spans only the title. */
+  display: inline-flex;
   align-items: center;
-  justify-content: center; /* Centrado horizontal */
+  justify-content: flex-start;
   gap: 15px;
 }
 
@@ -690,7 +700,7 @@
   background: rgba(255, 255, 255, 0.15);
   padding: 4px 12px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: var(--text-meta);
   width: fit-content;
   display: flex;
   align-items: center;
@@ -709,7 +719,7 @@
 }
 
 .ludiContent h3 {
-  font-size: 1.25rem;
+  font-size: var(--text-card);
   margin: 10px 0 6px 0;
   color: white;
   font-weight: 700;
@@ -717,7 +727,7 @@
 }
 
 .ludiContent p {
-  font-size: 0.85rem;
+  font-size: var(--text-base);
   color: rgba(255, 255, 255, 0.75);
   margin-bottom: 15px;
 }
@@ -730,7 +740,7 @@
   border-radius: 10px;
   font-weight: 600;
   width: fit-content;
-  font-size: 14px;
+  font-size: var(--text-ui);
 }
 
 /* Posicionamiento del GIF como en image_e8e77d.jpg */

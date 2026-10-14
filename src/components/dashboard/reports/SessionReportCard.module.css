@@ -14,7 +14,6 @@
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 18px;
 }
 
 .metaRow {
@@ -38,7 +37,7 @@
   gap: 6px;
   padding: 2px 10px;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -94,7 +93,7 @@
 }
 
 .stat dt {
-  font-size: 0.75rem;
+  font-size: var(--text-meta);
   font-weight: 700;
   line-height: 1.25;
   color: #6b6588;
@@ -107,7 +106,7 @@
   flex-wrap: wrap;
   gap: 4px 6px;
   margin: 4px 0 0;
-  font-size: 1.1rem;
+  font-size: var(--text-card);
   font-weight: 800;
   line-height: 1.2;
   color: #140a2e;

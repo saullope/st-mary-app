@@ -76,7 +76,7 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
                 </div>
               )}
               <div>
-                <h5 className="fw-bold mb-0" style={{ color: '#1D153A' }}>{student.nombre}</h5>
+                <h5 className="fw-bold mb-0" style={{ color: '#1D153A', fontSize: 'var(--text-card)' }}>{student.nombre}</h5>
                 <div className="small" style={{ color: '#4a4266' }}>
                   {t("score")} <strong style={{ color: isAboveAverage ? '#198754' : '#dc3545' }}>{t("points", { score: student.puntaje_total })}</strong>
                 </div>
@@ -153,7 +153,7 @@ export default function StudentDetailSidebar({ student, onClose, avgClassScore, 
                         </div>
                       )}
                       <div className="min-w-0">
-                        <div className="small text-uppercase fw-bold" style={{ color: a.color, fontSize: '0.65rem' }}>{a.kind}</div>
+                        <div className="small text-uppercase fw-bold" style={{ color: a.color, fontSize: 'var(--text-meta)' }}>{a.kind}</div>
                         <div className="fw-bold small text-truncate" style={{ color: '#1D153A' }}>{a.name}</div>
                       </div>
                     </div>

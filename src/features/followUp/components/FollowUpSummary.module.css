@@ -14,6 +14,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: var(--text-section);
   font-weight: 700;
   margin-bottom: 1.25rem;
 }
@@ -25,7 +26,7 @@
 }
 
 .heading {
-  font-size: 0.85rem;
+  font-size: var(--text-meta);
   font-weight: 700;
   text-transform: uppercase;
   color: #4a4266;
@@ -40,7 +41,7 @@
 }
 
 .metrics dt {
-  font-size: 0.8rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   color: #4a4266;
 }
@@ -53,7 +54,7 @@
 
 .muted {
   color: #4a4266;
-  font-size: 0.9rem;
+  font-size: var(--text-ui);
   margin-bottom: 0.75rem;
 }
 

@@ -103,7 +103,7 @@ export default function StudentSessionLog({ respuestas }: StudentSessionLogProps
             </div>
 
             <div className="card-body p-3 pt-1">
-              <h6 className="fw-bold text-dark mb-3">
+              <h6 className="fw-bold text-dark mb-3" style={{ fontSize: "var(--text-base)" }}>
                 <StatusIcon className={`${statusClass} me-2 fs-5 align-text-bottom`} aria-hidden="true" />
                 {r.pregunta?.enunciado || t("noQuestionText")}
               </h6>
@@ -111,7 +111,7 @@ export default function StudentSessionLog({ respuestas }: StudentSessionLogProps
               {isWritten ? (
                 <div className="d-flex flex-column gap-2">
                   <div className="p-2 rounded border bg-light">
-                    <small className="text-muted d-block" style={{ fontSize: "0.7rem" }}>{t("theirAnswer")}</small>
+                    <small className="text-muted d-block" style={{ fontSize: "var(--text-meta)" }}>{t("theirAnswer")}</small>
                     <p className="text-dark small mb-0" style={{ whiteSpace: "pre-wrap" }}>{r.respuestaTexto || t("noAnswer")}</p>
                   </div>
                   <WrittenAnswerReview
@@ -125,7 +125,7 @@ export default function StudentSessionLog({ respuestas }: StudentSessionLogProps
                   <div className={`d-flex align-items-start p-2 rounded border ${r.esCorrecta ? "bg-success bg-opacity-10 border-success" : "bg-danger bg-opacity-10 border-danger"} border-opacity-50`}>
                     {r.esCorrecta ? <FaCheck className="text-success mt-1 me-2 flex-shrink-0" /> : <FaTimes className="text-danger mt-1 me-2 flex-shrink-0" />}
                     <div>
-                      <small className="text-muted d-block" style={{ fontSize: "0.7rem" }}>{t("theirAnswer")}</small>
+                      <small className="text-muted d-block" style={{ fontSize: "var(--text-meta)" }}>{t("theirAnswer")}</small>
                       <span className="text-dark fw-bold small">{studentAnswerText(r, t)}</span>
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export default function StudentSessionLog({ respuestas }: StudentSessionLogProps
                     <div className="d-flex align-items-start p-2 rounded bg-light border border-secondary border-opacity-25">
                       <FaCheck className="text-success mt-1 me-2 flex-shrink-0" />
                       <div>
-                        <small className="text-muted d-block" style={{ fontSize: "0.7rem" }}>{t("correctAnswer")}</small>
+                        <small className="text-muted d-block" style={{ fontSize: "var(--text-meta)" }}>{t("correctAnswer")}</small>
                         <span className="text-dark fw-bold small">{correctAnswerText(r.pregunta, t)}</span>
                       </div>
                     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { Children, useEffect, useState, type ReactNode } from "react";
 import { FaGrip, FaList } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import styles from "./ActivityCollection.module.css";
@@ -10,6 +10,12 @@ type ViewMode = "list" | "grid";
 interface ActivityCollectionProps {
   /** localStorage key that remembers the chosen view for this page. */
   storageKey: string;
+  /** Search and filter controls, shown in the same row as the view toggle. */
+  filters?: ReactNode;
+  /** Pagination; in list view it becomes the footer of the list container. */
+  footer?: ReactNode;
+  /** Shown instead of the items when there are none (filters stay visible). */
+  emptyState?: ReactNode;
   children: ReactNode;
 }
 
@@ -31,7 +37,7 @@ function saveViewMode(key: string, mode: ViewMode) {
 }
 
 /** Activities or templates shown as a compact list or a grid, with a toggle to switch. */
-export default function ActivityCollection({ storageKey, children }: ActivityCollectionProps) {
+export default function ActivityCollection({ storageKey, filters, footer, emptyState, children }: ActivityCollectionProps) {
   const t = useTranslations("Collection");
   const [mode, setMode] = useState<ViewMode>("list");
 
@@ -51,9 +57,12 @@ export default function ActivityCollection({ storageKey, children }: ActivityCol
     { value: "grid", label: t("grid"), icon: <FaGrip aria-hidden="true" /> },
   ];
 
+  const isEmpty = Children.count(children) === 0;
+
   return (
     <div>
       <div className={styles.toolbar}>
+        {filters}
         <div className={styles.toggle} role="group" aria-label={t("view")}>
           {options.map((option) => (
             <button
@@ -69,10 +78,21 @@ export default function ActivityCollection({ storageKey, children }: ActivityCol
           ))}
         </div>
       </div>
-      {/* data-view lets item styles from other modules adapt to the layout. */}
-      <div className={mode === "list" ? styles.list : styles.grid} data-view={mode}>
-        {children}
-      </div>
+
+      {isEmpty ? (
+        emptyState
+      ) : mode === "list" ? (
+        // data-view lets item styles from other modules adapt to the layout.
+        <div className={styles.list} data-view="list">
+          <div className={styles.rows}>{children}</div>
+          {footer && <div className={styles.footer}>{footer}</div>}
+        </div>
+      ) : (
+        <>
+          <div className={styles.grid} data-view="grid">{children}</div>
+          {footer && <div className={`${styles.list} ${styles.footer}`}>{footer}</div>}
+        </>
+      )}
     </div>
   );
 }

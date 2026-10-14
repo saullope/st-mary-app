@@ -18,6 +18,20 @@
   transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 
+/* Inside list rows the trigger is a flat 34px button. */
+[data-view="list"] .trigger {
+  width: 34px;
+  height: 34px;
+  border-width: 1px;
+  border-radius: 10px;
+  font-size: var(--text-ui);
+  box-shadow: none;
+}
+
+[data-view="list"] .trigger:active {
+  transform: none;
+}
+
 .trigger:hover,
 .trigger[aria-expanded="true"] {
   background: #f3f1fb;
@@ -72,7 +86,7 @@
   border-radius: 10px;
   background: transparent;
   color: #140a2e;
-  font-size: 0.92rem;
+  font-size: var(--text-ui);
   font-weight: 700;
   text-align: left;
   text-decoration: none;

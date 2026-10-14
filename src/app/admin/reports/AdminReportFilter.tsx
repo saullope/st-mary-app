@@ -25,6 +25,7 @@ export default function AdminReportFilter() {
     } else {
       params.delete(key);
     }
+    params.delete("page");
 
     router.push(`?${params.toString()}`);
   }, [searchParams, router]);

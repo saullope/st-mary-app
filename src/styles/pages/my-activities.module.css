@@ -24,20 +24,7 @@
   border-bottom: 2px dashed #e0e0e0;
 }
 
-.filterCard {
-  background: #E8E5F7; /* Lavanda suave */
-  border-radius: 1.5rem;
-  padding: 1.5rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  margin-bottom: 2rem;
-  transition: transform 0.3s ease;
-  border: 1px solid rgba(29, 21, 58, 0.05);
-}
 
-.filterCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(29, 21, 58, 0.1);
-}
 
 .emptyStateCard {
   background: transparent;
@@ -64,7 +51,7 @@
 .emptyStateCard h3 {
   color: #ffffff; /* Blanco nítido */
   font-weight: 800;
-  font-size: 1.8rem;
+  font-size: var(--text-card);
   margin-top: 1rem;
   margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
@@ -72,7 +59,7 @@
 
 .emptyStateCard p {
   color: rgba(255, 255, 255, 0.85); /* Blanco para la descripción */
-  font-size: 1.1rem;
+  font-size: var(--text-base);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -91,15 +78,6 @@
   100% { transform: translateY(0px); }
 }
 
-.paginationCard {
-  background: white;
-  border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-}
 
 /* Original Buttons (Restored) */
 .primaryButton {

@@ -8,6 +8,7 @@ import AdminReportFilter from "./AdminReportFilter";
 import AdminInfoModal from "./AdminInfoModal";
 import AdminFollowUpTable from "./AdminFollowUpTable";
 import AdminReportViewToggle, { type AdminReportView } from "./AdminReportViewToggle";
+import PaginationControls from "@/components/dashboard/PaginationControls";
 import { aggregateFollowUp, type FollowUpSession } from "@/features/followUp/followUp";
 import styles from "@/styles/pages/my-activities.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
@@ -25,6 +26,8 @@ interface PageProps {
     grade?: string;
     dateRange?: string;
     view?: string;
+    page?: string;
+    limit?: string;
   }>;
 }
 
@@ -40,7 +43,9 @@ export default async function AdminReportsPage({ searchParams }: PageProps) {
   const searchFilter = resolvedSearchParams.search?.toLowerCase();
   const gradeFilter = resolvedSearchParams.grade;
   const dateFilter = resolvedSearchParams.dateRange;
-  const view: AdminReportView = resolvedSearchParams.view === "sessions" ? "sessions" : "activities";
+  const view: AdminReportView = resolvedSearchParams.view === "activities" ? "activities" : "sessions";
+  const limit = resolvedSearchParams.limit === "5" ? 5 : 10;
+  const requestedPage = Math.max(1, parseInt(resolvedSearchParams.page ?? "1") || 1);
 
   // Solo sesiones que empezaron: en la BD conviven "lobby" y el heredado "ESPERANDO" (ver sessionState.ts).
   const whereCondition: any = {
@@ -168,6 +173,11 @@ export default async function AdminReportsPage({ searchParams }: PageProps) {
   });
   const followUpRows = aggregateFollowUp(followUpSessions);
 
+  // The consolidated view uses every session; only the per-session table is paginated.
+  const totalPages = Math.max(1, Math.ceil(processedSessions.length / limit));
+  const page = Math.min(requestedPage, totalPages);
+  const pageSessions = processedSessions.slice((page - 1) * limit, page * limit);
+
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 0' }}>
       <div className={styles.headerContainer} style={{ borderBottomColor: 'rgba(255,255,255,0.1)' }}>
@@ -182,7 +192,7 @@ export default async function AdminReportsPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      <div className={styles.filterCard}>
+      <div className="d-flex flex-wrap align-items-center mb-3" style={{ gap: '12px' }}>
         <AdminReportFilter />
       </div>
 
@@ -192,7 +202,12 @@ export default async function AdminReportsPage({ searchParams }: PageProps) {
         <div className="col-12">
             {view === "activities"
               ? <AdminFollowUpTable rows={followUpRows} />
-              : <AdminReportsTable sessions={processedSessions} />}
+              : (
+                <AdminReportsTable
+                  sessions={pageSessions}
+                  footer={<PaginationControls totalCount={processedSessions.length} currentPage={page} pageSize={limit} />}
+                />
+              )}
         </div>
       </div>
     </div>

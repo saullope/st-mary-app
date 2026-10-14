@@ -1699,7 +1699,11 @@
     "receptionMid": "Medio",
     "receptionLow": "Bajo",
     "noParticipants": "Sin participantes registrados.",
-    "noSessions": "No se encontraron sesiones."
+    "noSessions": "No se encontraron sesiones.",
+    "viewSummary": "Ver resumen",
+    "viewSummaryOf": "Ver resumen de {name}",
+    "actions": "Acciones",
+    "close": "Cerrar"
   },
   "SessionTimeout": {
     "idleTitle": "¿Sigues ahí?",

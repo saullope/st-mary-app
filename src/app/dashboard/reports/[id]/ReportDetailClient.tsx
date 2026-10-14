@@ -7,6 +7,7 @@ import { isPendingReview } from "@/features/form/formQuestions";
 import { FollowUpSummary } from "@/features/followUp/components/FollowUpSummary";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import tableStyles from "@/components/ui/DataTable.module.css";
 
 interface ReportDetailClientProps {
   session: any;
@@ -44,7 +45,7 @@ export default function ReportDetailClient({
     <div className="container py-4 print-container" style={{ maxWidth: '1200px' }}>
       {/* Breadcrumb Navigation */}
       <div className="mb-4 no-print">
-        <Link href="/dashboard/reports" className="badge d-inline-flex align-items-center shadow-sm" style={{ background: '#E8E5F7', color: '#1D153A', padding: '0.6rem 1.2rem', borderRadius: '2rem', fontSize: '0.9rem', textDecoration: 'none', border: '1px solid rgba(29, 21, 58, 0.1)', transition: 'all 0.2s ease' }}>
+        <Link href="/dashboard/reports" className="badge d-inline-flex align-items-center shadow-sm" style={{ background: '#E8E5F7', color: '#1D153A', padding: '0.6rem 1.2rem', borderRadius: '2rem', fontSize: 'var(--text-ui)', textDecoration: 'none', border: '1px solid rgba(29, 21, 58, 0.1)', transition: 'all 0.2s ease' }}>
           <FaArrowLeft className="me-2" /> 
           Reportes <span className="mx-2" style={{ opacity: 0.5 }}>/</span> <span className="fw-bold">{session.LUDI_ACTIVIDAD.activity.activity_name}</span>
         </Link>
@@ -53,7 +54,7 @@ export default function ReportDetailClient({
       {/* Header & Export Action */}
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 pb-3" style={{ borderBottom: '2px dashed rgba(255,255,255,0.1)' }}>
         <div>
-          <h2 className="fw-bold mb-1" style={{ color: '#E8E5F7' }}>{session.LUDI_ACTIVIDAD.activity.activity_name}</h2>
+          <h2 className="fw-bold mb-1" style={{ color: '#E8E5F7', fontSize: 'var(--text-title)' }}>{session.LUDI_ACTIVIDAD.activity.activity_name}</h2>
           <p style={{ color: 'rgba(255,255,255,0.7)' }}>{t("sessionPin")}: <span className="fw-bold" style={{ color: '#E8E5F7' }}>{session.codigo}</span> | {new Date(session.creada_en).toLocaleDateString()}</p>
         </div>
         <div className="mt-3 mt-md-0 no-print d-flex align-items-center gap-3">
@@ -76,8 +77,8 @@ export default function ReportDetailClient({
                 <FaExclamationTriangle className="fs-3" style={{ color: '#dc3545' }} />
               </div>
               <div>
-                <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266' }}>{t("hardQuestions")}</h6>
-                <h5 className="fw-bold mb-0" style={{ color: '#1D153A' }}>
+                <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266', fontSize: 'var(--text-meta)' }}>{t("hardQuestions")}</h6>
+                <h5 className="fw-bold mb-0" style={{ color: '#1D153A', fontSize: 'var(--text-card)' }}>
                   {hardestQuestion && hardestRate > 0 
                     ? t("hardestValue", { text: hardestQuestion.text, rate: hardestRate })
                     : t("notEnoughData")}
@@ -93,8 +94,8 @@ export default function ReportDetailClient({
                 <FaClock className="fs-3" style={{ color: '#1D153A' }} />
               </div>
               <div>
-                <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266' }}>{t("timeForAnswer")}</h6>
-                <h3 className="fw-bold mb-0" style={{ color: '#1D153A' }}>{avgTimeSeconds} {t("seconds")}</h3>
+                <h6 className="text-uppercase fw-bold mb-1" style={{ color: '#4a4266', fontSize: 'var(--text-meta)' }}>{t("timeForAnswer")}</h6>
+                <h3 className="fw-bold mb-0" style={{ color: '#1D153A', fontSize: 'var(--text-card)' }}>{avgTimeSeconds} {t("seconds")}</h3>
               </div>
             </div>
           </div>
@@ -116,7 +117,7 @@ export default function ReportDetailClient({
 
       {/* Podium - Lavender Theme */}
       <div className="mb-5 p-4 rounded-4 shadow-lg position-relative" style={{ background: '#E8E5F7', border: '1px solid rgba(29, 21, 58, 0.05)' }}>
-        <h3 className="text-center fw-bold mb-5 flex-row align-items-center justify-content-center d-flex" style={{ color: '#1D153A' }}>
+        <h3 className="text-center fw-bold mb-5 flex-row align-items-center justify-content-center d-flex" style={{ color: '#1D153A', fontSize: 'var(--text-section)' }}>
             <FaTrophy className="me-2" style={{ color: '#e5b869' }}/> {t("podium")}
         </h3>
         
@@ -176,34 +177,34 @@ export default function ReportDetailClient({
       </div>
 
       {/* Student Identity Table */}
-      <h4 className="fw-bold mb-4" style={{ color: '#E8E5F7' }}>{t("detailedPerformance")}</h4>
-      <div className="card border-0 shadow-sm" style={{ borderRadius: '1.5rem', overflow: 'hidden', background: '#E8E5F7' }}>
-        <div className="table-responsive">
-          <table className="table align-middle mb-0" style={{ background: 'transparent' }}>
-            <thead style={{ borderBottom: '2px solid rgba(29, 21, 58, 0.1)' }}>
-              <tr>
-                <th className="px-4 py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("student")}</th>
-                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("score")}</th>
-                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("effectiveness")}</th>
-                <th className="py-3" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("trend")}</th>
-                <th className="py-3 text-end no-print" style={{ background: 'transparent', color: '#4a4266', borderBottom: 'none' }}>{t("actions")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {participantes.map((p) => {
-                let pCorrect = 0;
-                let pTotal = 0;
-                p.respuestas.forEach((r: any) => {
-                  if (isPendingReview(r)) return;
-                  pTotal++;
-                  if (r.esCorrecta) pCorrect++;
-                });
-                const effectiveness = pTotal > 0 ? Math.round((pCorrect / pTotal) * 100) : 0;
-                const isAboveAverage = p.puntaje_total >= avgClassScore;
+      <h4 className="fw-bold mb-4" style={{ color: '#E8E5F7', fontSize: 'var(--text-section)' }}>{t("detailedPerformance")}</h4>
+      <div className={tableStyles.container}>
+        <table className={`table align-middle ${tableStyles.table}`}>
+          <thead>
+            <tr>
+              <th>{t("student")}</th>
+              <th>{t("score")}</th>
+              <th>{t("effectiveness")}</th>
+              <th>{t("trend")}</th>
+              <th className="text-end no-print">{t("actions")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {participantes.map((p) => {
+              let pCorrect = 0;
+              let pTotal = 0;
+              p.respuestas.forEach((r: any) => {
+                if (isPendingReview(r)) return;
+                pTotal++;
+                if (r.esCorrecta) pCorrect++;
+              });
+              const effectiveness = pTotal > 0 ? Math.round((pCorrect / pTotal) * 100) : 0;
+              const isAboveAverage = p.puntaje_total >= avgClassScore;
 
-                return (
-                  <tr key={p.id.toString()} className="clickable-row" onClick={() => openStudentDetail(p)} style={{ borderBottom: '1px solid rgba(29, 21, 58, 0.05)', cursor: 'pointer' }}>
-                    <td className="px-4 py-3 d-flex align-items-center border-0" style={{ background: 'transparent' }}>
+              return (
+                <tr key={p.id.toString()} className="clickable-row" onClick={() => openStudentDetail(p)} style={{ cursor: 'pointer' }}>
+                  <td>
+                    <div className="d-flex align-items-center">
                       {p.avatar ? (
                         <img src={p.avatar.urlImagen} alt="" className="rounded-circle shadow-sm me-3" style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
                       ) : (
@@ -212,45 +213,45 @@ export default function ReportDetailClient({
                         </div>
                       )}
                       <span className="fw-bold" style={{ color: '#1D153A' }}>{p.nombre}</span>
-                    </td>
-                    <td className="py-3 fw-bold border-0" style={{ background: 'transparent', color: '#1D153A' }}>{t("points", { score: p.puntaje_total })}</td>
-                    <td className="py-3 border-0" style={{ background: 'transparent' }}>
-                      <div className="d-flex align-items-center">
-                        <span className="me-2 fw-bold" style={{ color: effectiveness >= 70 ? '#198754' : effectiveness >= 50 ? '#e5b869' : '#dc3545' }}>
-                          {effectiveness}%
-                        </span>
-                        <div className="progress flex-grow-1 shadow-sm" style={{ height: '6px', maxWidth: '100px', backgroundColor: 'rgba(29, 21, 58, 0.1)' }}>
-                          <div className="progress-bar" style={{ width: `${effectiveness}%`, backgroundColor: effectiveness >= 70 ? '#198754' : effectiveness >= 50 ? '#e5b869' : '#dc3545' }} />
-                        </div>
+                    </div>
+                  </td>
+                  <td className="fw-bold">{t("points", { score: p.puntaje_total })}</td>
+                  <td>
+                    <div className="d-flex align-items-center">
+                      <span className="me-2 fw-bold" style={{ color: effectiveness >= 70 ? '#198754' : effectiveness >= 50 ? '#e5b869' : '#dc3545' }}>
+                        {effectiveness}%
+                      </span>
+                      <div className="progress flex-grow-1 shadow-sm" style={{ height: '6px', maxWidth: '100px', backgroundColor: 'rgba(29, 21, 58, 0.1)' }}>
+                        <div className="progress-bar" style={{ width: `${effectiveness}%`, backgroundColor: effectiveness >= 70 ? '#198754' : effectiveness >= 50 ? '#e5b869' : '#dc3545' }} />
                       </div>
-                    </td>
-                    <td className="py-3 border-0" style={{ background: 'transparent' }}>
-                      {isAboveAverage ? (
-                        <span className="badge rounded-pill px-3 py-2 d-inline-flex align-items-center" style={{ background: 'rgba(25, 135, 84, 0.15)', color: '#198754' }}>
-                          <FaArrowUp className="me-1" /> {t("overAverage")}
-                        </span>
-                      ) : (
-                        <span className="badge rounded-pill px-3 py-2 d-inline-flex align-items-center" style={{ background: 'rgba(220, 53, 69, 0.15)', color: '#dc3545' }}>
-                          <FaArrowDown className="me-1" /> {t("belowAverage")}
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3 text-end px-4 border-0 no-print" style={{ background: 'transparent' }}>
-                       <button className="btn btn-sm rounded-circle shadow-sm" style={{ width: '35px', height: '35px', background: 'white', color: '#1D153A', border: '1px solid rgba(29, 21, 58, 0.1)' }}>
-                         <FaExternalLinkAlt />
-                       </button>
-                    </td>
-                  </tr>
-                );
-              })}
-              {participantes.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="text-center py-5 text-muted border-0" style={{ background: 'transparent' }}>{t("noStudentsInSession")}</td>
+                    </div>
+                  </td>
+                  <td>
+                    {isAboveAverage ? (
+                      <span className="badge rounded-pill px-3 py-2 d-inline-flex align-items-center" style={{ background: 'rgba(25, 135, 84, 0.15)', color: '#198754' }}>
+                        <FaArrowUp className="me-1" /> {t("overAverage")}
+                      </span>
+                    ) : (
+                      <span className="badge rounded-pill px-3 py-2 d-inline-flex align-items-center" style={{ background: 'rgba(220, 53, 69, 0.15)', color: '#dc3545' }}>
+                        <FaArrowDown className="me-1" /> {t("belowAverage")}
+                      </span>
+                    )}
+                  </td>
+                  <td className="text-end no-print">
+                     <button className={tableStyles.rowButton}>
+                       <FaExternalLinkAlt />
+                     </button>
+                  </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              );
+            })}
+            {participantes.length === 0 && (
+              <tr>
+                <td colSpan={5} className="text-center text-muted">{t("noStudentsInSession")}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
 
       {/* Sidebar Component */}

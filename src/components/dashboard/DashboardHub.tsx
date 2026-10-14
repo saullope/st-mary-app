@@ -51,7 +51,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
       <section className={`${designStyles.glassCardDark} mb-5 p-4 p-md-5`}>
 
         <div className="flex-md-row mb-4 pb-3 border-bottom border-light border-opacity-10">
-          <h2 id="dashboard-user-greeting" className={designStyles.titleLudi} style={{ marginBottom: 0, textAlign: 'center' }}>
+          <h2 id="dashboard-user-greeting" className={designStyles.titleLudi} style={{ marginBottom: 0 }}>
             <span className={designStyles.star}>★</span> {t('whatYouCanDo')}
           </h2>
         </div>
@@ -109,7 +109,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
         <div className="col-12 col-xl-8">
           {drafts && drafts.length > 0 ? (
             <div className="mb-4">
-              <h5 className="fw-bold text-white mb-3 d-flex align-items-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+              <h5 className="fw-bold text-white mb-3 d-flex align-items-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', fontSize: 'var(--text-section)' }}>
                 <FaPen className="me-2" /> {t('continueJob')}
               </h5>
               <div className={`${designStyles.glassCardDark} p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between`}>
@@ -117,7 +117,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
                   <span className="badge bg-primary bg-opacity-25 text-white mb-2 border border-primary border-opacity-50 rounded-pill">
                     {drafts[0].tipoActividad?.nombre || "Actividad"}
                   </span>
-                  <h4 className="fw-bold text-white mb-1">{drafts[0].activity?.activity_name || t('untitledActivity')}</h4>
+                  <h4 className="fw-bold text-white mb-1" style={{ fontSize: 'var(--text-card)' }}>{drafts[0].activity?.activity_name || t('untitledActivity')}</h4>
                   <p className="text-white opacity-75 small mb-0">{t('lastEdition')}</p>
                 </div>
                 <div className="mt-3 mt-md-0">
@@ -135,7 +135,7 @@ export default function DashboardHub({ userName, drafts }: DashboardHubProps) {
             </div>
           ) : (
             <div className="mb-4">
-              <h5 className="fw-bold text-white mb-3 d-flex align-items-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+              <h5 className="fw-bold text-white mb-3 d-flex align-items-center" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', fontSize: 'var(--text-section)' }}>
                 <FaPen className="me-2" /> {t('continueJob')}
               </h5>
               <div className={`${designStyles.glassCardDark} p-4 text-center`}>

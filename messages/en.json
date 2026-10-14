@@ -1699,7 +1699,11 @@
     "receptionMid": "Medium",
     "receptionLow": "Low",
     "noParticipants": "No participants recorded.",
-    "noSessions": "No sessions found."
+    "noSessions": "No sessions found.",
+    "viewSummary": "View summary",
+    "viewSummaryOf": "View summary of {name}",
+    "actions": "Actions",
+    "close": "Close"
   },
   "SessionTimeout": {
     "idleTitle": "Are you still there?",

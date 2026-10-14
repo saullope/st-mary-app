@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import TemplateCard from "./TemplateCard";
 import ActivityCollection from "@/components/dashboard/collection/ActivityCollection";
+import filterStyles from "@/components/dashboard/ActivityFilter.module.css";
 import styles from "@/styles/pages/my-activities.module.css";
 import designStyles from "@/styles/pages/LudiDesign.module.css";
 import { FaShapes } from "react-icons/fa6";
@@ -93,73 +94,57 @@ export default async function TemplatesPage({
         </div>
       </div>
 
-      <div className={`${styles.filterCard} mb-4 d-flex justify-content-between align-items-center`}>
-        <div className="d-flex gap-3">
-          <div className="dropdown">
-            <button 
-              className="btn dropdown-toggle fw-bold" 
-              type="button" 
-              data-bs-toggle="dropdown"
-              style={{
-                backgroundColor: 'white',
-                color: '#1D153A',
-                border: '1px solid rgba(29, 21, 58, 0.2)',
-                borderRadius: '2rem',
-                padding: '0.4rem 1rem',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-              }}
-            >
-              {t("gradeFilter", { grade: getGradeTitle(currentGradeFilter) })}
-            </button>
-            <ul className="dropdown-menu shadow-sm border-0">
-              <li><Link className="dropdown-item" href={`?grade=firstGrade&subject=${currentSubjectFilter}`}>{t("grade1")}</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=secondGrade&subject=${currentSubjectFilter}`}>{t("grade2")}</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=thirdGrade&subject=${currentSubjectFilter}`}>{t("grade3")}</Link></li>
-              <li><hr className="dropdown-divider" /></li>
-              <li><Link className="dropdown-item" href={`?grade=All&subject=${currentSubjectFilter}`}>{t("allGrades")}</Link></li>
-            </ul>
-          </div>
-          
-          <div className="dropdown">
-            <button 
-              className="btn dropdown-toggle fw-bold" 
-              type="button" 
-              data-bs-toggle="dropdown"
-              style={{
-                backgroundColor: 'white',
-                color: '#1D153A',
-                border: '1px solid rgba(29, 21, 58, 0.2)',
-                borderRadius: '2rem',
-                padding: '0.4rem 1rem',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-              }}
-            >
-              {t("subjectFilter", { subject: currentSubjectFilter === "All" ? t("allSubjectsShort") : currentSubjectFilter })}
-            </button>
-            <ul className="dropdown-menu shadow-sm border-0">
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=All`}>{t("allSubjects")}</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Matemáticas`}>{t("subjects.math")}</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Lengua`}>{t("subjects.language")}</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Tecnología`}>{t("subjects.technology")}</Link></li>
-              <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Efemérides`}>{t("subjects.ephemerides")}</Link></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <ActivityCollection
+        storageKey="ludi.view.templates"
+        filters={
+          <div className={filterStyles.filterWrapper}>
+            <div className="dropdown">
+              <button
+                className={`dropdown-toggle ${filterStyles.chip} ${filterStyles.chipActive}`}
+                type="button"
+                data-bs-toggle="dropdown"
+              >
+                {t("gradeFilter", { grade: getGradeTitle(currentGradeFilter) })}
+              </button>
+              <ul className="dropdown-menu shadow-sm border-0">
+                <li><Link className="dropdown-item" href={`?grade=firstGrade&subject=${currentSubjectFilter}`}>{t("grade1")}</Link></li>
+                <li><Link className="dropdown-item" href={`?grade=secondGrade&subject=${currentSubjectFilter}`}>{t("grade2")}</Link></li>
+                <li><Link className="dropdown-item" href={`?grade=thirdGrade&subject=${currentSubjectFilter}`}>{t("grade3")}</Link></li>
+                <li><hr className="dropdown-divider" /></li>
+                <li><Link className="dropdown-item" href={`?grade=All&subject=${currentSubjectFilter}`}>{t("allGrades")}</Link></li>
+              </ul>
+            </div>
 
-      {templates.length > 0 ? (
-        <ActivityCollection storageKey="ludi.view.templates">
-          {templates.map((template) => (
-            <TemplateCard key={template.activityId} template={template} />
-          ))}
-        </ActivityCollection>
-      ) : (
-        <div className={styles.emptyStateCard}>
-          <div className={styles.emptyStateIcon} aria-hidden="true">📚</div>
-          <h3><span className={designStyles.star} aria-hidden="true">★</span> {t("emptyTitle")}</h3>
-          <p>{t("emptyBody")}</p>
-        </div>
-      )}
+            <div className="dropdown">
+              <button
+                className={`dropdown-toggle ${filterStyles.chip} ${filterStyles.chipActive}`}
+                type="button"
+                data-bs-toggle="dropdown"
+              >
+                {t("subjectFilter", { subject: currentSubjectFilter === "All" ? t("allSubjectsShort") : currentSubjectFilter })}
+              </button>
+              <ul className="dropdown-menu shadow-sm border-0">
+                <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=All`}>{t("allSubjects")}</Link></li>
+                <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Matemáticas`}>{t("subjects.math")}</Link></li>
+                <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Lengua`}>{t("subjects.language")}</Link></li>
+                <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Tecnología`}>{t("subjects.technology")}</Link></li>
+                <li><Link className="dropdown-item" href={`?grade=${currentGradeFilter}&subject=Efemérides`}>{t("subjects.ephemerides")}</Link></li>
+              </ul>
+            </div>
+          </div>
+        }
+        emptyState={
+          <div className={styles.emptyStateCard}>
+            <div className={styles.emptyStateIcon} aria-hidden="true">📚</div>
+            <h3><span className={designStyles.star} aria-hidden="true">★</span> {t("emptyTitle")}</h3>
+            <p>{t("emptyBody")}</p>
+          </div>
+        }
+      >
+        {templates.map((template) => (
+          <TemplateCard key={template.activityId} template={template} />
+        ))}
+      </ActivityCollection>
     </div>
   );
 }

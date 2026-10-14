@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import filterStyles from "@/components/dashboard/ActivityFilter.module.css";
 
 export type AdminReportView = "activities" | "sessions";
 
@@ -14,20 +15,20 @@ export default function AdminReportViewToggle({ current }: { current: AdminRepor
   const hrefFor = (view: AdminReportView) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("view", view);
+    params.delete("page");
     return `?${params.toString()}`;
   };
 
   return (
     <nav aria-label={t("viewLabel")} className="d-flex gap-2 mb-3">
-      {(["activities", "sessions"] as const).map((view) => {
+      {(["sessions", "activities"] as const).map((view) => {
         const active = view === current;
         return (
           <Link
             key={view}
             href={hrefFor(view)}
             aria-current={active ? "page" : undefined}
-            className="btn rounded-pill px-4 fw-bold"
-            style={active ? { background: "#6a4bff", color: "#fff" } : { background: "#E8E5F7", color: "#1D153A" }}
+            className={`${filterStyles.chip} ${active ? filterStyles.chipActive : ""}`}
           >
             {t(view === "activities" ? "viewActivities" : "viewSessions")}
           </Link>

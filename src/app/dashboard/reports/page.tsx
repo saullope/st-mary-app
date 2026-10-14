@@ -87,31 +87,29 @@ export default async function ReportsHubPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      <div className={styles.filterCard}>
-        <ReportFilter />
-      </div>
-
-      {sessions.length > 0 ? (
-        <ActivityCollection storageKey="ludi.view.reports">
-          {sessions.map((session) => (
-            <SessionReportCard
-              key={session.id.toString()}
-              sessionId={session.id.toString()}
-              activityName={session.LUDI_ACTIVIDAD.activity.activity_name}
-              typeId={session.LUDI_ACTIVIDAD.tipoActividadId}
-              estado={session.estado}
-              createdAt={session.creada_en}
-              participants={session.LUDI_SESION_PARTICIPANTE}
-            />
-          ))}
-        </ActivityCollection>
-      ) : (
-        <div className={styles.emptyStateCard}>
-          <div className={styles.emptyStateIcon} aria-hidden="true">📊</div>
-          <h3><span className={designStyles.star} aria-hidden="true">★</span> {tReports('noSession')}</h3>
-          <p>{tReports('noSessionDesc')}</p>
-        </div>
-      )}
+      <ActivityCollection
+        storageKey="ludi.view.reports"
+        filters={<ReportFilter />}
+        emptyState={
+          <div className={styles.emptyStateCard}>
+            <div className={styles.emptyStateIcon} aria-hidden="true">📊</div>
+            <h3><span className={designStyles.star} aria-hidden="true">★</span> {tReports('noSession')}</h3>
+            <p>{tReports('noSessionDesc')}</p>
+          </div>
+        }
+      >
+        {sessions.map((session) => (
+          <SessionReportCard
+            key={session.id.toString()}
+            sessionId={session.id.toString()}
+            activityName={session.LUDI_ACTIVIDAD.activity.activity_name}
+            typeId={session.LUDI_ACTIVIDAD.tipoActividadId}
+            estado={session.estado}
+            createdAt={session.creada_en}
+            participants={session.LUDI_SESION_PARTICIPANTE}
+          />
+        ))}
+      </ActivityCollection>
     </div>
   );
 }

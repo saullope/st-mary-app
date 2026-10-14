@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { sortFollowUpRows, type FollowUpRow, type FollowUpSortKey } from "@/features/followUp/followUp";
+import tableStyles from "@/components/ui/DataTable.module.css";
 
 const COLUMNS: { key: FollowUpSortKey; label: string; numeric: boolean }[] = [
   { key: "activityName", label: "activity", numeric: false },
@@ -16,8 +17,6 @@ const COLUMNS: { key: FollowUpSortKey; label: string; numeric: boolean }[] = [
   { key: "studentResponses", label: "studentResponses", numeric: true },
 ];
 
-const cellStyle = { background: "transparent", color: "#1D153A" };
-const headStyle = { background: "transparent", color: "#4a4266", borderBottom: "none" };
 const score = (value: number | null) => (value === null ? "-" : value.toFixed(1));
 const percent = (value: number | null) => (value === null ? "-" : `${Math.round(value)} %`);
 
@@ -39,72 +38,69 @@ export default function AdminFollowUpTable({ rows }: { rows: FollowUpRow[] }) {
   };
 
   return (
-    <div className="card border-0 shadow-lg rounded-4 overflow-hidden" style={{ background: "#E8E5F7" }}>
-      <div className="table-responsive">
-        <table className="table align-middle mb-0" style={{ background: "transparent" }}>
-          <caption className="px-4 small" style={{ color: "#4a4266" }}>{t("caption")}</caption>
-          <thead>
-            <tr>
-              {COLUMNS.map(({ key, label, numeric }) => {
-                const active = key === sortKey;
-                const Icon = !active ? ArrowUpDown : direction === "asc" ? ArrowUp : ArrowDown;
-                return (
-                  <th
-                    key={key}
-                    scope="col"
-                    className={`py-3 small text-uppercase ${numeric ? "text-center" : "px-4"}`}
-                    style={headStyle}
-                    aria-sort={active ? (direction === "asc" ? "ascending" : "descending") : "none"}
+    <div className={tableStyles.container}>
+      <table className={`table align-middle ${tableStyles.table}`}>
+        <caption>{t("caption")}</caption>
+        <thead>
+          <tr>
+            {COLUMNS.map(({ key, label, numeric }) => {
+              const active = key === sortKey;
+              const Icon = !active ? ArrowUpDown : direction === "asc" ? ArrowUp : ArrowDown;
+              return (
+                <th
+                  key={key}
+                  scope="col"
+                  className={`text-uppercase ${numeric ? "text-center" : ""}`}
+                  aria-sort={active ? (direction === "asc" ? "ascending" : "descending") : "none"}
+                >
+                  <button
+                    type="button"
+                    className="btn btn-link p-0 text-decoration-none fw-bold text-uppercase d-inline-flex align-items-center gap-1"
+                    style={{ color: "inherit" }}
+                    onClick={() => sortBy(key, numeric)}
+                    aria-label={t("sortBy", { column: t(label) })}
                   >
-                    <button
-                      type="button"
-                      className="btn btn-link p-0 text-decoration-none fw-bold small text-uppercase d-inline-flex align-items-center gap-1"
-                      style={{ color: "inherit" }}
-                      onClick={() => sortBy(key, numeric)}
-                      aria-label={t("sortBy", { column: t(label) })}
-                    >
-                      {t(label)} <Icon size={14} aria-hidden />
-                    </button>
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.length === 0 && (
-              <tr>
-                <td colSpan={COLUMNS.length} className="py-4 text-center border-0" style={cellStyle}>{t("empty")}</td>
-              </tr>
-            )}
-            {sorted.map((row) => (
-              <tr key={row.key} style={{ borderBottom: "1px solid rgba(29, 21, 58, 0.05)" }}>
-                <th scope="row" className="py-3 px-4 border-0 fw-bold" style={cellStyle}>
-                  {row.activityName}
-                  <div className="small fw-normal" style={{ color: "#4a4266" }}>
-                    {row.activityType}
-                    {row.fromTemplate && (
-                      <span className="badge rounded-pill ms-2" style={{ background: "rgba(106, 75, 255, 0.12)", color: "#6a4bff" }}>{t("fromTemplate")}</span>
-                    )}
-                    <span className="ms-2">{t("teachers", { count: row.teachers })}</span>
-                  </div>
+                    {t(label)} <Icon size={14} aria-hidden />
+                  </button>
                 </th>
-                <td className="py-3 px-4 border-0" style={cellStyle}>{row.gradeName ?? t("noGrade")}</td>
-                <td className="py-3 text-center border-0" style={cellStyle}>{t("sessionsOf", { evaluated: row.evaluatedSessions, total: row.sessions })}</td>
-                <td className="py-3 text-center border-0 fw-bold" style={cellStyle}>{score(row.avgEffectiveness)}</td>
-                <td className="py-3 text-center border-0" style={cellStyle}>
-                  <span className="fw-bold">{percent(row.objectiveMetPct)}</span>
-                  {row.objectivePartialPct !== null && row.objectivePartialPct > 0 && (
-                    <div className="small" style={{ color: "#4a4266" }}>{t("partial", { value: Math.round(row.objectivePartialPct) })}</div>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {sorted.length === 0 && (
+            <tr>
+              <td colSpan={COLUMNS.length} className="text-center">{t("empty")}</td>
+            </tr>
+          )}
+          {sorted.map((row) => (
+            <tr key={row.key}>
+              <th scope="row" className="fw-bold">
+                {row.activityName}
+                <div className="small fw-normal" style={{ color: "#4a4266" }}>
+                  {row.activityType}
+                  {row.fromTemplate && (
+                    <span className="badge rounded-pill ms-2" style={{ background: "rgba(106, 75, 255, 0.12)", color: "#6a4bff" }}>{t("fromTemplate")}</span>
                   )}
-                </td>
-                <td className="py-3 text-center border-0" style={cellStyle}>{score(row.avgEnjoyment)}</td>
-                <td className="py-3 text-center border-0" style={cellStyle}>{score(row.avgLearning)}</td>
-                <td className="py-3 text-center border-0" style={cellStyle}>{row.studentResponses}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  <span className="ms-2">{t("teachers", { count: row.teachers })}</span>
+                </div>
+              </th>
+              <td>{row.gradeName ?? t("noGrade")}</td>
+              <td className="text-center">{t("sessionsOf", { evaluated: row.evaluatedSessions, total: row.sessions })}</td>
+              <td className="text-center fw-bold">{score(row.avgEffectiveness)}</td>
+              <td className="text-center">
+                <span className="fw-bold">{percent(row.objectiveMetPct)}</span>
+                {row.objectivePartialPct !== null && row.objectivePartialPct > 0 && (
+                  <div className="small" style={{ color: "#4a4266" }}>{t("partial", { value: Math.round(row.objectivePartialPct) })}</div>
+                )}
+              </td>
+              <td className="text-center">{score(row.avgEnjoyment)}</td>
+              <td className="text-center">{score(row.avgLearning)}</td>
+              <td className="text-center">{row.studentResponses}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

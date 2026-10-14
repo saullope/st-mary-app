@@ -138,7 +138,7 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
         <div className={styles.memoryGrid}>
           {activity.memoriaParejas.map((pareja: any, idx: number) => (
             <div key={Number(pareja.id)} className={styles.memoryPair}>
-              <h5 className="mb-3 text-muted">{t("pair", { number: idx + 1 })}</h5>
+              <h5 className="mb-3 text-muted" style={{ fontSize: 'var(--text-section)' }}>{t("pair", { number: idx + 1 })}</h5>
               {pareja.tarjetas[0]?.recurso && (
                 <MultimediaDisplay
                   url={pareja.tarjetas[0].recurso.url}
@@ -228,7 +228,7 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
 
           <div className="col-12 col-lg-3 d-none d-lg-block">
             <div className={styles.scrollSpySidebar}>
-              <h6 className="fw-bold mb-3 text-uppercase" style={{ color: '#1D153A' }}>{t("index")}</h6>
+              <h6 className="fw-bold mb-3 text-uppercase" style={{ color: '#1D153A', fontSize: 'var(--text-meta)' }}>{t("index")}</h6>
               <ul className={styles.scrollSpyList}>
                 {activity.preguntas.map((pregunta: any, idx: number) => (
                   <li

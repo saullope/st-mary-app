@@ -67,35 +67,22 @@ export default async function MyActivities({ searchParams }: PageProps) {
         </div>
       </div>
 
-      {/* Barra de Filtros */}
-      <div className={styles.filterCard}>
-        <ActivityFilter types={types} />
-      </div>
-
-      {activities.length > 0 ? (
-        <ActivityCollection storageKey="ludi.view.myActivities">
-          {activities.map((act: any) => (
-            <ActivityCard key={act.activityId} activity={act} />
-          ))}
-        </ActivityCollection>
-      ) : (
-        <div className={styles.emptyStateCard}>
-          <div className={styles.emptyStateIcon} aria-hidden="true">🚀</div>
-          <h3><span className={designStyles.star} aria-hidden="true">★</span> {t("emptyTitle")}</h3>
-          <p>{t("emptyBody")}</p>
-        </div>
-      )}
-      
-      {/* Paginación */}
-      {activities.length > 0 && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
-          <PaginationControls 
-            totalCount={total} 
-            currentPage={page} 
-            pageSize={limit} 
-          />
-        </div>
-      )}
+      <ActivityCollection
+        storageKey="ludi.view.myActivities"
+        filters={<ActivityFilter types={types} />}
+        footer={<PaginationControls totalCount={total} currentPage={page} pageSize={limit} />}
+        emptyState={
+          <div className={styles.emptyStateCard}>
+            <div className={styles.emptyStateIcon} aria-hidden="true">🚀</div>
+            <h3><span className={designStyles.star} aria-hidden="true">★</span> {t("emptyTitle")}</h3>
+            <p>{t("emptyBody")}</p>
+          </div>
+        }
+      >
+        {activities.map((act: any) => (
+          <ActivityCard key={act.activityId} activity={act} />
+        ))}
+      </ActivityCollection>
     </div>
   );
 }

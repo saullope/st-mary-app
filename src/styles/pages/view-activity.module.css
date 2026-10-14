@@ -26,7 +26,7 @@
 }
 
 .title {
-  font-size: 2.2rem;
+  font-size: var(--text-title);
   font-weight: 800;
   color: #1D153A;
   margin-bottom: 0.5rem;
@@ -43,7 +43,7 @@
 
 .metaItem label {
   display: block;
-  font-size: 0.8rem;
+  font-size: var(--text-meta);
   color: #4a4266;
   font-weight: 600;
   text-transform: uppercase;
@@ -52,13 +52,13 @@
 }
 
 .metaItem span {
-  font-size: 1.1rem;
+  font-size: var(--text-card);
   font-weight: 700;
   color: #1D153A;
 }
 
 .sectionTitle {
-  font-size: 1.5rem;
+  font-size: var(--text-section);
   font-weight: 800;
   color: white; /* Titulo en fondo oscuro de dashboard */
   margin-bottom: 1.5rem;
@@ -91,6 +91,7 @@
 }
 
 .questionNumber {
+  font-size: var(--text-ui);
   font-weight: 800;
   color: #1D153A;
 }
@@ -100,7 +101,7 @@
 }
 
 .questionText {
-  font-size: 1.25rem;
+  font-size: var(--text-card);
   font-weight: 700;
   color: #1D153A;
   margin-bottom: 1rem;
@@ -176,6 +177,7 @@
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   color: #4a4266;
+  font-size: var(--text-ui);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
