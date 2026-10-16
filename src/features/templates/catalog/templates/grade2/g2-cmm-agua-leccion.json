@@ -1,0 +1,48 @@
+{
+  "code": "g2-cmm-agua-leccion",
+  "grade": 2,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g2-cmm-seres-vivos",
+  "order": 4,
+  "type": "ludileccion",
+  "title": "El agua es vida",
+  "durationMin": 8,
+  "cover": {
+    "source": "unsplash",
+    "query": "lago de nicaragua volcán",
+    "url": "https://images.unsplash.com/photo-1711609065017-749841408b17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxsYWdvJTIwZGUlMjBuaWNhcmFndWElMjB2b2xjJUMzJUExbnxlc3wxfDB8fHwxNzkyMTEwMjg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "credit": "Foto de Mario von Rotz en Unsplash"
+  },
+  "blocks": [
+    {
+      "kind": "youtube",
+      "title": "El viaje del agua: el ciclo del agua",
+      "media": {
+        "source": "youtube",
+        "query": "ciclo del agua para niños",
+        "url": "https://www.youtube.com/embed/x-Em4JGD8pQ",
+        "credit": "Video de Happy Learning Español en YouTube: EL CICLO DEL AGUA para niños💧 | Aprende sobre la Naturaleza🌿"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "Nicaragua tiene grandes lagos. ¿Para qué usamos el agua?",
+      "media": {
+        "source": "unsplash",
+        "query": "lago de nicaragua volcán",
+        "url": "https://images.unsplash.com/photo-1665518889833-34dd910bb0f7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwyfHxsYWdvJTIwZGUlMjBuaWNhcmFndWElMjB2b2xjJUMzJUExbnxlc3wxfDB8fHwxNzkyMTEwMjg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de Alvison Lucas Hunter Arnuero en Unsplash"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Cuidemos el agua en casa y en la escuela",
+      "media": {
+        "source": "youtube",
+        "query": "cuidar el agua para niños",
+        "url": "https://www.youtube.com/embed/fuo4tfzcGp4",
+        "credit": "Video de Mundo Divertido de Niños en YouTube: El Agua y su Cuidado: Como Cuidar el Agua (Videos Educativos para Niños)"
+      }
+    }
+  ]
+}

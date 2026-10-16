@@ -1,0 +1,168 @@
+{
+  "code": "g1-cmm-sentidos-quiz",
+  "grade": 1,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g1-cmm-cuerpo",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Mis cinco sentidos",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "niña oliendo una flor",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109392835_5162496.jpg?alt=media&token=550c72ec-3f60-40bb-9732-41a1738fcc07",
+    "credit": "Imagen de Emmie_Norfolk en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Con qué parte del cuerpo vemos?",
+      "answers": [
+        {
+          "text": "Los ojos",
+          "correct": true
+        },
+        {
+          "text": "La nariz",
+          "correct": false
+        },
+        {
+          "text": "Las orejas",
+          "correct": false
+        },
+        {
+          "text": "La lengua",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "ojo de niño",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109393610_7071811.jpg?alt=media&token=aedc1166-b401-4ba6-93eb-8a96dd76efad",
+        "credit": "Imagen de geralt en Pixabay"
+      }
+    },
+    {
+      "text": "¿Con qué parte del cuerpo escuchamos la música?",
+      "answers": [
+        {
+          "text": "Las manos",
+          "correct": false
+        },
+        {
+          "text": "Las orejas",
+          "correct": true
+        },
+        {
+          "text": "Los pies",
+          "correct": false
+        },
+        {
+          "text": "Los ojos",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "niño escuchando música",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109394388_6614545.jpg?alt=media&token=00a847f8-bc08-434a-aa09-cb5c547dc5f4",
+        "credit": "Imagen de Edurs34 en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué sentido usamos para oler una flor?",
+      "answers": [
+        {
+          "text": "El gusto",
+          "correct": false
+        },
+        {
+          "text": "La vista",
+          "correct": false
+        },
+        {
+          "text": "El olfato",
+          "correct": true
+        },
+        {
+          "text": "El oído",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "oler una flor",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109395223_1456252.jpg?alt=media&token=7a26eee7-8048-439a-ab4d-fcc26173776d",
+        "credit": "Imagen de eommina en Pixabay"
+      }
+    },
+    {
+      "text": "¿Con qué sentimos si el agua está fría o caliente?",
+      "answers": [
+        {
+          "text": "Con la piel",
+          "correct": true
+        },
+        {
+          "text": "Con los ojos",
+          "correct": false
+        },
+        {
+          "text": "Con las orejas",
+          "correct": false
+        },
+        {
+          "text": "Con la nariz",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué sentido nos dice que el mango es dulce?",
+      "answers": [
+        {
+          "text": "El oído",
+          "correct": false
+        },
+        {
+          "text": "El gusto",
+          "correct": true
+        },
+        {
+          "text": "La vista",
+          "correct": false
+        },
+        {
+          "text": "El tacto",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "mango fruta",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109396027_3658159.jpg?alt=media&token=013547cf-3f83-466c-8b4d-5084dd60f997",
+        "credit": "Imagen de wixin_56k en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál de estos cuida nuestros ojos?",
+      "answers": [
+        {
+          "text": "Ver la pantalla muy de cerca",
+          "correct": false
+        },
+        {
+          "text": "Leer con buena luz",
+          "correct": true
+        },
+        {
+          "text": "Frotarlos con las manos sucias",
+          "correct": false
+        },
+        {
+          "text": "Mirar el sol",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

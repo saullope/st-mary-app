@@ -1,0 +1,201 @@
+{
+  "code": "g1-len-vocales-quiz",
+  "grade": 1,
+  "subject": "lengua-literatura",
+  "collection": "g1-len-vocales",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "¿Con qué vocal empieza?",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "vocales a e i o u",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107828442_1015537.jpg?alt=media&token=a2cca7da-f031-4f72-bd37-ad183272410e",
+    "credit": "Imagen de Peggy_Marco en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Con qué vocal empieza «avión»?",
+      "answers": [
+        {
+          "text": "a",
+          "correct": true
+        },
+        {
+          "text": "e",
+          "correct": false
+        },
+        {
+          "text": "i",
+          "correct": false
+        },
+        {
+          "text": "o",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "avión",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107829163_4301615.jpg?alt=media&token=79d68ec3-b1d7-4210-9dbd-c21da76e28fc",
+        "credit": "Imagen de talhakhalil007 en Pixabay"
+      }
+    },
+    {
+      "text": "¿Con qué vocal empieza «elefante»?",
+      "answers": [
+        {
+          "text": "u",
+          "correct": false
+        },
+        {
+          "text": "e",
+          "correct": true
+        },
+        {
+          "text": "o",
+          "correct": false
+        },
+        {
+          "text": "a",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "elefante",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107829949_3526681.jpg?alt=media&token=98e56dda-8dc8-4645-bd85-2a4ccbc4d8be",
+        "credit": "Imagen de 2567670 en Pixabay"
+      }
+    },
+    {
+      "text": "¿Con qué vocal empieza «iguana»?",
+      "answers": [
+        {
+          "text": "i",
+          "correct": true
+        },
+        {
+          "text": "a",
+          "correct": false
+        },
+        {
+          "text": "u",
+          "correct": false
+        },
+        {
+          "text": "e",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "iguana",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107830798_8968121.jpg?alt=media&token=5445ae63-f10d-4634-8941-94a62cb27b4e",
+        "credit": "Imagen de DavidClode en Pixabay"
+      }
+    },
+    {
+      "text": "¿Con qué vocal empieza «oso»?",
+      "answers": [
+        {
+          "text": "a",
+          "correct": false
+        },
+        {
+          "text": "u",
+          "correct": false
+        },
+        {
+          "text": "o",
+          "correct": true
+        },
+        {
+          "text": "i",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "oso",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107831578_5544856.jpg?alt=media&token=c01ec7ab-e80c-4a9f-803e-fe1e447933ac",
+        "credit": "Imagen de OnceInuenG_63632924 en Pixabay"
+      }
+    },
+    {
+      "text": "¿Con qué vocal empieza «uvas»?",
+      "answers": [
+        {
+          "text": "o",
+          "correct": false
+        },
+        {
+          "text": "u",
+          "correct": true
+        },
+        {
+          "text": "e",
+          "correct": false
+        },
+        {
+          "text": "a",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "uvas",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107832328_8941078.jpg?alt=media&token=edb9df7a-7524-456d-9028-eca535d9a646",
+        "credit": "Imagen de IMAGEMO en Pixabay"
+      }
+    },
+    {
+      "text": "¿Con qué vocal empieza «estrella»?",
+      "answers": [
+        {
+          "text": "e",
+          "correct": true
+        },
+        {
+          "text": "a",
+          "correct": false
+        },
+        {
+          "text": "i",
+          "correct": false
+        },
+        {
+          "text": "u",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "estrella",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107833252_2869817.jpg?alt=media&token=37c72a16-f732-40ca-bdcf-f34eaa0c5825",
+        "credit": "Imagen de Angeleses en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál de estas letras es una vocal?",
+      "answers": [
+        {
+          "text": "m",
+          "correct": false
+        },
+        {
+          "text": "s",
+          "correct": false
+        },
+        {
+          "text": "o",
+          "correct": true
+        },
+        {
+          "text": "p",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

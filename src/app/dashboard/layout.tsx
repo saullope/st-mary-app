@@ -7,6 +7,8 @@ import { redirect } from 'next/navigation';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import styles from '@/styles/pages/sidebar.module.css';
 import designStyles from '@/styles/pages/LudiDesign.module.css';
+import prisma from "@/lib/db";
+import FirstActivityTour from "@/features/tours/firstActivity/FirstActivityTour";
 
 interface FirebaseSession {
   s: string;
@@ -72,6 +74,11 @@ export default async function DashboardLayout({
 
   const user: FirebaseSession = mapDecodedIdTokenToFirebaseSession(token, dbUser);
 
+  // La invitación a la primera actividad solo se ofrece a quien todavía no creó ninguna.
+  const hasActivities = dbUser
+    ? (await prisma.ludiActividad.findFirst({ where: { userId: dbUser.id }, select: { activityId: true } })) !== null
+    : false;
+
   // Generamos partículas para el fondo
   const particles = Array.from({ length: 8 }).map((_, i) => ({
     id: i,
@@ -102,6 +109,7 @@ export default async function DashboardLayout({
       <DashboardFrame defaultCollapsed={sidebarCollapsed} navbar={<NavbarDashboard sessionData={user} />}>
         {children}
       </DashboardFrame>
+      <FirstActivityTour hasActivities={hasActivities} />
     </div>
   );
 }

@@ -1,0 +1,42 @@
+{
+  "code": "g2-mat-restas-vf",
+  "grade": 2,
+  "subject": "matematica",
+  "collection": "g2-mat-operaciones",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Restas hasta 100",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "pizarra con números",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110430488_73496.jpg?alt=media&token=aa79a289-29a9-49cc-843d-01f74b5bf574",
+    "credit": "Imagen de geralt en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "50 − 20 = 30",
+      "answer": true
+    },
+    {
+      "text": "45 − 5 = 41",
+      "answer": false
+    },
+    {
+      "text": "78 − 8 = 70",
+      "answer": true
+    },
+    {
+      "text": "99 − 9 = 90",
+      "answer": true
+    },
+    {
+      "text": "64 − 30 = 24",
+      "answer": false
+    },
+    {
+      "text": "Si tengo 30 córdobas y gasto 10, me quedan 20.",
+      "answer": true
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { SESSION_STATE, sessionPhase } from "@/lib/play/sessionState";
+import { notifySessionFinished } from "@/features/notifications/notifications.server";
 
 // GET: Fetch session status, PIN, and participants (with avatar and score)
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -99,6 +100,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       where: { id: sessionId },
       data: updateData
     });
+
+    // Solo la primera vez que termina: repetir "end" no duplica el resumen.
+    if (action === "end" && sessionPhase(session.estado) !== "finished") await notifySessionFinished(sessionId);
 
     return NextResponse.json({ success: true, estado: updatedSession.estado, preguntaActualIndex: updatedSession.preguntaActualIndex });
   } catch (error) {

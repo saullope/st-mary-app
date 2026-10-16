@@ -147,7 +147,10 @@
     "myActivities": "Mis Actividades",
     "myActivitiesDescription": "Guarda, organiza y reutiliza tus actividades cuando quieras",
     "continueJob": "CONTINUAR TRABAJANDO",
-    "lastEdition": "Última edición hace poco",
+    "lastEdited": "Editada {when}",
+    "resumeQuestions": "{count, plural, =0 {Sin preguntas} one {# pregunta} other {# preguntas}}",
+    "resumeBlocks": "{count, plural, =0 {Sin bloques} one {# bloque} other {# bloques}}",
+    "resumeImages": "{count, plural, =0 {Sin imágenes} one {# imagen} other {# imágenes}}",
     "resume": "Retomar",
     "noDrafts": "No tienes borradores pendientes ¡Crea una nueva actividad para comenzar!",
     "untitledActivity": "Actividad sin título"
@@ -156,19 +159,19 @@
     "metaTitle": "Crear actividad",
     "metaDescription": "Crear juegos lúdicos divididos por asignaturas",
     "titlePage": "Crear Actividad",
-    "ludiquizTitle": "Ludi Quiz",
+    "ludiquizTitle": "LudiQuiz",
     "ludiquizSubTitle": "Aventura de Preguntas",
     "ludiquiz_desc": "¡Diseña cuestionarios divertidos y desafiantes para tus estudiantes!",
-    "ludimemoryTitle": "Ludi Memory",
+    "ludimemoryTitle": "LudiMemory",
     "ludimemorySubTitle": "Memoriza y Gana",
     "ludimemory_desc": "¡Crea emocionantes juegos de memoria que pondrán a prueba las habilidades de tus estudiantes!",
-    "trueorfalseTitle": "True or False",
+    "trueorfalseTitle": "TrueOrFalse",
     "trueorfalseSubTitle": "Verdadero o Falso: El Desafío",
     "trueorfalse_desc": "¡Prepara juegos de verdadero o falso llenos de sorpresas y aprendizaje!",
-    "ludileccionTitle": "Ludi Lección",
+    "ludileccionTitle": "LudiLección",
     "ludileccionSubTitle": "Aprende y Descubre",
     "ludileccion_desc": "¡Arma lecciones con presentaciones, videos, imágenes y lecturas que tus estudiantes recorren para ganar insignias!",
-    "ludiformTitle": "Ludi Form",
+    "ludiformTitle": "LudiForm",
     "ludiformSubTitle": "Piensa y Responde",
     "ludiform_desc": "¡Crea formularios con preguntas de opción y respuestas escritas, sin límite de tiempo, para tercer grado!",
     "createText": "Empezar a Crear"
@@ -668,7 +671,7 @@
     "editor": {
       "description": "Editor de actividades de LudiGame.",
       "ludiquiz": "Crear LudiQuiz",
-      "trueorfalse": "Crear Verdadero o Falso",
+      "trueorfalse": "Crear TrueOrFalse",
       "ludimemory": "Crear LudiMemory",
       "ludileccion": "Crear LudiLección",
       "ludiform": "Crear LudiForm"
@@ -933,7 +936,7 @@
       "missingStatement": "Falta escribir la afirmación.",
       "markTrueOrFalse": "Marca si es Verdadero o Falso.",
       "addStatement": "Agregar afirmación",
-      "canvasTitle": "Verdadero o Falso",
+      "canvasTitle": "TrueOrFalse",
       "statementPlaceholder": "Escribe tu afirmación aquí...",
       "statementLabel": "Afirmación",
       "shortcut": "<strong>Atajo de teclado:</strong> <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para guardar cambios"
@@ -990,8 +993,7 @@
       "buttons": {
         "next": "Siguiente",
         "previous": "Anterior",
-        "done": "¡Entendido!",
-        "toCreate": "Ir a Crear actividad"
+        "done": "¡Entendido!"
       },
       "command": {
         "title": "Tu centro de mando",
@@ -1016,16 +1018,12 @@
       "myActivities": {
         "title": "Tus actividades",
         "description": "Aquí encuentras todo lo que creaste: lánzalo a tus estudiantes, edítalo o compártelo."
-      },
-      "next": {
-        "title": "Creemos tu primera actividad",
-        "description": "Te acompañamos paso a paso en Crear actividad. Puedes elegir \"Ver más tarde\" en cualquier momento."
       }
     },
     "createActivity": {
       "ludiquiz": {
         "title": "Empieza con LudiQuiz",
-        "description": "Haz clic en LudiQuiz: el editor se abre en otra pestaña y allí seguimos juntos con tu primera actividad."
+        "description": "Haz clic en LudiQuiz para abrir su editor y crear un cuestionario con puntos e insignias."
       },
       "buttons": {
         "done": "Entendido"
@@ -1040,10 +1038,6 @@
         "next": "Siguiente",
         "previous": "Anterior",
         "done": "¡A crear!"
-      },
-      "name": {
-        "title": "Nombre de la actividad",
-        "description": "Dale un nombre claro a tu actividad: así la reconocerás en Mis actividades y tus estudiantes sabrán de qué trata."
       },
       "question": {
         "title": "Escribe la pregunta",
@@ -1108,7 +1102,7 @@
         "description": "Guía completa del editor de cuestionarios: preguntas, respuestas y Panel Lúdico."
       },
       "trueorfalse_tour": {
-        "name": "Editor de Verdadero o Falso",
+        "name": "Editor de TrueOrFalse",
         "description": "Crea afirmaciones y define cuáles son verdaderas."
       },
       "ludimemory_tour": {
@@ -1144,24 +1138,146 @@
       "next": "Siguiente",
       "previous": "Anterior",
       "done": "Entendido",
-      "close": "Cerrar visita",
-      "later": "Ver más tarde",
-      "progress": "{current} de {total}"
+      "exit": "Salir",
+      "progress": "Paso {current} de {total}"
+    },
+    "trueorfalse": {
+      "statement": {
+        "title": "Escribe la afirmación",
+        "description": "Una frase que tus estudiantes deban juzgar, por ejemplo: \"El Sol es una estrella\"."
+      },
+      "answer": {
+        "title": "¿Verdadera o falsa?",
+        "description": "Elige cuál es la respuesta correcta para esta afirmación."
+      },
+      "add": {
+        "title": "Agrégala a la lista",
+        "description": "Guarda la afirmación y empieza la siguiente."
+      },
+      "list": {
+        "title": "Tus afirmaciones",
+        "description": "Aquí aparecen todas: selecciona una para editarla, cámbiala de orden o elimínala."
+      },
+      "theme": {
+        "title": "Elige un tema",
+        "description": "Cambia el fondo que verán tus estudiantes al jugar."
+      },
+      "panelGeneral": {
+        "title": "Tiempo y puntos",
+        "description": "Define cuánto tiempo hay para responder y cuántos puntos vale cada acierto."
+      },
+      "panelBadges": {
+        "title": "Elige las recompensas",
+        "description": "Estas son las insignias que pueden ganar tus estudiantes. Puedes dejarlas como están."
+      },
+      "save": {
+        "title": "Guarda tu actividad",
+        "description": "Quedará en Mis actividades, lista para usar en clase."
+      },
+      "buttons": {
+        "done": "Entendido"
+      }
+    },
+    "ludimemory": {
+      "board": {
+        "title": "Arma el tablero",
+        "description": "Sube de 2 a 12 imágenes desde tu equipo o la galería. Cada una forma una pareja que tus estudiantes deberán encontrar."
+      },
+      "theme": {
+        "title": "Elige un tema",
+        "description": "Cambia el fondo que verán tus estudiantes al jugar."
+      },
+      "panelGeneral": {
+        "title": "Puntos por pareja",
+        "description": "Define cuántos puntos gana el estudiante por cada pareja que encuentra."
+      },
+      "panelBadges": {
+        "title": "Elige las recompensas",
+        "description": "Estas son las insignias que pueden ganar tus estudiantes. Puedes dejarlas como están."
+      },
+      "save": {
+        "title": "Guarda tu actividad",
+        "description": "Quedará en Mis actividades, lista para usar en clase."
+      },
+      "buttons": {
+        "done": "Entendido"
+      }
+    },
+    "ludileccion": {
+      "addBlock": {
+        "title": "Agrega un bloque",
+        "description": "Una lección es una secuencia de bloques: lectura, imagen, video y más. Los tipos disponibles dependen del grado."
+      },
+      "list": {
+        "title": "Tus bloques",
+        "description": "Selecciona un bloque para editarlo, cámbialo de orden o elimínalo."
+      },
+      "canvas": {
+        "title": "Edita el bloque",
+        "description": "Aquí completas el bloque que seleccionaste, tal como lo verán tus estudiantes."
+      },
+      "theme": {
+        "title": "Elige un tema",
+        "description": "Cambia el fondo que verán tus estudiantes al jugar."
+      },
+      "panelBadges": {
+        "title": "Elige las recompensas",
+        "description": "Estas son las insignias que pueden ganar tus estudiantes. Puedes dejarlas como están."
+      },
+      "save": {
+        "title": "Guarda tu actividad",
+        "description": "Quedará en Mis actividades, lista para usar en clase."
+      },
+      "buttons": {
+        "done": "Entendido"
+      }
+    },
+    "ludiform": {
+      "addQuestion": {
+        "title": "Agrega una pregunta",
+        "description": "Elige el tipo: opción única, selección múltiple o respuesta larga."
+      },
+      "list": {
+        "title": "Tus preguntas",
+        "description": "Selecciona una para editarla, cámbiala de orden o elimínala."
+      },
+      "canvas": {
+        "title": "Edita la pregunta",
+        "description": "Escribe la pregunta y sus opciones. Las respuestas largas las calificas tú en Reportes."
+      },
+      "theme": {
+        "title": "Elige un tema",
+        "description": "Cambia el fondo que verán tus estudiantes al jugar."
+      },
+      "panelGeneral": {
+        "title": "Puntos",
+        "description": "Define cuántos puntos vale cada pregunta acertada o respuesta escrita que apruebes."
+      },
+      "panelBadges": {
+        "title": "Elige las recompensas",
+        "description": "Estas son las insignias que pueden ganar tus estudiantes. Puedes dejarlas como están."
+      },
+      "save": {
+        "title": "Guarda tu actividad",
+        "description": "Quedará en Mis actividades, lista para usar en clase."
+      },
+      "buttons": {
+        "done": "Entendido"
+      }
     }
   },
   "TourSettings": {
     "loading": "Cargando visitas guiadas",
     "title": "Visitas guiadas",
-    "subtitle": "Recorridos cortos que te muestran cada parte de la aplicación. Nunca bloquean la pantalla y puedes dejarlos para más tarde.",
+    "subtitle": "Recorridos cortos que te acompañan paso a paso. Puedes salir cuando quieras y retomarlos aquí.",
     "general": "Configuración general",
     "enable": "Mostrar visitas guiadas automáticamente",
-    "enableHint": "Si lo desactivas, las visitas solo se abren cuando las inicias desde aquí.",
+    "enableHint": "Si lo desactivas, no te invitaremos a crear tu primera actividad ni te propondremos retomarla. Siempre puedes iniciarla desde aquí.",
     "mode": "Tipo de asistencia",
     "modeFull": "Recorrido completo",
     "modeFullHint": "Resalta cada elemento con un velo suave; la pantalla sigue usable.",
     "modeHints": "Solo sugerencias",
     "modeHintsHint": "Muestra los consejos sin oscurecer la pantalla.",
-    "restartOnboarding": "Repetir el recorrido inicial",
     "resetAll": "Reiniciar todas las visitas",
     "laterHint": "Las visitas que dejaste con \"Ver más tarde\" quedan pendientes aquí y no vuelven a abrirse solas.",
     "play": "Iniciar",
@@ -1231,9 +1347,24 @@
       }
     },
     "confirmTitle": "¿Reiniciar todas las visitas guiadas?",
-    "confirmBody": "Todas las visitas, incluidas las pospuestas, se volverán a mostrar la próxima vez que visites cada página.",
+    "confirmBody": "Todas las visitas vuelven a quedar pendientes, incluida \"Crea tu primera actividad\".",
     "cancel": "Cancelar",
-    "reset": "Reiniciar"
+    "reset": "Reiniciar",
+    "firstActivity": {
+      "title": "Crea tu primera actividad",
+      "meta": "{steps} pasos · unos 2 min",
+      "description": "Del panel al editor de LudiQuiz: escribe una pregunta, elige las recompensas y guarda.",
+      "start": "Empezar",
+      "continue": "Continuar (paso {step} de {total})",
+      "restart": "Empezar de nuevo",
+      "repeat": "Repetir",
+      "status": {
+        "pendiente": "Pendiente",
+        "pospuesta": "Pospuesta",
+        "en_progreso": "En progreso",
+        "completada": "Completada"
+      }
+    }
   },
   "SettingsNav": {
     "personal": "Información personal",
@@ -1483,7 +1614,7 @@
     "noGrade": "Sin grado",
     "activityTypes": {
       "1": "LudiQuiz",
-      "2": "Verdadero o Falso",
+      "2": "TrueOrFalse",
       "3": "LudiMemory",
       "4": "LudiLección",
       "5": "LudiForm"
@@ -1554,38 +1685,45 @@
     "backToActivities": "Volver a mis actividades"
   },
   "Templates": {
-    "grade1": "1.er grado",
-    "grade2": "2.º grado",
-    "grade3": "3.er grado",
-    "allGrades": "Todos los grados",
-    "allGradesShort": "Todos",
-    "title": "Catálogo de plantillas",
-    "subtitle": "Explora y copia actividades listas para usar en clase.",
-    "gradeFilter": "Grado: {grade}",
-    "subjectFilter": "Materia: {subject}",
-    "allSubjectsShort": "Todas",
-    "allSubjects": "Todas las materias",
-    "subjects": {
-      "math": "Matemáticas",
-      "language": "Lengua y Literatura",
-      "technology": "Tecnología",
-      "ephemerides": "Efemérides de Nicaragua"
-    },
+    "title": "Plantillas",
+    "subtitle": "Actividades listas para tus clases, alineadas a los temas del MINED. Guarda una copia para editarla o lánzala al momento.",
+    "gradeLabel": "Grado",
+    "subjectLabel": "Clase",
+    "mySubjects": "Mis clases",
+    "allSubjects": "Todas",
+    "chooseSubjectsHint": "Elige las clases que impartes en {grade} y te mostraremos primero sus plantillas.",
+    "chooseSubjects": "Elegir mis clases",
+    "collectionsTitle": "Colecciones",
+    "collectionCount": "{count, plural, one {# plantilla} other {# plantillas}}",
+    "searchPlaceholder": "Buscar plantilla",
+    "typeLabel": "Tipo de actividad",
+    "allTypes": "Todos los tipos",
+    "apply": "Aplicar",
     "emptyTitle": "Aún no hay plantillas para este filtro",
-    "emptyBody": "Prueba con otro grado u otra materia.",
+    "emptyBody": "Prueba con otra clase, otra colección o todos los tipos.",
+    "count": {
+      "questions": "{count, plural, one {# pregunta} other {# preguntas}}",
+      "blocks": "{count, plural, one {# bloque} other {# bloques}}",
+      "images": "{count, plural, one {# imagen} other {# imágenes}}"
+    },
+    "duration": "unos {minutes} min",
+    "perQuestion": "{seconds} s por pregunta",
+    "badges": "{count, plural, one {# insignia} other {# insignias}}",
+    "inMyActivities": "En tus actividades",
+    "use": "Usar plantilla",
+    "preparing": "Guardando...",
+    "saved": "\"{name}\" se guardó en Mis actividades.",
+    "goToMyActivities": "Ver Mis actividades",
+    "editCopy": "Editar mi copia",
+    "editCopyOf": "Editar mi copia de {name}",
+    "launch": "Lanzar ahora",
+    "preview": "Vista previa",
+    "moreActions": "Más acciones para {name}",
+    "studentPin": "PIN PARA ESTUDIANTES: <strong>{pin}</strong>",
     "launchFailed": "No se pudo lanzar la partida",
     "tryAgain": "Inténtalo de nuevo.",
     "cloneFailed": "No se pudo usar la plantilla",
-    "cloneError": "Ocurrió un error al copiar la plantilla.",
-    "unexpected": "Error inesperado al usar la plantilla.",
-    "general": "General",
-    "officialTemplate": "Plantilla oficial de LudiGame.",
-    "studentPin": "PIN PARA ESTUDIANTES: <strong>{pin}</strong>",
-    "preparing": "Preparando...",
-    "use": "Usar plantilla",
-    "launch": "Lanzar partida inmediata",
-    "preview": "Previsualizar",
-    "moreActions": "Más acciones para {name}"
+    "unexpected": "Error inesperado al usar la plantilla."
   },
   "MyActivities": {
     "confirmDelete": "¿Seguro que quieres eliminar la actividad \"{name}\"?",
@@ -1873,5 +2011,98 @@
     "save": "Guardar clases",
     "saved": "Clases de {grade} guardadas.",
     "saveFailed": "No se pudieron guardar tus clases. Inténtalo de nuevo."
+  },
+  "FirstActivityTour": {
+    "invite": {
+      "title": "¡Te damos la bienvenida a LudiGame!",
+      "text": "Te acompañamos a crear tu primera actividad. Toma unos 2 minutos.",
+      "start": "Empezar",
+      "later": "Ver más tarde"
+    },
+    "resume": {
+      "title": "¿Seguimos con tu primera actividad?",
+      "step": "Paso {step} de {total}",
+      "continue": "Continuar",
+      "notNow": "Ahora no"
+    },
+    "pausedToast": "Puedes retomarla cuando quieras en Ajustes › Visitas guiadas.",
+    "pausedToastLink": "Ir a Visitas guiadas",
+    "counter": "Paso {current} de {total}",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "exit": "Salir",
+    "steps": {
+      "sidebar": {
+        "title": "Todo empieza aquí",
+        "description": "Haz clic en <b>Crear actividad</b> para elegir qué tipo de juego quieres hacer."
+      },
+      "ludiquiz": {
+        "title": "Empecemos con un LudiQuiz",
+        "description": "Es un cuestionario con puntos e insignias. Haz clic en <b>Empezar a Crear</b>."
+      },
+      "question": {
+        "title": "Escribe tu primera pregunta",
+        "description": "Por ejemplo: \"¿Cuánto es 7 + 5?\""
+      },
+      "answers": {
+        "title": "Agrega las respuestas",
+        "description": "Escribe al menos dos y marca la correcta con el círculo."
+      },
+      "badges": {
+        "title": "Elige las recompensas",
+        "description": "Estas son las insignias que pueden ganar tus estudiantes. Puedes dejarlas como están."
+      },
+      "save": {
+        "title": "Guarda tu actividad",
+        "description": "Quedará en <b>Mis actividades</b>, lista para usar en clase."
+      }
+    },
+    "done": {
+      "title": "¡Listo! Creaste tu primera actividad",
+      "text": "Cuando quieras usarla en clase, ve a Mis actividades y pulsa Lanzar.",
+      "goToActivities": "Ir a Mis actividades",
+      "keepEditing": "Seguir editando"
+    }
+  },
+  "Notifications": {
+    "bell": "Notificaciones",
+    "bellUnread": "Notificaciones, {count, plural, one {# sin leer} other {# sin leer}}",
+    "title": "Notificaciones",
+    "markAll": "Marcar todas como leídas",
+    "empty": "No tienes notificaciones por ahora.",
+    "unreadMark": "(sin leer)",
+    "settingsLink": "Elegir qué avisos recibo",
+    "types": {
+      "review_pending": {
+        "title": "Respuestas por calificar",
+        "body": "{count, plural, one {Tienes # respuesta escrita} other {Tienes # respuestas escritas}} por calificar en {activity}."
+      },
+      "evaluation_pending": {
+        "title": "¿Cómo te fue en la sesión?",
+        "body": "Cuéntanos en un minuto si {activity} ayudó a cumplir el objetivo de la clase."
+      },
+      "session_summary": {
+        "title": "Sesión terminada",
+        "body": "{participants, plural, one {# estudiante jugó} other {# estudiantes jugaron}} {activity}: promedio de {average} puntos y {badges, plural, =0 {ninguna insignia ganada} one {# insignia ganada} other {# insignias ganadas}}."
+      }
+    },
+    "preferences": {
+      "title": "Notificaciones",
+      "description": "Elige qué avisos aparecen en la campana del panel.",
+      "saveFailed": "No se pudo guardar el cambio. Inténtalo de nuevo.",
+      "hints": {
+        "review_pending": "Cuando un estudiante entrega un LudiForm con respuestas largas que debes calificar.",
+        "evaluation_pending": "Al terminar una sesión en vivo sin haberla evaluado.",
+        "session_summary": "Al terminar una sesión en vivo: cuántos jugaron, el promedio y las insignias ganadas."
+      }
+    }
+  },
+  "TemplateCatalog": {
+    "title": "Catálogo de plantillas",
+    "description": "Carga en la base las plantillas de src/features/templates/catalog. Las que no cambiaron no se reescriben y las que salieron del catálogo se ocultan.",
+    "sync": "Sincronizar plantillas",
+    "syncing": "Sincronizando...",
+    "summary": "{created} nuevas, {updated} actualizadas, {unchanged} sin cambios, {retired} retiradas.",
+    "failed": "{count, plural, one {# no se pudo cargar:} other {# no se pudieron cargar:}}"
   }
 }

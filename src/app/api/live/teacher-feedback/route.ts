@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { isSameOrigin } from "@/lib/http/isSameOrigin";
 import { teacherFeedbackSchema } from "@/features/followUp/followUpSchemas";
+import { resolveEvaluation } from "@/features/notifications/notifications.server";
 
 /**
  * Evaluación del docente de una sesión suya: la única vía de guardado, usada al
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
                 templateDifficulty: session.LUDI_ACTIVIDAD.plantillaOrigenId !== null ? body.templateDifficulty : null,
             },
         });
+        await resolveEvaluation(user.id, BigInt(body.sessionId));
 
         return NextResponse.json({ success: true });
     } catch (error) {

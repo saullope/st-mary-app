@@ -1,0 +1,54 @@
+{
+  "code": "g1-cmm-cuerpo-memoria",
+  "grade": 1,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g1-cmm-cuerpo",
+  "order": 3,
+  "type": "ludimemory",
+  "title": "Memoria de las partes del cuerpo",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "cuerpo humano niños dibujo",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109383169_5818843.jpg?alt=media&token=9689e123-f14c-4c8b-b31c-0bbd404be389",
+    "credit": "Imagen de GDJ en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "ojo dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109384164_4453129.jpg?alt=media&token=4468a3b1-5cb8-480b-9c50-a2149cca7b4b",
+      "credit": "Imagen de Nika_Akin en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "oreja dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109385004_155674.jpg?alt=media&token=5dc102dd-ee0c-44a2-afb4-5bef88bc59c9",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "nariz dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109386151_2856531.jpg?alt=media&token=25d3a7f5-cb21-4b63-9a47-33b2599b9a36",
+      "credit": "Imagen de JenDigitalArt en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "boca sonriente dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109387044_7136433.jpg?alt=media&token=352e5025-1943-483e-aaa8-0df53aff35a4",
+      "credit": "Imagen de revzack en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "mano abierta dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109387926_8843887.jpg?alt=media&token=3fb9a635-6141-4d0b-8cea-94f1d202d391",
+      "credit": "Imagen de Boy-Employee en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "pie dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109388707_8825072.jpg?alt=media&token=95fdcb69-9efd-467a-a4a4-0169651718e1",
+      "credit": "Imagen de lavnatalia en Pixabay"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "code": "g1-val-compartir-leccion",
+  "grade": 1,
+  "subject": "creciendo-en-valores",
+  "collection": "g1-val-convivencia",
+  "order": 3,
+  "type": "ludileccion",
+  "title": "Compartir y ayudar",
+  "durationMin": 8,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños compartiendo",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109410326_10188892.jpg?alt=media&token=78b72c5d-f135-40cc-8f46-b3ed0e3ecb85",
+    "credit": "Imagen de CreativeCanvasDesign en Pixabay"
+  },
+  "blocks": [
+    {
+      "kind": "youtube",
+      "title": "Un cuento sobre compartir",
+      "media": {
+        "source": "youtube",
+        "query": "cuento para niños aprender a compartir los juguetes",
+        "url": "https://www.youtube.com/embed/RDyf9YYo-bE",
+        "credit": "Video de Esmeralda Te Cuenta Un Cuento en YouTube: ¡Es mío, mi juguete! | Cuento para aprender a compartir | Esmeralda Te Cuenta Un Cuento"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "¿Qué están haciendo estos niños? Conversemos",
+      "media": {
+        "source": "pixabay",
+        "query": "niños compartiendo juguetes",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109411845_9950627.jpg?alt=media&token=17e9277a-5f72-4d2d-8995-1a45e650dcc9",
+        "credit": "Imagen de tanrıca en Pixabay"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Juguemos con alegría y sin pelear",
+      "media": {
+        "source": "youtube",
+        "query": "canción infantil ayudar a los demás valores",
+        "url": "https://www.youtube.com/embed/63NvorPOP74",
+        "credit": "Video de Little Angel Español - Canciones Infantiles en YouTube: Juguemos Con Alegría y Sin Pelear | Canciones Infantiles De Bebé Juan | Little Angel Español"
+      }
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "code": "g2-mat-dinero-quiz",
+  "grade": 2,
+  "subject": "matematica",
+  "collection": "g2-mat-operaciones",
+  "order": 3,
+  "type": "ludiquiz",
+  "title": "Contemos córdobas",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "mercado de frutas",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110421816_4856748.jpg?alt=media&token=72e21575-c8a0-4ccc-83d8-dca592921c54",
+    "credit": "Imagen de DesignDrawArtes en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "Una moneda de 5 córdobas y otra de 5 córdobas suman...",
+      "answers": [
+        {
+          "text": "10 córdobas",
+          "correct": true
+        },
+        {
+          "text": "5 córdobas",
+          "correct": false
+        },
+        {
+          "text": "55 córdobas",
+          "correct": false
+        },
+        {
+          "text": "15 córdobas",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Tengo un billete de 20 córdobas y compro un pan de 10. ¿Cuánto me queda?",
+      "answers": [
+        {
+          "text": "10 córdobas",
+          "correct": true
+        },
+        {
+          "text": "30 córdobas",
+          "correct": false
+        },
+        {
+          "text": "20 córdobas",
+          "correct": false
+        },
+        {
+          "text": "5 córdobas",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué vale más?",
+      "answers": [
+        {
+          "text": "Un billete de 50",
+          "correct": true
+        },
+        {
+          "text": "Un billete de 20",
+          "correct": false
+        },
+        {
+          "text": "Un billete de 10",
+          "correct": false
+        },
+        {
+          "text": "Una moneda de 5",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Un jugo cuesta 15 córdobas. ¿Me alcanza con 10 córdobas?",
+      "answers": [
+        {
+          "text": "Sí, me sobra",
+          "correct": false
+        },
+        {
+          "text": "No, me faltan 5",
+          "correct": true
+        },
+        {
+          "text": "Sí, justo",
+          "correct": false
+        },
+        {
+          "text": "No, me faltan 15",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuántas monedas de 1 córdoba forman 5 córdobas?",
+      "answers": [
+        {
+          "text": "1",
+          "correct": false
+        },
+        {
+          "text": "10",
+          "correct": false
+        },
+        {
+          "text": "5",
+          "correct": true
+        },
+        {
+          "text": "50",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

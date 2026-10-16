@@ -1,0 +1,338 @@
+[
+  {
+    "code": "g1-mat-numeros",
+    "grade": 1,
+    "subject": "matematica",
+    "order": 1,
+    "name": "Números del 0 al 20",
+    "description": "Contar, leer y comparar números con objetos de todos los días.",
+    "cover": {
+      "source": "pixabay",
+      "query": "números coloridos niños",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107793535_10379909.jpg?alt=media&token=2db1ee22-71bb-460b-bd9f-ad4d8b75f31f",
+      "credit": "Imagen de Królestwo_Nauki en Pixabay"
+    }
+  },
+  {
+    "code": "g1-mat-sumas-restas",
+    "grade": 1,
+    "subject": "matematica",
+    "order": 2,
+    "name": "Sumas y restas hasta 10",
+    "description": "Juntar y quitar objetos para descubrir cuántos quedan.",
+    "cover": {
+      "source": "pixabay",
+      "query": "niños contando bloques",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107798905_8656244.jpg?alt=media&token=ba4168b3-476b-4b3f-8848-4911001f590f",
+      "credit": "Imagen de geralt en Pixabay"
+    }
+  },
+  {
+    "code": "g1-mat-figuras",
+    "grade": 1,
+    "subject": "matematica",
+    "order": 3,
+    "name": "Figuras y formas",
+    "description": "Círculos, cuadrados y triángulos en el mundo que nos rodea.",
+    "cover": {
+      "source": "pixabay",
+      "query": "figuras geométricas coloridas",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107799676_8836763.jpg?alt=media&token=48fe3b22-6ba8-4c5f-bbd1-84c49bbf89bf",
+      "credit": "Imagen de Aristal en Pixabay"
+    }
+  },
+  {
+    "code": "g1-len-vocales",
+    "grade": 1,
+    "subject": "lengua-literatura",
+    "order": 1,
+    "name": "Las vocales",
+    "description": "Reconocer el sonido de la a, e, i, o, u al inicio de las palabras.",
+    "cover": {
+      "source": "pixabay",
+      "query": "letras abecedario colores",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107800604_1136170.jpg?alt=media&token=1aab19c8-d576-4ec6-bf35-f3d6565fcdd6",
+      "credit": "Imagen de Larchick en Pixabay"
+    }
+  },
+  {
+    "code": "g1-len-silabas",
+    "grade": 1,
+    "subject": "lengua-literatura",
+    "order": 2,
+    "name": "Sílabas y palabras",
+    "description": "Formar palabras con m, p, s y l, y contar sus sílabas.",
+    "cover": {
+      "source": "pixabay",
+      "query": "niño leyendo libro",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107801335_7712948.jpg?alt=media&token=5ca14069-13c6-44bc-8f45-ee2fe7b926c1",
+      "credit": "Imagen de marinamejj en Pixabay"
+    }
+  },
+  {
+    "code": "g1-len-cuentos",
+    "grade": 1,
+    "subject": "lengua-literatura",
+    "order": 3,
+    "name": "Escucho y comprendo",
+    "description": "Cuentos y fábulas cortas para escuchar, recordar y conversar.",
+    "cover": {
+      "source": "unsplash",
+      "query": "libros infantiles coloridos",
+      "url": "https://images.unsplash.com/photo-1455884981818-54cb785db6fc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxsaWJyb3MlMjBpbmZhbnRpbGVzJTIwY29sb3JpZG9zfGVzfDF8MHx8fDE3OTIxMDc4OTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "credit": "Foto de Annie Spratt en Unsplash"
+    }
+  },
+  {
+    "code": "g1-cmm-cuerpo",
+    "grade": 1,
+    "subject": "conociendo-mi-mundo",
+    "order": 1,
+    "name": "Mi cuerpo y mis sentidos",
+    "description": "Conocer las partes del cuerpo y para qué sirve cada sentido.",
+    "cover": {
+      "source": "pixabay",
+      "query": "niños felices jugando",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109356738_1268694.jpg?alt=media&token=9d482b5c-502f-4cb9-8b4d-f76597efdd33",
+      "credit": "Imagen de La_Petite_Femme en Pixabay"
+    }
+  },
+  {
+    "code": "g1-cmm-naturaleza",
+    "grade": 1,
+    "subject": "conociendo-mi-mundo",
+    "order": 2,
+    "name": "Animales de Nicaragua",
+    "description": "Los animales que viven en nuestro país y cómo cuidarlos.",
+    "cover": {
+      "source": "unsplash",
+      "query": "selva tropical nicaragua",
+      "url": "https://images.unsplash.com/photo-1712228960105-86491a8bdc72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxzZWx2YSUyMHRyb3BpY2FsJTIwbmljYXJhZ3VhfGVzfDF8MHx8fDE3OTIxMDkyODd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "credit": "Foto de Mario von Rotz en Unsplash"
+    }
+  },
+  {
+    "code": "g1-val-convivencia",
+    "grade": 1,
+    "subject": "creciendo-en-valores",
+    "order": 1,
+    "name": "Convivo con respeto",
+    "description": "Saludar, compartir, pedir permiso y ayudar a los demás.",
+    "cover": {
+      "source": "pixabay",
+      "query": "niños abrazados amistad",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109358822_10331242.jpg?alt=media&token=f354ba49-7ece-4775-998d-c4fd43aa8811",
+      "credit": "Imagen de Tilixia-Summer en Pixabay"
+    }
+  },
+  {
+    "code": "g1-edf-movimiento",
+    "grade": 1,
+    "subject": "educacion-fisica",
+    "order": 1,
+    "name": "Me muevo y juego",
+    "description": "Movimientos, juegos y hábitos para cuidar el cuerpo.",
+    "cover": {
+      "source": "pixabay",
+      "query": "niños corriendo parque",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109359701_10458443.jpg?alt=media&token=aa8fb56d-a995-4d93-b31a-37d2f40cc279",
+      "credit": "Imagen de flutie8211 en Pixabay"
+    }
+  },
+  {
+    "code": "g1-art-colores-musica",
+    "grade": 1,
+    "subject": "expresion-cultural-artistica",
+    "order": 1,
+    "name": "Colores y música",
+    "description": "Mezclar colores y conocer los instrumentos de nuestra música.",
+    "cover": {
+      "source": "pixabay",
+      "query": "pinturas de colores",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109360494_1674642.jpg?alt=media&token=f7dc9611-0935-4c1b-bd1a-361d256c16bc",
+      "credit": "Imagen de gdakaska en Pixabay"
+    }
+  },
+  {
+    "code": "g1-efe-patria",
+    "grade": 1,
+    "subject": "efemerides",
+    "order": 1,
+    "name": "Mi patria Nicaragua",
+    "description": "Los símbolos patrios y las fiestas de septiembre.",
+    "cover": {
+      "source": "pixabay",
+      "query": "bandera de nicaragua",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109361252_4613142.jpg?alt=media&token=046c39a5-8d76-496d-9f53-484847053b5a",
+      "credit": "Imagen de TheDigitalArtist en Pixabay"
+    }
+  },
+  {
+    "code": "g2-mat-numeros",
+    "grade": 2,
+    "subject": "matematica",
+    "order": 1,
+    "name": "Números hasta 100",
+    "description": "Decenas, unidades y cómo leer, escribir y comparar números.",
+    "cover": {
+      "source": "pixabay",
+      "query": "números coloridos",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110338052_9118109.jpg?alt=media&token=94995cba-9824-4b4f-bee5-5fb605b42f45",
+      "credit": "Imagen de geralt en Pixabay"
+    }
+  },
+  {
+    "code": "g2-mat-operaciones",
+    "grade": 2,
+    "subject": "matematica",
+    "order": 2,
+    "name": "Sumas, restas y dinero",
+    "description": "Calcular hasta 100 y resolver problemas con córdobas.",
+    "cover": {
+      "source": "pixabay",
+      "query": "calculadora niños matemáticas",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110339871_6744948.jpg?alt=media&token=f5592171-3848-49d2-9bac-20265f3b2610",
+      "credit": "Imagen de Elf-Moondance en Pixabay"
+    }
+  },
+  {
+    "code": "g2-mat-medidas",
+    "grade": 2,
+    "subject": "matematica",
+    "order": 3,
+    "name": "La hora, medidas y cuerpos",
+    "description": "Leer el reloj, medir y reconocer cuerpos geométricos.",
+    "cover": {
+      "source": "pixabay",
+      "query": "reloj de pared colorido",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110340723_9414115.jpg?alt=media&token=6a72c289-636d-4895-b5f7-3e2ea52b5148",
+      "credit": "Imagen de flutie8211 en Pixabay"
+    }
+  },
+  {
+    "code": "g2-len-palabras",
+    "grade": 2,
+    "subject": "lengua-literatura",
+    "order": 1,
+    "name": "Palabras y sílabas trabadas",
+    "description": "Sílabas con bl, br, pl, fl y el orden alfabético.",
+    "cover": {
+      "source": "pixabay",
+      "query": "letras de madera",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110341536_8746280.jpg?alt=media&token=b6b20a4f-7924-48f3-959f-253e8ea09e2e",
+      "credit": "Imagen de beasternchen en Pixabay"
+    }
+  },
+  {
+    "code": "g2-len-oraciones",
+    "grade": 2,
+    "subject": "lengua-literatura",
+    "order": 2,
+    "name": "Oraciones y signos",
+    "description": "Nombres, mayúsculas, signos y palabras opuestas.",
+    "cover": {
+      "source": "unsplash",
+      "query": "niños escribiendo en cuaderno",
+      "url": "https://images.unsplash.com/photo-1565843248736-8c41e6db117b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxuaSVDMyVCMW9zJTIwZXNjcmliaWVuZG8lMjBlbiUyMGN1YWRlcm5vfGVzfDF8MHx8fDE3OTIxMTAyODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "credit": "Foto de Jonathan Borba en Unsplash"
+    }
+  },
+  {
+    "code": "g2-len-cuentos",
+    "grade": 2,
+    "subject": "lengua-literatura",
+    "order": 3,
+    "name": "Leo y comprendo",
+    "description": "Fábulas y cuentos para leer, escuchar y comentar.",
+    "cover": {
+      "source": "pixabay",
+      "query": "libro abierto ilustración",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110342936_160172.jpg?alt=media&token=f72ad1c2-493e-4e69-b319-a759a26da40f",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    }
+  },
+  {
+    "code": "g2-cmm-seres-vivos",
+    "grade": 2,
+    "subject": "conociendo-mi-mundo",
+    "order": 1,
+    "name": "Seres vivos y el agua",
+    "description": "Las plantas, los animales y por qué cuidar el agua.",
+    "cover": {
+      "source": "unsplash",
+      "query": "lago de nicaragua volcán",
+      "url": "https://images.unsplash.com/photo-1711609065017-749841408b17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxsYWdvJTIwZGUlMjBuaWNhcmFndWElMjB2b2xjJUMzJUExbnxlc3wxfDB8fHwxNzkyMTEwMjg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "credit": "Foto de Mario von Rotz en Unsplash"
+    }
+  },
+  {
+    "code": "g2-cmm-comunidad",
+    "grade": 2,
+    "subject": "conociendo-mi-mundo",
+    "order": 2,
+    "name": "Mi comunidad",
+    "description": "Cómo nos movemos y vivimos en nuestra comunidad.",
+    "cover": {
+      "source": "pixabay",
+      "query": "pueblo colonial colores",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110344090_159714.jpg?alt=media&token=0df80c5b-1b25-47a5-a284-a43f0957eb8b",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    }
+  },
+  {
+    "code": "g2-val-responsabilidad",
+    "grade": 2,
+    "subject": "creciendo-en-valores",
+    "order": 1,
+    "name": "Soy responsable y honesto",
+    "description": "Cumplir mis deberes, decir la verdad y cuidar el ambiente.",
+    "cover": {
+      "source": "pixabay",
+      "query": "niños plantando árbol",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110345064_1732244.jpg?alt=media&token=a0eda529-adcc-4820-873e-18eb8df48956",
+      "credit": "Imagen de Prawny en Pixabay"
+    }
+  },
+  {
+    "code": "g2-edf-juegos",
+    "grade": 2,
+    "subject": "educacion-fisica",
+    "order": 1,
+    "name": "Juegos tradicionales",
+    "description": "Trompos, chibolas, papelotes y juegos de siempre.",
+    "cover": {
+      "source": "pixabay",
+      "query": "trompo de madera",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110345909_304298.jpg?alt=media&token=0c94ff0f-8afd-4ab4-9a5f-f5dd40454363",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    }
+  },
+  {
+    "code": "g2-art-cultura",
+    "grade": 2,
+    "subject": "expresion-cultural-artistica",
+    "order": 1,
+    "name": "Nuestra cultura",
+    "description": "Bailes, música y artesanías de Nicaragua.",
+    "cover": {
+      "source": "pixabay",
+      "query": "cerámica artesanal",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110346813_9061670.jpg?alt=media&token=200645b2-2579-4b0f-8199-2bc3c1af50b8",
+      "credit": "Imagen de tarasyasinski en Pixabay"
+    }
+  },
+  {
+    "code": "g2-efe-fechas",
+    "grade": 2,
+    "subject": "efemerides",
+    "order": 1,
+    "name": "Fechas y personajes",
+    "description": "Rubén Darío, la Gritería y otras fechas de nuestro país.",
+    "cover": {
+      "source": "pixabay",
+      "query": "libro de poesía antiguo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110347696_2687881.jpg?alt=media&token=2dffbd1b-1ef8-4ac2-a49d-cf9a6600f0f4",
+      "credit": "Imagen de CCXpistiavos en Pixabay"
+    }
+  }
+]

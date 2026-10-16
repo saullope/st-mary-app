@@ -1,0 +1,58 @@
+{
+  "code": "g2-mat-medidas-leccion",
+  "grade": 2,
+  "subject": "matematica",
+  "collection": "g2-mat-medidas",
+  "order": 3,
+  "type": "ludileccion",
+  "title": "Medimos y leemos el reloj",
+  "durationMin": 8,
+  "cover": {
+    "source": "pixabay",
+    "query": "regla y cinta métrica",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110422685_6370199.jpg?alt=media&token=1591d9a6-6321-4b26-a1c7-8962a05f8c1f",
+    "credit": "Imagen de flutie8211 en Pixabay"
+  },
+  "blocks": [
+    {
+      "kind": "youtube",
+      "title": "Aprendamos a medir: el metro y el centímetro",
+      "media": {
+        "source": "youtube",
+        "query": "medidas de longitud para niños metro centímetro",
+        "url": "https://www.youtube.com/embed/D-Txj8PaB_I",
+        "credit": "Video de Peques Aprenden Jugando en YouTube: Unidades de medida centímetro y metro para niños. Longitud. Video de Peques Aprenden Jugando."
+      }
+    },
+    {
+      "kind": "image",
+      "title": "Con la regla medimos cosas pequeñas, como un lápiz",
+      "media": {
+        "source": "pixabay",
+        "query": "regla de medir",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110424201_161210.jpg?alt=media&token=35d144e0-2d23-4921-823f-91f6243ecaf0",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Aprendamos a leer las horas del reloj",
+      "media": {
+        "source": "youtube",
+        "query": "aprender las horas del reloj para niños",
+        "url": "https://www.youtube.com/embed/RGDXyDn4ibY",
+        "credit": "Video de Math2me Kids en YouTube: 🔴 Uso del Reloj | para niños"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "Este reloj marca las 8 en punto: la aguja larga en el 12",
+      "media": {
+        "source": "counting",
+        "query": "clock:8h00",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_4a8c07943cc62156.svg?alt=media&token=db03cf60-b159-458b-9f4a-6fa151a969c3",
+        "credit": "Ilustración de LudiGame"
+      }
+    }
+  ]
+}

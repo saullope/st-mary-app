@@ -1,0 +1,180 @@
+{
+  "code": "g1-len-silabas-quiz",
+  "grade": 1,
+  "subject": "lengua-literatura",
+  "collection": "g1-len-silabas",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "La sílaba que falta",
+  "durationMin": 5,
+  "cover": {
+    "source": "unsplash",
+    "query": "niña escribiendo en cuaderno",
+    "url": "https://images.unsplash.com/photo-1646617747593-8f075659286a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxuaSVDMyVCMWElMjBlc2NyaWJpZW5kbyUyMGVuJTIwY3VhZGVybm98ZXN8MXwwfHx8MTc5MjEwNzg5Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+    "credit": "Foto de Kelly Sikkema en Unsplash"
+  },
+  "questions": [
+    {
+      "text": "Completa: ma _ _ (lo que usas para saludar)",
+      "answers": [
+        {
+          "text": "no",
+          "correct": true
+        },
+        {
+          "text": "sa",
+          "correct": false
+        },
+        {
+          "text": "pa",
+          "correct": false
+        },
+        {
+          "text": "lo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "mano",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107816930_8843887.jpg?alt=media&token=e4e780b9-4e09-49fd-95e9-eb765d8845ea",
+        "credit": "Imagen de Boy-Employee en Pixabay"
+      }
+    },
+    {
+      "text": "Completa: _ _ to (el animal que dice cua cua)",
+      "answers": [
+        {
+          "text": "ga",
+          "correct": false
+        },
+        {
+          "text": "pa",
+          "correct": true
+        },
+        {
+          "text": "ma",
+          "correct": false
+        },
+        {
+          "text": "lo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "pato",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107818147_4679464.jpg?alt=media&token=d77cf830-b8ae-4410-9610-dee41a504ed5",
+        "credit": "Imagen de PAPKOK en Pixabay"
+      }
+    },
+    {
+      "text": "Completa: me _ _ (donde comemos)",
+      "answers": [
+        {
+          "text": "sa",
+          "correct": true
+        },
+        {
+          "text": "lo",
+          "correct": false
+        },
+        {
+          "text": "no",
+          "correct": false
+        },
+        {
+          "text": "pa",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "mesa de comedor",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107818836_1687121.jpg?alt=media&token=54bdf330-69b3-4e20-a291-519a974169e9",
+        "credit": "Imagen de PIRO4D en Pixabay"
+      }
+    },
+    {
+      "text": "Completa: _ _ na (la vemos en el cielo de noche)",
+      "answers": [
+        {
+          "text": "lu",
+          "correct": true
+        },
+        {
+          "text": "ba",
+          "correct": false
+        },
+        {
+          "text": "pi",
+          "correct": false
+        },
+        {
+          "text": "lo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "luna llena noche",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107819597_7674557.jpg?alt=media&token=338d7c62-99f7-4842-8a9c-c1d832ee9006",
+        "credit": "Imagen de betidraws en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué palabra empieza con la sílaba «so»?",
+      "answers": [
+        {
+          "text": "mesa",
+          "correct": false
+        },
+        {
+          "text": "sol",
+          "correct": true
+        },
+        {
+          "text": "pato",
+          "correct": false
+        },
+        {
+          "text": "luna",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "sol",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107820367_8553511.jpg?alt=media&token=99e2c9ea-f675-4925-9b2b-ff048928da39",
+        "credit": "Imagen de Andrey_and_Olesya en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué palabra empieza con la sílaba «pe»?",
+      "answers": [
+        {
+          "text": "pelota",
+          "correct": true
+        },
+        {
+          "text": "mono",
+          "correct": false
+        },
+        {
+          "text": "sapo",
+          "correct": false
+        },
+        {
+          "text": "lima",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "pelota",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107820943_157930.jpg?alt=media&token=dbaa3541-e2a4-46fe-b393-5183ae0162c3",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    }
+  ]
+}

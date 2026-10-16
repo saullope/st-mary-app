@@ -10,9 +10,10 @@ import { validateFormForSave } from "@/features/form/formQuestions";
 import { validateMemoryForSave } from "@/features/memory/memoryCards";
 import { useTranslations } from "next-intl";
 import { useMessage } from "@/lib/i18n/useMessage";
+import { announceActivitySaved } from "./activitySavedEvent";
 
 export const SaveActivityButton = () => {
-  const { state, resetEditor } = useActivityEditor();
+  const { state, resetEditor, setActivityId } = useActivityEditor();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations("Editor.save");
@@ -150,6 +151,14 @@ export const SaveActivityButton = () => {
         } else {
           notify.success(t("savedSuccess"));
         }
+      }
+
+      // La visita "Crea tu primera actividad" pide quedarse en el editor; con el id la
+      // actividad pasa a modo edición y el siguiente guardado la actualiza en vez de duplicarla.
+      const savedId: number | null = result.activityId ?? state.activityId ?? null;
+      if (!announceActivitySaved(savedId) && savedId !== null) {
+        setActivityId(savedId);
+        return;
       }
 
       // 3. Limpiar y Redirigir

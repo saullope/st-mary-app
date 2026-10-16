@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FaClone } from "react-icons/fa6";
-import { cloneTemplateActivity } from "@/app/dashboard/templates/actions";
+import { saveTemplateCopy } from "@/app/dashboard/templates/actions";
 import { notify } from "@/components/ui";
 import { getEditorRoute, openPendingEditorTab } from "@/lib/editorTab";
 import { useTranslations } from "next-intl";
@@ -20,13 +20,13 @@ export default function UseTemplateButton({ templateActivityId, tipoActividadId 
     const editorTab = openPendingEditorTab();
     setCloning(true);
     try {
-      const result = await cloneTemplateActivity(templateActivityId);
-      if (result.success && result.newActivityId) {
-        editorTab.navigate(getEditorRoute(tipoActividadId, result.newActivityId));
+      const result = await saveTemplateCopy(templateActivityId);
+      if (result.success) {
+        editorTab.navigate(getEditorRoute(tipoActividadId, result.copyId));
         setCloning(false);
       } else {
         editorTab.cancel();
-        notify.error(t("cloneFailed"), result.error || t("cloneError"));
+        notify.error(t("cloneFailed"), result.error);
         setCloning(false);
       }
     } catch (error) {

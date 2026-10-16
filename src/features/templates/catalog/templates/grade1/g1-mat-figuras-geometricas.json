@@ -1,0 +1,162 @@
+{
+  "code": "g1-mat-figuras-geometricas",
+  "grade": 1,
+  "subject": "matematica",
+  "collection": "g1-mat-figuras",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Figuras a mi alrededor",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "figuras geométricas",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107841580_7737638.jpg?alt=media&token=a8295c12-1f0b-4066-9404-121401851248",
+    "credit": "Imagen de PatoLenin en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Qué forma tiene una pelota?",
+      "answers": [
+        {
+          "text": "Cuadrado",
+          "correct": false
+        },
+        {
+          "text": "Círculo",
+          "correct": true
+        },
+        {
+          "text": "Triángulo",
+          "correct": false
+        },
+        {
+          "text": "Rectángulo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "pelota de fútbol",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107842487_157930.jpg?alt=media&token=fdb8618a-a8bd-4e38-9e61-a4983967a5aa",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuántos lados tiene un triángulo?",
+      "answers": [
+        {
+          "text": "2",
+          "correct": false
+        },
+        {
+          "text": "4",
+          "correct": false
+        },
+        {
+          "text": "3",
+          "correct": true
+        },
+        {
+          "text": "5",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué figura tiene 4 lados iguales?",
+      "answers": [
+        {
+          "text": "Cuadrado",
+          "correct": true
+        },
+        {
+          "text": "Círculo",
+          "correct": false
+        },
+        {
+          "text": "Triángulo",
+          "correct": false
+        },
+        {
+          "text": "Óvalo",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué forma tiene una puerta?",
+      "answers": [
+        {
+          "text": "Círculo",
+          "correct": false
+        },
+        {
+          "text": "Triángulo",
+          "correct": false
+        },
+        {
+          "text": "Rectángulo",
+          "correct": true
+        },
+        {
+          "text": "Estrella",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "puerta de madera",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107844012_7206803.jpg?alt=media&token=ef3f4119-e007-4d36-94f3-114887ce84bf",
+        "credit": "Imagen de Eleatell en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué forma tiene una porción de pizza?",
+      "answers": [
+        {
+          "text": "Cuadrado",
+          "correct": false
+        },
+        {
+          "text": "Triángulo",
+          "correct": true
+        },
+        {
+          "text": "Círculo",
+          "correct": false
+        },
+        {
+          "text": "Rectángulo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "porción de pizza",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107844805_155771.jpg?alt=media&token=baf7e540-d867-4216-a89a-8e1b37392e44",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál figura no tiene esquinas?",
+      "answers": [
+        {
+          "text": "Cuadrado",
+          "correct": false
+        },
+        {
+          "text": "Triángulo",
+          "correct": false
+        },
+        {
+          "text": "Círculo",
+          "correct": true
+        },
+        {
+          "text": "Rectángulo",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

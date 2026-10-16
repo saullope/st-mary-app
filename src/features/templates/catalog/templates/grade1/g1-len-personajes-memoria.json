@@ -1,0 +1,54 @@
+{
+  "code": "g1-len-personajes-memoria",
+  "grade": 1,
+  "subject": "lengua-literatura",
+  "collection": "g1-len-cuentos",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Personajes de cuentos",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "cuentos infantiles ilustración",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107810563_9591466.jpg?alt=media&token=32e08ac2-7a87-4352-ab04-f8feae3117a7",
+    "credit": "Imagen de betidraws en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "tortuga dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107811344_7627794.jpg?alt=media&token=9b1f80d4-ee60-4274-bbec-9330a482e8ef",
+      "credit": "Imagen de Alan_Frijns en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "liebre dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107812102_6533365.jpg?alt=media&token=1748b5a2-a527-42da-a45f-4148221446e3",
+      "credit": "Imagen de Sunriseforever en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "lobo dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107812853_10267172.jpg?alt=media&token=5bda43ca-31e7-4e98-931f-9793b8017521",
+      "credit": "Imagen de betidraws en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cerdito dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107813666_7005180.jpg?alt=media&token=6710e017-38e8-452d-bb79-f6c354293ffe",
+      "credit": "Imagen de souandresantana en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "caperucita roja",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107814463_10351433.jpg?alt=media&token=a9f0800b-2c0e-45f6-ba7d-82ee5d3a9695",
+      "credit": "Imagen de betidraws en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "búho dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107815140_10459025.jpg?alt=media&token=739ebe53-c596-419a-b090-46136666e963",
+      "credit": "Imagen de betidraws en Pixabay"
+    }
+  ]
+}

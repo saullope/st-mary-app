@@ -1,0 +1,72 @@
+{
+  "code": "g2-cmm-animales-vf",
+  "grade": 2,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g2-cmm-seres-vivos",
+  "order": 3,
+  "type": "trueorfalse",
+  "title": "Animales domésticos y salvajes",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "animales de granja",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110360418_10159933.jpg?alt=media&token=77ed92dd-4b47-4733-a892-e376a66c0c46",
+    "credit": "Imagen de Ylanite_NietjuhArt en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "El gato es un animal doméstico.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "gato",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110361315_8702500.jpg?alt=media&token=939a288d-0c78-4cbe-b61a-a05f42988787",
+        "credit": "Imagen de BiancaVanDijk en Pixabay"
+      }
+    },
+    {
+      "text": "El jaguar vive en las casas como mascota.",
+      "answer": false,
+      "media": {
+        "source": "pixabay",
+        "query": "jaguar",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110362678_42010.jpg?alt=media&token=2e11ba08-31c2-41f8-9533-0c579a547108",
+        "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+      }
+    },
+    {
+      "text": "La vaca nos da leche.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "vaca",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110363618_10274653.jpg?alt=media&token=9bc9a9c3-26fe-4d45-a70d-3bd9b91ced50",
+        "credit": "Imagen de MissyWhimsyArt en Pixabay"
+      }
+    },
+    {
+      "text": "El perezoso vive en los árboles del bosque.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "perezoso",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110364602_5835891.jpg?alt=media&token=9e2845bb-a085-4ead-a7b2-5715e5d8495d",
+        "credit": "Imagen de Saydung en Pixabay"
+      }
+    },
+    {
+      "text": "El cocodrilo es una buena mascota para la casa.",
+      "answer": false
+    },
+    {
+      "text": "Las gallinas son animales de granja.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "gallinas",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110365445_8373648.jpg?alt=media&token=8707d391-b368-4197-b2c0-174b9de966c0",
+        "credit": "Imagen de mai_hint en Pixabay"
+      }
+    }
+  ]
+}

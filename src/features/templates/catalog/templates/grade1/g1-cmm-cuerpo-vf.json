@@ -1,0 +1,60 @@
+{
+  "code": "g1-cmm-cuerpo-vf",
+  "grade": 1,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g1-cmm-cuerpo",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Cuido mi cuerpo",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "niño lavándose las manos",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109389462_4972638.jpg?alt=media&token=b1bb01af-b767-442d-b96f-061af5b9ef77",
+    "credit": "Imagen de geralt en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "Debo lavarme las manos antes de comer.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "lavarse las manos",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109390283_5735213.jpg?alt=media&token=c0666994-d4cd-477a-aa05-f4f84df9d239",
+        "credit": "Imagen de HtcHnm en Pixabay"
+      }
+    },
+    {
+      "text": "Cepillarme los dientes solo una vez a la semana está bien.",
+      "answer": false
+    },
+    {
+      "text": "Dormir bien me ayuda a crecer sano.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "niño durmiendo",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109391091_8233868.jpg?alt=media&token=fd2f4118-6eaa-459e-aa74-f5617a2dfc5e",
+        "credit": "Imagen de geovanaegilsonsilva en Pixabay"
+      }
+    },
+    {
+      "text": "Comer frutas y verduras es bueno para mi cuerpo.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "frutas y verduras",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109391915_8847758.jpg?alt=media&token=3532fe03-a18a-42f7-93ae-95150b3938e3",
+        "credit": "Imagen de Iffany en Pixabay"
+      }
+    },
+    {
+      "text": "Las uñas sucias no causan ninguna enfermedad.",
+      "answer": false
+    },
+    {
+      "text": "Tomar agua todos los días me mantiene sano.",
+      "answer": true
+    }
+  ]
+}

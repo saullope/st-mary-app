@@ -1,0 +1,60 @@
+{
+  "code": "g1-len-vocales-vf",
+  "grade": 1,
+  "subject": "lengua-literatura",
+  "collection": "g1-len-vocales",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Vocales: ¿verdadero o falso?",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "letras de colores",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107833984_9121378.jpg?alt=media&token=b34ccd90-bae0-438e-be7e-b375ee226de1",
+    "credit": "Imagen de geralt en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "Las vocales son cinco: a, e, i, o, u.",
+      "answer": true
+    },
+    {
+      "text": "«Mesa» empieza con vocal.",
+      "answer": false,
+      "media": {
+        "source": "pixabay",
+        "query": "mesa",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107834588_7386978.jpg?alt=media&token=d32707c3-1a67-410d-a5aa-e92fe389f217",
+        "credit": "Imagen de nnnhi en Pixabay"
+      }
+    },
+    {
+      "text": "«Ojo» empieza con la vocal o.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "ojo",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107835380_4453129.jpg?alt=media&token=83def918-c76a-4b25-832a-7182aaa76a41",
+        "credit": "Imagen de Nika_Akin en Pixabay"
+      }
+    },
+    {
+      "text": "La letra m es una vocal.",
+      "answer": false
+    },
+    {
+      "text": "«Uña» empieza con la vocal u.",
+      "answer": true
+    },
+    {
+      "text": "«Isla» empieza con la vocal a.",
+      "answer": false,
+      "media": {
+        "source": "pixabay",
+        "query": "isla",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107836163_7983688.jpg?alt=media&token=e5bc987d-cdc3-4ae8-9493-85f0ae2c63db",
+        "credit": "Imagen de silviagaudenzi en Pixabay"
+      }
+    }
+  ]
+}

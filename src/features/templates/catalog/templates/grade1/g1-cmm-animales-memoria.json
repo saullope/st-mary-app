@@ -1,0 +1,54 @@
+{
+  "code": "g1-cmm-animales-memoria",
+  "grade": 1,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g1-cmm-naturaleza",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de animales",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "animales de la selva ilustración",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109372678_7211336.jpg?alt=media&token=7d08703b-f54a-4261-a257-c7f56ac5cf12",
+    "credit": "Imagen de DianaWolfskin en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "iguana verde",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109373497_6580956.jpg?alt=media&token=b3e97b70-db02-4e91-95c6-dc4235157d21",
+      "credit": "Imagen de DremArtes en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "tortuga marina",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109374415_47047.jpg?alt=media&token=d0bc903b-b6ab-4ea5-b487-4fefe388953f",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "mono aullador",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109375312_786858.jpg?alt=media&token=c7b74267-8161-4680-8ec8-547bf49bbb54",
+      "credit": "Imagen de igla_111 en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "jaguar",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109376268_42010.jpg?alt=media&token=843dca99-8ab0-4a62-90fd-2bccca801a53",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "garza blanca",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109377060_3363541.jpg?alt=media&token=02994aca-c03f-4d74-a5dd-835da84b1094",
+      "credit": "Imagen de prettysleepy1 en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "tucán",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109377825_7991337.jpg?alt=media&token=67460b73-ce2f-4a54-bec5-8e0cc3ff5ea3",
+      "credit": "Imagen de BiancaVanDijk en Pixabay"
+    }
+  ]
+}

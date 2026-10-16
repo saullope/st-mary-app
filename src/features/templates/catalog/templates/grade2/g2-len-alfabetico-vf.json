@@ -1,0 +1,42 @@
+{
+  "code": "g2-len-alfabetico-vf",
+  "grade": 2,
+  "subject": "lengua-literatura",
+  "collection": "g2-len-palabras",
+  "order": 3,
+  "type": "trueorfalse",
+  "title": "El orden alfabético",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "abecedario colorido",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110390247_1136170.jpg?alt=media&token=48262f26-823c-4648-bc41-1cfde3a9d5b5",
+    "credit": "Imagen de Larchick en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "La letra que sigue a la a es la b.",
+      "answer": true
+    },
+    {
+      "text": "En orden alfabético, «Ana» va antes que «Beto».",
+      "answer": true
+    },
+    {
+      "text": "En orden alfabético, «mango» va antes que «coco».",
+      "answer": false
+    },
+    {
+      "text": "El abecedario termina con la letra z.",
+      "answer": true
+    },
+    {
+      "text": "La letra m va antes que la letra l.",
+      "answer": false
+    },
+    {
+      "text": "En orden alfabético, «dado» va antes que «elote».",
+      "answer": true
+    }
+  ]
+}

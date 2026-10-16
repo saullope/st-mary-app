@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { AdminUsers } from "@/components/settings/AdminUsers";
+import { TemplateCatalogSync } from "@/components/settings/TemplateCatalogSync";
 import getSession from '@/lib/auth/getSession'; 
 import getCurrentUser from '@/lib/auth/getCurrentUser';
 import { DecodedIdToken } from 'firebase-admin/auth';
@@ -28,6 +29,7 @@ export default async function AdminPage() {
   return (
     <div style={{ padding: '10px' }}>
       <AdminUsers />
+      <TemplateCatalogSync />
     </div>
   );
 }

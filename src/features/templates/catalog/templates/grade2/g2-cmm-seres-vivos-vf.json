@@ -1,0 +1,60 @@
+{
+  "code": "g2-cmm-seres-vivos-vf",
+  "grade": 2,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g2-cmm-seres-vivos",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Seres vivos y no vivos",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "naturaleza animales plantas",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110370522_7993566.jpg?alt=media&token=e91bcf24-3729-4b05-8832-de823848040d",
+    "credit": "Imagen de BiancaVanDijk en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "El perro es un ser vivo.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "perro",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110371304_7632906.jpg?alt=media&token=0f6b2c8c-51e4-4294-9034-420e18eed93a",
+        "credit": "Imagen de BiancaVanDijk en Pixabay"
+      }
+    },
+    {
+      "text": "Una piedra respira y crece.",
+      "answer": false,
+      "media": {
+        "source": "pixabay",
+        "query": "piedras",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110372098_8466950.jpg?alt=media&token=e85cdbba-86d9-4b65-8d71-856008a963c1",
+        "credit": "Imagen de Hardae en Pixabay"
+      }
+    },
+    {
+      "text": "Las plantas nacen, crecen y mueren.",
+      "answer": true
+    },
+    {
+      "text": "Una silla es un ser vivo.",
+      "answer": false
+    },
+    {
+      "text": "Todos los seres vivos necesitan alimento.",
+      "answer": true
+    },
+    {
+      "text": "Los peces son seres vivos que viven en el agua.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "peces de colores",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110372879_6379241.jpg?alt=media&token=eeb88047-4fcb-46d8-b649-3075688f0d3f",
+        "credit": "Imagen de Habib_Rahman en Pixabay"
+      }
+    }
+  ]
+}

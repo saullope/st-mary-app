@@ -1,0 +1,58 @@
+{
+  "code": "g1-mat-leccion-numeros",
+  "grade": 1,
+  "subject": "matematica",
+  "collection": "g1-mat-numeros",
+  "order": 4,
+  "type": "ludileccion",
+  "title": "Aprendo los números del 1 al 10",
+  "durationMin": 8,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños aprendiendo números",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107851565_5498036.jpg?alt=media&token=a85c6aae-4795-4f5f-9c10-ec46acfe9182",
+    "credit": "Imagen de 14823137 en Pixabay"
+  },
+  "blocks": [
+    {
+      "kind": "image",
+      "title": "Contemos juntos hasta 10: toca cada estrella con tu dedo",
+      "media": {
+        "source": "counting",
+        "query": "star:5 + star:5",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_d62b80737d849244.svg?alt=media&token=d55caabf-299a-45a3-aaf9-8315028191d7",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Cantemos los números del 1 al 10",
+      "media": {
+        "source": "youtube",
+        "query": "canción de los números del 1 al 10 para niños",
+        "url": "https://www.youtube.com/embed/suDoQAqWyfA",
+        "credit": "Video de lunacreciente en YouTube: La Canción de los Numeros del 1 al 10 | El Mono Silabo y Nicola Cavernicola | Lunacreciente"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "¿Cuántos lápices hay? Cuéntalos en voz alta",
+      "media": {
+        "source": "counting",
+        "query": "pencil:7",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_90e05d10b0998583.svg?alt=media&token=6416a13f-a54b-4146-83d7-6e7da21ba4ec",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Contemos objetos juntos",
+      "media": {
+        "source": "youtube",
+        "query": "aprender a contar del 1 al 10 para niños en español",
+        "url": "https://www.youtube.com/embed/qHkEDhTaPnk",
+        "credit": "Video de Smile and Learn - Español en YouTube: Los números del 1 al 10 - Aprende a escribir y a contar los números del 1 al 10"
+      }
+    }
+  ]
+}

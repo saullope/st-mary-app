@@ -47,7 +47,7 @@ export const SidebarDashboard = ({ collapsed, onToggle }: SidebarDashboardProps)
     const toggleLabel = collapsed ? t('expand') : t('collapse');
 
     return (
-        <div id="sidebar-dashboard" className={`${designStyles.sidebarDark} ${collapsed ? designStyles.sidebarCollapsed : ''}`}>
+        <div id="sidebar-dashboard" data-tour="sidebar" className={`${designStyles.sidebarDark} ${collapsed ? designStyles.sidebarCollapsed : ''}`}>
             <div className={`text-center ${designStyles.sidebarLogo}`}>
                 {collapsed ? (
                     <Image src="/images/PartialLogo.png" alt="LudiGame" width={44} height={48} style={{ objectFit: 'contain' }} />
@@ -75,6 +75,7 @@ export const SidebarDashboard = ({ collapsed, onToggle }: SidebarDashboardProps)
                             href={link.href}
                             className={`${designStyles.navLink} ${isActive ? designStyles.active : ''}`}
                             aria-current={isActive ? 'page' : undefined}
+                            data-tour={link.href === '/dashboard/create-activity' ? 'sidebar-create-activity' : undefined}
                         >
                             <link.icon className={designStyles.icon} aria-hidden="true" />
                             {/* When collapsed this label becomes the hover/focus tooltip, so it still names the link. */}

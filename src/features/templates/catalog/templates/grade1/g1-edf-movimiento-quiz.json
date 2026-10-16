@@ -1,0 +1,147 @@
+{
+  "code": "g1-edf-movimiento-quiz",
+  "grade": 1,
+  "subject": "educacion-fisica",
+  "collection": "g1-edf-movimiento",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Me muevo con mi cuerpo",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños haciendo ejercicio",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109399661_5571764.jpg?alt=media&token=26efbe86-595e-4205-9ce9-44f4803cec06",
+    "credit": "Imagen de HtcHnm en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Qué hacemos antes de jugar o hacer ejercicio?",
+      "answers": [
+        {
+          "text": "Dormir",
+          "correct": false
+        },
+        {
+          "text": "Calentar el cuerpo",
+          "correct": true
+        },
+        {
+          "text": "Comer mucho",
+          "correct": false
+        },
+        {
+          "text": "Nada",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "niños estirando",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109400455_9896330.jpg?alt=media&token=79e097d9-b35d-4306-9fa9-3b7ce595e09d",
+        "credit": "Imagen de gnasheshir en Pixabay"
+      }
+    },
+    {
+      "text": "¿Con qué parte del cuerpo pateamos la pelota?",
+      "answers": [
+        {
+          "text": "Con la cabeza",
+          "correct": false
+        },
+        {
+          "text": "Con el pie",
+          "correct": true
+        },
+        {
+          "text": "Con la mano",
+          "correct": false
+        },
+        {
+          "text": "Con el codo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "niño pateando pelota",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109401221_1719621.jpg?alt=media&token=e1c6da11-ef93-444a-9266-a3cb8a05847b",
+        "credit": "Imagen de Endresz en Pixabay"
+      }
+    },
+    {
+      "text": "Después de correr mucho, ¿qué es bueno tomar?",
+      "answers": [
+        {
+          "text": "Agua",
+          "correct": true
+        },
+        {
+          "text": "Refresco",
+          "correct": false
+        },
+        {
+          "text": "Café",
+          "correct": false
+        },
+        {
+          "text": "Nada",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "niño tomando agua",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109402238_7304699.jpg?alt=media&token=e75a0a3f-08fc-4db5-be26-3dc674fd25d2",
+        "credit": "Imagen de KiFoKu en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué movimiento hacemos para saltar la cuerda?",
+      "answers": [
+        {
+          "text": "Arrastrarnos",
+          "correct": false
+        },
+        {
+          "text": "Saltar",
+          "correct": true
+        },
+        {
+          "text": "Sentarnos",
+          "correct": false
+        },
+        {
+          "text": "Acostarnos",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "saltar la cuerda",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109403112_5773481.jpg?alt=media&token=530fd620-f56b-4b41-8cad-508d02be0161",
+        "credit": "Imagen de kirillsl en Pixabay"
+      }
+    },
+    {
+      "text": "Para no lastimarnos cuando jugamos debemos...",
+      "answers": [
+        {
+          "text": "Empujar a los demás",
+          "correct": false
+        },
+        {
+          "text": "Seguir las reglas del juego",
+          "correct": true
+        },
+        {
+          "text": "Correr sin mirar",
+          "correct": false
+        },
+        {
+          "text": "Jugar en la calle",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

@@ -144,7 +144,6 @@ export default function ActivityContentViewer({ activity }: { activity: any }) {
                   url={pareja.tarjetas[0].recurso.url}
                   type="IMAGEN"
                   width={150}
-                  height={150}
                 />
               )}
             </div>

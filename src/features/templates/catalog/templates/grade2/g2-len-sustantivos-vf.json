@@ -1,0 +1,48 @@
+{
+  "code": "g2-len-sustantivos-vf",
+  "grade": 2,
+  "subject": "lengua-literatura",
+  "collection": "g2-len-oraciones",
+  "order": 1,
+  "type": "trueorfalse",
+  "title": "Nombres de personas, animales y cosas",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños en la escuela",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110401951_7355058.jpg?alt=media&token=3e531d9f-2d4c-4a75-9598-5948d16b3f1b",
+    "credit": "Imagen de RosZie en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "«Perro» es el nombre de un animal.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "perro feliz",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110402746_6233868.jpg?alt=media&token=139a4178-bde0-484a-a3a4-ee2a09f3ab16",
+        "credit": "Imagen de dandelion_tea en Pixabay"
+      }
+    },
+    {
+      "text": "«Correr» es el nombre de una cosa.",
+      "answer": false
+    },
+    {
+      "text": "Los nombres de las personas se escriben con mayúscula, como María.",
+      "answer": true
+    },
+    {
+      "text": "«Managua» es el nombre de una ciudad.",
+      "answer": true
+    },
+    {
+      "text": "«Mesa» es el nombre de una persona.",
+      "answer": false
+    },
+    {
+      "text": "«Granada» se escribe con mayúscula porque es el nombre de una ciudad.",
+      "answer": true
+    }
+  ]
+}

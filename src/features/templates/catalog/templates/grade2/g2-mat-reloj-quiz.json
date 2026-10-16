@@ -1,0 +1,195 @@
+{
+  "code": "g2-mat-reloj-quiz",
+  "grade": 2,
+  "subject": "matematica",
+  "collection": "g2-mat-medidas",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "¿Qué hora es?",
+  "durationMin": 6,
+  "cover": {
+    "source": "counting",
+    "query": "clock:3h00",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_8055b7a95a49448a.svg?alt=media&token=ff8a006c-957d-41e0-86d7-4e92d7fa49ce",
+    "credit": "Ilustración de LudiGame"
+  },
+  "questions": [
+    {
+      "text": "¿Qué hora marca el reloj?",
+      "answers": [
+        {
+          "text": "Las 3 en punto",
+          "correct": true
+        },
+        {
+          "text": "Las 12 y cuarto",
+          "correct": false
+        },
+        {
+          "text": "Las 6 en punto",
+          "correct": false
+        },
+        {
+          "text": "Las 9 en punto",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "clock:3h00",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_8055b7a95a49448a.svg?alt=media&token=ff8a006c-957d-41e0-86d7-4e92d7fa49ce",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "¿Qué hora marca el reloj?",
+      "answers": [
+        {
+          "text": "Las 12 en punto",
+          "correct": false
+        },
+        {
+          "text": "Las 7 en punto",
+          "correct": true
+        },
+        {
+          "text": "Las 5 en punto",
+          "correct": false
+        },
+        {
+          "text": "Las 7 y media",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "clock:7h00",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_a5b1dacd93580e31.svg?alt=media&token=72b32e6c-6876-4d8e-927d-309bdb851cb2",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "¿Qué hora marca el reloj?",
+      "answers": [
+        {
+          "text": "Las 6 y media",
+          "correct": false
+        },
+        {
+          "text": "Las 9 y media",
+          "correct": true
+        },
+        {
+          "text": "Las 9 en punto",
+          "correct": false
+        },
+        {
+          "text": "Las 10 en punto",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "clock:9h30",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_c5510bc141aa7926.svg?alt=media&token=4fe6ead9-1416-46c8-8431-7a7ee3836896",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "¿Qué hora marca el reloj?",
+      "answers": [
+        {
+          "text": "Las 12 en punto",
+          "correct": true
+        },
+        {
+          "text": "Las 6 en punto",
+          "correct": false
+        },
+        {
+          "text": "Las 11 en punto",
+          "correct": false
+        },
+        {
+          "text": "Las 1 en punto",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "clock:12h00",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_7fd8cc72fae9e192.svg?alt=media&token=39124658-0408-467d-99aa-71d603cc3559",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "¿Qué hora marca el reloj?",
+      "answers": [
+        {
+          "text": "Las 4 y media",
+          "correct": true
+        },
+        {
+          "text": "Las 6 y media",
+          "correct": false
+        },
+        {
+          "text": "Las 4 en punto",
+          "correct": false
+        },
+        {
+          "text": "Las 5 en punto",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "clock:4h30",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_b2bf715ac53d2327.svg?alt=media&token=c5f7c2c7-9eed-494c-bf5d-087b522a0963",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "¿Cuántos minutos tiene una hora?",
+      "answers": [
+        {
+          "text": "30",
+          "correct": false
+        },
+        {
+          "text": "100",
+          "correct": false
+        },
+        {
+          "text": "60",
+          "correct": true
+        },
+        {
+          "text": "12",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "La aguja corta del reloj marca...",
+      "answers": [
+        {
+          "text": "Los minutos",
+          "correct": false
+        },
+        {
+          "text": "Las horas",
+          "correct": true
+        },
+        {
+          "text": "Los días",
+          "correct": false
+        },
+        {
+          "text": "Los segundos",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

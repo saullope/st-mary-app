@@ -1,0 +1,42 @@
+{
+  "code": "g2-val-honestidad-vf",
+  "grade": 2,
+  "subject": "creciendo-en-valores",
+  "collection": "g2-val-responsabilidad",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Digo la verdad",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños amigos",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110438587_8737453.jpg?alt=media&token=aad1a7a3-fdd5-4226-bd3f-9de9b77df16b",
+    "credit": "Imagen de Παῦλος en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "Si encuentro algo que no es mío, debo devolverlo.",
+      "answer": true
+    },
+    {
+      "text": "Decir mentiras está bien si nadie se entera.",
+      "answer": false
+    },
+    {
+      "text": "Ser honesto es decir la verdad aunque sea difícil.",
+      "answer": true
+    },
+    {
+      "text": "Copiar en un examen es una forma de ser honesto.",
+      "answer": false
+    },
+    {
+      "text": "Si me dan más vuelto del que me toca, lo devuelvo.",
+      "answer": true
+    },
+    {
+      "text": "Las personas confían más en quien dice la verdad.",
+      "answer": true
+    }
+  ]
+}

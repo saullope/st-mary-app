@@ -1,0 +1,177 @@
+{
+  "code": "g1-mat-sumas-hasta-10",
+  "grade": 1,
+  "subject": "matematica",
+  "collection": "g1-mat-sumas-restas",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Sumas hasta 10",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños sumando",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107866025_10295248.jpg?alt=media&token=00083462-668b-47d7-b721-8914dcf18a71",
+    "credit": "Imagen de CreativeCanvasDesign en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Cuánto es 2 + 3?",
+      "answers": [
+        {
+          "text": "4",
+          "correct": false
+        },
+        {
+          "text": "5",
+          "correct": true
+        },
+        {
+          "text": "6",
+          "correct": false
+        },
+        {
+          "text": "3",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuánto es 4 + 4?",
+      "answers": [
+        {
+          "text": "8",
+          "correct": true
+        },
+        {
+          "text": "6",
+          "correct": false
+        },
+        {
+          "text": "9",
+          "correct": false
+        },
+        {
+          "text": "7",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Hay 3 pájaros y llegan 2 más. ¿Cuántos pájaros hay?",
+      "answers": [
+        {
+          "text": "4",
+          "correct": false
+        },
+        {
+          "text": "6",
+          "correct": false
+        },
+        {
+          "text": "5",
+          "correct": true
+        },
+        {
+          "text": "3",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "bird:3 + bird:2",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_a7b28de882fcdd3a.svg?alt=media&token=81442b57-ca24-4fb0-826d-77ac2f3e1026",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "¿Cuánto es 6 + 1?",
+      "answers": [
+        {
+          "text": "5",
+          "correct": false
+        },
+        {
+          "text": "8",
+          "correct": false
+        },
+        {
+          "text": "7",
+          "correct": true
+        },
+        {
+          "text": "6",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Tengo 5 lápices y compro 5 más. ¿Cuántos tengo?",
+      "answers": [
+        {
+          "text": "10",
+          "correct": true
+        },
+        {
+          "text": "9",
+          "correct": false
+        },
+        {
+          "text": "11",
+          "correct": false
+        },
+        {
+          "text": "8",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "pencil:5 + pencil:5",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_d0c24093c6849596.svg?alt=media&token=2cf75b16-8ba0-47d3-8253-d4b2ed2a8a2d",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "¿Cuánto es 1 + 2?",
+      "answers": [
+        {
+          "text": "2",
+          "correct": false
+        },
+        {
+          "text": "3",
+          "correct": true
+        },
+        {
+          "text": "4",
+          "correct": false
+        },
+        {
+          "text": "1",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué suma da 9?",
+      "answers": [
+        {
+          "text": "4 + 4",
+          "correct": false
+        },
+        {
+          "text": "5 + 4",
+          "correct": true
+        },
+        {
+          "text": "6 + 2",
+          "correct": false
+        },
+        {
+          "text": "3 + 3",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

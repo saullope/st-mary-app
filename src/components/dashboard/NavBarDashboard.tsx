@@ -8,6 +8,7 @@ import { auth } from "@/firebase/firebase";
 import { BsGlobe } from 'react-icons/bs';
 import { FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import { LanguageSelector } from "@/components";
+import NotificationBell from "@/features/notifications/components/NotificationBell";
 import { notify } from "@/components/ui";
 import { AUTH_API_ROUTES } from "@/lib/auth/constants";
 import designStyles from '@/styles/pages/LudiDesign.module.css';
@@ -156,6 +157,7 @@ export const NavbarDashboard: React.FC<NavbarDashboardProps> = ({ sessionData })
                         <BsGlobe aria-hidden="true" />
                         <LanguageSelector />
                         </div>
+                        <NotificationBell />
                         <div className="dropdown">
                             <Dropdown>
                                 <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">

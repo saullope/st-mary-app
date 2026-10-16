@@ -8,11 +8,12 @@ import getCurrentUser from "@/lib/auth/getCurrentUser";
 
 jest.mock("@/lib/db", () => ({
   __esModule: true,
-  default: { lUDI_SESION: { findUnique: jest.fn(), update: jest.fn() } },
+  default: { lUDI_SESION: { findUnique: jest.fn(), update: jest.fn() }, ludiNotificacion: { deleteMany: jest.fn() } },
 }));
 jest.mock("@/lib/auth/getCurrentUser", () => ({ __esModule: true, default: jest.fn() }));
 
 const sesiones = prisma.lUDI_SESION as unknown as { findUnique: jest.Mock; update: jest.Mock };
+const notificaciones = (prisma as unknown as { ludiNotificacion: { deleteMany: jest.Mock } }).ludiNotificacion;
 const mockUser = getCurrentUser as jest.Mock;
 
 const evaluation = { sessionId: "15", teacherRating: 4, objectiveLevel: 1, templateDifficulty: "ADECUADA" };
@@ -38,6 +39,8 @@ describe("POST /api/live/teacher-feedback", () => {
       where: { id: BigInt(15) },
       data: { teacherRating: 4, objectiveLevel: 1, templateDifficulty: "ADECUADA" },
     });
+    // El aviso "¿Cómo te fue?" de esa sesión deja de tener sentido.
+    expect(notificaciones.deleteMany).toHaveBeenCalledWith({ where: { userId: "docente-1", clave: "evaluation:15" } });
   });
 
   it("descarta la dificultad si la actividad no viene de una plantilla", async () => {

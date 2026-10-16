@@ -1,0 +1,174 @@
+{
+  "code": "g2-len-trabadas-quiz",
+  "grade": 2,
+  "subject": "lengua-literatura",
+  "collection": "g2-len-palabras",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Completa la sílaba trabada",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "pluma de ave",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110409956_7881512.jpg?alt=media&token=eef50da7-2406-40e5-89bd-73837d948b5d",
+    "credit": "Imagen de GDJ en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "Completa: _ _ uma (lo que cubre a los pájaros)",
+      "answers": [
+        {
+          "text": "pl",
+          "correct": true
+        },
+        {
+          "text": "br",
+          "correct": false
+        },
+        {
+          "text": "fl",
+          "correct": false
+        },
+        {
+          "text": "tr",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "pluma de ave",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110410747_521492.jpg?alt=media&token=af59123e-f507-4b08-80c8-a328cb4e344b",
+        "credit": "Imagen de FlashBuddy en Pixabay"
+      }
+    },
+    {
+      "text": "Completa: _ _ ancha (sirve para quitar las arrugas a la ropa)",
+      "answers": [
+        {
+          "text": "bl",
+          "correct": false
+        },
+        {
+          "text": "pl",
+          "correct": true
+        },
+        {
+          "text": "fr",
+          "correct": false
+        },
+        {
+          "text": "cr",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "plancha de ropa",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110411569_10459529.jpg?alt=media&token=a87fc193-e51e-4e71-9d5e-c256ea9d9c28",
+        "credit": "Imagen de Mohamed_hassan en Pixabay"
+      }
+    },
+    {
+      "text": "Completa: _ _ azo (parte del cuerpo entre el hombro y la mano)",
+      "answers": [
+        {
+          "text": "br",
+          "correct": true
+        },
+        {
+          "text": "pl",
+          "correct": false
+        },
+        {
+          "text": "gl",
+          "correct": false
+        },
+        {
+          "text": "fl",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Completa: _ _ ores (crecen en el jardín)",
+      "answers": [
+        {
+          "text": "fl",
+          "correct": true
+        },
+        {
+          "text": "cl",
+          "correct": false
+        },
+        {
+          "text": "br",
+          "correct": false
+        },
+        {
+          "text": "tr",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "flores del jardín",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110412501_7230812.jpg?alt=media&token=196567a9-369e-41f0-952c-7fd83de860f3",
+        "credit": "Imagen de lyubmalee en Pixabay"
+      }
+    },
+    {
+      "text": "Completa: _ _ ato (en él servimos la comida)",
+      "answers": [
+        {
+          "text": "bl",
+          "correct": false
+        },
+        {
+          "text": "pl",
+          "correct": true
+        },
+        {
+          "text": "fr",
+          "correct": false
+        },
+        {
+          "text": "gr",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "plato de comida",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110413203_10371701.jpg?alt=media&token=52df5ce6-0191-4604-a0f8-e6136a221ead",
+        "credit": "Imagen de Franchement_mic en Pixabay"
+      }
+    },
+    {
+      "text": "Completa: _ _ en (viaja sobre rieles)",
+      "answers": [
+        {
+          "text": "tr",
+          "correct": true
+        },
+        {
+          "text": "pl",
+          "correct": false
+        },
+        {
+          "text": "fl",
+          "correct": false
+        },
+        {
+          "text": "bl",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "tren de juguete",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110413995_8316054.jpg?alt=media&token=d527e9aa-0491-4f1f-ba1b-9585dd9bcf81",
+        "credit": "Imagen de IdeaTivas-TLM en Pixabay"
+      }
+    }
+  ]
+}

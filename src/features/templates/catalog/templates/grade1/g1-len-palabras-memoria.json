@@ -1,0 +1,54 @@
+{
+  "code": "g1-len-palabras-memoria",
+  "grade": 1,
+  "subject": "lengua-literatura",
+  "collection": "g1-len-silabas",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de palabras con m, p y s",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "objetos dibujo niños",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107805458_10239070.jpg?alt=media&token=d0f18474-8a6f-45ad-bd26-75327a395035",
+    "credit": "Imagen de HoggyArt en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "mono animal",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107806170_8674827.jpg?alt=media&token=4b54a2b4-d1fe-4ce7-85be-5616270f94c0",
+      "credit": "Imagen de Jimbo457 en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "pato",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107806887_4679464.jpg?alt=media&token=151dc423-3499-4806-827f-a7dd64c33dc3",
+      "credit": "Imagen de PAPKOK en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "sol dibujo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107807562_7522095.jpg?alt=media&token=f186de8d-3964-417e-944f-02dcdb37a713",
+      "credit": "Imagen de Ylanite_NietjuhArt en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "mesa",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107808311_7386978.jpg?alt=media&token=793c2fde-f65a-4f89-88a9-9bc08c27939f",
+      "credit": "Imagen de nnnhi en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "sapo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107809039_1299381.jpg?alt=media&token=1985d159-4724-43d6-bde2-888d7bb7d3e2",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "pelota",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107809778_157930.jpg?alt=media&token=339a2385-0456-41b4-8b57-fb6db0155b5a",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    }
+  ]
+}

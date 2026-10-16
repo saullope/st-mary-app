@@ -10,7 +10,7 @@ import style2 from '@/styles/pages/ludiquiz.module.css';
 import { useTranslations } from 'next-intl';
 import { LudiQuizQuestion, MediaType, createContentSlide } from '@/lib/types/';
 import { useActivityEditor } from "@/context/ActivityEditorContext";
-import LudiQuizTour from "./LudiQuizTour";
+import EditorTour from "@/features/tours/EditorTour";
 
 export default function LudiQuiz() {
     /** Traducciones */
@@ -360,7 +360,7 @@ export default function LudiQuiz() {
 
     return (
         <>
-            <LudiQuizTour />
+            <EditorTour type="ludiquiz" />
             {/* El Navbar ahora está en layout.tsx */}
 
             <div className="row" style={{ minHeight: "calc(100vh - 80px)" }}>

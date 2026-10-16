@@ -42,6 +42,7 @@ export const EditorTypePicker = <T extends string>({ label, groupLabel, options,
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
         aria-controls={pickerId}
+        data-tour="add-item"
       >
         {open ? t("close") : label}
       </EditorAddButton>

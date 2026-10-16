@@ -2,16 +2,17 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from 'react';
 import {
+  DEFAULT_FIRST_ACTIVITY,
   DEFAULT_TOUR_PREFERENCES,
   markCompleted,
   postpone,
   resetTours,
-  shouldAutoStart,
+  type FirstActivityProgress,
   type TourMode,
   type TourPreferences,
 } from '@/lib/tours/tourProgress';
 
-export type { TourMode, TourPreferences };
+export type { FirstActivityProgress, TourMode, TourPreferences };
 
 // El progreso vive en el servidor (/api/user/tours) para que siga al educador en
 // cualquier navegador. Un solo estado por pestaña: los tours y Configuración lo comparten.
@@ -112,16 +113,22 @@ export function useTourPreferences() {
     update((prefs) => ({ ...prefs, ...postpone(prefs, tourIds) }));
   }, []);
 
-  /** Vuelve a ofrecer visitas concretas; sin argumentos, todas. */
+  /** Vuelve a ofrecer visitas concretas; sin argumentos, todas (también la primera actividad). */
   const resetToursProgress = useCallback((tourIds?: readonly string[]) => {
-    update((prefs) => ({ ...prefs, ...(tourIds ? resetTours(prefs, tourIds) : { completed: [], later: [] }) }));
+    update((prefs) => ({
+      ...prefs,
+      ...(tourIds ? resetTours(prefs, tourIds) : { completed: [], later: [], firstActivity: DEFAULT_FIRST_ACTIVITY }),
+    }));
+  }, []);
+
+  const setFirstActivity = useCallback((firstActivity: FirstActivityProgress) => {
+    update((prefs) => ({ ...prefs, firstActivity }));
   }, []);
 
   const resetAllTours = useCallback(() => resetToursProgress(), [resetToursProgress]);
 
   const isTourCompleted = useCallback((tourId: string) => preferences.completed.includes(tourId), [preferences.completed]);
   const isTourPostponed = useCallback((tourId: string) => preferences.later.includes(tourId), [preferences.later]);
-  const shouldShowTour = useCallback((tourId: string) => isLoaded && shouldAutoStart(preferences, tourId), [isLoaded, preferences]);
 
   return {
     preferences,
@@ -134,7 +141,7 @@ export function useTourPreferences() {
     resetAllTours,
     isTourCompleted,
     isTourPostponed,
-    shouldShowTour,
+    setFirstActivity,
     updatePreferences,
   };
 }

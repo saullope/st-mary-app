@@ -4,13 +4,45 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { getTranslations } from "next-intl/server";
+import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
 
-export async function cloneTemplateActivity(templateActivityId: number) {
+type CopyResult = { success: true; copyId: number; created: boolean } | { success: false; error: string };
+
+/** La copia activa que el docente ya guardó de esta plantilla, si existe. */
+async function findCopy(userId: string, templateActivityId: number): Promise<number | null> {
+  const copy = await prisma.ludiActividad.findFirst({
+    where: { userId, plantillaOrigenId: templateActivityId, estatus: true },
+    orderBy: { activityId: "desc" },
+    select: { activityId: true },
+  });
+  return copy?.activityId ?? null;
+}
+
+/**
+ * "Usar plantilla": guarda una copia en Mis actividades, o devuelve la que ya tenía, para
+ * no llenar su lista de duplicados. Solo esa copia se puede editar; la plantilla no.
+ */
+export async function saveTemplateCopy(templateActivityId: number): Promise<CopyResult> {
+  const t = await getTranslations("Errors");
+  const user = await getCurrentUser();
+  if (!user) return { success: false, error: t("unauthorized") };
+  const existing = await findCopy(user.id, templateActivityId);
+  if (existing !== null) return { success: true, copyId: existing, created: false };
+  const result = await cloneTemplate(user.id, templateActivityId);
+  return result.success ? { success: true, copyId: result.newActivityId, created: true } : result;
+}
+
+/** Lanzar una plantilla lanza la copia del docente: así la sesión y su reporte son suyos. */
+export async function launchTemplate(templateActivityId: number) {
+  const copy = await saveTemplateCopy(templateActivityId);
+  if (!copy.success) return copy;
+  const session = await createGameSession(copy.copyId);
+  return session.success ? { ...session, copyId: copy.copyId, created: copy.created } : session;
+}
+
+async function cloneTemplate(newUserId: string, templateActivityId: number): Promise<{ success: true; newActivityId: number } | { success: false; error: string }> {
   try {
-    const user = await getCurrentUser();
     const t = await getTranslations("Errors");
-    if (!user) return { success: false, error: t("unauthorized") };
-    const newUserId = user.id;
 
     // 1. Fetch the full template with all nested data
     const template = await prisma.ludiActividad.findFirst({
@@ -43,7 +75,8 @@ export async function cloneTemplateActivity(templateActivityId: number) {
       // Create new base ACTIVITY (Copia)
       const newActivityBase = await tx.aCTIVITY.create({
         data: {
-          activity_name: `${template.activity.activity_name} (Mi Copia)`,
+          // Mismo título: en Mis actividades se distingue por su origen, no por un sufijo.
+          activity_name: template.activity.activity_name,
           activity_desc: "Clonado desde plantilla",
           image_url: template.activity.image_url,
           isTemplate: false, // The clone is NOT a template

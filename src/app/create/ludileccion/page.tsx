@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getActivityForEdit } from "@/app/actions/getActivityForEdit";
 import { useActivityEditor } from "@/context/ActivityEditorContext";
+import EditorTour from "@/features/tours/EditorTour";
 import { EditorSidebar, EditorCanvas, EditorPlaceholder, EditorGamificationColumn, moveItem } from "@/components/editor";
 import { LessonBlockList, LessonBlockPicker } from "@/features/lesson/components/LessonBlockList";
 import { LessonBlockEditor } from "@/features/lesson/components/LessonBlockEditor";
@@ -94,6 +95,8 @@ export default function LudiLeccion() {
                     </EditorPlaceholder>
                 )}
             </EditorCanvas>
+
+            <EditorTour type="ludileccion" />
 
             <EditorGamificationColumn />
         </div>

@@ -1,96 +1,118 @@
 "use client";
 
 import { useState } from "react";
-import { FaClone, FaEye, FaRocket } from "react-icons/fa6";
+import Link from "next/link";
+import { FaCheck, FaClone, FaEye, FaPen, FaRocket } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import styles from "@/components/dashboard/collection/ActivityCollection.module.css";
 import ActivityTypeIcon, { activityTypeClass } from "@/components/dashboard/collection/ActivityTypeIcon";
-import { cloneTemplateActivity } from "./actions";
-import { createGameSession } from "@/app/dashboard/my-activities/sessionActions";
 import { ActionMenu, notify, type ActionMenuItem } from "@/components/ui";
-import { getEditorRoute, openPendingEditorTab } from "@/lib/editorTab";
+import { getEditorRoute } from "@/lib/editorTab";
+import type { TemplateCardData } from "@/features/templates/templates.server";
+import { launchTemplate, saveTemplateCopy } from "./actions";
+import templateStyles from "./templates.module.css";
 
-interface TemplateCardProps {
-  template: {
-    activityId: number;
-    tipoActividadId: number;
-    gradoId: number | null;
-    activity: { activity_name: string };
-    tema: { nombre: string } | null;
-  };
-}
+const MY_ACTIVITIES = "/dashboard/my-activities";
 
-export default function TemplateCard({ template }: TemplateCardProps) {
+export default function TemplateCard({ template }: { template: TemplateCardData }) {
   const t = useTranslations("Templates");
   const tCommon = useTranslations("Common");
-  const tThemes = useTranslations("themeBackground");
-  const [cloning, setCloning] = useState(false);
-  const [isLaunching, setIsLaunching] = useState(false);
+  const tSubjects = useTranslations("Subjects");
+  const [copyId, setCopyId] = useState<number | null>(template.copyId);
+  const [saving, setSaving] = useState(false);
+  const [launching, setLaunching] = useState(false);
   const [sessionPin, setSessionPin] = useState<string | null>(null);
 
-  const name = template.activity.activity_name;
-  const themeName = template.tema?.nombre;
-  const themeLabel = themeName && tThemes.has(themeName) ? tThemes(themeName) : t("general");
-  const gradeLabel = template.gradoId ? tCommon(`grades.${template.gradoId as 1 | 2 | 3}`) : t("allGradesShort");
+  const typeName = tCommon(`activityTypes.${template.typeId as 1 | 2 | 3 | 4 | 5}`);
+  const subject = template.subjectCode && tSubjects.has(template.subjectCode) ? tSubjects(template.subjectCode) : null;
+  const itemsKey = template.typeId === 3 ? "images" : template.typeId === 4 ? "blocks" : "questions";
 
-  const handleLaunch = async () => {
-    if (isLaunching) return;
-    setIsLaunching(true);
-    const result = await createGameSession(template.activityId);
-    if (result.success) {
-      setSessionPin(result.pin || "");
-    } else {
-      notify.error(t("launchFailed"), result.error || t("tryAgain"));
-    }
-    setIsLaunching(false);
+  const save = async () => {
+    setSaving(true);
+    const result = await saveTemplateCopy(template.activityId);
+    setSaving(false);
+    if (!result.success) return notify.error(t("cloneFailed"), result.error);
+    setCopyId(result.copyId);
+    notify.withAction(t("saved", { name: template.title }), { label: t("goToMyActivities"), onClick: () => window.location.assign(MY_ACTIVITIES) }, 6000);
   };
 
-  const handleClone = async () => {
-    const editorTab = openPendingEditorTab();
-    setCloning(true);
-    try {
-      const result = await cloneTemplateActivity(template.activityId);
-      if (result.success && result.newActivityId) {
-        editorTab.navigate(getEditorRoute(template.tipoActividadId, result.newActivityId));
-      } else {
-        editorTab.cancel();
-        notify.error(t("cloneFailed"), result.error || t("cloneError"));
-      }
-    } catch (error) {
-      console.error(error);
-      editorTab.cancel();
-      notify.error(t("unexpected"));
-    }
-    setCloning(false);
+  const launch = async () => {
+    if (launching) return;
+    setLaunching(true);
+    const result = await launchTemplate(template.activityId);
+    setLaunching(false);
+    if (!result.success) return notify.error(t("launchFailed"), result.error || t("tryAgain"));
+    if ("copyId" in result && result.copyId) setCopyId(result.copyId);
+    setSessionPin("pin" in result ? (result.pin ?? "") : "");
   };
 
   const menuItems: ActionMenuItem[] = [
-    { key: "launch", label: t("launch"), icon: <FaRocket />, onSelect: handleLaunch, disabled: isLaunching },
+    { key: "launch", label: t("launch"), icon: <FaRocket />, onSelect: launch, disabled: launching },
     { key: "preview", label: t("preview"), icon: <FaEye />, href: `/views/activity/${template.activityId}`, external: true },
   ];
 
   return (
-    <article className={`${styles.item} ${activityTypeClass(template.tipoActividadId)}`} aria-busy={isLaunching || undefined}>
-      <ActivityTypeIcon typeId={template.tipoActividadId} />
+    <article className={`${styles.item} ${activityTypeClass(template.typeId)}`} aria-busy={launching || saving || undefined}>
+      {template.coverUrl ? (
+        <div className={`${styles.typeIcon} ${templateStyles.cover}`} title={template.coverCredit ?? undefined}>
+          {/* Decorativa: el título de la tarjeta ya nombra la plantilla. */}
+          <img src={template.coverUrl} alt="" loading="lazy" className={templateStyles.coverImage} />
+          <span className={templateStyles.typeChip} aria-hidden="true">
+            <ActivityTypeIcon typeId={template.typeId} bare />
+          </span>
+        </div>
+      ) : (
+        <ActivityTypeIcon typeId={template.typeId} />
+      )}
+
       <div className={styles.main}>
-        <h3 className={styles.title} title={name}>{name}</h3>
+        {copyId !== null && (
+          <span className={templateStyles.savedTag}>
+            <FaCheck aria-hidden="true" /> {t("inMyActivities")}
+          </span>
+        )}
+        <h3 className={styles.title} title={template.title}>{template.title}</h3>
         <p className={styles.meta}>
-          {tCommon(`activityTypes.${template.tipoActividadId as 1 | 2 | 3 | 4 | 5}`)} · {gradeLabel} · {themeLabel}
+          {[typeName, subject, template.collectionName].filter(Boolean).join(" · ")}
+        </p>
+        <p className={styles.meta}>
+          {[
+            t(`count.${itemsKey}`, { count: template.items }),
+            template.durationMin ? t("duration", { minutes: template.durationMin }) : null,
+            template.secondsPerQuestion ? t("perQuestion", { seconds: template.secondsPerQuestion }) : null,
+            template.badges > 0 ? t("badges", { count: template.badges }) : null,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
         </p>
         <div role="status">
-          {sessionPin && (
+          {sessionPin !== null && (
             <p className={styles.notice}>
               {t.rich("studentPin", { pin: sessionPin, strong: (chunks) => <strong>{chunks}</strong> })}
             </p>
           )}
         </div>
       </div>
+
       <div className={styles.actions}>
-        <button type="button" className={styles.primary} onClick={handleClone} disabled={cloning}>
-          {cloning ? <span className="spinner-border spinner-border-sm" aria-hidden="true" /> : <FaClone aria-hidden="true" />}
-          {cloning ? t("preparing") : t("use")}
-        </button>
-        <ActionMenu label={t("moreActions", { name })} items={menuItems} />
+        {copyId === null ? (
+          <button type="button" className={styles.primary} onClick={save} disabled={saving}>
+            {saving ? <span className="spinner-border spinner-border-sm" aria-hidden="true" /> : <FaClone aria-hidden="true" />}
+            {saving ? t("preparing") : t("use")}
+          </button>
+        ) : (
+          // Solo se edita la copia propia, nunca la plantilla.
+          <Link
+            href={getEditorRoute(template.typeId, copyId)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.primary}
+            aria-label={t("editCopyOf", { name: template.title })}
+          >
+            <FaPen aria-hidden="true" /> {t("editCopy")}
+          </Link>
+        )}
+        <ActionMenu label={t("moreActions", { name: template.title })} items={menuItems} />
       </div>
     </article>
   );

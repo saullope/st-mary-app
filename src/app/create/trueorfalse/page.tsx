@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getActivityForEdit } from '@/app/actions/getActivityForEdit';
+import EditorTour from "@/features/tours/EditorTour";
 import { ModalMultimedia, CanvaEmbedModal, LoadMultimediaFile, useContentSlides, EditorSidebar, EditorGamificationColumn, EditorAddButton, EditorFooterButton, QuestionList, moveItem, type EditorListTagTone } from "@/components/editor";
 import { SiCanva } from "react-icons/si";
 import { notify } from "@/components/ui";
@@ -267,7 +268,7 @@ export default function TrueOrFalse() {
                         }
                         footer={
                             <>
-                                <EditorFooterButton variant="primary" onClick={editingId !== null ? handleUpdateQuestion : handleAddQuestion}>
+                                <EditorFooterButton variant="primary" data-tour="add-question" onClick={editingId !== null ? handleUpdateQuestion : handleAddQuestion}>
                                     {editingId !== null ? tq("saveChanges") : t("addStatement")}
                                 </EditorFooterButton>
                                 {editingId !== null && (
@@ -378,6 +379,7 @@ export default function TrueOrFalse() {
                                         className={style2["question-input"]}
                                         placeholder={t("statementPlaceholder")}
                                         aria-label={t("statementLabel")}
+                                        data-tour="question-input"
                                         value={newQuestion.text}
                                         onChange={(e) =>
                                             setNewQuestion({ ...newQuestion, text: e.target.value })
@@ -399,7 +401,7 @@ export default function TrueOrFalse() {
                                     onFreesound={handleShowFreesound}
                                 />
 
-                                <div className="d-flex justify-content-center gap-4 mt-4 w-100 flex-wrap" style={{ position: 'relative' }}>
+                                <div className="d-flex justify-content-center gap-4 mt-4 w-100 flex-wrap" style={{ position: 'relative' }} data-tour="truefalse-answer">
                                     {showErrors && !isAnswerSelected && (
                                         <div style={{
                                             position: 'absolute', top: '-35px', left: '50%', transform: 'translateX(-50%)',
@@ -517,6 +519,8 @@ export default function TrueOrFalse() {
                         </div>
                     </div>
                 </div>
+
+                <EditorTour type="trueorfalse" />
 
                 <EditorGamificationColumn />
 

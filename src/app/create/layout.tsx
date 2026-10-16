@@ -10,6 +10,7 @@ import { AchievementCatalogLoader } from "@/features/gamification/AchievementCat
 import { getTranslations } from "next-intl/server";
 import { pageMetadata } from "@/lib/seo/metadata";
 import styles from "./editorShell.module.css";
+import FirstActivityTour from "@/features/tours/firstActivity/FirstActivityTour";
 
 // add metadata to the page
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,6 +45,7 @@ export default async function CreateActivityLayout({
             </main>
           </div>
         </div>
+        <FirstActivityTour />
       </ActivityEditorProvider>
       </AchievementCatalogLoader>
     );

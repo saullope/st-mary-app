@@ -1,0 +1,54 @@
+{
+  "code": "g1-mat-numeros-memoria",
+  "grade": 1,
+  "subject": "matematica",
+  "collection": "g1-mat-numeros",
+  "order": 3,
+  "type": "ludimemory",
+  "title": "Memoria de los números",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "números de madera",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107857882_8417328.jpg?alt=media&token=236a12c1-1354-44dd-bbd3-dca290d55b97",
+    "credit": "Imagen de Its_Shade en Pixabay"
+  },
+  "images": [
+    {
+      "source": "counting",
+      "query": "card:1",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_8966725d78cecf76.svg?alt=media&token=a5e3f4e4-da16-442d-b1ef-08da3fd25682",
+      "credit": "Ilustración de LudiGame"
+    },
+    {
+      "source": "counting",
+      "query": "card:2",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_5e96822c02dff52e.svg?alt=media&token=089afe71-bec0-4a9f-bfb7-e3536494b906",
+      "credit": "Ilustración de LudiGame"
+    },
+    {
+      "source": "counting",
+      "query": "card:3",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_40a0a1b10b57297b.svg?alt=media&token=24c30350-4379-476f-8a9d-9e736de309c1",
+      "credit": "Ilustración de LudiGame"
+    },
+    {
+      "source": "counting",
+      "query": "card:4",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_ce046dd372d55ad6.svg?alt=media&token=6db5fd4c-099f-48bf-aff9-03b0b3eed9e8",
+      "credit": "Ilustración de LudiGame"
+    },
+    {
+      "source": "counting",
+      "query": "card:5",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_61a345add4364364.svg?alt=media&token=adc0af97-ece6-4ca9-9cc4-620de9c2281c",
+      "credit": "Ilustración de LudiGame"
+    },
+    {
+      "source": "counting",
+      "query": "card:6",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_d6277abe229ecded.svg?alt=media&token=f665b992-b997-4c17-b9db-f02004f65e83",
+      "credit": "Ilustración de LudiGame"
+    }
+  ]
+}

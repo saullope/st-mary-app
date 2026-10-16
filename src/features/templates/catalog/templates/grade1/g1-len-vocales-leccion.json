@@ -1,0 +1,58 @@
+{
+  "code": "g1-len-vocales-leccion",
+  "grade": 1,
+  "subject": "lengua-literatura",
+  "collection": "g1-len-vocales",
+  "order": 3,
+  "type": "ludileccion",
+  "title": "Cantemos las vocales",
+  "durationMin": 8,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños cantando",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107824771_18382.jpg?alt=media&token=bd03fdb3-6464-43ef-9bdb-f9233b702520",
+    "credit": "Imagen de PublicDomainPictures en Pixabay"
+  },
+  "blocks": [
+    {
+      "kind": "youtube",
+      "title": "La canción de las vocales",
+      "media": {
+        "source": "youtube",
+        "query": "canción de las vocales para niños",
+        "url": "https://www.youtube.com/embed/OHUktPPdTaM",
+        "credit": "Video de toycantando en YouTube: LA RISA DE LAS VOCALES | Canciones Infantiles | Toy Cantando"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "A de árbol: di otras palabras que empiecen con a",
+      "media": {
+        "source": "pixabay",
+        "query": "árbol",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107826258_7751862.jpg?alt=media&token=778cd7d3-f5b8-4350-81ef-2996e5f19d54",
+        "credit": "Imagen de Ruzaindo en Pixabay"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "E de escuela: ¿qué más empieza con e?",
+      "media": {
+        "source": "pixabay",
+        "query": "escuela",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107827064_1023846.jpg?alt=media&token=b8c576b5-48b1-4d8d-8114-fa14e62403f8",
+        "credit": "Imagen de geralt en Pixabay"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Repasemos las vocales",
+      "media": {
+        "source": "youtube",
+        "query": "aprender las vocales a e i o u para niños",
+        "url": "https://www.youtube.com/embed/sDBGBXyJaJg",
+        "credit": "Video de Minders en YouTube: Ejercicios de las vocales - Aprendiendo a leer - Minders Psicología Infantil"
+      }
+    }
+  ]
+}

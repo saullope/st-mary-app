@@ -1,0 +1,60 @@
+{
+  "code": "g1-val-esta-bien-vf",
+  "grade": 1,
+  "subject": "creciendo-en-valores",
+  "collection": "g1-val-convivencia",
+  "order": 1,
+  "type": "trueorfalse",
+  "title": "¿Está bien o está mal?",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños jugando juntos",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109413275_1268694.jpg?alt=media&token=8cf496e8-b40b-4f85-ad7d-a7453336c868",
+    "credit": "Imagen de La_Petite_Femme en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "Saludar al llegar a la escuela es una muestra de respeto.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "niños saludando",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109414085_9792509.jpg?alt=media&token=b19d5f39-414f-4ba7-80df-70c9b39060c7",
+        "credit": "Imagen de InPixell_Studio en Pixabay"
+      }
+    },
+    {
+      "text": "Burlarse de un compañero está bien si es en broma.",
+      "answer": false
+    },
+    {
+      "text": "Pedir permiso antes de tomar algo que no es mío está bien.",
+      "answer": true
+    },
+    {
+      "text": "Tirar la basura en el piso del aula está bien.",
+      "answer": false,
+      "media": {
+        "source": "pixabay",
+        "query": "basurero reciclaje",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109414861_146455.jpg?alt=media&token=2f103498-4468-4d56-961a-e31a67e9714a",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "Ayudar a un amigo que se cayó es un acto de bondad.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "niño ayudando a otro",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109415635_8861154.jpg?alt=media&token=e2d0ff7b-d763-457d-9b13-91d478b62f2e",
+        "credit": "Imagen de SmyrnaPro en Pixabay"
+      }
+    },
+    {
+      "text": "Esperar mi turno en la fila es una forma de respeto.",
+      "answer": true
+    }
+  ]
+}

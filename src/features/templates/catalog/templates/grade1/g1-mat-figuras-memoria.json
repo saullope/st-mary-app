@@ -1,0 +1,54 @@
+{
+  "code": "g1-mat-figuras-memoria",
+  "grade": 1,
+  "subject": "matematica",
+  "collection": "g1-mat-figuras",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de figuras",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "formas geométricas niños",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107845757_5640802.jpg?alt=media&token=3d70a511-c039-48a0-a95e-452f636b2a1f",
+    "credit": "Imagen de chenspec en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "círculo rojo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107846590_4064614.jpg?alt=media&token=9698c70a-e2de-4293-a1ef-b23c74329ea9",
+      "credit": "Imagen de lucianapappdesign en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cuadrado azul",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107847493_34075.jpg?alt=media&token=776d46a6-c2f3-4229-8953-b4e564d9ff24",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "triángulo amarillo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107848331_6567058.jpg?alt=media&token=37b63766-e44b-4245-bbbc-16c76690a28e",
+      "credit": "Imagen de HitaJast en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "rectángulo verde",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107849134_7287389.jpg?alt=media&token=233899af-80b9-4969-a2c9-91762a31ba5c",
+      "credit": "Imagen de sadekhusein en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "estrella amarilla",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107849934_6726176.jpg?alt=media&token=644170aa-eeda-4745-95b7-f70ac4f0a17f",
+      "credit": "Imagen de ninikvaratskhelia_ en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "corazón rojo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107850643_5079717.jpg?alt=media&token=e9e36310-535b-439a-a524-6bea295f6a4d",
+      "credit": "Imagen de mandrakept en Pixabay"
+    }
+  ]
+}

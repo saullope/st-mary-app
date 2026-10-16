@@ -14,9 +14,13 @@ export function activityTypeClass(typeId: number): string {
   return TYPE_VISUALS[typeId]?.className ?? styles.typeQuiz;
 }
 
-/** Tile (list) or cover (grid) in the type's color; decorative, the type name is shown as text. */
-export default function ActivityTypeIcon({ typeId }: { typeId: number }) {
+/**
+ * Tile (list) or cover (grid) in the type's color; decorative, the type name is shown as text.
+ * `bare` renders only the icon, e.g. as a small chip over a template's cover image.
+ */
+export default function ActivityTypeIcon({ typeId, bare = false }: { typeId: number; bare?: boolean }) {
   const Icon = TYPE_VISUALS[typeId]?.Icon ?? FaGamepad;
+  if (bare) return <Icon aria-hidden="true" />;
   return (
     <span className={styles.typeIcon} aria-hidden="true">
       <Icon />

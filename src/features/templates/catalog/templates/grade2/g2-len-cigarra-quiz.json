@@ -1,0 +1,135 @@
+{
+  "code": "g2-len-cigarra-quiz",
+  "grade": 2,
+  "subject": "lengua-literatura",
+  "collection": "g2-len-cuentos",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "La cigarra y la hormiga",
+  "durationMin": 6,
+  "cover": {
+    "source": "pixabay",
+    "query": "hormiga",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110391041_156893.jpg?alt=media&token=8580cc3b-ead0-4e88-aa5f-be6364b2ac54",
+    "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "En la fábula, ¿quién trabajó todo el verano guardando comida?",
+      "answers": [
+        {
+          "text": "La cigarra",
+          "correct": false
+        },
+        {
+          "text": "La hormiga",
+          "correct": true
+        },
+        {
+          "text": "El grillo",
+          "correct": false
+        },
+        {
+          "text": "La mariposa",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "hormiga trabajando",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110391829_9990508.jpg?alt=media&token=3a270df2-14b6-4b03-b47a-bced22ecdd63",
+        "credit": "Imagen de WhyXing en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué hizo la cigarra durante el verano?",
+      "answers": [
+        {
+          "text": "Guardó granos",
+          "correct": false
+        },
+        {
+          "text": "Cantó y descansó",
+          "correct": true
+        },
+        {
+          "text": "Construyó una casa",
+          "correct": false
+        },
+        {
+          "text": "Ayudó a la hormiga",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "cigarra insecto",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110392693_2028365.jpg?alt=media&token=dd27a1d4-d895-48d1-af21-1c30d58755c1",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué le pasó a la cigarra cuando llegó el invierno?",
+      "answers": [
+        {
+          "text": "Tuvo frío y hambre",
+          "correct": true
+        },
+        {
+          "text": "Se fue de viaje",
+          "correct": false
+        },
+        {
+          "text": "Encontró mucha comida",
+          "correct": false
+        },
+        {
+          "text": "Ganó un premio",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Quién tenía comida guardada en el invierno?",
+      "answers": [
+        {
+          "text": "La cigarra",
+          "correct": false
+        },
+        {
+          "text": "Nadie",
+          "correct": false
+        },
+        {
+          "text": "La hormiga",
+          "correct": true
+        },
+        {
+          "text": "El sapo",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué nos enseña esta fábula?",
+      "answers": [
+        {
+          "text": "A trabajar y prepararnos",
+          "correct": true
+        },
+        {
+          "text": "A cantar más",
+          "correct": false
+        },
+        {
+          "text": "A dormir todo el día",
+          "correct": false
+        },
+        {
+          "text": "A no compartir",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

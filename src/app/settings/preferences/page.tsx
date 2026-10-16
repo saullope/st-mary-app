@@ -8,6 +8,8 @@ import { pageMetadata } from "@/lib/seo/metadata";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { SubjectSettings } from "@/components/settings/SubjectSettings";
 import { getSubjectsByGrade, getUserSubjectIdsByGrade } from "@/features/subjects/subjects.server";
+import { NotificationSettings } from "@/components/settings/NotificationSettings";
+import { getMutedTypes } from "@/features/notifications/notifications.server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
@@ -22,15 +24,17 @@ export default async function GamePreferencesPage() {
     redirect('/auth/login');
   }
 
-  const [subjectsByGrade, selectedSubjects] = await Promise.all([
+  const [subjectsByGrade, selectedSubjects, mutedNotifications] = await Promise.all([
     getSubjectsByGrade(),
     getUserSubjectIdsByGrade(user.id),
+    getMutedTypes(user.id),
   ]);
 
   return (
     <div style={{ padding: '10px' }}>
       <GamePreferences />
       <SubjectSettings subjectsByGrade={subjectsByGrade} initialSelected={selectedSubjects} />
+      <NotificationSettings initialMuted={mutedNotifications} />
     </div>
   );
 }

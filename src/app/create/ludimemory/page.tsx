@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getActivityForEdit } from "@/app/actions/getActivityForEdit";
 import { useActivityEditor } from "@/context/ActivityEditorContext";
+import EditorTour from "@/features/tours/EditorTour";
 import { EditorCanvas, EditorGamificationColumn } from "@/components/editor";
 import { MemoryBoardEditor } from "@/features/memory/components/MemoryBoardEditor";
 
@@ -35,6 +36,8 @@ export default function LudiMemory() {
             <EditorCanvas title="LudiMemory">
                 <MemoryBoardEditor images={state.memoryImages} onChange={setMemoryImages} />
             </EditorCanvas>
+
+            <EditorTour type="ludimemory" />
 
             <EditorGamificationColumn />
         </div>

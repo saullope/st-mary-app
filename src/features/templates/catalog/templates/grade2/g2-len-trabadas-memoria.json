@@ -1,0 +1,54 @@
+{
+  "code": "g2-len-trabadas-memoria",
+  "grade": 2,
+  "subject": "lengua-literatura",
+  "collection": "g2-len-palabras",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de palabras con pl, fl, br, tr",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "juguetes de madera",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110403840_8724012.jpg?alt=media&token=6fca43c4-ab81-4055-89a3-3ec361a33062",
+    "credit": "Imagen de Alexas_Fotos en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "plátano fruta",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110404827_155616.jpg?alt=media&token=4867e39a-d3ab-4d11-9bd4-8a96627654f8",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "flor roja",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110405778_9296256.jpg?alt=media&token=19f95379-d47a-4e70-8aca-d41bf55997fb",
+      "credit": "Imagen de betidraws en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "bloques de juguete",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110406689_8656244.jpg?alt=media&token=e3e3bc99-fdc8-4d8e-a8a8-eec2d4dbe38c",
+      "credit": "Imagen de geralt en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "brocha de pintar",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110407546_1945856.jpg?alt=media&token=d406d6f4-c843-4afb-8395-cf472a9b1089",
+      "credit": "Imagen de MiM326 en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "trompeta",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110408357_7477336.jpg?alt=media&token=65af9cf8-0d17-458a-873c-bac2e49c45a5",
+      "credit": "Imagen de limitrofe en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "fresa fruta",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110409136_7021062.jpg?alt=media&token=4516bb78-beec-43db-936f-92e6ca3580a4",
+      "credit": "Imagen de zazufiane en Pixabay"
+    }
+  ]
+}

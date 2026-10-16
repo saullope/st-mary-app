@@ -14,6 +14,7 @@ export const EditorCanvas = ({ title, children }: { title: string; children: Rea
     <div
       className={`card shadow-sm d-flex ${state.fullScreen ? "col-12" : "col"} ${styles.canvas}`}
       style={{ backgroundImage: `url(${state.backgroundImage})` }}
+      data-tour="editor-canvas"
     >
       <div className={styles.overlay} />
       <div className={`col d-flex flex-column align-items-center ${styles.content}`}>

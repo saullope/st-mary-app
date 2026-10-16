@@ -1,0 +1,168 @@
+{
+  "code": "g1-art-colores-quiz",
+  "grade": 1,
+  "subject": "expresion-cultural-artistica",
+  "collection": "g1-art-colores-musica",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "El mundo de los colores",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "arcoíris colores",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109362091_1885352.jpg?alt=media&token=05415e4d-b034-4eb2-9497-404947875785",
+    "credit": "Imagen de cmart29 en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿De qué color es el cielo en un día soleado?",
+      "answers": [
+        {
+          "text": "Verde",
+          "correct": false
+        },
+        {
+          "text": "Azul",
+          "correct": true
+        },
+        {
+          "text": "Rojo",
+          "correct": false
+        },
+        {
+          "text": "Café",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "cielo azul",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109362930_2869817.jpg?alt=media&token=200f4522-04df-430f-b573-0c9d12957043",
+        "credit": "Imagen de Angeleses en Pixabay"
+      }
+    },
+    {
+      "text": "Si mezclo azul y amarillo, ¿qué color obtengo?",
+      "answers": [
+        {
+          "text": "Verde",
+          "correct": true
+        },
+        {
+          "text": "Morado",
+          "correct": false
+        },
+        {
+          "text": "Naranja",
+          "correct": false
+        },
+        {
+          "text": "Rosado",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "mezcla de pinturas",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109363758_2490257.jpg?alt=media&token=d8b139d6-7ebf-4cf8-8eaf-cb599a33c069",
+        "credit": "Imagen de Prawny en Pixabay"
+      }
+    },
+    {
+      "text": "Si mezclo rojo y amarillo, ¿qué color obtengo?",
+      "answers": [
+        {
+          "text": "Azul",
+          "correct": false
+        },
+        {
+          "text": "Verde",
+          "correct": false
+        },
+        {
+          "text": "Naranja",
+          "correct": true
+        },
+        {
+          "text": "Gris",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿De qué colores es la bandera de Nicaragua?",
+      "answers": [
+        {
+          "text": "Rojo y verde",
+          "correct": false
+        },
+        {
+          "text": "Azul y blanco",
+          "correct": true
+        },
+        {
+          "text": "Amarillo y negro",
+          "correct": false
+        },
+        {
+          "text": "Verde y blanco",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "bandera de nicaragua",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109364675_4613142.jpg?alt=media&token=b31e04c9-992e-4c4a-8b57-3cce110c70b2",
+        "credit": "Imagen de TheDigitalArtist en Pixabay"
+      }
+    },
+    {
+      "text": "¿De qué color son casi siempre las hojas de los árboles?",
+      "answers": [
+        {
+          "text": "Verdes",
+          "correct": true
+        },
+        {
+          "text": "Azules",
+          "correct": false
+        },
+        {
+          "text": "Moradas",
+          "correct": false
+        },
+        {
+          "text": "Negras",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "hojas verdes",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109365658_7746730.jpg?alt=media&token=a759a9f6-3467-4e54-9b79-57c42ef2f752",
+        "credit": "Imagen de SYG_Anime en Pixabay"
+      }
+    },
+    {
+      "text": "Si mezclo rojo y azul, ¿qué color obtengo?",
+      "answers": [
+        {
+          "text": "Morado",
+          "correct": true
+        },
+        {
+          "text": "Amarillo",
+          "correct": false
+        },
+        {
+          "text": "Verde",
+          "correct": false
+        },
+        {
+          "text": "Blanco",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

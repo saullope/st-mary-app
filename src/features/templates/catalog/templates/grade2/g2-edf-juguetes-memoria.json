@@ -1,0 +1,54 @@
+{
+  "code": "g2-edf-juguetes-memoria",
+  "grade": 2,
+  "subject": "educacion-fisica",
+  "collection": "g2-edf-juegos",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de juegos y juguetes",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "juguetes tradicionales",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110382950_7406133.jpg?alt=media&token=53462de9-1982-4e87-9528-500fae6c6124",
+    "credit": "Imagen de IdeaTivas-TLM en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "trompo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110383808_2874994.jpg?alt=media&token=c26b7306-0f9d-4fa9-9656-dbb733eed31f",
+      "credit": "Imagen de dric en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "canicas",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110384663_8713485.jpg?alt=media&token=8dc8d8d2-e91f-4945-9840-d8ff21737451",
+      "credit": "Imagen de Alexas_Fotos en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cometa volando",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110385614_1344067.jpg?alt=media&token=54293cc0-f946-41c7-8662-13c738952296",
+      "credit": "Imagen de La_Petite_Femme en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cuerda para saltar",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110386361_5773481.jpg?alt=media&token=613badb2-1b9a-4789-8291-8ae43d35c851",
+      "credit": "Imagen de kirillsl en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "pelota de fútbol",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110387147_157930.jpg?alt=media&token=2855c64f-9bfb-492e-b46f-72a441ba1e96",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "yoyo juguete",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110387884_8029379.jpg?alt=media&token=38697245-c942-438c-b34b-a4c630db5fe6",
+      "credit": "Imagen de Edurs34 en Pixabay"
+    }
+  ]
+}

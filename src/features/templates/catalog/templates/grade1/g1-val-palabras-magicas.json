@@ -1,0 +1,135 @@
+{
+  "code": "g1-val-palabras-magicas",
+  "grade": 1,
+  "subject": "creciendo-en-valores",
+  "collection": "g1-val-convivencia",
+  "order": 2,
+  "type": "ludiquiz",
+  "title": "Las palabras mágicas",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños sonriendo",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109416947_10454228.jpg?alt=media&token=e56fc1ab-3a5e-44d7-a67f-6bceecefe7c6",
+    "credit": "Imagen de tanrıca en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "Tu compañero te presta un lápiz. ¿Qué le dices?",
+      "answers": [
+        {
+          "text": "Gracias",
+          "correct": true
+        },
+        {
+          "text": "Adiós",
+          "correct": false
+        },
+        {
+          "text": "No",
+          "correct": false
+        },
+        {
+          "text": "Ya",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Quieres pedir agua. ¿Qué palabra usas?",
+      "answers": [
+        {
+          "text": "Dame",
+          "correct": false
+        },
+        {
+          "text": "Por favor",
+          "correct": true
+        },
+        {
+          "text": "Rápido",
+          "correct": false
+        },
+        {
+          "text": "Oye",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "vaso de agua",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109418389_5650335.jpg?alt=media&token=8a394bc9-f098-40fe-a1f5-67caeb94c7e1",
+        "credit": "Imagen de colbicrook5 en Pixabay"
+      }
+    },
+    {
+      "text": "Sin querer pisaste a alguien. ¿Qué dices?",
+      "answers": [
+        {
+          "text": "Nada",
+          "correct": false
+        },
+        {
+          "text": "Perdón",
+          "correct": true
+        },
+        {
+          "text": "Qué bien",
+          "correct": false
+        },
+        {
+          "text": "Hasta luego",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Llegas a la escuela por la mañana. ¿Qué dices a tu maestra?",
+      "answers": [
+        {
+          "text": "Buenas noches",
+          "correct": false
+        },
+        {
+          "text": "Buenos días",
+          "correct": true
+        },
+        {
+          "text": "Adiós",
+          "correct": false
+        },
+        {
+          "text": "Gracias",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "maestra en el aula",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109419225_2841679.jpg?alt=media&token=649a1bd3-9e22-46d2-ae60-075fbd3e1348",
+        "credit": "Imagen de Kidaha en Pixabay"
+      }
+    },
+    {
+      "text": "Necesitas pasar entre dos personas. ¿Qué dices?",
+      "answers": [
+        {
+          "text": "Con permiso",
+          "correct": true
+        },
+        {
+          "text": "Muévete",
+          "correct": false
+        },
+        {
+          "text": "Ya me voy",
+          "correct": false
+        },
+        {
+          "text": "Ahí voy",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "code": "g2-len-signos-quiz",
+  "grade": 2,
+  "subject": "lengua-literatura",
+  "collection": "g2-len-oraciones",
+  "order": 2,
+  "type": "ludiquiz",
+  "title": "Signos de pregunta y de emoción",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "signo de interrogación",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110401139_1872665.jpg?alt=media&token=f04d064d-c32d-481d-a0fa-c928234b7ef6",
+    "credit": "Imagen de qimono en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Qué signos usamos para hacer una pregunta?",
+      "answers": [
+        {
+          "text": "¿ ?",
+          "correct": true
+        },
+        {
+          "text": "¡ !",
+          "correct": false
+        },
+        {
+          "text": ". .",
+          "correct": false
+        },
+        {
+          "text": ", ,",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuál oración está bien escrita?",
+      "answers": [
+        {
+          "text": "¿Cómo te llamas?",
+          "correct": true
+        },
+        {
+          "text": "cómo te llamas",
+          "correct": false
+        },
+        {
+          "text": "¡Cómo te llamas",
+          "correct": false
+        },
+        {
+          "text": "Cómo te llamas?",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "La oración «¡Qué bonito día!» expresa...",
+      "answers": [
+        {
+          "text": "Una pregunta",
+          "correct": false
+        },
+        {
+          "text": "Una emoción",
+          "correct": true
+        },
+        {
+          "text": "Una orden",
+          "correct": false
+        },
+        {
+          "text": "Un número",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Con qué letra empieza siempre una oración?",
+      "answers": [
+        {
+          "text": "Con minúscula",
+          "correct": false
+        },
+        {
+          "text": "Con mayúscula",
+          "correct": true
+        },
+        {
+          "text": "Con un número",
+          "correct": false
+        },
+        {
+          "text": "Con un punto",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Al final de una oración que cuenta algo ponemos...",
+      "answers": [
+        {
+          "text": "Un punto",
+          "correct": true
+        },
+        {
+          "text": "Una coma",
+          "correct": false
+        },
+        {
+          "text": "Un signo de pregunta",
+          "correct": false
+        },
+        {
+          "text": "Nada",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "code": "g1-edf-estiramiento-leccion",
+  "grade": 1,
+  "subject": "educacion-fisica",
+  "collection": "g1-edf-movimiento",
+  "order": 2,
+  "type": "ludileccion",
+  "title": "Pausa activa en el aula",
+  "durationMin": 8,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños bailando",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109396881_10362476.jpg?alt=media&token=220fd852-fe80-4592-9d80-6328b8fb3391",
+    "credit": "Imagen de CreativeCanvasDesign en Pixabay"
+  },
+  "blocks": [
+    {
+      "kind": "youtube",
+      "title": "Calentemos el cuerpo",
+      "media": {
+        "source": "youtube",
+        "query": "calentamiento para niños",
+        "url": "https://www.youtube.com/embed/wUxWiu5Veg8",
+        "credit": "Video de Little Sports Español en YouTube: 10 EJERCICIOS DE ESTIRAR Y FLEXIONAR - CALENTAMIENTO PARA NIÑOS"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "Estira los brazos hacia arriba como un árbol",
+      "media": {
+        "source": "pixabay",
+        "query": "niño estirando los brazos",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109398438_9878716.jpg?alt=media&token=b61978e9-2654-4440-84f0-752a7150cc2f",
+        "credit": "Imagen de TyliJura en Pixabay"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Pausa activa para bailar y movernos",
+      "media": {
+        "source": "youtube",
+        "query": "pausa activa para niños",
+        "url": "https://www.youtube.com/embed/p2RM5zXbIZM",
+        "credit": "Video de Carla Efis en YouTube: PAUSA ACTIVA PARA NIÑOS"
+      }
+    }
+  ]
+}

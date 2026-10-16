@@ -1,0 +1,135 @@
+{
+  "code": "g2-art-cultura-quiz",
+  "grade": 2,
+  "subject": "expresion-cultural-artistica",
+  "collection": "g2-art-cultura",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Nuestra cultura nicaragüense",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "marimba",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110355920_8034435.jpg?alt=media&token=2eec776b-4a51-40b1-a063-6da6188008e0",
+    "credit": "Imagen de GDJ en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Cómo se llama la obra de teatro y baile tradicional de Nicaragua reconocida por la UNESCO?",
+      "answers": [
+        {
+          "text": "El Güegüense",
+          "correct": true
+        },
+        {
+          "text": "La Cenicienta",
+          "correct": false
+        },
+        {
+          "text": "El Cascanueces",
+          "correct": false
+        },
+        {
+          "text": "La Marimba",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué instrumento de madera es típico de nuestra música?",
+      "answers": [
+        {
+          "text": "La marimba",
+          "correct": true
+        },
+        {
+          "text": "El piano",
+          "correct": false
+        },
+        {
+          "text": "La gaita",
+          "correct": false
+        },
+        {
+          "text": "El arpa eléctrica",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "marimba",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110356706_308025.jpg?alt=media&token=23eb4c1b-567c-413b-8d55-cb86476a024e",
+        "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+      }
+    },
+    {
+      "text": "Masaya es conocida como la cuna del...",
+      "answers": [
+        {
+          "text": "Folclor nicaragüense",
+          "correct": true
+        },
+        {
+          "text": "Café",
+          "correct": false
+        },
+        {
+          "text": "Mar",
+          "correct": false
+        },
+        {
+          "text": "Desierto",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "San Juan de Oriente es famoso por su...",
+      "answers": [
+        {
+          "text": "Cerámica",
+          "correct": true
+        },
+        {
+          "text": "Nieve",
+          "correct": false
+        },
+        {
+          "text": "Petróleo",
+          "correct": false
+        },
+        {
+          "text": "Puerto",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "vasija de cerámica",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110357576_1465373.jpg?alt=media&token=8a7535ba-27e6-4737-ba50-97a493c263a9",
+        "credit": "Imagen de leopoldwalden en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuáles son los tres colores primarios?",
+      "answers": [
+        {
+          "text": "Rojo, azul y amarillo",
+          "correct": true
+        },
+        {
+          "text": "Verde, morado y naranja",
+          "correct": false
+        },
+        {
+          "text": "Blanco, negro y gris",
+          "correct": false
+        },
+        {
+          "text": "Rosado, café y celeste",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Form, Button, Card, Spinner, Badge, Modal } from 'react-bootstrap';
-import { FaRoute, FaPlay, FaRedo, FaQuestionCircle, FaInfoCircle } from 'react-icons/fa';
+import { FaRoute, FaPlay, FaRedo, FaQuestionCircle, FaInfoCircle, FaFlagCheckered } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
 import { useTourPreferences } from '@/hooks/useTourPreferences';
-import { ONBOARDING_JOURNEY } from '@/lib/tours/tourProgress';
+import { FIRST_ACTIVITY_STEPS, type FirstActivityStatus } from '@/lib/tours/tourProgress';
+import { firstActivityHref } from '@/features/tours/firstActivity/firstActivitySteps';
 import { FAQ, TOUR_GROUPS, TOUR_REGISTRY, getTour, tourHref, type TourDefinition } from '@/lib/tours/tourRegistry';
 import styles from './Settings.module.css';
 
@@ -19,6 +20,13 @@ const STATUS_BADGE: Record<TourStatus, string> = {
   soon: 'light',
 };
 
+const FIRST_ACTIVITY_BADGE: Record<FirstActivityStatus, string> = {
+  pendiente: 'secondary',
+  pospuesta: 'warning',
+  en_progreso: 'primary',
+  completada: 'success',
+};
+
 export const TourSettings = () => {
   const {
     preferences,
@@ -26,7 +34,6 @@ export const TourSettings = () => {
     setToursEnabled,
     setTourMode,
     resetAllTours,
-    resetToursProgress,
     isTourCompleted,
     isTourPostponed,
   } = useTourPreferences();
@@ -35,17 +42,13 @@ export const TourSettings = () => {
   const tTours = useTranslations('Tours.registry');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
+  const { firstActivity } = preferences;
+
   const statusOf = (tour: TourDefinition): TourStatus => {
     if (!tour.route) return 'soon';
     if (isTourCompleted(tour.id)) return 'completed';
     if (isTourPostponed(tour.id)) return 'later';
     return 'pending';
-  };
-
-  // Vuelve a ofrecer el recorrido inicial, que empieza en Inicio.
-  const restartOnboarding = () => {
-    resetToursProgress(ONBOARDING_JOURNEY);
-    window.location.href = '/dashboard';
   };
 
   const handleResetTours = () => {
@@ -69,6 +72,44 @@ export const TourSettings = () => {
       <p className={styles.subtitle}>{t('subtitle')}</p>
 
       <div className="row">
+        <div className="col-lg-8 mb-4">
+          <Card className={styles.card}>
+            <Card.Body>
+              <div className="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                <div>
+                  <h5 className={styles.cardTitle}>
+                    <FaFlagCheckered className="me-2" aria-hidden="true" />
+                    {t('firstActivity.title')}
+                  </h5>
+                  <p className="text-muted mb-1">{t('firstActivity.meta', { steps: FIRST_ACTIVITY_STEPS })}</p>
+                </div>
+                <Badge bg={FIRST_ACTIVITY_BADGE[firstActivity.status]} text={firstActivity.status === 'pospuesta' ? 'dark' : undefined}>
+                  {t(`firstActivity.status.${firstActivity.status}`)}
+                </Badge>
+              </div>
+              <p className="mb-3">{t('firstActivity.description')}</p>
+              <div className="d-flex flex-wrap align-items-center gap-3">
+                {firstActivity.status === 'en_progreso' ? (
+                  <>
+                    <Link href={firstActivityHref(firstActivity.step)} className="btn btn-primary">
+                      <FaPlay className="me-2" aria-hidden="true" />
+                      {t('firstActivity.continue', { step: firstActivity.step, total: FIRST_ACTIVITY_STEPS })}
+                    </Link>
+                    <Link href={firstActivityHref(1)} className="btn btn-link px-0">
+                      {t('firstActivity.restart')}
+                    </Link>
+                  </>
+                ) : (
+                  <Link href={firstActivityHref(1)} className="btn btn-primary">
+                    <FaPlay className="me-2" aria-hidden="true" />
+                    {firstActivity.status === 'completada' ? t('firstActivity.repeat') : t('firstActivity.start')}
+                  </Link>
+                )}
+              </div>
+            </Card.Body>
+          </Card>
+        </div>
+
         <div className="col-lg-8 mb-4">
           <Card className={styles.card}>
             <Card.Body>
@@ -116,10 +157,6 @@ export const TourSettings = () => {
               </Form.Group>
 
               <div className="d-flex flex-wrap align-items-center gap-3">
-                <Button variant="primary" onClick={restartOnboarding}>
-                  <FaPlay className="me-2" aria-hidden="true" />
-                  {t('restartOnboarding')}
-                </Button>
                 <Button variant="outline-warning" onClick={() => setShowResetConfirm(true)}>
                   <FaRedo className="me-2" aria-hidden="true" />
                   {t('resetAll')}

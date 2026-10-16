@@ -147,7 +147,10 @@
     "myActivities": "My Activities",
     "myActivitiesDescription": "Save, organize, and reuse your activities when you want",
     "continueJob": "CONTINUE YOUR WORK",
-    "lastEdition": "Last edited a short while ago",
+    "lastEdited": "Edited {when}",
+    "resumeQuestions": "{count, plural, =0 {No questions} one {# question} other {# questions}}",
+    "resumeBlocks": "{count, plural, =0 {No blocks} one {# block} other {# blocks}}",
+    "resumeImages": "{count, plural, =0 {No images} one {# image} other {# images}}",
     "resume": "Resume",
     "noDrafts": "You have no pending drafts. Create a new activity to get started!",
     "untitledActivity": "Untitled activity"
@@ -156,19 +159,19 @@
     "metaTitle": "Create activity",
     "metaDescription": "Create playful games divided by subjects",
     "titlePage": "Create Activity",
-    "ludiquizTitle": "Ludi Quiz",
+    "ludiquizTitle": "LudiQuiz",
     "ludiquizSubTitle": "Question Adventure",
     "ludiquiz_desc": "Design fun and challenging quizzes for your students!",
-    "ludimemoryTitle": "Ludi Memory",
+    "ludimemoryTitle": "LudiMemory",
     "ludimemorySubTitle": "Memorize and Win",
     "ludimemory_desc": "Create exciting memory games that will test your students' skills!",
-    "trueorfalseTitle": "True or False",
+    "trueorfalseTitle": "TrueOrFalse",
     "trueorfalseSubTitle": "True or False: The Challenge",
     "trueorfalse_desc": "Prepare true or false games full of surprises and learning!",
-    "ludileccionTitle": "Ludi Lesson",
+    "ludileccionTitle": "LudiLección",
     "ludileccionSubTitle": "Learn and Discover",
     "ludileccion_desc": "Build lessons with presentations, videos, images and readings that your students go through to earn badges!",
-    "ludiformTitle": "Ludi Form",
+    "ludiformTitle": "LudiForm",
     "ludiformSubTitle": "Think and Answer",
     "ludiform_desc": "Build forms with choice questions and written answers, with no time limit, for third grade!",
     "createText": "Start Creating"
@@ -668,9 +671,9 @@
     "editor": {
       "description": "LudiGame activity editor.",
       "ludiquiz": "Create LudiQuiz",
-      "trueorfalse": "Create True or False",
+      "trueorfalse": "Create TrueOrFalse",
       "ludimemory": "Create LudiMemory",
-      "ludileccion": "Create LudiLesson",
+      "ludileccion": "Create LudiLección",
       "ludiform": "Create LudiForm"
     },
     "studentPlay": {
@@ -856,7 +859,7 @@
       "blockItem": "block",
       "notAllowedWarning": "Not available for this grade",
       "sidebarTitle": "Blocks",
-      "canvasTitle": "LudiLesson",
+      "canvasTitle": "LudiLección",
       "placeholderTitle": "Build your lesson",
       "placeholderBody": "Add blocks from the left column. Your students will go through them in order and earn the badges and missions you choose when they finish."
     },
@@ -933,7 +936,7 @@
       "missingStatement": "The statement is missing.",
       "markTrueOrFalse": "Choose whether it is True or False.",
       "addStatement": "Add statement",
-      "canvasTitle": "True or False",
+      "canvasTitle": "TrueOrFalse",
       "statementPlaceholder": "Write your statement here...",
       "statementLabel": "Statement",
       "shortcut": "<strong>Keyboard shortcut:</strong> <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to save changes"
@@ -990,8 +993,7 @@
       "buttons": {
         "next": "Next",
         "previous": "Previous",
-        "done": "Got it!",
-        "toCreate": "Go to Create activity"
+        "done": "Got it!"
       },
       "command": {
         "title": "Your command center",
@@ -1016,16 +1018,12 @@
       "myActivities": {
         "title": "Your activities",
         "description": "Everything you created is here: launch it for your students, edit it or share it."
-      },
-      "next": {
-        "title": "Let's create your first activity",
-        "description": "We'll walk you through Create activity step by step. You can choose \"Remind me later\" at any time."
       }
     },
     "createActivity": {
       "ludiquiz": {
         "title": "Start with LudiQuiz",
-        "description": "Click LudiQuiz: the editor opens in a new tab and we'll continue there with your first activity."
+        "description": "Click LudiQuiz to open its editor and build a quiz with points and badges."
       },
       "buttons": {
         "done": "Got it"
@@ -1040,10 +1038,6 @@
         "next": "Next",
         "previous": "Previous",
         "done": "Let's create!"
-      },
-      "name": {
-        "title": "Activity name",
-        "description": "Give your activity a clear name so you can find it in My activities and your students know what it's about."
       },
       "question": {
         "title": "Write the question",
@@ -1108,7 +1102,7 @@
         "description": "Full guide to the quiz editor: questions, answers and the Game Panel."
       },
       "trueorfalse_tour": {
-        "name": "True or False editor",
+        "name": "TrueOrFalse editor",
         "description": "Write statements and set which ones are true."
       },
       "ludimemory_tour": {
@@ -1116,7 +1110,7 @@
         "description": "Build image pairs for a memory game."
       },
       "ludileccion_tour": {
-        "name": "LudiLesson editor",
+        "name": "LudiLección editor",
         "description": "Build a lesson with reading and multimedia blocks."
       },
       "ludiform_tour": {
@@ -1144,24 +1138,146 @@
       "next": "Next",
       "previous": "Previous",
       "done": "Got it",
-      "close": "Close tour",
-      "later": "Remind me later",
-      "progress": "{current} of {total}"
+      "exit": "Exit",
+      "progress": "Step {current} of {total}"
+    },
+    "trueorfalse": {
+      "statement": {
+        "title": "Write the statement",
+        "description": "A sentence your students must judge, for example: \"The Sun is a star\"."
+      },
+      "answer": {
+        "title": "True or false?",
+        "description": "Choose the correct answer for this statement."
+      },
+      "add": {
+        "title": "Add it to the list",
+        "description": "Save the statement and start the next one."
+      },
+      "list": {
+        "title": "Your statements",
+        "description": "They all show up here: select one to edit it, reorder it or delete it."
+      },
+      "theme": {
+        "title": "Choose a theme",
+        "description": "Change the background your students will see while playing."
+      },
+      "panelGeneral": {
+        "title": "Time and points",
+        "description": "Set how long students have to answer and how many points each correct answer is worth."
+      },
+      "panelBadges": {
+        "title": "Choose the rewards",
+        "description": "These are the badges your students can earn. You can leave them as they are."
+      },
+      "save": {
+        "title": "Save your activity",
+        "description": "It will be in My activities, ready to use in class."
+      },
+      "buttons": {
+        "done": "Got it"
+      }
+    },
+    "ludimemory": {
+      "board": {
+        "title": "Build the board",
+        "description": "Upload 2 to 12 images from your device or the gallery. Each one makes a pair your students must find."
+      },
+      "theme": {
+        "title": "Choose a theme",
+        "description": "Change the background your students will see while playing."
+      },
+      "panelGeneral": {
+        "title": "Points per pair",
+        "description": "Set how many points students earn for each pair they find."
+      },
+      "panelBadges": {
+        "title": "Choose the rewards",
+        "description": "These are the badges your students can earn. You can leave them as they are."
+      },
+      "save": {
+        "title": "Save your activity",
+        "description": "It will be in My activities, ready to use in class."
+      },
+      "buttons": {
+        "done": "Got it"
+      }
+    },
+    "ludileccion": {
+      "addBlock": {
+        "title": "Add a block",
+        "description": "A lesson is a sequence of blocks: reading, image, video and more. The available kinds depend on the grade."
+      },
+      "list": {
+        "title": "Your blocks",
+        "description": "Select a block to edit it, reorder it or delete it."
+      },
+      "canvas": {
+        "title": "Edit the block",
+        "description": "Fill in the block you selected here, just as your students will see it."
+      },
+      "theme": {
+        "title": "Choose a theme",
+        "description": "Change the background your students will see while playing."
+      },
+      "panelBadges": {
+        "title": "Choose the rewards",
+        "description": "These are the badges your students can earn. You can leave them as they are."
+      },
+      "save": {
+        "title": "Save your activity",
+        "description": "It will be in My activities, ready to use in class."
+      },
+      "buttons": {
+        "done": "Got it"
+      }
+    },
+    "ludiform": {
+      "addQuestion": {
+        "title": "Add a question",
+        "description": "Choose the kind: single choice, multiple choice or long answer."
+      },
+      "list": {
+        "title": "Your questions",
+        "description": "Select one to edit it, reorder it or delete it."
+      },
+      "canvas": {
+        "title": "Edit the question",
+        "description": "Write the question and its options. You grade long answers yourself in Reports."
+      },
+      "theme": {
+        "title": "Choose a theme",
+        "description": "Change the background your students will see while playing."
+      },
+      "panelGeneral": {
+        "title": "Points",
+        "description": "Set how many points each correct question or approved written answer is worth."
+      },
+      "panelBadges": {
+        "title": "Choose the rewards",
+        "description": "These are the badges your students can earn. You can leave them as they are."
+      },
+      "save": {
+        "title": "Save your activity",
+        "description": "It will be in My activities, ready to use in class."
+      },
+      "buttons": {
+        "done": "Got it"
+      }
     }
   },
   "TourSettings": {
     "loading": "Loading guided tours",
     "title": "Guided tours",
-    "subtitle": "Short walkthroughs that show you each part of the app. They never block the screen and you can leave them for later.",
+    "subtitle": "Short tours that walk you through step by step. You can leave whenever you want and pick them up here.",
     "general": "General settings",
     "enable": "Show guided tours automatically",
-    "enableHint": "If you turn this off, tours only open when you start them from here.",
+    "enableHint": "If you turn this off, we won't invite you to create your first activity or offer to resume it. You can always start it from here.",
     "mode": "Type of assistance",
     "modeFull": "Full walkthrough",
     "modeFullHint": "Highlights each element with a soft overlay; the screen stays usable.",
     "modeHints": "Hints only",
     "modeHintsHint": "Shows the tips without dimming the screen.",
-    "restartOnboarding": "Replay the getting started tour",
     "resetAll": "Reset all tours",
     "laterHint": "Tours you left with \"Remind me later\" stay pending here and don't open on their own again.",
     "play": "Start",
@@ -1231,9 +1347,24 @@
       }
     },
     "confirmTitle": "Reset all guided tours?",
-    "confirmBody": "All tours, including postponed ones, will show again the next time you visit each page.",
+    "confirmBody": "All tours go back to pending, including \"Create your first activity\".",
     "cancel": "Cancel",
-    "reset": "Reset"
+    "reset": "Reset",
+    "firstActivity": {
+      "title": "Create your first activity",
+      "meta": "{steps} steps · about 2 min",
+      "description": "From the dashboard to the LudiQuiz editor: write a question, choose the rewards and save.",
+      "start": "Start",
+      "continue": "Continue (step {step} of {total})",
+      "restart": "Start over",
+      "repeat": "Repeat",
+      "status": {
+        "pendiente": "Pending",
+        "pospuesta": "Postponed",
+        "en_progreso": "In progress",
+        "completada": "Completed"
+      }
+    }
   },
   "SettingsNav": {
     "personal": "Personal information",
@@ -1483,9 +1614,9 @@
     "noGrade": "No grade",
     "activityTypes": {
       "1": "LudiQuiz",
-      "2": "True or False",
+      "2": "TrueOrFalse",
       "3": "LudiMemory",
-      "4": "LudiLesson",
+      "4": "LudiLección",
       "5": "LudiForm"
     }
   },
@@ -1554,38 +1685,45 @@
     "backToActivities": "Back to my activities"
   },
   "Templates": {
-    "grade1": "1st grade",
-    "grade2": "2nd grade",
-    "grade3": "3rd grade",
-    "allGrades": "All grades",
-    "allGradesShort": "All",
-    "title": "Template catalog",
-    "subtitle": "Explore and copy ready-to-use classroom activities.",
-    "gradeFilter": "Grade: {grade}",
-    "subjectFilter": "Subject: {subject}",
-    "allSubjectsShort": "All",
-    "allSubjects": "All subjects",
-    "subjects": {
-      "math": "Mathematics",
-      "language": "Language and Literature",
-      "technology": "Technology",
-      "ephemerides": "Nicaraguan historical dates"
+    "title": "Templates",
+    "subtitle": "Activities ready for your classes, aligned with MINED topics. Save a copy to edit it or launch it right away.",
+    "gradeLabel": "Grade",
+    "subjectLabel": "Subject",
+    "mySubjects": "My subjects",
+    "allSubjects": "All",
+    "chooseSubjectsHint": "Choose the subjects you teach in {grade} and we'll show their templates first.",
+    "chooseSubjects": "Choose my subjects",
+    "collectionsTitle": "Collections",
+    "collectionCount": "{count, plural, one {# template} other {# templates}}",
+    "searchPlaceholder": "Search templates",
+    "typeLabel": "Activity type",
+    "allTypes": "All types",
+    "apply": "Apply",
+    "emptyTitle": "No templates for this filter yet",
+    "emptyBody": "Try another subject, another collection or all types.",
+    "count": {
+      "questions": "{count, plural, one {# question} other {# questions}}",
+      "blocks": "{count, plural, one {# block} other {# blocks}}",
+      "images": "{count, plural, one {# image} other {# images}}"
     },
-    "emptyTitle": "No templates match this filter yet",
-    "emptyBody": "Try another grade or subject.",
+    "duration": "about {minutes} min",
+    "perQuestion": "{seconds} s per question",
+    "badges": "{count, plural, one {# badge} other {# badges}}",
+    "inMyActivities": "In your activities",
+    "use": "Use template",
+    "preparing": "Saving...",
+    "saved": "\"{name}\" was saved to My activities.",
+    "goToMyActivities": "Go to My activities",
+    "editCopy": "Edit my copy",
+    "editCopyOf": "Edit my copy of {name}",
+    "launch": "Launch now",
+    "preview": "Preview",
+    "moreActions": "More actions for {name}",
+    "studentPin": "STUDENT PIN: <strong>{pin}</strong>",
     "launchFailed": "The game could not be launched",
     "tryAgain": "Please try again.",
     "cloneFailed": "The template could not be used",
-    "cloneError": "An error occurred while copying the template.",
-    "unexpected": "Unexpected error while using the template.",
-    "general": "General",
-    "officialTemplate": "Official LudiGame template.",
-    "studentPin": "STUDENT PIN: <strong>{pin}</strong>",
-    "preparing": "Preparing...",
-    "use": "Use template",
-    "launch": "Launch a game now",
-    "preview": "Preview",
-    "moreActions": "More actions for {name}"
+    "unexpected": "Unexpected error while using the template."
   },
   "MyActivities": {
     "confirmDelete": "Are you sure you want to delete the activity \"{name}\"?",
@@ -1873,5 +2011,98 @@
     "save": "Save subjects",
     "saved": "{grade} subjects saved.",
     "saveFailed": "Your subjects could not be saved. Please try again."
+  },
+  "FirstActivityTour": {
+    "invite": {
+      "title": "Welcome to LudiGame!",
+      "text": "We'll walk you through creating your first activity. It takes about 2 minutes.",
+      "start": "Start",
+      "later": "Remind me later"
+    },
+    "resume": {
+      "title": "Shall we continue with your first activity?",
+      "step": "Step {step} of {total}",
+      "continue": "Continue",
+      "notNow": "Not now"
+    },
+    "pausedToast": "You can pick it up anytime in Settings › Guided tours.",
+    "pausedToastLink": "Go to Guided tours",
+    "counter": "Step {current} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "exit": "Exit",
+    "steps": {
+      "sidebar": {
+        "title": "It all starts here",
+        "description": "Click <b>Create activity</b> to choose the kind of game you want to make."
+      },
+      "ludiquiz": {
+        "title": "Let's start with a LudiQuiz",
+        "description": "It's a quiz with points and badges. Click <b>Start Creating</b>."
+      },
+      "question": {
+        "title": "Write your first question",
+        "description": "For example: \"What is 7 + 5?\""
+      },
+      "answers": {
+        "title": "Add the answers",
+        "description": "Write at least two and mark the correct one with the circle."
+      },
+      "badges": {
+        "title": "Choose the rewards",
+        "description": "These are the badges your students can earn. You can leave them as they are."
+      },
+      "save": {
+        "title": "Save your activity",
+        "description": "It will be in <b>My activities</b>, ready to use in class."
+      }
+    },
+    "done": {
+      "title": "Done! You created your first activity",
+      "text": "When you want to use it in class, go to My activities and press Launch.",
+      "goToActivities": "Go to My activities",
+      "keepEditing": "Keep editing"
+    }
+  },
+  "Notifications": {
+    "bell": "Notifications",
+    "bellUnread": "Notifications, {count, plural, one {# unread} other {# unread}}",
+    "title": "Notifications",
+    "markAll": "Mark all as read",
+    "empty": "You have no notifications right now.",
+    "unreadMark": "(unread)",
+    "settingsLink": "Choose which alerts I get",
+    "types": {
+      "review_pending": {
+        "title": "Answers to grade",
+        "body": "{count, plural, one {You have # written answer} other {You have # written answers}} to grade in {activity}."
+      },
+      "evaluation_pending": {
+        "title": "How did the session go?",
+        "body": "Take a minute to tell us whether {activity} helped meet the class objective."
+      },
+      "session_summary": {
+        "title": "Session finished",
+        "body": "{participants, plural, one {# student played} other {# students played}} {activity}: an average of {average} points and {badges, plural, =0 {no badges earned} one {# badge earned} other {# badges earned}}."
+      }
+    },
+    "preferences": {
+      "title": "Notifications",
+      "description": "Choose which alerts show up in the dashboard bell.",
+      "saveFailed": "The change could not be saved. Please try again.",
+      "hints": {
+        "review_pending": "When a student submits a LudiForm with long answers you need to grade.",
+        "evaluation_pending": "When you finish a live session without evaluating it.",
+        "session_summary": "When a live session ends: how many played, the average and the badges earned."
+      }
+    }
+  },
+  "TemplateCatalog": {
+    "title": "Template catalog",
+    "description": "Loads the templates in src/features/templates/catalog into the database. Unchanged ones are not rewritten and those removed from the catalog are hidden.",
+    "sync": "Sync templates",
+    "syncing": "Syncing...",
+    "summary": "{created} new, {updated} updated, {unchanged} unchanged, {retired} retired.",
+    "failed": "{count, plural, one {# could not be loaded:} other {# could not be loaded:}}"
   }
 }

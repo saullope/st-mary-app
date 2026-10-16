@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { REVIEW_STATUS } from "@/features/form/formQuestions";
 import { getTranslations } from "next-intl/server";
+import { syncPendingReviews } from "@/features/notifications/notifications.server";
 
 const DEFAULT_BASE_POINTS = 10;
 
@@ -50,6 +51,7 @@ export async function reviewWrittenAnswer(respuestaId: number, approved: boolean
     }),
   ]);
 
+  await syncPendingReviews(respuesta.participante.sesion_id);
   revalidatePath(`/dashboard/reports/${respuesta.participante.sesion_id.toString()}`);
   return { success: true, esCorrecta: approved, puntajeObtenido: newScore };
 }

@@ -1,0 +1,54 @@
+{
+  "code": "g1-art-instrumentos-memoria",
+  "grade": 1,
+  "subject": "expresion-cultural-artistica",
+  "collection": "g1-art-colores-musica",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de instrumentos musicales",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "instrumentos musicales",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109366933_5803724.jpg?alt=media&token=eca3594a-1b39-4ad7-8301-ec3073efc310",
+    "credit": "Imagen de AlLes en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "marimba",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109367873_8034435.jpg?alt=media&token=146384be-d9a0-4e8e-8d2a-c9c18c62ee5e",
+      "credit": "Imagen de GDJ en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "tambor",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109368662_6887210.jpg?alt=media&token=ca30565d-27b6-436d-8561-74d5ab692560",
+      "credit": "Imagen de Atky en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "guitarra",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109369539_2912447.jpg?alt=media&token=544c224a-bb72-415e-a441-3cfbcc3335c5",
+      "credit": "Imagen de rahu en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "maracas",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109370360_8731603.jpg?alt=media&token=320fde37-b71b-42fe-86de-b07c21eb3ca3",
+      "credit": "Imagen de popmelon en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "flauta",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109371191_32068.jpg?alt=media&token=f1d9ff14-4df4-468d-9a36-01ed4c5738eb",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "violín",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109371956_278795.jpg?alt=media&token=388d2749-c732-49c6-b265-7a2e8cb3af86",
+      "credit": "Imagen de geralt en Pixabay"
+    }
+  ]
+}

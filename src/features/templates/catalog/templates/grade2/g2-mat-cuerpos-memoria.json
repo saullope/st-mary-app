@@ -1,0 +1,54 @@
+{
+  "code": "g2-mat-cuerpos-memoria",
+  "grade": 2,
+  "subject": "matematica",
+  "collection": "g2-mat-medidas",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de cuerpos geométricos",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "cuerpos geométricos",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110414884_2773507.jpg?alt=media&token=5ceca85b-e003-45e3-8b68-53337d06ecdb",
+    "credit": "Imagen de GDJ en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "cubo de colores",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110415677_677092.jpg?alt=media&token=8a3ae1cd-1eed-4eb8-a2cd-07b315c286d1",
+      "credit": "Imagen de CreativeMagic en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "esfera pelota",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110416499_157930.jpg?alt=media&token=b83c0cd9-af36-4cb6-ba82-a2bd0b712b50",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cilindro geometría",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110417439_5468912.jpg?alt=media&token=bbdb00a5-5ef1-4dbc-a195-f5e425092d90",
+      "credit": "Imagen de Stampf en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cono de tránsito",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110418262_43576.jpg?alt=media&token=d0502fef-7078-4d0b-a10c-919de8b7a38d",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "pirámide de egipto",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110419110_9565325.jpg?alt=media&token=363f958e-d4a1-43e4-aca3-d4e7b719b5b1",
+      "credit": "Imagen de Mohamed_hassan en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "caja de regalo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110419901_4536515.jpg?alt=media&token=f79de0bf-ca80-45bb-b136-7b6d4d806c3f",
+      "credit": "Imagen de dapple-designers en Pixabay"
+    }
+  ]
+}

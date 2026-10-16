@@ -1,0 +1,162 @@
+{
+  "code": "g1-efe-simbolos-quiz",
+  "grade": 1,
+  "subject": "efemerides",
+  "collection": "g1-efe-patria",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Símbolos patrios de Nicaragua",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "bandera de nicaragua",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109407411_4613142.jpg?alt=media&token=e40c07fe-5d0e-4975-bc43-7cb38c15713f",
+    "credit": "Imagen de TheDigitalArtist en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿De qué colores son las franjas de la bandera de Nicaragua?",
+      "answers": [
+        {
+          "text": "Azul y blanco",
+          "correct": true
+        },
+        {
+          "text": "Rojo y blanco",
+          "correct": false
+        },
+        {
+          "text": "Verde y amarillo",
+          "correct": false
+        },
+        {
+          "text": "Azul y rojo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "bandera de nicaragua",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109408215_890668.jpg?alt=media&token=a368597f-f3f8-4f4a-91d1-0ac793f0664f",
+        "credit": "Imagen de Kjrstie en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál es el ave nacional de Nicaragua?",
+      "answers": [
+        {
+          "text": "El guardabarranco",
+          "correct": true
+        },
+        {
+          "text": "El colibrí",
+          "correct": false
+        },
+        {
+          "text": "El pelícano",
+          "correct": false
+        },
+        {
+          "text": "El búho",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "unsplash",
+        "query": "guardabarranco ave",
+        "url": "https://images.unsplash.com/photo-1597170119532-c699f9d25be5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxndWFyZGFiYXJyYW5jbyUyMGF2ZXxlc3wxfDB8fHwxNzkyMTA5MzAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de roberto zuniga en Unsplash"
+      }
+    },
+    {
+      "text": "¿Cuál es la flor nacional de Nicaragua?",
+      "answers": [
+        {
+          "text": "El sacuanjoche",
+          "correct": true
+        },
+        {
+          "text": "La rosa",
+          "correct": false
+        },
+        {
+          "text": "El girasol",
+          "correct": false
+        },
+        {
+          "text": "La margarita",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "unsplash",
+        "query": "plumeria flower white yellow",
+        "url": "https://images.unsplash.com/photo-1694735785416-c0dd9318edeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxwbHVtZXJpYSUyMGZsb3dlciUyMHdoaXRlJTIweWVsbG93fGVzfDF8MHx8fDE3OTIxMDk0NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de Cemre Akçal en Unsplash"
+      }
+    },
+    {
+      "text": "¿Cuál es el árbol nacional de Nicaragua?",
+      "answers": [
+        {
+          "text": "El madroño",
+          "correct": true
+        },
+        {
+          "text": "El pino",
+          "correct": false
+        },
+        {
+          "text": "El manzano",
+          "correct": false
+        },
+        {
+          "text": "El roble",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué celebramos el 15 de septiembre?",
+      "answers": [
+        {
+          "text": "La Navidad",
+          "correct": false
+        },
+        {
+          "text": "La Independencia",
+          "correct": true
+        },
+        {
+          "text": "El Día de la Madre",
+          "correct": false
+        },
+        {
+          "text": "El Año Nuevo",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué batalla recordamos el 14 de septiembre?",
+      "answers": [
+        {
+          "text": "La Batalla de San Jacinto",
+          "correct": true
+        },
+        {
+          "text": "La Batalla de Rivas",
+          "correct": false
+        },
+        {
+          "text": "La Batalla del Lago",
+          "correct": false
+        },
+        {
+          "text": "Ninguna",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

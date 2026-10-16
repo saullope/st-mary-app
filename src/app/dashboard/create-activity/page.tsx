@@ -77,7 +77,7 @@ export default async function CreateActivity() {
                     <span className={designStyles.star}>★</span> {t('titlePage')}
                 </h2>
 
-                    <div id="create-activity-cards" className={designStyles.createCards}>
+                    <div id="create-activity-cards" data-tour="activity-types" className={designStyles.createCards}>
                         {gameTemplates.map((game) => (
                             <CardGameActivity 
                                 key={game.id}

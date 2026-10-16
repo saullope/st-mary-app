@@ -1,0 +1,52 @@
+{
+  "code": "g1-mat-mayor-menor",
+  "grade": 1,
+  "subject": "matematica",
+  "collection": "g1-mat-numeros",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "¿Mayor o menor?",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "balanza números",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107855655_2083206.jpg?alt=media&token=0007ad92-6e96-4d18-91e3-bea5446c1438",
+    "credit": "Imagen de makamuki0 en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "El 7 es mayor que el 4.",
+      "answer": true
+    },
+    {
+      "text": "El 3 es mayor que el 9.",
+      "answer": false
+    },
+    {
+      "text": "El 10 viene después del 9.",
+      "answer": true
+    },
+    {
+      "text": "El 12 es menor que el 20.",
+      "answer": true
+    },
+    {
+      "text": "El 0 es mayor que el 1.",
+      "answer": false
+    },
+    {
+      "text": "El 15 está entre el 14 y el 16.",
+      "answer": true
+    },
+    {
+      "text": "Hay más patas en un perro que en una gallina.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "perro y gallina",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107856520_8285216.jpg?alt=media&token=feba940a-80b7-496d-92b3-7631f589c152",
+        "credit": "Imagen de BiancaVanDijk en Pixabay"
+      }
+    }
+  ]
+}

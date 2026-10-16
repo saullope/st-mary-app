@@ -1,0 +1,54 @@
+{
+  "code": "g2-val-ambiente-memoria",
+  "grade": 2,
+  "subject": "creciendo-en-valores",
+  "collection": "g2-val-responsabilidad",
+  "order": 3,
+  "type": "ludimemory",
+  "title": "Memoria: cuido el ambiente",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "planeta tierra verde",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110432223_8703270.jpg?alt=media&token=1aeee238-1f28-4c6d-a94c-fed099156a76",
+    "credit": "Imagen de IdeaTivas-TLM en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "reciclaje",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110433205_160281.jpg?alt=media&token=9a921f37-c94d-49b0-a540-79499b7865dc",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "plantar un árbol",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110434113_7268713.jpg?alt=media&token=9738b800-5320-4b5a-9ba2-67021baca641",
+      "credit": "Imagen de TimeBeCreative en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "llave de agua cerrada",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110434969_29429.jpg?alt=media&token=615681b2-8755-4265-bff2-cf5bbe4d599d",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "apagar la luz interruptor",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110435852_1762980.jpg?alt=media&token=7b754e40-0875-4501-815f-131f73cab3ed",
+      "credit": "Imagen de bartekhdd en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "basurero",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110436794_4326821.jpg?alt=media&token=f2e00d8e-9f77-4824-bc9e-c458c24d4444",
+      "credit": "Imagen de Juhele en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "bicicleta en el parque",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110437695_7153125.jpg?alt=media&token=29bd6d28-2013-4824-84ff-1392efbe924a",
+      "credit": "Imagen de dandelion_tea en Pixabay"
+    }
+  ]
+}

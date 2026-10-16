@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
 import prisma from "@/lib/db";
 import { authorizeParticipant } from "@/lib/play/participantToken";
+import { syncPendingReviews } from "@/features/notifications/notifications.server";
 import {
     LONG_ANSWER_MAX_CHARS,
     gradeFormAnswer,
@@ -126,6 +127,8 @@ export async function POST(req: NextRequest) {
                 data: { puntaje_total: { increment: total }, completado: true },
             });
         });
+
+        if (graded.some(({ result }) => result.status === "pending")) await syncPendingReviews(participante.sesion_id);
 
         return NextResponse.json({
             success: true,

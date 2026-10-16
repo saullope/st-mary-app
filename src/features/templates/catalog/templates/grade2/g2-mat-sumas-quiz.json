@@ -1,0 +1,165 @@
+{
+  "code": "g2-mat-sumas-quiz",
+  "grade": 2,
+  "subject": "matematica",
+  "collection": "g2-mat-operaciones",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Sumas hasta 100",
+  "durationMin": 6,
+  "cover": {
+    "source": "pixabay",
+    "query": "niño estudiando matemáticas",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110431332_9043602.jpg?alt=media&token=3d72cedd-7727-405a-9a17-788c859af97e",
+    "credit": "Imagen de TungArt7 en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Cuánto es 23 + 14?",
+      "answers": [
+        {
+          "text": "37",
+          "correct": true
+        },
+        {
+          "text": "36",
+          "correct": false
+        },
+        {
+          "text": "27",
+          "correct": false
+        },
+        {
+          "text": "47",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuánto es 40 + 30?",
+      "answers": [
+        {
+          "text": "60",
+          "correct": false
+        },
+        {
+          "text": "70",
+          "correct": true
+        },
+        {
+          "text": "80",
+          "correct": false
+        },
+        {
+          "text": "34",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuánto es 15 + 15?",
+      "answers": [
+        {
+          "text": "25",
+          "correct": false
+        },
+        {
+          "text": "30",
+          "correct": true
+        },
+        {
+          "text": "35",
+          "correct": false
+        },
+        {
+          "text": "20",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuánto es 52 + 6?",
+      "answers": [
+        {
+          "text": "58",
+          "correct": true
+        },
+        {
+          "text": "56",
+          "correct": false
+        },
+        {
+          "text": "112",
+          "correct": false
+        },
+        {
+          "text": "59",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Ana tiene 25 chibolas y gana 12 más. ¿Cuántas tiene ahora?",
+      "answers": [
+        {
+          "text": "37",
+          "correct": true
+        },
+        {
+          "text": "13",
+          "correct": false
+        },
+        {
+          "text": "35",
+          "correct": false
+        },
+        {
+          "text": "27",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuánto es 8 + 7?",
+      "answers": [
+        {
+          "text": "14",
+          "correct": false
+        },
+        {
+          "text": "15",
+          "correct": true
+        },
+        {
+          "text": "16",
+          "correct": false
+        },
+        {
+          "text": "13",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuánto es 36 + 20?",
+      "answers": [
+        {
+          "text": "56",
+          "correct": true
+        },
+        {
+          "text": "38",
+          "correct": false
+        },
+        {
+          "text": "54",
+          "correct": false
+        },
+        {
+          "text": "66",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

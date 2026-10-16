@@ -6,6 +6,8 @@ import getCurrentUser from "@/lib/auth/getCurrentUser";
 import { isSameOrigin } from "@/lib/http/isSameOrigin";
 import {
   DEFAULT_TOUR_PREFERENCES,
+  FIRST_ACTIVITY_STATUSES,
+  FIRST_ACTIVITY_STEPS,
   TOUR_MODES,
   isValidTourId,
   parseTourProgress,
@@ -23,6 +25,13 @@ const toursSchema = yup
     tourMode: yup.string().oneOf([...TOUR_MODES]),
     completed: tourIdList,
     later: tourIdList,
+    firstActivity: yup
+      .object({
+        status: yup.string().oneOf([...FIRST_ACTIVITY_STATUSES]).required(),
+        step: yup.number().integer().min(1).max(FIRST_ACTIVITY_STEPS).required(),
+      })
+      .noUnknown()
+      .default(undefined),
   })
   .noUnknown()
   .strict();
@@ -72,6 +81,7 @@ export async function PUT(request: NextRequest) {
       tourMode: body.tourMode ?? current.tourMode,
       completed: (body.completed as string[] | undefined) ?? current.completed,
       later: (body.later as string[] | undefined) ?? current.later,
+      firstActivity: (body.firstActivity as TourPreferences["firstActivity"] | undefined) ?? current.firstActivity,
     };
     const data = {
       toursEnabled: next.toursEnabled,

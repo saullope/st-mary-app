@@ -1,0 +1,135 @@
+{
+  "code": "g2-val-responsable-quiz",
+  "grade": 2,
+  "subject": "creciendo-en-valores",
+  "collection": "g2-val-responsabilidad",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Soy responsable",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "niño haciendo la tarea",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110439461_6666003.jpg?alt=media&token=12859e58-9c4b-49a2-af79-5f122a85a4a6",
+    "credit": "Imagen de Elf-Moondance en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "Tu maestra dejó una tarea para mañana. ¿Qué haces?",
+      "answers": [
+        {
+          "text": "La hago en casa",
+          "correct": true
+        },
+        {
+          "text": "La olvido",
+          "correct": false
+        },
+        {
+          "text": "La copio de otro",
+          "correct": false
+        },
+        {
+          "text": "No vuelvo a clase",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "niño haciendo la tarea",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110440258_6651104.jpg?alt=media&token=0522c406-88be-46bb-bd29-6dbd7571d915",
+        "credit": "Imagen de Elf-Moondance en Pixabay"
+      }
+    },
+    {
+      "text": "Terminaste de jugar con tus juguetes. ¿Qué haces?",
+      "answers": [
+        {
+          "text": "Los dejo tirados",
+          "correct": false
+        },
+        {
+          "text": "Los guardo en su lugar",
+          "correct": true
+        },
+        {
+          "text": "Los rompo",
+          "correct": false
+        },
+        {
+          "text": "Los escondo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "caja de juguetes",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110441051_677092.jpg?alt=media&token=778888cc-d8d2-4527-af0b-76c395dcd581",
+        "credit": "Imagen de CreativeMagic en Pixabay"
+      }
+    },
+    {
+      "text": "Te toca regar las plantas de la escuela. ¿Qué haces?",
+      "answers": [
+        {
+          "text": "Las riego",
+          "correct": true
+        },
+        {
+          "text": "Espero que otro lo haga",
+          "correct": false
+        },
+        {
+          "text": "Me voy a jugar",
+          "correct": false
+        },
+        {
+          "text": "Las arranco",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Ser responsable significa...",
+      "answers": [
+        {
+          "text": "Cumplir con mis deberes",
+          "correct": true
+        },
+        {
+          "text": "Hacer solo lo que quiero",
+          "correct": false
+        },
+        {
+          "text": "Llegar tarde",
+          "correct": false
+        },
+        {
+          "text": "Culpar a otros",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Rompiste sin querer el lápiz de un amigo. ¿Qué haces?",
+      "answers": [
+        {
+          "text": "Me escondo",
+          "correct": false
+        },
+        {
+          "text": "Le pido perdón y lo repongo",
+          "correct": true
+        },
+        {
+          "text": "Digo que fue otro",
+          "correct": false
+        },
+        {
+          "text": "Me río",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

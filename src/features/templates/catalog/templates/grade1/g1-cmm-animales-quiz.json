@@ -1,0 +1,174 @@
+{
+  "code": "g1-cmm-animales-quiz",
+  "grade": 1,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g1-cmm-naturaleza",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Animales de mi país",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "tortuga marina en la playa",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109378807_8735059.jpg?alt=media&token=3d4482c1-b548-407c-95e9-11455f244637",
+    "credit": "Imagen de Amatheus en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Cuál es el ave nacional de Nicaragua?",
+      "answers": [
+        {
+          "text": "El guardabarranco",
+          "correct": true
+        },
+        {
+          "text": "La paloma",
+          "correct": false
+        },
+        {
+          "text": "El loro",
+          "correct": false
+        },
+        {
+          "text": "La gallina",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "unsplash",
+        "query": "guardabarranco ave",
+        "url": "https://images.unsplash.com/photo-1597170119532-c699f9d25be5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxndWFyZGFiYXJyYW5jbyUyMGF2ZXxlc3wxfDB8fHwxNzkyMTA5MzAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de roberto zuniga en Unsplash"
+      }
+    },
+    {
+      "text": "¿Qué animal tiene caparazón y llega a nuestras playas a poner huevos?",
+      "answers": [
+        {
+          "text": "El mono",
+          "correct": false
+        },
+        {
+          "text": "La tortuga marina",
+          "correct": true
+        },
+        {
+          "text": "El perro",
+          "correct": false
+        },
+        {
+          "text": "El conejo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "tortuga marina",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109379940_47047.jpg?alt=media&token=9c5cd823-cb0f-4197-8be9-fdbc564e7da2",
+        "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+      }
+    },
+    {
+      "text": "¿Dónde vive el pez?",
+      "answers": [
+        {
+          "text": "En un árbol",
+          "correct": false
+        },
+        {
+          "text": "En el agua",
+          "correct": true
+        },
+        {
+          "text": "En la arena",
+          "correct": false
+        },
+        {
+          "text": "En una cueva",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "pez en el agua",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109380699_3635221.jpg?alt=media&token=395dbc9c-9b2d-4860-ac5c-503b4baa60be",
+        "credit": "Imagen de souandresantana en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué animal es famoso por su fuerte aullido en el bosque?",
+      "answers": [
+        {
+          "text": "El mono congo",
+          "correct": true
+        },
+        {
+          "text": "La vaca",
+          "correct": false
+        },
+        {
+          "text": "El gato",
+          "correct": false
+        },
+        {
+          "text": "El pato",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "mono aullador",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109381436_786858.jpg?alt=media&token=d9040e88-bf52-49d0-b34b-f8f33a0e4fc8",
+        "credit": "Imagen de igla_111 en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué animal tiene plumas y pone huevos?",
+      "answers": [
+        {
+          "text": "La gallina",
+          "correct": true
+        },
+        {
+          "text": "El perro",
+          "correct": false
+        },
+        {
+          "text": "El cerdo",
+          "correct": false
+        },
+        {
+          "text": "El caballo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "gallina",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109382413_10159933.jpg?alt=media&token=7e9a44c8-93a9-483e-b14e-653930c21272",
+        "credit": "Imagen de Ylanite_NietjuhArt en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cómo cuidamos a los animales?",
+      "answers": [
+        {
+          "text": "Les tiramos piedras",
+          "correct": false
+        },
+        {
+          "text": "No dañamos sus casas",
+          "correct": true
+        },
+        {
+          "text": "Los dejamos sin agua",
+          "correct": false
+        },
+        {
+          "text": "Rompemos sus nidos",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

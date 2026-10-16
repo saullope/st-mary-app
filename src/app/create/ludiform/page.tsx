@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { getActivityForEdit } from "@/app/actions/getActivityForEdit";
 import { useActivityEditor } from "@/context/ActivityEditorContext";
 import { useSelectedGrade } from "@/hooks/useSelectedGrade";
+import EditorTour from "@/features/tours/EditorTour";
 import { EditorSidebar, EditorCanvas, EditorPlaceholder, EditorGamificationColumn, moveItem } from "@/components/editor";
 import { FormQuestionList, FormQuestionPicker } from "@/features/form/components/FormQuestionList";
 import { FormQuestionEditor } from "@/features/form/components/FormQuestionEditor";
@@ -106,6 +107,8 @@ export default function LudiForm() {
                     </EditorPlaceholder>
                 )}
             </EditorCanvas>
+
+            <EditorTour type="ludiform" />
 
             <EditorGamificationColumn />
         </div>

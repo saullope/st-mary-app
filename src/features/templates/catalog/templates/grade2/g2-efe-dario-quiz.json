@@ -1,0 +1,123 @@
+{
+  "code": "g2-efe-dario-quiz",
+  "grade": 2,
+  "subject": "efemerides",
+  "collection": "g2-efe-fechas",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Rubén Darío, nuestro poeta",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "libro de poesía antiguo",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110388602_2687881.jpg?alt=media&token=17cfe494-2ab8-4379-afa6-171bd8b03ddc",
+    "credit": "Imagen de CCXpistiavos en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Quién es el poeta más famoso de Nicaragua?",
+      "answers": [
+        {
+          "text": "Rubén Darío",
+          "correct": true
+        },
+        {
+          "text": "Pablo Neruda",
+          "correct": false
+        },
+        {
+          "text": "Gabriela Mistral",
+          "correct": false
+        },
+        {
+          "text": "José Martí",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿En qué mes nació Rubén Darío?",
+      "answers": [
+        {
+          "text": "Enero",
+          "correct": true
+        },
+        {
+          "text": "Septiembre",
+          "correct": false
+        },
+        {
+          "text": "Diciembre",
+          "correct": false
+        },
+        {
+          "text": "Mayo",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cómo se llama el poema que Rubén Darío escribió para una niña?",
+      "answers": [
+        {
+          "text": "A Margarita Debayle",
+          "correct": true
+        },
+        {
+          "text": "Caperucita Roja",
+          "correct": false
+        },
+        {
+          "text": "El patito feo",
+          "correct": false
+        },
+        {
+          "text": "La tortuga",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Rubén Darío es conocido como el Padre del...",
+      "answers": [
+        {
+          "text": "Modernismo",
+          "correct": true
+        },
+        {
+          "text": "Fútbol",
+          "correct": false
+        },
+        {
+          "text": "Cine",
+          "correct": false
+        },
+        {
+          "text": "Teatro",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿En qué pueblo de Nicaragua nació, hoy llamado Ciudad Darío?",
+      "answers": [
+        {
+          "text": "Metapa",
+          "correct": true
+        },
+        {
+          "text": "Bluefields",
+          "correct": false
+        },
+        {
+          "text": "Rivas",
+          "correct": false
+        },
+        {
+          "text": "Somoto",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

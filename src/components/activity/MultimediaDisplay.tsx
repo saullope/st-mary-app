@@ -11,11 +11,11 @@ const DOCUMENT_TYPES = new Set(["PDF", "WORD", "POWERPOINT"]);
 interface MultimediaDisplayProps {
   url: string;
   type: string; // 'IMAGEN', 'VIDEO', 'AUDIO', or specific IDs
+  /** Ancho máximo en px; el alto sigue la proporción de cada recurso. */
   width?: number;
-  height?: number;
 }
 
-export default function MultimediaDisplay({ url, type, width = 400, height = 300 }: MultimediaDisplayProps) {
+export default function MultimediaDisplay({ url, type, width = 400 }: MultimediaDisplayProps) {
   const t = useTranslations("Media");
   // Va primero: la URL de Canva no debe caer en las reglas por coincidencia de texto de abajo.
   if (type === 'PRESENTACION' || type === 'canva' || isCanvaUrl(url)) {
@@ -63,11 +63,14 @@ export default function MultimediaDisplay({ url, type, width = 400, height = 300
   if (isImage) {
     return (
       <div className="rounded overflow-hidden shadow-sm" style={{ position: 'relative', width: '100%', height: 'auto', maxWidth: width }}>
+        {/* Tamaño desconocido (Pixabay, Unsplash, Storage): el CSS lo decide entero. Con
+            width/height fijos y solo uno cambiado por CSS, Next avisa que se pierde la proporción. */}
         <Image
           src={url}
           alt={t("resource")}
-          width={width}
-          height={height}
+          width={0}
+          height={0}
+          sizes={`${width}px`}
           style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
           unoptimized // To allow external providers
         />

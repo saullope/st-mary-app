@@ -1,0 +1,141 @@
+{
+  "code": "g2-edf-juegos-quiz",
+  "grade": 2,
+  "subject": "educacion-fisica",
+  "collection": "g2-edf-juegos",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Juegos tradicionales de Nicaragua",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "trompo de madera",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110379487_304298.jpg?alt=media&token=0f3635fb-7976-41a0-adb8-1c81636cd6e2",
+    "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Qué juguete se hace bailar enrollándole un cordel?",
+      "answers": [
+        {
+          "text": "El trompo",
+          "correct": true
+        },
+        {
+          "text": "La pelota",
+          "correct": false
+        },
+        {
+          "text": "El papelote",
+          "correct": false
+        },
+        {
+          "text": "La cuerda",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "trompo de madera",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110380313_41937.jpg?alt=media&token=23e8033f-ed08-440a-a96d-e4840d97cd5f",
+        "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué hacemos volar con el viento en el verano?",
+      "answers": [
+        {
+          "text": "El trompo",
+          "correct": false
+        },
+        {
+          "text": "El papelote",
+          "correct": true
+        },
+        {
+          "text": "Las chibolas",
+          "correct": false
+        },
+        {
+          "text": "El yoyo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "papalote cometa en el cielo",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110381133_2869817.jpg?alt=media&token=265d68fb-672f-4d5f-b5ea-ee6024d49ea2",
+        "credit": "Imagen de Angeleses en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cómo llamamos en Nicaragua a las bolitas de vidrio para jugar?",
+      "answers": [
+        {
+          "text": "Chibolas",
+          "correct": true
+        },
+        {
+          "text": "Dados",
+          "correct": false
+        },
+        {
+          "text": "Fichas",
+          "correct": false
+        },
+        {
+          "text": "Trompos",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "canicas de vidrio",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110382002_8713485.jpg?alt=media&token=bb4c3762-d88e-4dbb-bba0-38d797f4f746",
+        "credit": "Imagen de Alexas_Fotos en Pixabay"
+      }
+    },
+    {
+      "text": "En el juego de la gallina ciega, quien la hace tiene...",
+      "answers": [
+        {
+          "text": "Los ojos tapados",
+          "correct": true
+        },
+        {
+          "text": "Una pelota",
+          "correct": false
+        },
+        {
+          "text": "Un trompo",
+          "correct": false
+        },
+        {
+          "text": "Los pies amarrados",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Al jugar con otros niños debemos...",
+      "answers": [
+        {
+          "text": "Respetar los turnos",
+          "correct": true
+        },
+        {
+          "text": "Hacer trampa",
+          "correct": false
+        },
+        {
+          "text": "Empujar",
+          "correct": false
+        },
+        {
+          "text": "Jugar solos siempre",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

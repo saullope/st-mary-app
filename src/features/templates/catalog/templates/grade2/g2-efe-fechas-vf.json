@@ -1,0 +1,42 @@
+{
+  "code": "g2-efe-fechas-vf",
+  "grade": 2,
+  "subject": "efemerides",
+  "collection": "g2-efe-fechas",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Fechas importantes de Nicaragua",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "bandera de nicaragua",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110389432_4613142.jpg?alt=media&token=ffc5166d-a3fd-4824-82d9-136736c4a20f",
+    "credit": "Imagen de TheDigitalArtist en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "El 30 de mayo celebramos el Día de las Madres en Nicaragua.",
+      "answer": true
+    },
+    {
+      "text": "Andrés Castro lanzó una piedra contra los invasores en la Batalla de San Jacinto.",
+      "answer": true
+    },
+    {
+      "text": "La Gritería se celebra el 7 de diciembre.",
+      "answer": true
+    },
+    {
+      "text": "Rubén Darío nació en Guatemala.",
+      "answer": false
+    },
+    {
+      "text": "El 15 de septiembre celebramos la Navidad.",
+      "answer": false
+    },
+    {
+      "text": "La Purísima es una celebración en honor a la Virgen María.",
+      "answer": true
+    }
+  ]
+}

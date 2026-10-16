@@ -20,6 +20,7 @@ model LUDI_COMMON_GRADE {
   misiones        LudiMision[]
   materias        LudiMateriaGrado[]
   usuariosMateria LudiUsuarioMateria[]
+  colecciones     LudiPlantillaColeccion[]
 }
 
 model LUDI_COMMON_GRADE_IMAGES {
@@ -66,6 +67,7 @@ model LudiActividad {
 
   plantillaOrigen LudiActividad?  @relation("PlantillaOrigen", fields: [plantillaOrigenId], references: [activityId], onDelete: NoAction, onUpdate: NoAction)
   copias          LudiActividad[] @relation("PlantillaOrigen")
+  plantilla       LudiPlantilla?
 
   @@map("LUDI_ACTIVIDAD")
 }
@@ -397,20 +399,21 @@ model LudiRol {
 }
 
 model LudiUser {
-  id           String               @id @default(uuid())
-  firebaseUid  String?              @map("firebase_uid") @db.NVarChar(128)
-  email        String?              @db.NVarChar(160)
-  nombre       String               @db.NVarChar(120)
-  username     String?              @db.NVarChar(50)
-  passwordHash String?              @map("password_hash") @db.NVarChar(256)
-  rolId        Int                  @map("rol_id")
-  createdAt    DateTime             @default(now()) @map("created_at")
-  updatedAt    DateTime             @updatedAt @map("updated_at")
-  rol          LudiRol              @relation(fields: [rolId], references: [id], onUpdate: NoAction, map: "FK_LUDI_USER_ROL")
-  actividades  LudiActividad[]
-  sesiones     LUDI_SESION[]
-  config       LudiUserConfig?
-  materias     LudiUsuarioMateria[]
+  id             String               @id @default(uuid())
+  firebaseUid    String?              @map("firebase_uid") @db.NVarChar(128)
+  email          String?              @db.NVarChar(160)
+  nombre         String               @db.NVarChar(120)
+  username       String?              @db.NVarChar(50)
+  passwordHash   String?              @map("password_hash") @db.NVarChar(256)
+  rolId          Int                  @map("rol_id")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+  rol            LudiRol              @relation(fields: [rolId], references: [id], onUpdate: NoAction, map: "FK_LUDI_USER_ROL")
+  actividades    LudiActividad[]
+  sesiones       LUDI_SESION[]
+  config         LudiUserConfig?
+  materias       LudiUsuarioMateria[]
+  notificaciones LudiNotificacion[]
 
   @@map("LUDI_USERS")
 }
@@ -425,8 +428,10 @@ model LudiMateria {
   // Retirar una clase es activo = false: las FK impiden borrarla mientras esté elegida.
   activo Boolean @default(true)
 
-  grados   LudiMateriaGrado[]
-  usuarios LudiUsuarioMateria[]
+  grados      LudiMateriaGrado[]
+  usuarios    LudiUsuarioMateria[]
+  plantillas  LudiPlantilla[]
+  colecciones LudiPlantillaColeccion[]
 
   @@map("LUDI_MATERIA")
 }
@@ -470,10 +475,32 @@ model LudiUserConfig {
   // Voz que narra los logros al estudiante: female | male y slow | normal | fast (ver voiceProfile.ts).
   voiceGender             String  @default("female") @map("voice_gender") @db.NVarChar(10)
   voiceSpeed              String  @default("normal") @map("voice_speed") @db.NVarChar(10)
+  // Tipos de notificación que el docente apagó, como lista JSON (ver features/notifications).
+  mutedNotifications      String  @default("[]") @map("muted_notifications") @db.NVarChar(400)
 
   user LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("LUDI_USER_CONFIG")
+}
+
+// Avisos del panel docente (campana). Una por usuario y clave: el mismo hecho (p. ej.
+// las respuestas por calificar de una sesión) actualiza su aviso en vez de repetirlo.
+// El texto se arma en el cliente desde messages (Notifications.types.<tipo>) con datos.
+model LudiNotificacion {
+  id            BigInt   @id @default(autoincrement())
+  userId        String   @map("user_id")
+  tipo          String   @db.NVarChar(40)
+  clave         String   @db.NVarChar(120)
+  datos         String   @default("{}") @db.NVarChar(Max)
+  enlace        String?  @db.NVarChar(300)
+  leida         Boolean  @default(false)
+  creadaEn      DateTime @default(now()) @map("creada_en")
+  actualizadaEn DateTime @default(now()) @map("actualizada_en")
+  user          LudiUser @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([userId, clave], map: "UQ_LUDI_NOTIFICACION_user_clave")
+  @@index([userId, actualizadaEn], map: "IX_LUDI_NOTIFICACION_user_fecha")
+  @@map("LUDI_NOTIFICACION")
 }
 
 model LudiAvatar {
@@ -506,4 +533,46 @@ model LudiRespuestaEstudiante {
   opcion       LudiOpcion?              @relation(fields: [opcionId], references: [id], onDelete: NoAction, onUpdate: NoAction) // THIS IS THE LINE TO FIX
 
   @@map("LudiRespuestaEstudiante")
+}
+
+// Catálogo de plantillas (src/features/templates). La actividad es una LudiActividad
+// normal con ACTIVITY.isTemplate; aquí vive lo que solo tiene una plantilla: su código
+// estable en el catálogo (catalog/*.json), su clase, su colección y su portada.
+model LudiPlantilla {
+  activityId     Int                     @id @map("activity_id")
+  codigo         String                  @unique(map: "UQ_LUDI_PLANTILLA_codigo") @db.NVarChar(80)
+  materiaId      Int                     @map("materia_id")
+  coleccionId    Int?                    @map("coleccion_id")
+  orden          Int                     @default(0)
+  portadaUrl     String?                 @map("portada_url") @db.NVarChar(600)
+  portadaCredito String?                 @map("portada_credito") @db.NVarChar(200)
+  duracionMin    Int                     @default(5) @map("duracion_min")
+  // Huella del contenido del catálogo: sincronizar sin cambios no reescribe la actividad.
+  version        String                  @db.NVarChar(64)
+  actividad      LudiActividad           @relation(fields: [activityId], references: [activityId], onDelete: Cascade, onUpdate: NoAction)
+  materia        LudiMateria             @relation(fields: [materiaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coleccion      LudiPlantillaColeccion? @relation(fields: [coleccionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([materiaId], map: "IX_LUDI_PLANTILLA_materia")
+  @@map("LUDI_PLANTILLA")
+}
+
+// Colección temática de plantillas de un grado y una clase (p. ej. "Las vocales").
+// No es LUDI_TEMA: ese nombre ya lo usan los fondos de pantalla de las actividades.
+model LudiPlantillaColeccion {
+  id             Int               @id @default(autoincrement())
+  codigo         String            @unique(map: "UQ_LUDI_PLANTILLA_COLECCION_codigo") @db.NVarChar(80)
+  gradoId        Int               @map("grado_id")
+  materiaId      Int               @map("materia_id")
+  nombre         String            @db.NVarChar(120)
+  descripcion    String?           @db.NVarChar(300)
+  portadaUrl     String?           @map("portada_url") @db.NVarChar(600)
+  portadaCredito String?           @map("portada_credito") @db.NVarChar(200)
+  orden          Int               @default(0)
+  activo         Boolean           @default(true)
+  grado          LUDI_COMMON_GRADE @relation(fields: [gradoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  materia        LudiMateria       @relation(fields: [materiaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  plantillas     LudiPlantilla[]
+
+  @@map("LUDI_PLANTILLA_COLECCION")
 }

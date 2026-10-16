@@ -1,0 +1,54 @@
+{
+  "code": "g2-cmm-transporte-memoria",
+  "grade": 2,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g2-cmm-comunidad",
+  "order": 1,
+  "type": "ludimemory",
+  "title": "Memoria de medios de transporte",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "autobús escolar",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110373794_8754047.jpg?alt=media&token=190ee5d5-4af9-48dc-bfca-4186d2a6ac76",
+    "credit": "Imagen de geralt en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "autobús",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110374606_8971975.jpg?alt=media&token=86e86376-7d29-45b2-90f8-9d46e1c7e8f5",
+      "credit": "Imagen de Alexas_Fotos en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "bicicleta",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110375482_7342379.jpg?alt=media&token=207c3bb9-23e2-4d06-8d09-c5b8e51e0365",
+      "credit": "Imagen de NoPixelZone en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "lancha",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110376313_159624.jpg?alt=media&token=015a88e9-1f98-4a12-ba4e-88a80cf236d0",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "avión",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110377115_4301615.jpg?alt=media&token=d165432a-db6e-4a9a-8c4b-998ffc945220",
+      "credit": "Imagen de talhakhalil007 en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "carreta de bueyes",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110377908_3978927.jpg?alt=media&token=da3f34c8-7ccc-47f5-a0de-126e1db46386",
+      "credit": "Imagen de Jazella en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "motocicleta",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110378776_7914313.jpg?alt=media&token=bd9fee45-1634-4055-b3d4-92b13c6b345e",
+      "credit": "Imagen de onismstd en Pixabay"
+    }
+  ]
+}

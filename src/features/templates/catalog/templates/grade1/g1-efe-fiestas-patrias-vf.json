@@ -1,0 +1,66 @@
+{
+  "code": "g1-efe-fiestas-patrias-vf",
+  "grade": 1,
+  "subject": "efemerides",
+  "collection": "g1-efe-patria",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Fiestas patrias de septiembre",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "desfile escolar banda",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109403892_2629361.jpg?alt=media&token=13dc622e-6a49-48e5-9ede-217f231736b8",
+    "credit": "Imagen de stux en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "El 15 de septiembre celebramos la Independencia de Centroamérica.",
+      "answer": true
+    },
+    {
+      "text": "La bandera de Nicaragua es roja y verde.",
+      "answer": false,
+      "media": {
+        "source": "pixabay",
+        "query": "bandera de nicaragua",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109404567_4613142.jpg?alt=media&token=81a54f87-cee8-4262-80c5-1ebbc1d799cf",
+        "credit": "Imagen de TheDigitalArtist en Pixabay"
+      }
+    },
+    {
+      "text": "El guardabarranco es el ave nacional de Nicaragua.",
+      "answer": true,
+      "media": {
+        "source": "unsplash",
+        "query": "guardabarranco ave",
+        "url": "https://images.unsplash.com/photo-1597170119532-c699f9d25be5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxndWFyZGFiYXJyYW5jbyUyMGF2ZXxlc3wxfDB8fHwxNzkyMTA5MzAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de roberto zuniga en Unsplash"
+      }
+    },
+    {
+      "text": "El sacuanjoche es la flor nacional.",
+      "answer": true,
+      "media": {
+        "source": "unsplash",
+        "query": "plumeria flower white yellow",
+        "url": "https://images.unsplash.com/photo-1694735785416-c0dd9318edeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxwbHVtZXJpYSUyMGZsb3dlciUyMHdoaXRlJTIweWVsbG93fGVzfDF8MHx8fDE3OTIxMDk0NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de Cemre Akçal en Unsplash"
+      }
+    },
+    {
+      "text": "El 14 de septiembre recordamos la Batalla de San Jacinto.",
+      "answer": true
+    },
+    {
+      "text": "En septiembre las escuelas celebran con desfiles y bandas rítmicas.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "desfile banda escolar",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792109406689_1545578.jpg?alt=media&token=f6215500-536c-434e-9df7-b880e741acb4",
+        "credit": "Imagen de AzamKamolov en Pixabay"
+      }
+    }
+  ]
+}

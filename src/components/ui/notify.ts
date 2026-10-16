@@ -17,4 +17,7 @@ export const notify = {
   error: (message: string, description?: string) => toast.error(message, { description }),
   warning: (message: string, description?: string) => toast.warning(message, { description }),
   info: (message: string, description?: string) => toast.info(message, { description }),
+  /** Aviso con un enlace de acción (p. ej. "Ir a Visitas guiadas"). */
+  withAction: (message: string, action: { label: string; onClick: () => void }, duration?: number) =>
+    toast.info(message, { action, duration }),
 };

@@ -76,7 +76,10 @@ export const ThemeContainer = ({ show, onClose, onThemeChange }: ThemeContainerP
                 className={`${style['theme-container']} ${show ? style.open : ''}`}
                 id="themeContainer"
                 role="dialog"
-                aria-modal="true"
+                // Siempre está montado (se desliza fuera de la pantalla): cerrado no es un diálogo
+                // abierto ni se alcanza con el teclado, y la visita guiada no espera por él.
+                aria-modal={show || undefined}
+                inert={!show}
                 aria-label={t('selectTheme')}
             >
                 {/* Close button */}

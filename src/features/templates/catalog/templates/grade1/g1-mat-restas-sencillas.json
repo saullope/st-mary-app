@@ -1,0 +1,54 @@
+{
+  "code": "g1-mat-restas-sencillas",
+  "grade": 1,
+  "subject": "matematica",
+  "collection": "g1-mat-sumas-restas",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Restas sencillas",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "globos de colores",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107863574_6539173.jpg?alt=media&token=8b52494a-41cf-49b6-91c1-da091101a3a3",
+    "credit": "Imagen de anaterate en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "5 − 2 = 3",
+      "answer": true
+    },
+    {
+      "text": "8 − 4 = 5",
+      "answer": false
+    },
+    {
+      "text": "Si tengo 6 globos y se revientan 2, me quedan 4.",
+      "answer": true,
+      "media": {
+        "source": "counting",
+        "query": "balloon:4,balloon-popped:2",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_040893d2a5a87a58.svg?alt=media&token=2483170f-cfd0-4260-886e-45f30d574fc1",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "10 − 10 = 0",
+      "answer": true
+    },
+    {
+      "text": "7 − 1 = 8",
+      "answer": false
+    },
+    {
+      "text": "Si como 3 de mis 5 galletas, me quedan 2.",
+      "answer": true,
+      "media": {
+        "source": "counting",
+        "query": "cookie:2,cookie-eaten:3",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_6c3704ef94a3f465.svg?alt=media&token=542d9e91-3371-4a4e-af47-28a927076c07",
+        "credit": "Ilustración de LudiGame"
+      }
+    }
+  ]
+}

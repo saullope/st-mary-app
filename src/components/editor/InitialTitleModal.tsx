@@ -62,7 +62,6 @@ const InitialTitleModalContent = () => {
                         </label>
                         <input 
                             id="input-activity-name"
-                            data-tour="activity-name"
                             type="text" 
                             className={styles.input}
                             placeholder={t("placeholder")}

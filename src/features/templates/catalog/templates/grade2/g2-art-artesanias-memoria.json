@@ -1,0 +1,54 @@
+{
+  "code": "g2-art-artesanias-memoria",
+  "grade": 2,
+  "subject": "expresion-cultural-artistica",
+  "collection": "g2-art-cultura",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de artesanías y tradiciones",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "artesanías coloridas",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110348724_4856749.jpg?alt=media&token=00d4791b-d618-4ef3-8864-d81347157d0a",
+    "credit": "Imagen de DesignDrawArtes en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "vasija de barro",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110350484_3321742.jpg?alt=media&token=56a99790-d443-47d2-bdee-0344bc84e494",
+      "credit": "Imagen de 1162835 en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "hamaca de colores",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110351344_10285736.jpg?alt=media&token=d9b3d3d3-1cf4-40a4-81b0-31d90c017898",
+      "credit": "Imagen de MissyWhimsyArt en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "sombrero de palma",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110352581_6883698.jpg?alt=media&token=2c94e19e-b682-49b0-8a9a-d8eb3a0d8267",
+      "credit": "Imagen de kiaboluki en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "máscara de madera",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110353431_7674435.jpg?alt=media&token=a887c5a9-8c73-4ddf-b95f-7bb9f0c9b064",
+      "credit": "Imagen de Roses_Street en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "marimba instrumento",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110354352_8034435.jpg?alt=media&token=3f65a00b-18f1-4117-8d8c-71614b686c5e",
+      "credit": "Imagen de GDJ en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "piñata",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110355157_8771369.jpg?alt=media&token=1c54fa8b-55cd-4e76-98e4-2164ac82b11c",
+      "credit": "Imagen de Ray_Shrewsberry en Pixabay"
+    }
+  ]
+}

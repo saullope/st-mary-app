@@ -1,0 +1,135 @@
+{
+  "code": "g1-len-liebre-tortuga",
+  "grade": 1,
+  "subject": "lengua-literatura",
+  "collection": "g1-len-cuentos",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "La liebre y la tortuga",
+  "durationMin": 6,
+  "cover": {
+    "source": "pixabay",
+    "query": "tortuga y liebre",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107803122_6570775.jpg?alt=media&token=d682a36e-7697-41d2-854a-ba02a25b56c5",
+    "credit": "Imagen de StephenWheeler en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "En la fábula, ¿quién era muy rápida pero se confió?",
+      "answers": [
+        {
+          "text": "La tortuga",
+          "correct": false
+        },
+        {
+          "text": "La liebre",
+          "correct": true
+        },
+        {
+          "text": "El perro",
+          "correct": false
+        },
+        {
+          "text": "El gato",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "liebre",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107803915_3270234.jpg?alt=media&token=5eaf45c6-8dae-4e03-8e1c-eff89f37243c",
+        "credit": "Imagen de Alexandra_Koch en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué hizo la liebre a mitad de la carrera?",
+      "answers": [
+        {
+          "text": "Se durmió",
+          "correct": true
+        },
+        {
+          "text": "Comió",
+          "correct": false
+        },
+        {
+          "text": "Cantó",
+          "correct": false
+        },
+        {
+          "text": "Nadó",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Quién ganó la carrera?",
+      "answers": [
+        {
+          "text": "La liebre",
+          "correct": false
+        },
+        {
+          "text": "Nadie",
+          "correct": false
+        },
+        {
+          "text": "La tortuga",
+          "correct": true
+        },
+        {
+          "text": "El búho",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "tortuga",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107804610_47047.jpg?alt=media&token=160abcff-4ef7-49e6-bd48-d5fcf8f731e4",
+        "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cómo caminaba la tortuga?",
+      "answers": [
+        {
+          "text": "Muy rápido",
+          "correct": false
+        },
+        {
+          "text": "Despacio pero sin parar",
+          "correct": true
+        },
+        {
+          "text": "Saltando",
+          "correct": false
+        },
+        {
+          "text": "Volando",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué nos enseña la fábula?",
+      "answers": [
+        {
+          "text": "A no confiarse",
+          "correct": true
+        },
+        {
+          "text": "A correr rápido",
+          "correct": false
+        },
+        {
+          "text": "A dormir mucho",
+          "correct": false
+        },
+        {
+          "text": "A no jugar",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

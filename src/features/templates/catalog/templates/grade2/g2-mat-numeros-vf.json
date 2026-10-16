@@ -1,0 +1,42 @@
+{
+  "code": "g2-mat-numeros-vf",
+  "grade": 2,
+  "subject": "matematica",
+  "collection": "g2-mat-numeros",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Leo y comparo números",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "números de colores",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110426289_9118109.jpg?alt=media&token=ed667716-f4ad-4c4e-9264-255d6af84476",
+    "credit": "Imagen de geralt en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "45 es mayor que 54.",
+      "answer": false
+    },
+    {
+      "text": "El número que sigue al 69 es el 70.",
+      "answer": true
+    },
+    {
+      "text": "El 80 tiene 8 decenas.",
+      "answer": true
+    },
+    {
+      "text": "El 100 se escribe con tres cifras.",
+      "answer": true
+    },
+    {
+      "text": "«Cincuenta y uno» se escribe 15.",
+      "answer": false
+    },
+    {
+      "text": "37 se lee «treinta y siete».",
+      "answer": true
+    }
+  ]
+}

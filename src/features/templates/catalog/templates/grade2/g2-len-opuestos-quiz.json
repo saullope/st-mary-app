@@ -1,0 +1,168 @@
+{
+  "code": "g2-len-opuestos-quiz",
+  "grade": 2,
+  "subject": "lengua-literatura",
+  "collection": "g2-len-oraciones",
+  "order": 3,
+  "type": "ludiquiz",
+  "title": "Palabras opuestas",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "día y noche",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110396693_6247630.jpg?alt=media&token=9cfa2170-c498-42a0-9119-acb1620e0ae1",
+    "credit": "Imagen de Eleatell en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Cuál es lo contrario de «grande»?",
+      "answers": [
+        {
+          "text": "Enorme",
+          "correct": false
+        },
+        {
+          "text": "Pequeño",
+          "correct": true
+        },
+        {
+          "text": "Alto",
+          "correct": false
+        },
+        {
+          "text": "Gordo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "elefante y ratón",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110397527_3526681.jpg?alt=media&token=110c945b-7fbd-4e12-a708-98b000be5003",
+        "credit": "Imagen de 2567670 en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál es lo contrario de «día»?",
+      "answers": [
+        {
+          "text": "Tarde",
+          "correct": false
+        },
+        {
+          "text": "Sol",
+          "correct": false
+        },
+        {
+          "text": "Noche",
+          "correct": true
+        },
+        {
+          "text": "Mañana",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "noche estrellada",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110398478_4259496.jpg?alt=media&token=e2432cc0-dea5-459f-a348-9f3b8a29fdfa",
+        "credit": "Imagen de susan-lu4esm en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál es lo contrario de «frío»?",
+      "answers": [
+        {
+          "text": "Helado",
+          "correct": false
+        },
+        {
+          "text": "Caliente",
+          "correct": true
+        },
+        {
+          "text": "Fresco",
+          "correct": false
+        },
+        {
+          "text": "Mojado",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuál es lo contrario de «lleno»?",
+      "answers": [
+        {
+          "text": "Vacío",
+          "correct": true
+        },
+        {
+          "text": "Grande",
+          "correct": false
+        },
+        {
+          "text": "Pesado",
+          "correct": false
+        },
+        {
+          "text": "Limpio",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "vaso vacío",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110399300_161034.jpg?alt=media&token=42cd0f04-4cfa-481f-89fa-b8157a501d1a",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál es lo contrario de «rápido»?",
+      "answers": [
+        {
+          "text": "Veloz",
+          "correct": false
+        },
+        {
+          "text": "Lento",
+          "correct": true
+        },
+        {
+          "text": "Fuerte",
+          "correct": false
+        },
+        {
+          "text": "Alto",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "caracol",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110400147_6855730.jpg?alt=media&token=0447050d-53e1-47ac-a15c-2c091f438f84",
+        "credit": "Imagen de cromaconceptovisual en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál es lo contrario de «alegre»?",
+      "answers": [
+        {
+          "text": "Feliz",
+          "correct": false
+        },
+        {
+          "text": "Contento",
+          "correct": false
+        },
+        {
+          "text": "Triste",
+          "correct": true
+        },
+        {
+          "text": "Divertido",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

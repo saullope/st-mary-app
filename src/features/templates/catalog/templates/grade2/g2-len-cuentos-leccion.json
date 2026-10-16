@@ -1,0 +1,48 @@
+{
+  "code": "g2-len-cuentos-leccion",
+  "grade": 2,
+  "subject": "lengua-literatura",
+  "collection": "g2-len-cuentos",
+  "order": 2,
+  "type": "ludileccion",
+  "title": "Escuchemos cuentos con enseñanza",
+  "durationMin": 10,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños escuchando un cuento",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110393481_7962251.jpg?alt=media&token=8a214962-266a-4fd1-89ee-c02dc982cb49",
+    "credit": "Imagen de thisisprabha en Pixabay"
+  },
+  "blocks": [
+    {
+      "kind": "youtube",
+      "title": "La cigarra y la hormiga",
+      "media": {
+        "source": "youtube",
+        "query": "fábula la cigarra y la hormiga para niños",
+        "url": "https://www.youtube.com/embed/H-32pOjheRs",
+        "credit": "Video de Cuentos y Canciones Infantiles en YouTube: La Cigarra y la Hormiga Nuevo Animado en Español | Cuentos infantiles para dormir"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "¿Te pareces más a la cigarra o a la hormiga? ¿Por qué?",
+      "media": {
+        "source": "pixabay",
+        "query": "hormigas",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110395116_3870871.jpg?alt=media&token=9506f39b-1a7f-45a4-86d0-298fe8cfdae2",
+        "credit": "Imagen de TheDigitalArtist en Pixabay"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "La gallinita roja",
+      "media": {
+        "source": "youtube",
+        "query": "cuento la gallinita roja para niños",
+        "url": "https://www.youtube.com/embed/s-D3B03PSEc",
+        "credit": "Video de Cuentos y Canciones Infantiles en YouTube: La Gallinita Roja cuentos infantiles para dormir & animados"
+      }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "code": "g1-len-silabas-vf",
+  "grade": 1,
+  "subject": "lengua-literatura",
+  "collection": "g1-len-silabas",
+  "order": 3,
+  "type": "trueorfalse",
+  "title": "Contemos sílabas",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "palmas manos niños",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107821874_7746772.jpg?alt=media&token=9c64970d-ee68-4b74-b7a1-0d44bd69b563",
+    "credit": "Imagen de Nytta en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "«Pato» tiene dos sílabas: pa-to.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "pato",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107822570_4679464.jpg?alt=media&token=6636fe14-4a20-40ca-804e-9e0af8dadb97",
+        "credit": "Imagen de PAPKOK en Pixabay"
+      }
+    },
+    {
+      "text": "«Sol» tiene tres sílabas.",
+      "answer": false
+    },
+    {
+      "text": "«Mariposa» tiene cuatro sílabas: ma-ri-po-sa.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "mariposa",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107823352_9520292.jpg?alt=media&token=48ebbf67-bcf3-44ee-8bb1-0fca24ff99bc",
+        "credit": "Imagen de flutie8211 en Pixabay"
+      }
+    },
+    {
+      "text": "«Mesa» y «mano» empiezan con la misma sílaba.",
+      "answer": false
+    },
+    {
+      "text": "«Luna» tiene dos sílabas: lu-na.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "luna llena",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792107824106_5307922.jpg?alt=media&token=79884509-93ab-436f-8655-9288d153b8d5",
+        "credit": "Imagen de susan-lu4esm en Pixabay"
+      }
+    },
+    {
+      "text": "«Pelota» tiene dos sílabas.",
+      "answer": false
+    }
+  ]
+}

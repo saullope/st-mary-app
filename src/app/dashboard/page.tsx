@@ -1,4 +1,4 @@
-import { DraftActivityResult } from "@/types/descriptionActivity";
+import type { ResumeActivity } from "@/types/descriptionActivity";
 import { Metadata } from "next";
 import { redirect } from 'next/navigation';
 import DashboardHub from "@/components/dashboard/DashboardHub";
@@ -25,36 +25,32 @@ export default async function Dashboard() {
     redirect('/auth/login');
   }
 
-const rawDrafts = await prisma.ludiActividad.findMany({
-  where: { userId: user.id },
-  orderBy: { activityId: 'desc' },
-  take: 1,
-  select: {
-    activityId: true,
-    userId: true,
-    gradoId: true,
-    temaId: true,
-    publico: true,
-    estatus: true,
-    tipoActividad: { // <-- Nombre exacto del campo de relación
-      select: {
-        nombre: true,
-      },
+  // La última actividad que editó (no la última creada), con el mismo filtro que Mis actividades.
+  const latest = await prisma.ludiActividad.findFirst({
+    where: { userId: user.id, estatus: true, activity: { isTemplate: false } },
+    orderBy: { activity: { modified_date: "desc" } },
+    select: {
+      activityId: true,
+      tipoActividadId: true,
+      gradoId: true,
+      activity: { select: { activity_name: true, modified_date: true } },
+      _count: { select: { preguntas: { where: { activo: true } }, memoriaParejas: true } },
     },
-  },
-});
+  });
 
-const drafts: DraftActivityResult[] = rawDrafts.map((draft) => ({
-  activity_id: Number(draft.activityId),
-  tipo_activity_id: draft.tipoActividad?.nombre?.toLowerCase() ?? null,
-  user_id: draft.userId,
-  grado_id: draft.gradoId !== null ? Number(draft.gradoId) : null,
-  tema_id: draft.temaId !== null ? Number(draft.temaId) : null,
-  publico: Boolean(draft.publico),
-  estatus: String(draft.estatus),
-}));
+  const lastActivity: ResumeActivity | null = latest
+    ? {
+        activityId: latest.activityId,
+        typeId: latest.tipoActividadId,
+        gradeId: latest.gradoId,
+        title: latest.activity.activity_name,
+        modifiedAt: latest.activity.modified_date.toISOString(),
+        // LudiMemory guarda imágenes (parejas); los demás tipos, preguntas o bloques.
+        items: latest.tipoActividadId === 3 ? latest._count.memoriaParejas : latest._count.preguntas,
+      }
+    : null;
 
   return (
-    <DashboardHub userName={user.nombre} drafts={drafts} />
+    <DashboardHub userName={user.nombre} lastActivity={lastActivity} />
   );
 }

@@ -1,0 +1,147 @@
+{
+  "code": "g2-cmm-plantas-quiz",
+  "grade": 2,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g2-cmm-seres-vivos",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Las partes de la planta",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "planta creciendo",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110366362_154734.jpg?alt=media&token=73df7a4f-e323-4e36-99c9-80298e413686",
+    "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Qué parte de la planta toma el agua de la tierra?",
+      "answers": [
+        {
+          "text": "La flor",
+          "correct": false
+        },
+        {
+          "text": "La raíz",
+          "correct": true
+        },
+        {
+          "text": "La hoja",
+          "correct": false
+        },
+        {
+          "text": "El fruto",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "raíces de planta",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110367191_7780950.jpg?alt=media&token=a147abf4-2a9e-4dda-b81a-f68c7805caf8",
+        "credit": "Imagen de BiancaVanDijk en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué parte sostiene a la planta y lleva el agua a las hojas?",
+      "answers": [
+        {
+          "text": "El tallo",
+          "correct": true
+        },
+        {
+          "text": "La flor",
+          "correct": false
+        },
+        {
+          "text": "La semilla",
+          "correct": false
+        },
+        {
+          "text": "La raíz",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "tallo de planta",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110367953_154735.jpg?alt=media&token=20cbc26d-46bd-49ea-8a32-57d37cddb2de",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué parte de la planta fabrica su alimento con la luz del sol?",
+      "answers": [
+        {
+          "text": "La raíz",
+          "correct": false
+        },
+        {
+          "text": "Las hojas",
+          "correct": true
+        },
+        {
+          "text": "El tallo",
+          "correct": false
+        },
+        {
+          "text": "La tierra",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "hoja verde",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110368804_6199691.jpg?alt=media&token=7e0e2461-5b28-4f5e-ab60-795e504e31dc",
+        "credit": "Imagen de Kollsd en Pixabay"
+      }
+    },
+    {
+      "text": "¿Dónde están las semillas de una planta?",
+      "answers": [
+        {
+          "text": "En el fruto",
+          "correct": true
+        },
+        {
+          "text": "En la raíz",
+          "correct": false
+        },
+        {
+          "text": "En el tallo",
+          "correct": false
+        },
+        {
+          "text": "En la tierra",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "fruta cortada semillas",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110369718_154510.jpg?alt=media&token=82ee11b1-8a59-4e1e-8d74-5ed60538a6b5",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué necesita una planta para vivir?",
+      "answers": [
+        {
+          "text": "Agua, luz y aire",
+          "correct": true
+        },
+        {
+          "text": "Solo oscuridad",
+          "correct": false
+        },
+        {
+          "text": "Dulces",
+          "correct": false
+        },
+        {
+          "text": "Ruido",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}
