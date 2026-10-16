@@ -65,7 +65,7 @@ export default async function TemplatesPage({ searchParams }: { searchParams: Pr
   };
   const chip = (active: boolean) => `${filterStyles.chip} ${active ? filterStyles.chipActive : ""}`;
   // Chips de grado y clase: cada uno con su color (subjectColors.ts).
-  const colorChip = (active: boolean) => `${filterStyles.chip} ${templateStyles.colorChip} ${active ? templateStyles.colorChipActive : ""}`;
+  const colorChip = (active: boolean) => `${filterStyles.chip} ${active ? templateStyles.colorChipActive : ""}`;
   const tint = (color: string) => ({ "--chip": color }) as CSSProperties;
   const subjectName = (codigo: string) => (tSubjects.has(codigo) ? tSubjects(codigo) : codigo);
 
@@ -103,7 +103,7 @@ export default async function TemplatesPage({ searchParams }: { searchParams: Pr
           </Link>
           {gradeSubjects.map((s) => (
             <Link key={s.codigo} href={href({ subject: s.codigo, collection: null })} className={colorChip(subject === s.codigo)} style={tint(subjectColor(s.codigo))} aria-current={subject === s.codigo ? "page" : undefined}>
-              <span className={templateStyles.chipDot} aria-hidden="true" /> {subjectName(s.codigo)}
+              {subjectName(s.codigo)}
             </Link>
           ))}
         </nav>

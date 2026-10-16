@@ -1,0 +1,144 @@
+{
+  "code": "g3-efe-historia-quiz",
+  "grade": 3,
+  "subject": "efemerides",
+  "collection": "g3-efe-historia",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Héroes y fechas patrias",
+  "durationMin": 6,
+  "cover": {
+    "source": "pixabay",
+    "query": "bandera de nicaragua",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128229652_4613142.jpg?alt=media&token=5193c7f9-f145-4ff9-96dc-6392967d40bd",
+    "credit": "Imagen de TheDigitalArtist en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿En qué año se firmó la Independencia de Centroamérica?",
+      "answers": [
+        {
+          "text": "1821",
+          "correct": true
+        },
+        {
+          "text": "1492",
+          "correct": false
+        },
+        {
+          "text": "1979",
+          "correct": false
+        },
+        {
+          "text": "2000",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿En qué año fue la Batalla de San Jacinto?",
+      "answers": [
+        {
+          "text": "1856",
+          "correct": true
+        },
+        {
+          "text": "1821",
+          "correct": false
+        },
+        {
+          "text": "1900",
+          "correct": false
+        },
+        {
+          "text": "1950",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Quién dirigió a los nicaragüenses en la Batalla de San Jacinto?",
+      "answers": [
+        {
+          "text": "José Dolores Estrada",
+          "correct": true
+        },
+        {
+          "text": "Rubén Darío",
+          "correct": false
+        },
+        {
+          "text": "Cristóbal Colón",
+          "correct": false
+        },
+        {
+          "text": "Simón Bolívar",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué héroe de San Jacinto lanzó una piedra al enemigo?",
+      "answers": [
+        {
+          "text": "Andrés Castro",
+          "correct": true
+        },
+        {
+          "text": "Rubén Darío",
+          "correct": false
+        },
+        {
+          "text": "Augusto Sandino",
+          "correct": false
+        },
+        {
+          "text": "José Martí",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué día celebramos el Día del Maestro en Nicaragua?",
+      "answers": [
+        {
+          "text": "29 de junio",
+          "correct": true
+        },
+        {
+          "text": "25 de diciembre",
+          "correct": false
+        },
+        {
+          "text": "1 de enero",
+          "correct": false
+        },
+        {
+          "text": "15 de septiembre",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué día celebramos el Día del Niño en Nicaragua?",
+      "answers": [
+        {
+          "text": "1 de junio",
+          "correct": true
+        },
+        {
+          "text": "30 de mayo",
+          "correct": false
+        },
+        {
+          "text": "7 de diciembre",
+          "correct": false
+        },
+        {
+          "text": "14 de septiembre",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

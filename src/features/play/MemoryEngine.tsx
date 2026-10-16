@@ -8,7 +8,7 @@ import { buildDeck, memoryScore, pairsFromSession, type MemoryCard } from "@/fea
 import { evaluateMemoryBadges, evaluateMemoryMissions, type MemoryProgressStats } from "@/features/gamification/achievementRules";
 import { usePlaySession } from "./usePlaySession";
 import { postPlay } from "./playApi";
-import { PlayScreen, ReadyCard, AchievementsRecap, SummaryActions } from "./PlayScreens";
+import { PlayScreen, ReadyCard, GameSummary } from "./PlayScreens";
 import styles from "./game.module.css";
 import memoryStyles from "./memory.module.css";
 import { useTranslations } from "next-intl";
@@ -135,18 +135,22 @@ export const MemoryEngine = ({ sesion, previewMode = false, onExit, previewName 
     return (
       <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
         <div className={styles.centerCard}>
-          <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
-          <h1 className={styles.summaryTitle}>{t("boardComplete")}</h1>
-          <p className={styles.summaryScore}>{t.rich("score", { score, span: (chunks) => <span>{chunks}</span> })}</p>
-          <p className={memoryStyles.summaryLine}>
-            {t("summaryLine", { pairs: pairs.length, attempts })}
-          </p>
-          <AchievementsRecap
+          <GameSummary
             missionCodes={Array.from(awardedMissionsRef.current)}
             badgeCodes={Array.from(awardedBadgesRef.current)}
             onReveal={speak}
-          />
-          <SummaryActions sesion={sesion} participant={participant} previewMode={previewMode} onExit={onExit} />
+            sesion={sesion}
+            participant={participant}
+            previewMode={previewMode}
+            onExit={onExit}
+          >
+            <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
+            <h1 className={styles.summaryTitle}>{t("boardComplete")}</h1>
+            <p className={styles.summaryScore}>{t.rich("score", { score, span: (chunks) => <span>{chunks}</span> })}</p>
+            <p className={memoryStyles.summaryLine}>
+              {t("summaryLine", { pairs: pairs.length, attempts })}
+            </p>
+          </GameSummary>
         </div>
       </PlayScreen>
     );

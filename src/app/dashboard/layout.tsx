@@ -9,6 +9,7 @@ import styles from '@/styles/pages/sidebar.module.css';
 import designStyles from '@/styles/pages/LudiDesign.module.css';
 import prisma from "@/lib/db";
 import FirstActivityTour from "@/features/tours/firstActivity/FirstActivityTour";
+import OpenLiveSessions from "@/features/live/OpenLiveSessions";
 
 interface FirebaseSession {
   s: string;
@@ -107,6 +108,7 @@ export default async function DashboardLayout({
       </div>
 
       <DashboardFrame defaultCollapsed={sidebarCollapsed} navbar={<NavbarDashboard sessionData={user} />}>
+        <OpenLiveSessions />
         {children}
       </DashboardFrame>
       <FirstActivityTour hasActivities={hasActivities} />

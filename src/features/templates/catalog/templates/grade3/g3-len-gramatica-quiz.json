@@ -1,0 +1,135 @@
+{
+  "code": "g3-len-gramatica-quiz",
+  "grade": 3,
+  "subject": "lengua-literatura",
+  "collection": "g3-len-gramatica",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Nombres, cualidades y acciones",
+  "durationMin": 6,
+  "cover": {
+    "source": "pixabay",
+    "query": "palabras letras",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128240369_1084365.jpg?alt=media&token=1df597d0-7078-402b-b8e8-6e7663e25705",
+    "credit": "Imagen de j_lloa en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "En «El perro negro corre», ¿qué palabra dice cómo es el perro?",
+      "answers": [
+        {
+          "text": "El",
+          "correct": false
+        },
+        {
+          "text": "perro",
+          "correct": false
+        },
+        {
+          "text": "negro",
+          "correct": true
+        },
+        {
+          "text": "corre",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "En «El perro negro corre», ¿qué palabra dice lo que hace?",
+      "answers": [
+        {
+          "text": "perro",
+          "correct": false
+        },
+        {
+          "text": "corre",
+          "correct": true
+        },
+        {
+          "text": "negro",
+          "correct": false
+        },
+        {
+          "text": "El",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuál de estas palabras es un sustantivo (nombra algo)?",
+      "answers": [
+        {
+          "text": "bonita",
+          "correct": false
+        },
+        {
+          "text": "saltar",
+          "correct": false
+        },
+        {
+          "text": "mesa",
+          "correct": true
+        },
+        {
+          "text": "rápido",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "mesa de madera",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128241104_1702670.jpg?alt=media&token=b9ff2e76-8218-465e-a5a5-c3c163cb5301",
+        "credit": "Imagen de PIRO4D en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuál de estas palabras es un verbo (una acción)?",
+      "answers": [
+        {
+          "text": "cantar",
+          "correct": true
+        },
+        {
+          "text": "azul",
+          "correct": false
+        },
+        {
+          "text": "casa",
+          "correct": false
+        },
+        {
+          "text": "feliz",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué palabra describe cómo es una flor?",
+      "answers": [
+        {
+          "text": "florero",
+          "correct": false
+        },
+        {
+          "text": "perfumada",
+          "correct": true
+        },
+        {
+          "text": "jardín",
+          "correct": false
+        },
+        {
+          "text": "regar",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "flor perfumada",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128241851_8225267.jpg?alt=media&token=c78ce7d7-b034-44ce-94b6-c5c8cd14ab5d",
+        "credit": "Imagen de susan-lu4esm en Pixabay"
+      }
+    }
+  ]
+}

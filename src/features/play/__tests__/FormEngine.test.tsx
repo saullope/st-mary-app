@@ -55,10 +55,15 @@ describe("FormEngine (LudiForm) en Vista Previa", () => {
       fireEvent.click(screen.getByRole("button", { name: /Entregar formulario/ }));
     });
 
+    // Las insignias salen solas de la caja sorpresa; tocar adelanta hasta el resumen.
+    expect(screen.getByRole("heading", { name: "¡Ganaste 2 insignias!" })).toBeInTheDocument();
+    for (let i = 0; i < 4; i++) fireEvent.click(screen.getByRole("button", { name: "Toca para ver la siguiente insignia" }));
+
     expect(screen.getByRole("heading", { name: "¡Formulario entregado!" })).toBeInTheDocument();
     expect(screen.getByText("20")).toBeInTheDocument();
     expect(screen.getByText("Acertaste 2 de 2 preguntas de opción.")).toBeInTheDocument();
     expect(screen.getByText("Tu respuesta escrita espera la revisión de tu docente.")).toBeInTheDocument();
-    expect(screen.getByText("Insignias ganadas (0/2)")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Tus insignias" })).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem").length).toBeGreaterThanOrEqual(2);
   });
 });

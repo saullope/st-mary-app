@@ -5,10 +5,11 @@ import styles from './game.module.css';
 import confetti from 'canvas-confetti';
 import { FaClock, FaStar, FaTrophy, FaArrowRight, FaBookOpen } from 'react-icons/fa6';
 import MultimediaDisplay from "@/components/activity/MultimediaDisplay";
+import { DEFAULT_POINTS, DEFAULT_TIME_LIMIT_MS, answerPoints, readSpeedBonus } from "@/lib/play/scoring";
 import { evaluateBadges, evaluateMissions, evaluateLessonBadges, evaluateLessonMissions, GameplayStats, LessonProgressStats } from "@/features/gamification/achievementRules";
 import { usePlaySession } from "./usePlaySession";
 import { postPlay } from "./playApi";
-import { PlayScreen, ReadyCard, AchievementsRecap, SummaryActions } from "./PlayScreens";
+import { PlayScreen, ReadyCard, GameSummary } from "./PlayScreens";
 import { useTranslations } from "next-intl";
 
 // Debe coincidir con ACTIVITY_TYPE_MAP en src/lib/activity-helpers.ts
@@ -127,10 +128,15 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
             isCorrect = selectedOption?.esCorrecta || false;
 
             if (isCorrect) {
-                // Calculate points based on time remaining
-                const basePoints = currentQuestion.puntaje || config.puntajeBase || 1000;
-                const timeFactor = timeLeft / (currentQuestion.tiempoLimiteMs / 1000 || config.tiempoPreguntaMs / 1000 || 30);
-                pointsEarned = Math.round(basePoints * (0.5 + 0.5 * timeFactor));
+                // Mismo cálculo que el servidor (lib/play/scoring): aquí solo se muestra al instante.
+                const totalTimeMs = currentQuestion.tiempoLimiteMs || config.tiempoPreguntaMs || DEFAULT_TIME_LIMIT_MS;
+                pointsEarned = answerPoints({
+                    correct: true,
+                    basePoints: currentQuestion.puntaje || config.puntajeBase || DEFAULT_POINTS,
+                    totalTimeMs,
+                    elapsedMs: totalTimeMs - timeLeft * 1000,
+                    speedBonus: readSpeedBonus(config.ajustesJson),
+                });
 
                 confetti({
                     particleCount: 100,
@@ -287,15 +293,19 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
         return (
             <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
                 <div className={styles.centerCard}>
-                    <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
-                    <h1 className={styles.summaryTitle}>{isLesson ? t('lessonCompleted') : t('greatJob')}</h1>
-                    {!isLesson && <p className={styles.summaryScore}>{t.rich('finalScore', { score, span: (chunks) => <span>{chunks}</span> })}</p>}
-                    <AchievementsRecap
+                    <GameSummary
                         missionCodes={Array.from(awardedMissionsRef.current)}
                         badgeCodes={Array.from(awardedBadgesRef.current)}
                         onReveal={speak}
-                    />
-                    <SummaryActions sesion={sesion} participant={participant} previewMode={previewMode} onExit={onExit} />
+                        sesion={sesion}
+                        participant={participant}
+                        previewMode={previewMode}
+                        onExit={onExit}
+                    >
+                        <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
+                        <h1 className={styles.summaryTitle}>{isLesson ? t('lessonCompleted') : t('greatJob')}</h1>
+                        {!isLesson && <p className={styles.summaryScore}>{t.rich('finalScore', { score, span: (chunks) => <span>{chunks}</span> })}</p>}
+                    </GameSummary>
                 </div>
             </PlayScreen>
         );
@@ -338,7 +348,7 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
                             <h2 id="slide-title" className={styles.slideTitle}>{currentQuestion.enunciado}</h2>
                         )}
                         {recurso ? (
-                            <MultimediaDisplay url={recurso.url} type={recurso.tipo?.nombre || 'PRESENTACION'} width={960} />
+                            <MultimediaDisplay url={recurso.url} type={recurso.tipo?.nombre || 'PRESENTACION'} width={960} maxHeight="min(60vh, 560px)" />
                         ) : currentQuestion.contenidoTexto ? (
                             <div className={styles.readingBody}>
                                 {String(currentQuestion.contenidoTexto).split(/\n{2,}/).map((paragraph: string, i: number) => (
@@ -386,6 +396,8 @@ export const GameEngine = ({ sesion, previewMode = false, onExit, previewName }:
                                 url={currentQuestion.preguntaRecursos[0].recurso.url}
                                 type={currentQuestion.preguntaRecursos[0].recurso.tipo?.nombre || "IMAGEN"}
                                 width={500}
+                                // La pregunta y las respuestas deben caber juntas en la pantalla.
+                                maxHeight="min(34vh, 320px)"
                             />
                         </div>
                     )}

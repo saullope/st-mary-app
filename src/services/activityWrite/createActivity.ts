@@ -78,6 +78,7 @@ export async function createActivityForUser(user: ActivityWriter, data: Activity
           tiempoPreguntaMs: data.config.timeLimit * 1000,
           ajustesJson: JSON.stringify({
             voiceEnabled: data.config.voiceEnabled,
+            speedBonus: data.config.speedBonus ?? true,
             backgroundImage: data.backgroundImage
           })
         }

@@ -1,0 +1,89 @@
+{
+  "code": "g3-efe-celebraciones-form",
+  "grade": 3,
+  "subject": "efemerides",
+  "collection": "g3-efe-historia",
+  "order": 2,
+  "type": "ludiform",
+  "title": "Celebramos en Nicaragua",
+  "durationMin": 10,
+  "cover": {
+    "source": "pixabay",
+    "query": "desfile banda escolar",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128228925_2629361.jpg?alt=media&token=10bb7483-1fc3-4756-86e9-e0e238ff095a",
+    "credit": "Imagen de stux en Pixabay"
+  },
+  "questions": [
+    {
+      "type": "single",
+      "text": "¿En qué fecha celebramos la Gritería?",
+      "options": [
+        {
+          "text": "7 de diciembre",
+          "correct": true
+        },
+        {
+          "text": "15 de septiembre",
+          "correct": false
+        },
+        {
+          "text": "1 de junio",
+          "correct": false
+        },
+        {
+          "text": "30 de mayo",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "single",
+      "text": "¿Qué día celebramos el Día de las Madres en Nicaragua?",
+      "options": [
+        {
+          "text": "30 de mayo",
+          "correct": true
+        },
+        {
+          "text": "14 de febrero",
+          "correct": false
+        },
+        {
+          "text": "1 de junio",
+          "correct": false
+        },
+        {
+          "text": "29 de junio",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "text": "¿Qué recordamos en septiembre?",
+      "options": [
+        {
+          "text": "La Independencia",
+          "correct": true
+        },
+        {
+          "text": "La Batalla de San Jacinto",
+          "correct": true
+        },
+        {
+          "text": "La Navidad",
+          "correct": false
+        },
+        {
+          "text": "El Año Nuevo",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "long",
+      "text": "Cuenta cómo celebra tu familia o tu comunidad una fecha especial.",
+      "options": []
+    }
+  ]
+}

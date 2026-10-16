@@ -1,0 +1,111 @@
+{
+  "code": "g3-cmm-cuerpo-form",
+  "grade": 3,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g3-cmm-ciencia",
+  "order": 4,
+  "type": "ludiform",
+  "title": "Mi cuerpo por dentro",
+  "durationMin": 10,
+  "cover": {
+    "source": "pixabay",
+    "query": "cuerpo humano ilustración",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128216755_163715.jpg?alt=media&token=ef992ce9-85c9-4e42-89ae-2188ee950150",
+    "credit": "Imagen de PublicDomainPictures en Pixabay"
+  },
+  "questions": [
+    {
+      "type": "single",
+      "text": "¿Qué órgano bombea la sangre por todo el cuerpo?",
+      "options": [
+        {
+          "text": "El corazón",
+          "correct": true
+        },
+        {
+          "text": "El estómago",
+          "correct": false
+        },
+        {
+          "text": "Los pulmones",
+          "correct": false
+        },
+        {
+          "text": "El cerebro",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "single",
+      "text": "¿Con qué órganos respiramos?",
+      "options": [
+        {
+          "text": "Con los pulmones",
+          "correct": true
+        },
+        {
+          "text": "Con el corazón",
+          "correct": false
+        },
+        {
+          "text": "Con los riñones",
+          "correct": false
+        },
+        {
+          "text": "Con los huesos",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "text": "¿Qué nos ayuda a crecer sanos?",
+      "options": [
+        {
+          "text": "Comer frutas",
+          "correct": true
+        },
+        {
+          "text": "Hacer ejercicio",
+          "correct": true
+        },
+        {
+          "text": "Dormir bien",
+          "correct": true
+        },
+        {
+          "text": "Comer muchos dulces",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "single",
+      "text": "Todos los huesos del cuerpo forman el...",
+      "options": [
+        {
+          "text": "Esqueleto",
+          "correct": true
+        },
+        {
+          "text": "Músculo",
+          "correct": false
+        },
+        {
+          "text": "Corazón",
+          "correct": false
+        },
+        {
+          "text": "Cabello",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "long",
+      "text": "Explica con tus palabras por qué es importante lavarnos las manos.",
+      "options": []
+    }
+  ]
+}

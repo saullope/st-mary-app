@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import confetti from "canvas-confetti";
-import { FaGift } from "react-icons/fa6";
 import { findBadge, type BadgeDef } from "@/features/gamification/catalog";
 import { useAchievementCatalog } from "@/features/gamification/AchievementCatalogContext";
 import { useAchievementText } from "@/features/gamification/useAchievementText";
@@ -10,75 +9,99 @@ import { BadgeArt } from "@/features/gamification/components/BadgeArt";
 import styles from "./BadgeRevealSequence.module.css";
 import { useTranslations } from "next-intl";
 
+// Tiempos de cada caja: se sacude, se abre y la insignia queda a la vista antes de la siguiente.
+const SHAKE_MS = 1300;
+const SHOW_MS = 2300;
+const REDUCED_SHAKE_MS = 250;
+
 interface BadgeRevealSequenceProps {
-  /** Códigos de insignias ganadas durante la partida (en el orden en que se ganaron) */
+  /** Códigos de insignias ganadas durante la partida (en el orden en que se ganaron). */
   codes: string[];
-  /** Narración opcional (voz) al abrir cada caja */
+  /** Narración opcional (voz) al salir cada insignia. */
   onReveal?: (text: string) => void;
+  /** Al terminar de mostrar la última. */
+  onComplete: () => void;
 }
 
 /**
- * Muestra las insignias ganadas como cajas sorpresa, una a la vez: el
- * participante debe tocar la caja para abrirla y ver cuál ganó, luego pasa
- * a la siguiente. A diferencia de las misiones (que se muestran en vivo
- * durante el juego), las insignias solo se revelan aquí, al final.
+ * Las insignias ganadas salen de una caja sorpresa, una tras otra y solas: la caja se
+ * sacude, se abre y aparece la insignia. No hay botones que leer; tocar adelanta.
  */
-export const BadgeRevealSequence = ({ codes, onReveal }: BadgeRevealSequenceProps) => {
-  const [index, setIndex] = useState(0);
-  const [opened, setOpened] = useState(false);
-
+export const BadgeRevealSequence = ({ codes, onReveal, onComplete }: BadgeRevealSequenceProps) => {
   const catalog = useAchievementCatalog();
   const achievementText = useAchievementText();
   const t = useTranslations("Play.achievements");
-  const badges = codes
-    .map((code) => findBadge(catalog, code))
-    .filter((b): b is BadgeDef => Boolean(b));
+  const badges = useMemo(
+    () => codes.map((code) => findBadge(catalog, code)).filter((b): b is BadgeDef => Boolean(b)),
+    [catalog, codes],
+  );
+  const [index, setIndex] = useState(0);
+  const [opened, setOpened] = useState(false);
+  const reduceMotion = typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (badges.length === 0) return null;
-
-  const current = badges[index];
-  const currentText = achievementText.badge(current);
-  const isLast = index === badges.length - 1;
-
-  const handleOpen = () => {
-    setOpened(true);
-    confetti({ particleCount: 90, spread: 70, origin: { y: 0.5 } });
-    onReveal?.(achievementText.badgeUnlocked(current));
-  };
-
-  const handleNext = () => {
+  const advance = useCallback(() => {
+    if (!opened) return setOpened(true);
+    if (index >= badges.length - 1) return onComplete();
     setOpened(false);
     setIndex((i) => i + 1);
-  };
+  }, [opened, index, badges.length, onComplete]);
+
+  // Sin insignias que mostrar no hay caja: se pasa directo al resumen.
+  useEffect(() => {
+    if (badges.length === 0) onComplete();
+  }, [badges.length, onComplete]);
+
+  useEffect(() => {
+    if (badges.length === 0) return;
+    const timer = window.setTimeout(advance, opened ? SHOW_MS : reduceMotion ? REDUCED_SHAKE_MS : SHAKE_MS);
+    return () => window.clearTimeout(timer);
+  }, [advance, opened, badges.length, reduceMotion]);
+
+  const current = badges[index];
+  useEffect(() => {
+    if (!opened || !current) return;
+    confetti({ particleCount: 90, spread: 70, origin: { y: 0.55 }, disableForReducedMotion: true });
+    onReveal?.(achievementText.badgeUnlocked(current));
+    // Solo al abrir cada caja; el texto de la voz no debe volver a sonar al re-renderizar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opened, index]);
+
+  if (!current) return null;
+  const text = achievementText.badge(current);
 
   return (
-    <div className={styles.wrapper}>
-      <h5 className={styles.title}>
-        {t("badgesEarned", { opened: index + (opened ? 1 : 0), total: badges.length })}
-      </h5>
+    <button
+      type="button"
+      className={styles.stage}
+      onClick={advance}
+      aria-label={t("tapToContinue")}
+      data-opened={opened || undefined}
+    >
+      <span className={styles.counter}>{t("revealCounter", { current: index + 1, total: badges.length })}</span>
 
-      {!opened ? (
-        <button
-          type="button"
-          className={styles.box}
-          onClick={handleOpen}
-          aria-label={t("openBox", { number: index + 1, total: badges.length })}
-        >
-          <span className={styles.boxEmoji} aria-hidden="true"><FaGift /></span>
-          <span className={styles.boxLabel}>{t("tapToOpen")}</span>
-        </button>
-      ) : (
-        <div className={styles.reveal} style={{ borderColor: current.color }}>
-          <BadgeArt badge={current} size={72} radius={14} className={styles.revealImg} />
-          <strong className={styles.revealName} style={{ color: current.color }}>{currentText.name}</strong>
-          <span className={styles.revealPhrase}>{currentText.phrase}</span>
-          {!isLast ? (
-            <button type="button" className={styles.nextBtn} onClick={handleNext}>{t("nextBadge")}</button>
-          ) : (
-            <span className={styles.doneLabel}>{t("allRevealed")}</span>
-          )}
-        </div>
-      )}
-    </div>
+      <span className={styles.scene} aria-hidden="true">
+        {/* La key reinicia las animaciones de la caja en cada insignia. */}
+        <span key={`box-${index}`} className={styles.box}>
+          <span className={styles.lid}><span className={styles.bow} /></span>
+          <span className={styles.body} />
+        </span>
+        {opened && (
+          <span key={`badge-${index}`} className={styles.badge} style={{ borderColor: current.color }}>
+            <BadgeArt badge={current} size={96} radius={18} />
+          </span>
+        )}
+      </span>
+
+      <span className={styles.caption} role="status">
+        {opened ? (
+          <>
+            <strong className={styles.name} style={{ color: current.color }}>{text.name}</strong>
+            <span className={styles.phrase}>{text.phrase}</span>
+          </>
+        ) : (
+          <span className={styles.phrase}>{t("surprise")}</span>
+        )}
+      </span>
+    </button>
   );
 };

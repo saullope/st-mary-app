@@ -1,0 +1,54 @@
+{
+  "code": "g3-mat-medidas-memoria",
+  "grade": 3,
+  "subject": "matematica",
+  "collection": "g3-mat-fracciones",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de instrumentos para medir",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "cinta métrica",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128248909_6370199.jpg?alt=media&token=e0ad3f46-93bc-4abc-851c-1dce3f9c6154",
+    "credit": "Imagen de flutie8211 en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "regla de medir",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128249680_161210.jpg?alt=media&token=d70bc867-e30f-47fa-a2e8-9cdb9dbf99bd",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "balanza de cocina",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128250416_154924.jpg?alt=media&token=49d039d7-6232-4db8-8a4b-76e250231ea7",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "termómetro",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128251369_37322.jpg?alt=media&token=1f39dac9-197e-481e-a0ab-1052e57904ac",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "reloj despertador",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128252277_1392328.jpg?alt=media&token=a08d0e5e-83e3-46b8-8fb9-67dfaa412298",
+      "credit": "Imagen de Alexas_Fotos en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cinta métrica",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128253079_158276.jpg?alt=media&token=1daee1ba-1baa-43e0-8756-062e8f25d02e",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "taza medidora",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128253832_1300565.jpg?alt=media&token=f1fcb47d-a44b-4818-92f4-47c9074a9f6e",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    }
+  ]
+}

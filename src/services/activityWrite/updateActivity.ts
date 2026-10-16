@@ -69,6 +69,7 @@ export async function updateActivityForUser(user: ActivityWriter, data: UpdateAc
       // 4. Update Configuración
       const ajustesJson = JSON.stringify({
         voiceEnabled: data.config.voiceEnabled,
+        speedBonus: data.config.speedBonus ?? true,
         backgroundImage: data.backgroundImage
       });
       await tx.ludiActividadConfig.upsert({

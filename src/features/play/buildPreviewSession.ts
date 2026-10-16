@@ -108,6 +108,7 @@ export function buildPreviewSession(state: ActivityEditorState, untitled = "") {
         puntajeBase: config.pointsPerCorrect,
         ajustesJson: JSON.stringify({
           voiceEnabled: config.voiceEnabled,
+          speedBonus: config.speedBonus,
           backgroundImage,
         }),
       },

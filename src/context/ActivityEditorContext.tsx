@@ -17,6 +17,8 @@ export interface GamificationConfig {
   selectedBadges: string[]; // IDs de insignias
   selectedMissions: string[]; // IDs o textos de misiones
   voiceEnabled: boolean;
+  /** Solo LudiQuiz y Verdadero/Falso: el acierto vale más cuanto antes se responde (ver lib/play/scoring). */
+  speedBonus: boolean;
 }
 
   // Estado global del editor
@@ -88,6 +90,7 @@ const defaultState: ActivityEditorState = {
     selectedBadges: [],
     selectedMissions: [],
     voiceEnabled: true,
+    speedBonus: true,
   },
 };
 

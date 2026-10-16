@@ -1,0 +1,42 @@
+{
+  "code": "g3-mat-fracciones-vf",
+  "grade": 3,
+  "subject": "matematica",
+  "collection": "g3-mat-fracciones",
+  "order": 1,
+  "type": "trueorfalse",
+  "title": "Mitades, tercios y cuartos",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "pizza en porciones",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128247375_155771.jpg?alt=media&token=47a607a8-82f6-4ea7-8616-3e2d52c4eb78",
+    "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "Si parto una pizza en 4 partes iguales, cada parte es un cuarto.",
+      "answer": true
+    },
+    {
+      "text": "La mitad de 10 es 6.",
+      "answer": false
+    },
+    {
+      "text": "Un entero tiene dos mitades.",
+      "answer": true
+    },
+    {
+      "text": "Un tercio es una de tres partes iguales.",
+      "answer": true
+    },
+    {
+      "text": "Si como 2 de 4 pedazos iguales, comí la mitad.",
+      "answer": true
+    },
+    {
+      "text": "Un cuarto es más grande que una mitad.",
+      "answer": false
+    }
+  ]
+}

@@ -4,6 +4,7 @@
 import * as yup from "yup";
 import type { ActivityData, ActivityType } from "@/services/activityWrite/types";
 import type { LessonBlockKind } from "@/features/lesson/lessonBlocks";
+import { FORM_QUESTION_TYPES, type FormQuestionType } from "@/features/form/formQuestions";
 
 // "counting": ilustración generada con una cantidad exacta (scripts/templates/counting-art.mjs).
 // query describe lo que dibuja: "apple:3 + pear:2", "balloon:4,balloon-popped:2" o "card:3".
@@ -75,6 +76,25 @@ const block = yup
     b.kind === "reading" ? Boolean(b.body) : Boolean(b.media),
   );
 
+// LudiForm (solo tercer grado, lo revalida el guardado): las de respuesta larga no llevan opciones
+// y las califica el docente; en la de opción única hay exactamente una correcta.
+const formQuestion = yup
+  .object({
+    type: yup.string().oneOf([...FORM_QUESTION_TYPES]).required(),
+    text: yup.string().trim().max(TEXT_MAX).required(),
+    options: yup
+      .array(yup.object({ text: yup.string().trim().max(120).required(), correct: yup.boolean().default(false) }).noUnknown())
+      .max(6)
+      .default([]),
+  })
+  .noUnknown()
+  .test("form-options", "single: 2+ options and one correct; multiple: 2+ and at least one; long: none", (q) => {
+    const options = q.options ?? [];
+    const correct = options.filter((o) => o.correct).length;
+    if (q.type === "long") return options.length === 0;
+    return options.length >= 2 && (q.type === "single" ? correct === 1 : correct >= 1);
+  });
+
 export const catalogTemplateSchema = yup.lazy((value: { type?: string }) => {
   switch (value?.type) {
     case "ludiquiz":
@@ -85,8 +105,10 @@ export const catalogTemplateSchema = yup.lazy((value: { type?: string }) => {
       return yup.object({ ...base, type: yup.string().oneOf(["ludimemory"]).required(), images: yup.array(media).min(2).max(12).required() }).noUnknown();
     case "ludileccion":
       return yup.object({ ...base, type: yup.string().oneOf(["ludileccion"]).required(), blocks: yup.array(block).min(1).max(15).required() }).noUnknown();
+    case "ludiform":
+      return yup.object({ ...base, type: yup.string().oneOf(["ludiform"]).required(), questions: yup.array(formQuestion).min(3).max(15).required() }).noUnknown();
     default:
-      return yup.object({ type: yup.string().oneOf(["ludiquiz", "trueorfalse", "ludimemory", "ludileccion"]).required() });
+      return yup.object({ type: yup.string().oneOf(["ludiquiz", "trueorfalse", "ludimemory", "ludileccion", "ludiform"]).required() });
   }
 });
 
@@ -119,6 +141,7 @@ export type CatalogTemplate = CatalogBase &
     | { type: "trueorfalse"; statements: { text: string; answer: boolean; media?: CatalogMedia }[] }
     | { type: "ludimemory"; images: CatalogMedia[] }
     | { type: "ludileccion"; blocks: { kind: "image" | "youtube" | "reading"; title: string; media?: CatalogMedia; body?: string }[] }
+    | { type: "ludiform"; questions: { type: FormQuestionType; text: string; options: { text: string; correct: boolean }[] }[] }
   );
 
 export interface CatalogCollection {
@@ -159,6 +182,9 @@ const ACHIEVEMENTS: Record<string, Record<number, { badges: string[]; missions: 
     2: { badges: ["coleccionista", "imparable", "buena-memoria"], missions: ["M2-3-parejas", "M2-completo"] },
     3: { badges: ["coleccionista", "imparable", "buena-memoria"], missions: ["M3-4-parejas", "M3-3-seguidas", "M3-completo"] },
   },
+  form: {
+    3: { badges: ["dedicado", "certero", "pensador"], missions: ["F3-3-respuestas", "F3-entrega"] },
+  },
   lesson: {
     1: { badges: ["explorador"], missions: ["L1-mitad", "L1-completa"] },
     2: { badges: ["explorador", "atento"], missions: ["L2-mitad", "L2-completa"] },
@@ -166,7 +192,7 @@ const ACHIEVEMENTS: Record<string, Record<number, { badges: string[]; missions: 
   },
 };
 
-const CATALOG_BY_TYPE: Record<string, string> = { ludiquiz: "quiz", trueorfalse: "quiz", ludimemory: "memory", ludileccion: "lesson" };
+const CATALOG_BY_TYPE: Record<string, string> = { ludiquiz: "quiz", trueorfalse: "quiz", ludimemory: "memory", ludileccion: "lesson", ludiform: "form" };
 
 export function levelConfig(type: ActivityType, grade: number): ActivityData["config"] {
   const achievements = ACHIEVEMENTS[CATALOG_BY_TYPE[type]][grade];
@@ -177,6 +203,7 @@ export function levelConfig(type: ActivityType, grade: number): ActivityData["co
     selectedBadges: achievements.badges,
     selectedMissions: achievements.missions,
     voiceEnabled: true,
+    speedBonus: true,
   };
 }
 
@@ -217,6 +244,17 @@ export function toActivityData(entry: CatalogTemplate): ActivityData {
   }
   if (entry.type === "ludimemory") {
     return { ...common, memoryImages: entry.images.map((image) => image.url as string) };
+  }
+  if (entry.type === "ludiform") {
+    return {
+      ...common,
+      formQuestions: entry.questions.map((q, index) => ({
+        id: index + 1,
+        type: q.type,
+        text: q.text,
+        options: q.options.map((o, optionIndex) => ({ id: optionIndex + 1, text: o.text, isCorrect: o.correct })),
+      })),
+    };
   }
   return {
     ...common,

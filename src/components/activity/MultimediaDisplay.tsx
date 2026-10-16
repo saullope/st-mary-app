@@ -13,9 +13,11 @@ interface MultimediaDisplayProps {
   type: string; // 'IMAGEN', 'VIDEO', 'AUDIO', or specific IDs
   /** Ancho máximo en px; el alto sigue la proporción de cada recurso. */
   width?: number;
+  /** Alto máximo de las imágenes (CSS): una foto vertical o muy grande no debe llenar la pantalla. */
+  maxHeight?: string;
 }
 
-export default function MultimediaDisplay({ url, type, width = 400 }: MultimediaDisplayProps) {
+export default function MultimediaDisplay({ url, type, width = 400, maxHeight = "min(55vh, 520px)" }: MultimediaDisplayProps) {
   const t = useTranslations("Media");
   // Va primero: la URL de Canva no debe caer en las reglas por coincidencia de texto de abajo.
   if (type === 'PRESENTACION' || type === 'canva' || isCanvaUrl(url)) {
@@ -71,7 +73,7 @@ export default function MultimediaDisplay({ url, type, width = 400 }: Multimedia
           width={0}
           height={0}
           sizes={`${width}px`}
-          style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+          style={{ width: '100%', height: 'auto', maxHeight, objectFit: 'contain' }}
           unoptimized // To allow external providers
         />
       </div>

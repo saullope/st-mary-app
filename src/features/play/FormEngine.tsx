@@ -17,7 +17,7 @@ import {
 import { evaluateFormBadges, evaluateFormMissions, type FormProgressStats } from "@/features/gamification/achievementRules";
 import { usePlaySession } from "./usePlaySession";
 import { postPlay } from "./playApi";
-import { PlayScreen, ReadyCard, AchievementsRecap, SummaryActions } from "./PlayScreens";
+import { PlayScreen, ReadyCard, GameSummary } from "./PlayScreens";
 import styles from "./game.module.css";
 import formStyles from "./form.module.css";
 import { useTranslations } from "next-intl";
@@ -175,25 +175,29 @@ export const FormEngine = ({ sesion, previewMode = false, onExit, previewName }:
     return (
       <PlayScreen backgroundImage={backgroundImage} achievementQueue={achievementQueue}>
         <div className={styles.centerCard}>
-          <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
-          <h1 className={styles.summaryTitle}>{t("submitted")}</h1>
-          <p className={styles.summaryScore}>{t.rich("score", { score: summary.score, span: (chunks) => <span>{chunks}</span> })}</p>
-          {summary.closedTotal > 0 && (
-            <p className={formStyles.summaryLine}>
-              {t("closedSummary", { correct: summary.closedCorrect, total: summary.closedTotal })}
-            </p>
-          )}
-          {summary.pending > 0 && (
-            <p className={formStyles.summaryLine}>
-              {t("pendingReview", { count: summary.pending })}
-            </p>
-          )}
-          <AchievementsRecap
+          <GameSummary
             missionCodes={Array.from(awardedMissionsRef.current)}
             badgeCodes={Array.from(awardedBadgesRef.current)}
             onReveal={speak}
-          />
-          <SummaryActions sesion={sesion} participant={participant} previewMode={previewMode} onExit={onExit} />
+            sesion={sesion}
+            participant={participant}
+            previewMode={previewMode}
+            onExit={onExit}
+          >
+            <FaTrophy className={styles.trophyIcon} aria-hidden="true" />
+            <h1 className={styles.summaryTitle}>{t("submitted")}</h1>
+            <p className={styles.summaryScore}>{t.rich("score", { score: summary.score, span: (chunks) => <span>{chunks}</span> })}</p>
+            {summary.closedTotal > 0 && (
+              <p className={formStyles.summaryLine}>
+                {t("closedSummary", { correct: summary.closedCorrect, total: summary.closedTotal })}
+              </p>
+            )}
+            {summary.pending > 0 && (
+              <p className={formStyles.summaryLine}>
+                {t("pendingReview", { count: summary.pending })}
+              </p>
+            )}
+          </GameSummary>
         </div>
       </PlayScreen>
     );

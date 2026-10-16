@@ -193,20 +193,8 @@ article:hover .coverImage {
 }
 
 /* ---------- Chips de color (grado y clase) ----------
-   --chip lo pone cada chip (subjectColors.ts). Inactivo: tinte del color con borde;
-   activo: el color lleno con relieve, como los botones del panel. */
-.chipRow .colorChip {
-  border: 1.5px solid color-mix(in srgb, var(--chip) 65%, #ffffff);
-  background: color-mix(in srgb, var(--chip) 28%, transparent);
-  color: #ffffff;
-}
-
-.chipRow .colorChip:hover {
-  border-color: #ffffff;
-  background: color-mix(in srgb, var(--chip) 55%, transparent);
-  color: #ffffff;
-}
-
+   --chip lo pone cada chip (subjectColors.ts). Sin elegir se ven como el resto de los
+   filtros; el color solo aparece en el elegido, lleno y con relieve. */
 .chipRow .colorChipActive,
 .chipRow .colorChipActive:hover {
   border-color: #ffffff;
@@ -214,20 +202,6 @@ article:hover .coverImage {
   color: #ffffff;
   box-shadow: 0 3px 0 color-mix(in srgb, var(--chip) 55%, #000000);
   transform: translateY(-1px);
-}
-
-.chipDot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--chip);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
-}
-
-.colorChipActive .chipDot {
-  background: #ffffff;
-  box-shadow: none;
 }
 
 /* Clase de la colección, con su color, sobre la portada. */

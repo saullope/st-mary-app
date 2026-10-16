@@ -1,0 +1,42 @@
+{
+  "code": "g3-len-sinonimos-vf",
+  "grade": 3,
+  "subject": "lengua-literatura",
+  "collection": "g3-len-gramatica",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Sinónimos y antónimos",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "diccionario",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128245840_7853830.jpg?alt=media&token=5877a584-035c-4075-af66-8da034569176",
+    "credit": "Imagen de Rtanvir en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "«Feliz» y «contento» son sinónimos.",
+      "answer": true
+    },
+    {
+      "text": "«Alto» y «bajo» son sinónimos.",
+      "answer": false
+    },
+    {
+      "text": "«Bonito» y «hermoso» significan casi lo mismo.",
+      "answer": true
+    },
+    {
+      "text": "«Rápido» y «veloz» son antónimos.",
+      "answer": false
+    },
+    {
+      "text": "«Empezar» y «comenzar» son sinónimos.",
+      "answer": true
+    },
+    {
+      "text": "«Grande» es lo contrario de «pequeño».",
+      "answer": true
+    }
+  ]
+}

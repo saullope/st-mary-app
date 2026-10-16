@@ -1,0 +1,144 @@
+{
+  "code": "g3-mat-centenas-quiz",
+  "grade": 3,
+  "subject": "matematica",
+  "collection": "g3-mat-numeros",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Centenas, decenas y unidades",
+  "durationMin": 6,
+  "cover": {
+    "source": "pixabay",
+    "query": "bloques de colores",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128246686_7491553.jpg?alt=media&token=f349e469-cf24-4bf0-b46e-ee4546cf7503",
+    "credit": "Imagen de TheDigitalArtist en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Cuántas centenas tiene el número 456?",
+      "answers": [
+        {
+          "text": "5",
+          "correct": false
+        },
+        {
+          "text": "6",
+          "correct": false
+        },
+        {
+          "text": "4",
+          "correct": true
+        },
+        {
+          "text": "45",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué número tiene 3 centenas, 2 decenas y 5 unidades?",
+      "answers": [
+        {
+          "text": "235",
+          "correct": false
+        },
+        {
+          "text": "325",
+          "correct": true
+        },
+        {
+          "text": "523",
+          "correct": false
+        },
+        {
+          "text": "352",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuál es el número mayor?",
+      "answers": [
+        {
+          "text": "890",
+          "correct": false
+        },
+        {
+          "text": "899",
+          "correct": false
+        },
+        {
+          "text": "908",
+          "correct": true
+        },
+        {
+          "text": "809",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué número va después del 999?",
+      "answers": [
+        {
+          "text": "1000",
+          "correct": true
+        },
+        {
+          "text": "998",
+          "correct": false
+        },
+        {
+          "text": "1001",
+          "correct": false
+        },
+        {
+          "text": "100",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "En el número 702, ¿qué valor tiene el 7?",
+      "answers": [
+        {
+          "text": "7",
+          "correct": false
+        },
+        {
+          "text": "70",
+          "correct": false
+        },
+        {
+          "text": "700",
+          "correct": true
+        },
+        {
+          "text": "72",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "«Quinientos treinta» se escribe...",
+      "answers": [
+        {
+          "text": "503",
+          "correct": false
+        },
+        {
+          "text": "530",
+          "correct": true
+        },
+        {
+          "text": "5030",
+          "correct": false
+        },
+        {
+          "text": "350",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

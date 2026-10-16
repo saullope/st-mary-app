@@ -2,6 +2,7 @@ import { BADGES, MISSIONS } from "../../../../prisma/seeds/achievementCatalog";
 import { SUBJECTS } from "../../../../prisma/seeds/subjectCatalog";
 import { validateLessonForSave } from "@/features/lesson/lessonBlocks";
 import { validateMemoryForSave } from "@/features/memory/memoryCards";
+import { validateFormForSave } from "@/features/form/formQuestions";
 import { catalogCollections, catalogTemplates } from "../catalog";
 import {
   catalogCollectionSchema,
@@ -41,6 +42,7 @@ describe("template catalog", () => {
     const data = toActivityData(template);
     if (data.type === "ludileccion") expect(validateLessonForSave(data.lessonBlocks, template.grade)).toBeNull();
     if (data.type === "ludimemory") expect(validateMemoryForSave(data.memoryImages)).toBeNull();
+    if (data.type === "ludiform") expect(validateFormForSave(data.formQuestions, template.grade)).toBeNull();
     if (data.type === "ludiquiz") {
       for (const question of data.questions) {
         expect((question as { answers: { isCorrect: boolean }[] }).answers.filter((a) => a.isCorrect)).toHaveLength(1);
@@ -48,7 +50,7 @@ describe("template catalog", () => {
     }
 
     // Insignias y misiones del catálogo de logros, del tipo y del grado correctos.
-    const catalogKey = { ludiquiz: "quiz", trueorfalse: "quiz", ludimemory: "memory", ludileccion: "lesson" }[template.type];
+    const catalogKey = { ludiquiz: "quiz", trueorfalse: "quiz", ludimemory: "memory", ludileccion: "lesson", ludiform: "form" }[template.type];
     for (const code of data.config.selectedBadges) {
       expect(BADGES.find((b) => b.codigo === code)?.catalogo).toBe(catalogKey);
     }

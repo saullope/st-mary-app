@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import designStyles from '@/styles/pages/LudiDesign.module.css';
-import { FaHome, FaPlus, FaListOl, FaFileAlt, FaClone, FaChartPie, FaChevronLeft } from 'react-icons/fa';
+import { FaHome, FaPlus, FaListOl, FaFileAlt, FaClone, FaChartPie, FaChevronLeft, FaPuzzlePiece } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from 'react';
@@ -41,6 +41,7 @@ export const SidebarDashboard = ({ collapsed, onToggle }: SidebarDashboardProps)
         { href: '/dashboard/my-activities', icon: FaListOl, text: t('myActivities') },
         { href: '/dashboard/reports', icon: FaFileAlt, text: t('reports') },
         { href: '/dashboard/templates', icon: FaClone, text: t('templates') },
+        { href: '/dashboard/minijuegos', icon: FaPuzzlePiece, text: t('minigames') },
         ...(isAdmin ? [{ href: '/admin/reports', icon: FaChartPie, text: t('watching') }] : []),
     ];
 

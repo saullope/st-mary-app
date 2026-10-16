@@ -1,0 +1,129 @@
+{
+  "code": "g3-art-comidas-quiz",
+  "grade": 3,
+  "subject": "expresion-cultural-artistica",
+  "collection": "g3-art-tradiciones",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Sabores de Nicaragua",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "arroz con frijoles",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128201851_8763929.jpg?alt=media&token=5ca7699e-506f-481a-859a-213f405becaa",
+    "credit": "Imagen de Claudio-Duart-Designer en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "El gallo pinto se prepara con...",
+      "answers": [
+        {
+          "text": "Arroz y frijoles",
+          "correct": true
+        },
+        {
+          "text": "Pan y queso",
+          "correct": false
+        },
+        {
+          "text": "Leche y café",
+          "correct": false
+        },
+        {
+          "text": "Pescado y papa",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "arroz con frijoles",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128202810_8763933.jpg?alt=media&token=1f7e5045-7f29-4136-a26f-1a2892c36c44",
+        "credit": "Imagen de Claudio-Duart-Designer en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué comida típica se hace con masa de maíz envuelta en hoja de plátano?",
+      "answers": [
+        {
+          "text": "El nacatamal",
+          "correct": true
+        },
+        {
+          "text": "La pizza",
+          "correct": false
+        },
+        {
+          "text": "El sushi",
+          "correct": false
+        },
+        {
+          "text": "La hamburguesa",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "El vigorón, típico de Granada, lleva yuca, chicharrón y...",
+      "answers": [
+        {
+          "text": "Ensalada de repollo",
+          "correct": true
+        },
+        {
+          "text": "Chocolate",
+          "correct": false
+        },
+        {
+          "text": "Helado",
+          "correct": false
+        },
+        {
+          "text": "Pan dulce",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿De qué ciudad son famosas las rosquillas?",
+      "answers": [
+        {
+          "text": "De Somoto",
+          "correct": true
+        },
+        {
+          "text": "De Bluefields",
+          "correct": false
+        },
+        {
+          "text": "De Managua",
+          "correct": false
+        },
+        {
+          "text": "De Corinto",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "El indio viejo es una comida hecha a base de...",
+      "answers": [
+        {
+          "text": "Masa de maíz y carne",
+          "correct": true
+        },
+        {
+          "text": "Arroz con leche",
+          "correct": false
+        },
+        {
+          "text": "Frutas",
+          "correct": false
+        },
+        {
+          "text": "Huevos fritos",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

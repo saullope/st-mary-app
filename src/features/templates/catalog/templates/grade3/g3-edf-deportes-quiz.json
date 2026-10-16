@@ -1,0 +1,141 @@
+{
+  "code": "g3-edf-deportes-quiz",
+  "grade": 3,
+  "subject": "educacion-fisica",
+  "collection": "g3-edf-deporte",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Deportes y sus reglas",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "pelota de béisbol",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128224429_157928.jpg?alt=media&token=ce952ad2-8f4d-4c82-8953-827a123d942b",
+    "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Qué deporte se juega con bate, guante y pelota y es muy popular en Nicaragua?",
+      "answers": [
+        {
+          "text": "El béisbol",
+          "correct": true
+        },
+        {
+          "text": "La natación",
+          "correct": false
+        },
+        {
+          "text": "El tenis",
+          "correct": false
+        },
+        {
+          "text": "El ajedrez",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "bate y pelota de béisbol",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128225237_2026891.jpg?alt=media&token=271696fe-e3e2-4890-9388-a576ad582ad8",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "En el fútbol, ¿dónde hay que meter la pelota para anotar un gol?",
+      "answers": [
+        {
+          "text": "En la canasta",
+          "correct": false
+        },
+        {
+          "text": "En la portería",
+          "correct": true
+        },
+        {
+          "text": "En la piscina",
+          "correct": false
+        },
+        {
+          "text": "En la red de voleibol",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "portería de fútbol",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128225986_10351949.jpg?alt=media&token=132a10ab-a62c-49e8-b150-d9a9f277a01a",
+        "credit": "Imagen de Mohamed_hassan en Pixabay"
+      }
+    },
+    {
+      "text": "¿Cuántos jugadores tiene un equipo de fútbol en la cancha?",
+      "answers": [
+        {
+          "text": "5",
+          "correct": false
+        },
+        {
+          "text": "9",
+          "correct": false
+        },
+        {
+          "text": "11",
+          "correct": true
+        },
+        {
+          "text": "20",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "En el baloncesto, la pelota se mete en...",
+      "answers": [
+        {
+          "text": "La canasta",
+          "correct": true
+        },
+        {
+          "text": "La portería",
+          "correct": false
+        },
+        {
+          "text": "El hoyo",
+          "correct": false
+        },
+        {
+          "text": "La red",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "canasta de baloncesto",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128226744_4919501.jpg?alt=media&token=4c222865-9518-45b6-a09c-4e807e549526",
+        "credit": "Imagen de cocoparisienne en Pixabay"
+      }
+    },
+    {
+      "text": "¿Qué es lo más importante al jugar en equipo?",
+      "answers": [
+        {
+          "text": "Respetar las reglas y a los compañeros",
+          "correct": true
+        },
+        {
+          "text": "Ganar como sea",
+          "correct": false
+        },
+        {
+          "text": "Jugar solo",
+          "correct": false
+        },
+        {
+          "text": "Pelear",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

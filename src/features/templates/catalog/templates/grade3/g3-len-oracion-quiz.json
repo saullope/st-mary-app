@@ -1,0 +1,129 @@
+{
+  "code": "g3-len-oracion-quiz",
+  "grade": 3,
+  "subject": "lengua-literatura",
+  "collection": "g3-len-gramatica",
+  "order": 3,
+  "type": "ludiquiz",
+  "title": "Sujeto y predicado",
+  "durationMin": 6,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños en el parque",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128244181_10093937.jpg?alt=media&token=d8c70dde-0aa8-4034-9946-21b365cca9ee",
+    "credit": "Imagen de tanrıca en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "En «Los niños juegan en el parque», ¿cuál es el sujeto?",
+      "answers": [
+        {
+          "text": "Los niños",
+          "correct": true
+        },
+        {
+          "text": "juegan",
+          "correct": false
+        },
+        {
+          "text": "en el parque",
+          "correct": false
+        },
+        {
+          "text": "el parque",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "niños jugando en el parque",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128245024_6477675.jpg?alt=media&token=14203a58-2218-437c-a57d-09ed6f793a70",
+        "credit": "Imagen de ramitheyuga en Pixabay"
+      }
+    },
+    {
+      "text": "En «Mi abuela cocina nacatamales», ¿cuál es el predicado?",
+      "answers": [
+        {
+          "text": "Mi abuela",
+          "correct": false
+        },
+        {
+          "text": "cocina nacatamales",
+          "correct": true
+        },
+        {
+          "text": "Mi",
+          "correct": false
+        },
+        {
+          "text": "abuela cocina",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuál de estas es una oración completa?",
+      "answers": [
+        {
+          "text": "El gato duerme en la cama.",
+          "correct": true
+        },
+        {
+          "text": "En la cama",
+          "correct": false
+        },
+        {
+          "text": "El gato",
+          "correct": false
+        },
+        {
+          "text": "Duerme en la",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "El sujeto de una oración es...",
+      "answers": [
+        {
+          "text": "De quien se habla",
+          "correct": true
+        },
+        {
+          "text": "Lo que se dice del sujeto",
+          "correct": false
+        },
+        {
+          "text": "Un signo",
+          "correct": false
+        },
+        {
+          "text": "Un número",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Con qué letra empieza una oración?",
+      "answers": [
+        {
+          "text": "Con mayúscula",
+          "correct": true
+        },
+        {
+          "text": "Con minúscula",
+          "correct": false
+        },
+        {
+          "text": "Con un número",
+          "correct": false
+        },
+        {
+          "text": "Con una coma",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

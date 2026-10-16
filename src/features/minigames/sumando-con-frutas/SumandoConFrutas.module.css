@@ -1,0 +1,430 @@
+/* Estilos propios del minijuego (del style.css original), sin la identidad del panel. */
+.root,
+.startScreen,
+.countdown,
+.uiRoot,
+.resultsScreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", Arial, sans-serif;
+  overflow: hidden;
+}
+
+.root {
+  background: #FFFBCC;
+}
+
+/* ---------- Tarjeta inicial ---------- */
+.introCard {
+  width: 80%;
+  max-width: 400px;
+  min-height: 220px;
+  padding: 20px;
+  border: none;
+  border-radius: 18px;
+  background: url("/minigames/sumando-con-frutas/img/card-fondo.jpg") center / cover no-repeat;
+  color: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.introCard:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.introCard:focus-visible,
+.startButton:focus-visible,
+.answer:focus-visible,
+.muteButton:focus-visible {
+  outline: 4px solid #1D4ED8;
+  outline-offset: 3px;
+}
+
+.introContent {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-20px);
+}
+
+.introTitle {
+  margin-bottom: 8px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.introHint {
+  font-size: 1.2rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- Pantalla de inicio ---------- */
+.startScreen {
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+  background: url("/minigames/sumando-con-frutas/img/fondo-frutas.gif") center / cover no-repeat;
+  color: #ffffff;
+  text-align: center;
+  z-index: 1000;
+}
+
+.startPhrase {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+}
+
+.startButton {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 16px;
+  /* El naranja claro del original no daba 3:1 con texto blanco; mismo tono, más oscuro. */
+  background: linear-gradient(135deg, #EA8A0C, #D97706);
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Cuenta regresiva ---------- */
+.countdown {
+  z-index: 2000;
+  background: linear-gradient(180deg, #FFF1D6, #FFE5B4);
+  color: #FF6F61;
+  font-size: 6rem;
+  font-weight: 800;
+}
+
+/* ---------- Juego ---------- */
+.uiRoot {
+  background: url("/minigames/sumando-con-frutas/img/fondo-juego.webp") center / cover no-repeat;
+}
+
+.musicControl {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(4px);
+}
+
+.muteButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #D97706;
+  color: #ffffff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.volume {
+  width: 90px;
+  cursor: pointer;
+}
+
+.layout {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 1100px;
+  padding: 0 12px;
+}
+
+.gameArea {
+  flex: 1 1 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topPanel {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 6px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.chip {
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1C1633;
+}
+
+.timer {
+  color: #C2410C;
+}
+
+.playCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.operation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 20px;
+  margin-bottom: 6px;
+  font-size: 1.8rem;
+}
+
+.operationPart {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.sign {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1C1633;
+}
+
+.fruitGroup {
+  text-align: center;
+}
+
+.fruits {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 230px;
+}
+
+.fruit {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.fruitNumber {
+  margin-top: 2px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1C1633;
+}
+
+.answers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.answer {
+  min-width: 72px;
+  padding: 14px 22px;
+  border: none;
+  border-radius: 14px;
+  background: #D97706;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.answer:disabled {
+  cursor: default;
+}
+
+.correct {
+  background: #15803D;
+}
+
+.incorrect {
+  background: #DC2626;
+}
+
+.message {
+  min-height: 1.6rem;
+  margin: 10px 0 0;
+  color: #1C1633;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---------- Estrellas ganadas (insignias del juego) ---------- */
+.sidePanel {
+  width: 180px;
+}
+
+.sideTitle {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.badgesBg {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  min-height: 54px;
+}
+
+.badgeArea {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.badgeItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border-radius: 10px;
+  background: #ffffff;
+  animation: starIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.badgeItem img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+@keyframes starIn {
+  from { transform: scale(0.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ---------- Resultados ---------- */
+.resultsScreen {
+  background: linear-gradient(#FFF5CC, #FFECB4);
+}
+
+.resultsCard {
+  padding: 30px;
+  border-radius: 25px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.resultsTitle {
+  margin: 0;
+  font-size: 2rem;
+  color: #1C1633;
+}
+
+.finalScore {
+  margin: 10px 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1C1633;
+}
+
+.finalStars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 15px 0;
+}
+
+.starOn,
+.starOff {
+  width: 42px;
+  height: 42px;
+  margin: 0 4px;
+  object-fit: contain;
+}
+
+.starOff {
+  opacity: 0.25;
+}
+
+/* En celular los paneles laterales de 180px no caben: las estrellas pasan arriba. */
+@media (max-width: 767.98px) {
+  .uiRoot {
+    align-items: flex-start;
+    padding-top: 64px;
+    overflow-y: auto;
+  }
+
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sidePanel {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .rightPanel {
+    display: none;
+  }
+
+  .badgeArea {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .topPanel {
+    font-size: 1rem;
+  }
+
+  .fruit {
+    width: 52px;
+    height: 52px;
+  }
+
+  .startPhrase {
+    font-size: 1.6rem;
+  }
+
+  .countdown {
+    font-size: 4.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .introCard,
+  .badgeItem {
+    transition: none;
+    animation: none;
+  }
+}

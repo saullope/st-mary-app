@@ -1,0 +1,42 @@
+{
+  "code": "g3-mat-sumas-llevando-vf",
+  "grade": 3,
+  "subject": "matematica",
+  "collection": "g3-mat-numeros",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Sumas y restas llevando",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "pizarra matemáticas",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128256154_1023846.jpg?alt=media&token=24879cf5-39e2-4fd0-b04e-844c2d4dd1bb",
+    "credit": "Imagen de geralt en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "125 + 136 = 261",
+      "answer": true
+    },
+    {
+      "text": "348 + 52 = 390",
+      "answer": false
+    },
+    {
+      "text": "500 − 150 = 350",
+      "answer": true
+    },
+    {
+      "text": "700 − 299 = 401",
+      "answer": true
+    },
+    {
+      "text": "246 + 154 = 400",
+      "answer": true
+    },
+    {
+      "text": "632 − 132 = 400",
+      "answer": false
+    }
+  ]
+}

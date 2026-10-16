@@ -1,0 +1,42 @@
+{
+  "code": "g3-mat-tablas-vf",
+  "grade": 3,
+  "subject": "matematica",
+  "collection": "g3-mat-multiplicar",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "¿Verdadero o falso? Tablas",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "números de colores",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128257933_9118109.jpg?alt=media&token=89324c90-7a25-4d2e-a921-117318dca4ee",
+    "credit": "Imagen de geralt en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "2 × 7 = 14",
+      "answer": true
+    },
+    {
+      "text": "3 × 4 = 13",
+      "answer": false
+    },
+    {
+      "text": "5 × 6 = 30",
+      "answer": true
+    },
+    {
+      "text": "4 × 4 = 16",
+      "answer": true
+    },
+    {
+      "text": "10 × 8 = 18",
+      "answer": false
+    },
+    {
+      "text": "3 × 5 = 15",
+      "answer": true
+    }
+  ]
+}

@@ -116,7 +116,8 @@
     "watching": "Activity Evaluation",
     "collapse": "Collapse menu",
     "expand": "Expand menu",
-    "navigation": "Main navigation"
+    "navigation": "Main navigation",
+    "minigames": "Minigames"
   },
   "firstGradeItemDashboard": {
     "gradeName": "First Grade",
@@ -510,8 +511,8 @@
         "5": "A lot!"
       },
       "optionLabel": "{value} of 5: {label}",
-      "send": "Send",
-      "skip": "Not now",
+      "close": "Close the survey",
+      "step": "{current} of {total}",
       "thanks": "Thanks for telling us!",
       "error": "We couldn't save your answer. You can keep going."
     },
@@ -700,6 +701,10 @@
     "activityPrivate": {
       "title": "Private activity",
       "description": "This activity is private."
+    },
+    "minigames": {
+      "title": "Minigames",
+      "description": "Games ready to project or share with your students."
     }
   },
   "Validation": {
@@ -976,6 +981,15 @@
     "timeHint": "Set how long the student has to answer.",
     "pointsPerPair": "Points per pair found:",
     "pointsPerAnswer": "Points per correct answer:",
+    "pointsPerAnswerMax": "Maximum points per correct answer:",
+    "pointsScoringHint": "This is what a correct answer is worth. Below you choose whether answering fast earns more.",
+    "scoringTitle": "How are points earned?",
+    "scoringSpeedName": "Reward speed",
+    "scoringSpeedDesc": "A correct answer is worth more the sooner it comes, but never less than half.",
+    "scoringSpeedExample": "Example: instantly {max} pts, at half time {mid} pts, at the end {min} pts.",
+    "scoringFixedName": "Fixed points",
+    "scoringFixedDesc": "Every correct answer is worth the same; the timer only limits when students can answer.",
+    "scoringFixedExample": "Example: fast or slow, each correct answer is worth {points} pts.",
     "pointsPlaceholder": "Enter the points",
     "badgesTitle": "Reward badges",
     "badgeLabel": "Badge {name}: {description}",
@@ -1075,6 +1089,10 @@
         "title": "Points, time and voice",
         "description": "Set how many points each question is worth, how long students have to answer and whether a voice announces achievements."
       },
+      "panelScoring": {
+        "title": "How are points earned?",
+        "description": "Choose whether to reward speed (a correct answer is worth between half and all of the points, depending on how fast students answer) or give fixed points (every correct answer is worth the same). Each option shows an example with your points and time."
+      },
       "panelBadges": {
         "title": "Badges",
         "description": "Choose the badges your students can earn, for example for answering fast or getting it right the first time."
@@ -1165,6 +1183,10 @@
       "panelGeneral": {
         "title": "Time and points",
         "description": "Set how long students have to answer and how many points each correct answer is worth."
+      },
+      "panelScoring": {
+        "title": "How are points earned?",
+        "description": "Choose whether to reward speed (a correct answer is worth between half and all of the points, depending on how fast students answer) or give fixed points (every correct answer is worth the same). Each option shows an example with your points and time."
       },
       "panelBadges": {
         "title": "Choose the rewards",
@@ -1536,11 +1558,11 @@
     "achievements": {
       "badgeUnlocked": "Badge unlocked!",
       "missionDone": "Mission complete!",
-      "badgesEarned": "Badges earned ({opened}/{total})",
-      "openBox": "Open surprise badge {number} of {total}",
-      "tapToOpen": "Tap to open",
-      "nextBadge": "Next badge",
-      "allRevealed": "All your badges are revealed!"
+      "badgesWon": "{count, plural, one {You earned a badge!} other {You earned # badges!}}",
+      "revealCounter": "Badge {current} of {total}",
+      "surprise": "What's inside?",
+      "tapToContinue": "Tap to see the next badge",
+      "yourBadges": "Your badges"
     },
     "memory": {
       "saveFailed": "Your result could not be saved",
@@ -1682,11 +1704,19 @@
     "finishedTitle": "Session ended",
     "finishedBody": "Review each student's details and grade written answers in the report.",
     "viewReport": "View report",
-    "backToActivities": "Back to my activities"
+    "backToActivities": "Back to my activities",
+    "leave": {
+      "title": "Leave the live panel?",
+      "body": "The session will stay open: {count, plural, =0 {your students can keep joining with the PIN.} one {# student is already in and can keep playing.} other {# students are already in and can keep playing.}}",
+      "howToReturn": "You can come back anytime from the \"Back to the live panel\" notice on Home or any dashboard screen. To close it, press \"End activity\".",
+      "close": "Close",
+      "stay": "Stay",
+      "confirm": "Leave"
+    }
   },
   "Templates": {
     "title": "Templates",
-    "subtitle": "Activities ready for your classes, aligned with MINED topics. Save a copy to edit it or launch it right away.",
+    "subtitle": "Activities ready for your classes. Save a copy to edit it or launch it right away.",
     "gradeLabel": "Grade",
     "subjectLabel": "Subject",
     "mySubjects": "My subjects",
@@ -2104,5 +2134,55 @@
     "syncing": "Syncing...",
     "summary": "{created} new, {updated} updated, {unchanged} unchanged, {retired} retired.",
     "failed": "{count, plural, one {# could not be loaded:} other {# could not be loaded:}}"
+  },
+  "LiveReturn": {
+    "label": "Open live sessions",
+    "titleActive": "You have a live session in progress",
+    "titleWaiting": "You have a live session waiting for students",
+    "meta": "{activity} · PIN {pin} · {count, plural, =0 {no students yet} one {# student} other {# students}}",
+    "back": "Back to the live panel"
+  },
+  "Minigames": {
+    "title": "Minigames",
+    "subtitle": "Games ready to project in class or share with your students. No PIN or setup needed.",
+    "metaTitle": "Minigame",
+    "metaDescription": "A LudiGame minigame.",
+    "play": "Play",
+    "playOf": "Play {name} in a new tab",
+    "copyLink": "Copy link",
+    "copyLinkOf": "Copy the link to {name}",
+    "linkCopied": "Link copied",
+    "linkCopiedHint": "Share it with your students: they open it without an account or PIN.",
+    "copyManually": "Copy this link",
+    "games": {
+      "sumando-con-frutas": {
+        "title": "Adding with fruits",
+        "description": "Add groups of fruits up to 10 with music, voice and a star for every right answer."
+      }
+    },
+    "sumandoConFrutas": {
+      "introTitle": "1st grade - Adding with fruits",
+      "introHint": "Click to start!",
+      "startPhrase": "Let's add fruits and have fun while you learn!",
+      "play": "Play!",
+      "go": "GO!",
+      "badges": "Badges",
+      "points": "Points: {score}",
+      "progress": "Question {current} / {total}",
+      "time": "Time: {time}",
+      "operationLabel": "What is {a} plus {b}?",
+      "answersLabel": "Choose the answer",
+      "mute": "Mute the music",
+      "unmute": "Turn on the music",
+      "volume": "Music volume",
+      "finished": "Game over!",
+      "starsLabel": "{stars} of {total} stars",
+      "playAgain": "Play again",
+      "voice": {
+        "correct": "Correct! {a} plus {b} is {sum}",
+        "tryAgain": "Try again",
+        "answerWas": "It was {sum}"
+      }
+    }
   }
 }

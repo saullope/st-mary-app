@@ -1,0 +1,43 @@
+{
+  "code": "g3-val-solidaridad-leccion",
+  "grade": 3,
+  "subject": "creciendo-en-valores",
+  "collection": "g3-val-derechos",
+  "order": 3,
+  "type": "ludileccion",
+  "title": "Una historia de solidaridad",
+  "durationMin": 8,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños ayudándose",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128261471_7096613.jpg?alt=media&token=e58df4ad-7ac4-43ca-973f-81657c204135",
+    "credit": "Imagen de Elf-Moondance en Pixabay"
+  },
+  "blocks": [
+    {
+      "kind": "reading",
+      "title": "Leamos: los cuadernos de Luis",
+      "body": "Una tarde llovió muy fuerte y la casa de Luis, un compañero de clase, se mojó por dentro. Al día siguiente, Luis llegó a la escuela sin cuadernos. Rosa lo notó y habló con la maestra. Entre todos juntaron cuadernos, lápices y una mochila. Luis sonrió y dijo: «Gracias, amigos».\n\nEso es la solidaridad: ayudar a quien lo necesita sin esperar nada a cambio."
+    },
+    {
+      "kind": "image",
+      "title": "¿Cómo podemos ayudar en nuestra escuela?",
+      "media": {
+        "source": "pixabay",
+        "query": "niños ayudándose",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128262174_6639157.jpg?alt=media&token=2505e4f6-d959-41b7-b4cc-2fb559c9a9ae",
+        "credit": "Imagen de Elf-Moondance en Pixabay"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Escuchemos el cuento «Hace frío»",
+      "media": {
+        "source": "youtube",
+        "query": "Hace frío cuento para niños sobre la solidaridad",
+        "url": "https://www.youtube.com/embed/ofwjx5reYhY",
+        "credit": "Video de Gabriela Castañón en YouTube: ¡Una casa para todos!  Ilustración del cuento \"Hace frío\""
+      }
+    }
+  ]
+}

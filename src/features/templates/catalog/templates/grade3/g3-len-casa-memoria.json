@@ -1,0 +1,54 @@
+{
+  "code": "g3-len-casa-memoria",
+  "grade": 3,
+  "subject": "lengua-literatura",
+  "collection": "g3-len-escritura",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria: nombres de cosas de mi casa",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "sala de casa",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128233114_7939062.jpg?alt=media&token=ab9ba098-b091-4ffa-b225-ada0d6ef8893",
+    "credit": "Imagen de Ron_Hoekstra en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "silla de madera",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128233848_1687121.jpg?alt=media&token=3cbff500-24be-4139-9d05-4e76aeed72d9",
+      "credit": "Imagen de PIRO4D en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cama",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128234525_1545991.jpg?alt=media&token=a1258a18-23f9-4ad3-9617-8821afbc5383",
+      "credit": "Imagen de susannp4 en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "lámpara",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128235308_1853203.jpg?alt=media&token=11b448a8-8b89-41c8-adda-f9da97457c36",
+      "credit": "Imagen de Pexels en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "ventana",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128235999_8257549.jpg?alt=media&token=d6f31aca-e5d9-4f40-9fae-1ef5a3762241",
+      "credit": "Imagen de Pheladii en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "puerta de madera",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128236800_7206803.jpg?alt=media&token=df165cae-7f4d-4170-9b22-3e0991c75fa3",
+      "credit": "Imagen de Eleatell en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "refrigeradora",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128237686_6942927.jpg?alt=media&token=9ebb7e4f-a2ba-492c-875f-2880b7acda05",
+      "credit": "Imagen de PixelCrusher en Pixabay"
+    }
+  ]
+}

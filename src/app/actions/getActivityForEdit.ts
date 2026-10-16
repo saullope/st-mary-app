@@ -50,6 +50,7 @@ export async function getActivityForEdit(id: number) {
       selectedBadges: selected.badges,
       selectedMissions: selected.missions,
       voiceEnabled: parsedAjustes.voiceEnabled ?? true,
+      speedBonus: parsedAjustes.speedBonus ?? true,
     };
 
     // Parse content

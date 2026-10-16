@@ -1,0 +1,54 @@
+{
+  "code": "g3-art-frutas-memoria",
+  "grade": 3,
+  "subject": "expresion-cultural-artistica",
+  "collection": "g3-art-tradiciones",
+  "order": 2,
+  "type": "ludimemory",
+  "title": "Memoria de frutas y cosechas",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "frutas tropicales",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128203794_7355393.jpg?alt=media&token=a9ed0551-94b7-46cd-b774-5ca2ea2eb92a",
+    "credit": "Imagen de serkankok en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "mango fruta",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128204521_3658159.jpg?alt=media&token=59b3f313-0f69-4dd2-b79d-740fbca54e19",
+      "credit": "Imagen de wixin_56k en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "coco",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128205293_7751862.jpg?alt=media&token=f27cc1f8-0b80-4810-bd31-65fbbaf13ba1",
+      "credit": "Imagen de Ruzaindo en Pixabay"
+    },
+    {
+      "source": "unsplash",
+      "query": "dragon fruit pitaya",
+      "url": "https://images.unsplash.com/photo-1635843110565-cb35d1c03d86?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxkcmFnb24lMjBmcnVpdCUyMHBpdGF5YXxlc3wxfDB8fHwxNzkyMTI4MzE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "credit": "Foto de engin akyurt en Unsplash"
+    },
+    {
+      "source": "pixabay",
+      "query": "mazorca de maíz",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128206849_311835.jpg?alt=media&token=908b52e1-16b9-479c-8d6a-394e08744fc8",
+      "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "plátano verde",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128207698_6199691.jpg?alt=media&token=3db6799d-df0e-4704-bf7c-5dea20c828ae",
+      "credit": "Imagen de Kollsd en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "cacao fruto",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128208735_3419334.jpg?alt=media&token=5d104675-14e1-4e7e-8952-5ef5b4b75daf",
+      "credit": "Imagen de sbgonti en Pixabay"
+    }
+  ]
+}

@@ -62,11 +62,16 @@ describe("MemoryEngine (LudiMemory) en Vista Previa", () => {
       fireEvent.click(luna2);
     });
 
+    // Las insignias salen solas de la caja sorpresa; tocar adelanta hasta el resumen.
+    expect(screen.getByRole("heading", { name: "¡Ganaste 2 insignias!" })).toBeInTheDocument();
+    for (let i = 0; i < 4; i++) fireEvent.click(screen.getByRole("button", { name: "Toca para ver la siguiente insignia" }));
+
     expect(screen.getByRole("heading", { name: "¡Tablero completo!" })).toBeInTheDocument();
     expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("Encontraste 2 parejas en 3 intentos.")).toBeInTheDocument();
     // Aparece en el aviso en vivo y en el resumen de misiones.
     expect(screen.getAllByText("Completa todo el tablero").length).toBeGreaterThan(0);
-    expect(screen.getByText("Insignias ganadas (0/2)")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Tus insignias" })).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem").length).toBeGreaterThanOrEqual(2);
   });
 });

@@ -96,7 +96,7 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
 
   const avgTimeSeconds = totalResponses > 0 ? Math.round((totalTime / totalResponses) / 1000) : 0;
 
-  // Find Hardest Question (highest failure rate)
+  // Pregunta mas dificil
   const questionStatsArray = Object.values(questionStats).filter(s => s.total > 0);
   const hardestQuestionData = questionStatsArray.length > 0 
     ? questionStatsArray.reduce((prev, current) => 
@@ -107,7 +107,7 @@ export default async function ReportDetail({ params }: { params: Promise<{ id: s
   const hardestRate = hardestQuestionData ? Math.round((hardestQuestionData.failed / hardestQuestionData.total) * 100) : 0;
   const hardestQuestion = hardestQuestionData ? { text: hardestQuestionData.text, rate: hardestRate } : null;
 
-  // Average class score to determine Trends
+  // Promedio de puntaje de la clase y tiempo total promedio
   const avgClassScore = participantes.length > 0 
     ? participantes.reduce((acc, p) => acc + p.puntaje_total, 0) / participantes.length 
     : 0;

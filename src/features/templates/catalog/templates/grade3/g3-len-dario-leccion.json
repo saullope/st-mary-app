@@ -1,0 +1,43 @@
+{
+  "code": "g3-len-dario-leccion",
+  "grade": 3,
+  "subject": "lengua-literatura",
+  "collection": "g3-len-leyendas",
+  "order": 3,
+  "type": "ludileccion",
+  "title": "Un poema de Rubén Darío",
+  "durationMin": 8,
+  "cover": {
+    "source": "unsplash",
+    "query": "mar al atardecer",
+    "url": "https://images.unsplash.com/photo-1503803548695-c2a7b4a5b875?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxtYXIlMjBhbCUyMGF0YXJkZWNlcnxlc3wxfDB8fHwxNzkyMTI4MDk3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "credit": "Foto de Sebastien Gabriel en Unsplash"
+  },
+  "blocks": [
+    {
+      "kind": "reading",
+      "title": "Lee en voz alta esta estrofa",
+      "body": "Margarita, está linda la mar,\ny el viento\nlleva esencia sutil de azahar;\nyo siento\nen el alma una alondra cantar:\ntu acento.\n\n— Rubén Darío, «A Margarita Debayle»"
+    },
+    {
+      "kind": "image",
+      "title": "El poeta le habla a una niña del mar. ¿Cómo te imaginas ese mar?",
+      "media": {
+        "source": "unsplash",
+        "query": "mar al atardecer",
+        "url": "https://images.unsplash.com/photo-1647962431451-d0fdaf1cf21c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwyfHxtYXIlMjBhbCUyMGF0YXJkZWNlcnxlc3wxfDB8fHwxNzkyMTI4MDk3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de John O'Nelio en Unsplash"
+      }
+    },
+    {
+      "kind": "youtube",
+      "title": "Escuchemos el poema completo",
+      "media": {
+        "source": "youtube",
+        "query": "a margarita debayle rubén darío poema",
+        "url": "https://www.youtube.com/embed/J9E4LXpODv4",
+        "credit": "Video de UNICEF Nicaragua en YouTube: Videolibro -A Margarita Debayle"
+      }
+    }
+  ]
+}

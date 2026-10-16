@@ -69,11 +69,16 @@ describe("GameEngine en modo LudiLección", () => {
     tick(12);
     fireEvent.click(screen.getByRole("button", { name: /Terminar lección/ }));
 
+    // Las insignias salen solas de la caja sorpresa; tocar adelanta hasta el resumen.
+    expect(screen.getByRole("heading", { name: "¡Ganaste 2 insignias!" })).toBeInTheDocument();
+    for (let i = 0; i < 4; i++) fireEvent.click(screen.getByRole("button", { name: "Toca para ver la siguiente insignia" }));
+
     expect(screen.getByRole("heading", { name: "¡Lección completada!" })).toBeInTheDocument();
     expect(screen.queryByText(/Puntaje Final/)).not.toBeInTheDocument();
     // Aparece en el aviso en vivo y en el resumen de misiones cumplidas.
     expect(screen.getAllByText("Termina toda la lección")).toHaveLength(2);
     expect(screen.getByText("Misiones cumplidas")).toBeInTheDocument();
-    expect(screen.getByText("Insignias ganadas (0/2)")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Tus insignias" })).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem").length).toBeGreaterThanOrEqual(2);
   });
 });

@@ -1,0 +1,141 @@
+{
+  "code": "g3-cmm-cadena-quiz",
+  "grade": 3,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g3-cmm-ciencia",
+  "order": 2,
+  "type": "ludiquiz",
+  "title": "¿Quién se come a quién?",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "cadena alimenticia",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128213483_161524.jpg?alt=media&token=24b6a597-90aa-4658-82ee-9b046fad9983",
+    "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Qué seres vivos fabrican su propio alimento con la luz del sol?",
+      "answers": [
+        {
+          "text": "Las plantas",
+          "correct": true
+        },
+        {
+          "text": "Los perros",
+          "correct": false
+        },
+        {
+          "text": "Las personas",
+          "correct": false
+        },
+        {
+          "text": "Los peces",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "planta al sol",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128214246_10341915.jpg?alt=media&token=bab9ac47-cd56-44e6-b840-67ee81646817",
+        "credit": "Imagen de Mohamed_hassan en Pixabay"
+      }
+    },
+    {
+      "text": "La vaca solo come plantas. Es un animal...",
+      "answers": [
+        {
+          "text": "Carnívoro",
+          "correct": false
+        },
+        {
+          "text": "Herbívoro",
+          "correct": true
+        },
+        {
+          "text": "Omnívoro",
+          "correct": false
+        },
+        {
+          "text": "De metal",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "vaca comiendo pasto",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128215216_8971245.jpg?alt=media&token=3cac3bed-2cbe-4147-8cda-4b19aa3e3c83",
+        "credit": "Imagen de ZT_OSCAR en Pixabay"
+      }
+    },
+    {
+      "text": "El jaguar come otros animales. Es un animal...",
+      "answers": [
+        {
+          "text": "Herbívoro",
+          "correct": false
+        },
+        {
+          "text": "Carnívoro",
+          "correct": true
+        },
+        {
+          "text": "Que no come",
+          "correct": false
+        },
+        {
+          "text": "Que come piedras",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "jaguar",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128215991_42010.jpg?alt=media&token=f06026e5-05ca-494c-adea-1b9f46248859",
+        "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+      }
+    },
+    {
+      "text": "Las personas comemos plantas y animales. Somos...",
+      "answers": [
+        {
+          "text": "Omnívoros",
+          "correct": true
+        },
+        {
+          "text": "Herbívoros",
+          "correct": false
+        },
+        {
+          "text": "Carnívoros",
+          "correct": false
+        },
+        {
+          "text": "Plantas",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "En la cadena «pasto → conejo → zorro», ¿quién come al conejo?",
+      "answers": [
+        {
+          "text": "El pasto",
+          "correct": false
+        },
+        {
+          "text": "El zorro",
+          "correct": true
+        },
+        {
+          "text": "Nadie",
+          "correct": false
+        },
+        {
+          "text": "El sol",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

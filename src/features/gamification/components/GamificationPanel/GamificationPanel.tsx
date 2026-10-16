@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { FaExpand } from "react-icons/fa6";
 import { SelectableCard } from "@/features/gamification/components/SelectableCard/SelectableCard";
+import { DEFAULT_POINTS, DEFAULT_TIME_LIMIT_MS, answerPoints } from "@/lib/play/scoring";
 import styles from "./GamificationPanel.module.css";
 import { useActivityEditor } from "@/context/ActivityEditorContext";
 import { badgesFor, catalogKeyForActivity, missionsFor, type BadgeDef, type MissionDef } from "@/features/gamification/catalog";
@@ -24,6 +25,15 @@ export default function GamificationPanel() {
   const hasTimer = activityType === "ludiquiz" || activityType === "trueorfalse";
   const hasPoints = activityType !== "ludileccion";
   const isMemory = activityType === "ludimemory";
+  // Las actividades guardadas antes de este ajuste lo tenían siempre activo.
+  const speedBonus = config.speedBonus ?? true;
+  // El ejemplo usa la misma fórmula que el servidor, con los puntos y el tiempo puestos.
+  const scoringExample = useMemo(() => {
+    const basePoints = config.pointsPerCorrect > 0 ? config.pointsPerCorrect : DEFAULT_POINTS;
+    const totalTimeMs = config.timeLimit > 0 ? config.timeLimit * 1000 : DEFAULT_TIME_LIMIT_MS;
+    const at = (elapsedMs: number) => answerPoints({ correct: true, basePoints, totalTimeMs, elapsedMs, speedBonus: true });
+    return { max: at(0), mid: at(totalTimeMs / 2), min: at(totalTimeMs) };
+  }, [config.pointsPerCorrect, config.timeLimit]);
   const t = useTranslations("GamificationPanel");
   const copyKey = activityType && COPY_KEYS.has(activityType) ? activityType : "default";
   const copy = (field: "points" | "badges") => t(`copy.${copyKey}.${field}`);
@@ -142,7 +152,7 @@ export default function GamificationPanel() {
             {hasPoints && (
             <div>
               <label htmlFor={`${scope}-puntos`} className={styles.label}>
-                {isMemory ? t("pointsPerPair") : t("pointsPerAnswer")}
+                {isMemory ? t("pointsPerPair") : hasTimer && speedBonus ? t("pointsPerAnswerMax") : t("pointsPerAnswer")}
               </label>
               <input
                 type="number"
@@ -154,10 +164,45 @@ export default function GamificationPanel() {
                 value={config.pointsPerCorrect || ""}
                 onChange={(e) => updateConfig({ pointsPerCorrect: Number(e.target.value) })}
               />
-              <div className={styles.desc}>{copy("points")}</div>
+              <div className={styles.desc}>
+                {hasTimer ? t("pointsScoringHint") : copy("points")}
+              </div>
             </div>
             )}
           </div>
+
+          {hasTimer && (
+          <fieldset className={styles.scoring} data-tour={tour("panel-scoring")}>
+            <legend className={styles.label}>{t("scoringTitle")}</legend>
+            {([true, false] as const).map((mode) => {
+              const id = `${scope}-scoring-${mode ? "speed" : "fixed"}`;
+              return (
+                <label key={id} htmlFor={id} className={styles.scoringOption} data-selected={speedBonus === mode || undefined}>
+                  <input
+                    type="radio"
+                    id={id}
+                    name={`${scope}-scoring`}
+                    className={styles.scoringRadio}
+                    checked={speedBonus === mode}
+                    onChange={() => updateConfig({ speedBonus: mode })}
+                    aria-describedby={`${id}-desc`}
+                  />
+                  <span>
+                    <span className={styles.scoringName}>{mode ? t("scoringSpeedName") : t("scoringFixedName")}</span>
+                    <span id={`${id}-desc`} className={styles.scoringDesc}>
+                      {mode ? t("scoringSpeedDesc") : t("scoringFixedDesc")}{" "}
+                      <span className={styles.scoringExample}>
+                        {mode
+                          ? t("scoringSpeedExample", scoringExample)
+                          : t("scoringFixedExample", { points: scoringExample.max })}
+                      </span>
+                    </span>
+                  </span>
+                </label>
+              );
+            })}
+          </fieldset>
+          )}
         </section>
         )}
 

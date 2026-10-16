@@ -2,6 +2,9 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithAchievements as render } from "@/features/gamification/testing/renderWithAchievements";
 import LiveDashboardClient from "@/app/dashboard/live/[id]/LiveDashboardClient";
 
+const mockPush = jest.fn();
+jest.mock("next/navigation", () => ({ useRouter: () => ({ push: mockPush }) }));
+
 const activeSession = { id: "15", codigo: "ABC123", phase: "active", participantes: [] };
 
 function mockApi() {
@@ -52,5 +55,21 @@ describe("terminar la sesión en vivo", () => {
     fireEvent.click(await screen.findByRole("button", { name: /Terminar actividad/ }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     await waitFor(() => expect(calls("PATCH", "/api/live/15")).toHaveLength(1));
+  });
+
+  it("avisa antes de salir con la sesión abierta y solo sale si se confirma", async () => {
+    mockPush.mockClear();
+    renderPanel(true);
+    const back = await screen.findByRole("link", { name: /Mis actividades/ });
+
+    fireEvent.click(back);
+    const dialog = screen.getByRole("dialog", { name: "¿Salir del panel en vivo?" });
+    expect(dialog).toHaveTextContent("La sesión seguirá abierta");
+    fireEvent.click(screen.getByRole("button", { name: "Quedarme" }));
+    expect(mockPush).not.toHaveBeenCalled();
+
+    fireEvent.click(back);
+    fireEvent.click(screen.getByRole("button", { name: "Salir" }));
+    expect(mockPush).toHaveBeenCalledWith("/dashboard/my-activities");
   });
 });

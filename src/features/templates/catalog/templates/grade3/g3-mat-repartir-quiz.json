@@ -1,0 +1,156 @@
+{
+  "code": "g3-mat-repartir-quiz",
+  "grade": 3,
+  "subject": "matematica",
+  "collection": "g3-mat-multiplicar",
+  "order": 3,
+  "type": "ludiquiz",
+  "title": "Repartimos en partes iguales",
+  "durationMin": 6,
+  "cover": {
+    "source": "counting",
+    "query": "orange:12",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_a59d2c1c3997ee89.svg?alt=media&token=16935956-a101-4d24-a4dc-f3b36a9a095f",
+    "credit": "Ilustración de LudiGame"
+  },
+  "questions": [
+    {
+      "text": "Reparto 12 naranjas entre 3 niños por igual. ¿Cuántas le tocan a cada uno?",
+      "answers": [
+        {
+          "text": "3",
+          "correct": false
+        },
+        {
+          "text": "4",
+          "correct": true
+        },
+        {
+          "text": "6",
+          "correct": false
+        },
+        {
+          "text": "9",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "orange:12",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_a59d2c1c3997ee89.svg?alt=media&token=16935956-a101-4d24-a4dc-f3b36a9a095f",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "Reparto 8 galletas entre 2 amigos por igual. ¿Cuántas le tocan a cada uno?",
+      "answers": [
+        {
+          "text": "2",
+          "correct": false
+        },
+        {
+          "text": "6",
+          "correct": false
+        },
+        {
+          "text": "4",
+          "correct": true
+        },
+        {
+          "text": "10",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "counting",
+        "query": "cookie:8",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fcounting_9a0ef7224a974a20.svg?alt=media&token=ea55959a-a42d-42d1-8799-a2e1b3d2dec8",
+        "credit": "Ilustración de LudiGame"
+      }
+    },
+    {
+      "text": "¿Cuánto es 10 ÷ 2?",
+      "answers": [
+        {
+          "text": "5",
+          "correct": true
+        },
+        {
+          "text": "8",
+          "correct": false
+        },
+        {
+          "text": "12",
+          "correct": false
+        },
+        {
+          "text": "20",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuánto es 15 ÷ 5?",
+      "answers": [
+        {
+          "text": "5",
+          "correct": false
+        },
+        {
+          "text": "10",
+          "correct": false
+        },
+        {
+          "text": "3",
+          "correct": true
+        },
+        {
+          "text": "20",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuánto es 20 ÷ 4?",
+      "answers": [
+        {
+          "text": "5",
+          "correct": true
+        },
+        {
+          "text": "16",
+          "correct": false
+        },
+        {
+          "text": "24",
+          "correct": false
+        },
+        {
+          "text": "4",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuál es la mitad de 8?",
+      "answers": [
+        {
+          "text": "2",
+          "correct": false
+        },
+        {
+          "text": "4",
+          "correct": true
+        },
+        {
+          "text": "6",
+          "correct": false
+        },
+        {
+          "text": "16",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

@@ -18,6 +18,7 @@ const activitySchema = yup.object({
     selectedBadges: yup.array(yup.string().required()).required(),
     selectedMissions: yup.array(yup.string().required()).required(),
     voiceEnabled: yup.boolean().required(),
+    speedBonus: yup.boolean(),
   }).required(),
   backgroundImage: yup.string().nullable(),
   memoryImages: yup.array(yup.string().required()),

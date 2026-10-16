@@ -1,0 +1,129 @@
+{
+  "code": "g3-len-leyendas-quiz",
+  "grade": 3,
+  "subject": "lengua-literatura",
+  "collection": "g3-len-leyendas",
+  "order": 2,
+  "type": "ludiquiz",
+  "title": "Leyendas de Nicaragua",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "abuela contando cuento a niños",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128242549_8846983.jpg?alt=media&token=60fb067a-a37b-47fa-81b9-be2f9797c4d5",
+    "credit": "Imagen de beasternchen en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "¿Qué es una leyenda?",
+      "answers": [
+        {
+          "text": "Una historia tradicional que se cuenta de generación en generación",
+          "correct": true
+        },
+        {
+          "text": "Una noticia del periódico",
+          "correct": false
+        },
+        {
+          "text": "Una receta de cocina",
+          "correct": false
+        },
+        {
+          "text": "Un juego de mesa",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Según la leyenda, ¿cuándo pasa la Carreta Nagua?",
+      "answers": [
+        {
+          "text": "En las noches sin luna",
+          "correct": true
+        },
+        {
+          "text": "A mediodía",
+          "correct": false
+        },
+        {
+          "text": "En la playa",
+          "correct": false
+        },
+        {
+          "text": "En la escuela",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Según la tradición, el Cadejo blanco es un perro que...",
+      "answers": [
+        {
+          "text": "Cuida a los caminantes",
+          "correct": true
+        },
+        {
+          "text": "Vende pan",
+          "correct": false
+        },
+        {
+          "text": "Vive en el mar",
+          "correct": false
+        },
+        {
+          "text": "Juega fútbol",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "perro blanco",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128243353_1728494.jpg?alt=media&token=e0b79d35-e326-4688-974c-9ac08381a1dc",
+        "credit": "Imagen de Gorkhs en Pixabay"
+      }
+    },
+    {
+      "text": "¿Quiénes suelen contar las leyendas en la familia?",
+      "answers": [
+        {
+          "text": "Los abuelos",
+          "correct": true
+        },
+        {
+          "text": "Los semáforos",
+          "correct": false
+        },
+        {
+          "text": "Los peces",
+          "correct": false
+        },
+        {
+          "text": "Las computadoras",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Las leyendas nos ayudan a conocer...",
+      "answers": [
+        {
+          "text": "Nuestra cultura",
+          "correct": true
+        },
+        {
+          "text": "Las tablas de multiplicar",
+          "correct": false
+        },
+        {
+          "text": "El precio del arroz",
+          "correct": false
+        },
+        {
+          "text": "El clima de mañana",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

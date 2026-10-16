@@ -1,0 +1,135 @@
+{
+  "code": "g3-val-derechos-quiz",
+  "grade": 3,
+  "subject": "creciendo-en-valores",
+  "collection": "g3-val-derechos",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Mis derechos y mis deberes",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños en la escuela",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128258759_7355056.jpg?alt=media&token=f8521933-afc0-49ec-be5b-b2262fec77cd",
+    "credit": "Imagen de RosZie en Pixabay"
+  },
+  "questions": [
+    {
+      "text": "Ir a la escuela y aprender es mi...",
+      "answers": [
+        {
+          "text": "Derecho",
+          "correct": true
+        },
+        {
+          "text": "Castigo",
+          "correct": false
+        },
+        {
+          "text": "Juego",
+          "correct": false
+        },
+        {
+          "text": "Premio",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "niños en el aula",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128259717_160168.jpg?alt=media&token=04e3b9d1-bc16-4039-b5de-aa51b5e38a6e",
+        "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+      }
+    },
+    {
+      "text": "Hacer mis tareas y estudiar es mi...",
+      "answers": [
+        {
+          "text": "Deber",
+          "correct": true
+        },
+        {
+          "text": "Derecho",
+          "correct": false
+        },
+        {
+          "text": "Problema",
+          "correct": false
+        },
+        {
+          "text": "Juguete",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Tener un nombre y una familia es un...",
+      "answers": [
+        {
+          "text": "Derecho de todos los niños",
+          "correct": true
+        },
+        {
+          "text": "Premio",
+          "correct": false
+        },
+        {
+          "text": "Deber",
+          "correct": false
+        },
+        {
+          "text": "Juego",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Respetar a mis compañeros es un...",
+      "answers": [
+        {
+          "text": "Deber",
+          "correct": true
+        },
+        {
+          "text": "Castigo",
+          "correct": false
+        },
+        {
+          "text": "Juego",
+          "correct": false
+        },
+        {
+          "text": "Regalo",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "Jugar y descansar también es un...",
+      "answers": [
+        {
+          "text": "Derecho",
+          "correct": true
+        },
+        {
+          "text": "Error",
+          "correct": false
+        },
+        {
+          "text": "Deber",
+          "correct": false
+        },
+        {
+          "text": "Castigo",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "pixabay",
+        "query": "niños jugando",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128260707_6709217.jpg?alt=media&token=d8e7e2cc-00d3-45ef-8b38-4f721af2089d",
+        "credit": "Imagen de biggerthanpluto en Pixabay"
+      }
+    }
+  ]
+}

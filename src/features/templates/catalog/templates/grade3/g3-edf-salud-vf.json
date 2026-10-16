@@ -1,0 +1,48 @@
+{
+  "code": "g3-edf-salud-vf",
+  "grade": 3,
+  "subject": "educacion-fisica",
+  "collection": "g3-edf-deporte",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "Ejercicio y salud",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "niños haciendo ejercicio",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128227504_5571764.jpg?alt=media&token=e738e308-7523-4ebc-a657-b30c5f08ff93",
+    "credit": "Imagen de HtcHnm en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "Debo tomar agua antes, durante y después de hacer ejercicio.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "botella de agua",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128228228_1377712.jpg?alt=media&token=7b766b55-13cd-4387-a4b0-87dfa7832fb0",
+        "credit": "Imagen de 51581 en Pixabay"
+      }
+    },
+    {
+      "text": "Calentar antes del ejercicio ayuda a no lastimarse.",
+      "answer": true
+    },
+    {
+      "text": "Hacer ejercicio solo es bueno para los adultos.",
+      "answer": false
+    },
+    {
+      "text": "Después de jugar debo lavarme las manos y la cara.",
+      "answer": true
+    },
+    {
+      "text": "Es mejor jugar al sol del mediodía sin gorra y sin agua.",
+      "answer": false
+    },
+    {
+      "text": "El ejercicio fortalece el corazón y los músculos.",
+      "answer": true
+    }
+  ]
+}

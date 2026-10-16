@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { authorizeParticipant } from "@/lib/play/participantToken";
+import { DEFAULT_POINTS, DEFAULT_TIME_LIMIT_MS, answerPoints, readSpeedBonus } from "@/lib/play/scoring";
 
-const DEFAULT_BASE_POINTS = 1000;
-const DEFAULT_TIME_LIMIT_MS = 30000;
 
 export async function POST(req: NextRequest) {
     try {
@@ -43,7 +42,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, error: "Las diapositivas de contenido no se responden." }, { status: 400 });
         }
 
-        const basePoints = pregunta.puntaje ?? pregunta.activity.config?.puntajeBase ?? DEFAULT_BASE_POINTS;
+        const basePoints = pregunta.puntaje ?? pregunta.activity.config?.puntajeBase ?? DEFAULT_POINTS;
         const totalTimeMs = pregunta.tiempoLimiteMs ?? pregunta.activity.config?.tiempoPreguntaMs ?? DEFAULT_TIME_LIMIT_MS;
 
         const selectedOption = opcionId
@@ -54,8 +53,13 @@ export async function POST(req: NextRequest) {
         // El tiempo transcurrido reportado por el cliente solo afecta el bono
         // de velocidad (nunca si acertó o no), y se acota al rango válido.
         const elapsedMs = Math.min(Math.max(Number(tiempoMs) || 0, 0), totalTimeMs);
-        const timeFactor = esCorrecta ? Math.max(0, (totalTimeMs - elapsedMs) / totalTimeMs) : 0;
-        const puntajeObtenido = esCorrecta ? Math.round(basePoints * (0.5 + 0.5 * timeFactor)) : 0;
+        const puntajeObtenido = answerPoints({
+            correct: esCorrecta,
+            basePoints,
+            totalTimeMs,
+            elapsedMs,
+            speedBonus: readSpeedBonus(pregunta.activity.config?.ajustesJson),
+        });
 
         // 1. Guardar la respuesta detallada
         await prisma.ludiRespuestaEstudiante.create({

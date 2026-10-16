@@ -1,0 +1,89 @@
+{
+  "code": "g3-len-cuento-form",
+  "grade": 3,
+  "subject": "lengua-literatura",
+  "collection": "g3-len-escritura",
+  "order": 1,
+  "type": "ludiform",
+  "title": "Escribo mi propio cuento",
+  "durationMin": 15,
+  "cover": {
+    "source": "unsplash",
+    "query": "niño escribiendo cuaderno",
+    "url": "https://images.unsplash.com/photo-1599689868384-59cb2b01bb21?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxuaSVDMyVCMW8lMjBlc2NyaWJpZW5kbyUyMGN1YWRlcm5vfGVzfDF8MHx8fDE3OTIxMjgwODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "credit": "Foto de Michał Parzuchowski en Unsplash"
+  },
+  "questions": [
+    {
+      "type": "single",
+      "text": "¿Qué parte del cuento presenta a los personajes y el lugar?",
+      "options": [
+        {
+          "text": "El inicio",
+          "correct": true
+        },
+        {
+          "text": "El final",
+          "correct": false
+        },
+        {
+          "text": "El título",
+          "correct": false
+        },
+        {
+          "text": "El índice",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "single",
+      "text": "¿En qué parte del cuento se resuelve el problema?",
+      "options": [
+        {
+          "text": "En el inicio",
+          "correct": false
+        },
+        {
+          "text": "En el final",
+          "correct": true
+        },
+        {
+          "text": "En el título",
+          "correct": false
+        },
+        {
+          "text": "En la portada",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "text": "¿Qué necesita un cuento?",
+      "options": [
+        {
+          "text": "Personajes",
+          "correct": true
+        },
+        {
+          "text": "Un lugar",
+          "correct": true
+        },
+        {
+          "text": "Un problema",
+          "correct": true
+        },
+        {
+          "text": "Una calculadora",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "long",
+      "text": "Escribe el inicio de un cuento sobre un animal de Nicaragua: ¿quién es, dónde vive y qué le pasa?",
+      "options": []
+    }
+  ]
+}

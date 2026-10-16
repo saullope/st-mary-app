@@ -2,11 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Modal } from "react-bootstrap";
 import { FaArrowLeft, FaCheck, FaCopy, FaPlay, FaFlagCheckered, FaChartColumn } from "react-icons/fa6";
 import { TeacherEvaluationModal } from "@/features/followUp/components/TeacherEvaluationModal";
 import { saveTeacherEvaluation } from "@/features/followUp/teacherEvaluationApi";
 import type { TeacherEvaluation } from "@/features/followUp/followUp";
 import type { SessionPhase } from "@/lib/play/sessionState";
+import { useLeaveWarning } from "@/features/live/useLeaveWarning";
 import styles from "./LivePanel.module.css";
 import { useTranslations } from "next-intl";
 
@@ -72,7 +75,15 @@ export default function LiveDashboardClient({ sessionId, gradeId, fromTemplate, 
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  // Enlace al que el docente quiso ir con la sesión abierta; se confirma antes de salir.
+  const [leaveTo, setLeaveTo] = useState<string | null>(null);
+  const router = useRouter();
   const t = useTranslations("Live");
+
+  // La sesión sigue abierta al salir (los estudiantes pueden seguir jugando): se avisa y se
+  // explica cómo volver. Ya terminada no hay nada que perder.
+  const sessionOpen = session !== null && session.phase !== "finished";
+  useLeaveWarning(sessionOpen, setLeaveTo);
 
   const fetchSession = useCallback(async () => {
     try {
@@ -276,6 +287,32 @@ export default function LiveDashboardClient({ sessionId, gradeId, fromTemplate, 
           </aside>
         </div>
       )}
+
+      <Modal show={leaveTo !== null} onHide={() => setLeaveTo(null)} centered aria-labelledby="leave-live-title">
+        <Modal.Header closeButton closeLabel={t("leave.close")}>
+          <Modal.Title id="leave-live-title" as="h2" className="fs-5">{t("leave.title")}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="mb-2">{t("leave.body", { count: session.participantes.length })}</p>
+          <p className="mb-0 text-muted">{t("leave.howToReturn")}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <button type="button" className={styles.secondaryButton} onClick={() => setLeaveTo(null)}>
+            {t("leave.stay")}
+          </button>
+          <button
+            type="button"
+            className={styles.primaryButton}
+            onClick={() => {
+              const target = leaveTo;
+              setLeaveTo(null);
+              if (target) router.push(target);
+            }}
+          >
+            {t("leave.confirm")}
+          </button>
+        </Modal.Footer>
+      </Modal>
 
       {showFeedbackModal && (
         <TeacherEvaluationModal

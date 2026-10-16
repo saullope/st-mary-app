@@ -1,0 +1,60 @@
+{
+  "code": "g3-cmm-agua-vf",
+  "grade": 3,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g3-cmm-ciencia",
+  "order": 1,
+  "type": "trueorfalse",
+  "title": "Los estados del agua",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "gotas de agua",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128209988_4380310.jpg?alt=media&token=68beb958-ef5b-4451-80ca-8f426cbd7141",
+    "credit": "Imagen de Willgard en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "El hielo es agua en estado sólido.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "cubos de hielo",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128210820_34075.jpg?alt=media&token=0e9b7027-31b9-4e5f-bb02-a0414306adef",
+        "credit": "Imagen de Clker-Free-Vector-Images en Pixabay"
+      }
+    },
+    {
+      "text": "El vapor es agua en estado gaseoso.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "vapor olla",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128211749_8369713.jpg?alt=media&token=cfa7c74a-21b1-47bb-9812-5db02e9b50cf",
+        "credit": "Imagen de AI-Hobby-Kunst en Pixabay"
+      }
+    },
+    {
+      "text": "El hielo es un gas.",
+      "answer": false
+    },
+    {
+      "text": "La lluvia cae de las nubes.",
+      "answer": true,
+      "media": {
+        "source": "pixabay",
+        "query": "lluvia",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128212654_6356393.jpg?alt=media&token=80de546a-cb33-4428-ba17-8ed1e67d174f",
+        "credit": "Imagen de ninikvaratskhelia_ en Pixabay"
+      }
+    },
+    {
+      "text": "Si calentamos el hielo, se derrite y se vuelve líquido.",
+      "answer": true
+    },
+    {
+      "text": "El agua de los ríos está en estado sólido.",
+      "answer": false
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "code": "g3-cmm-planetas-memoria",
+  "grade": 3,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g3-cmm-ciencia",
+  "order": 3,
+  "type": "ludimemory",
+  "title": "Memoria del sistema solar",
+  "durationMin": 5,
+  "cover": {
+    "source": "pixabay",
+    "query": "sistema solar planetas",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128218557_8735271.jpg?alt=media&token=a6138f3d-53a5-409e-91da-b5899800e471",
+    "credit": "Imagen de 1tamara2 en Pixabay"
+  },
+  "images": [
+    {
+      "source": "pixabay",
+      "query": "planeta tierra",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128219697_8703270.jpg?alt=media&token=00a935e4-0980-4ddd-9f78-af8535b437f6",
+      "credit": "Imagen de IdeaTivas-TLM en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "planeta saturno",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128220541_9746537.jpg?alt=media&token=52414862-ceaf-462c-a6ff-7f457e63b3d4",
+      "credit": "Imagen de milaoktasafitri en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "planeta marte",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128221399_11111.jpg?alt=media&token=cc7d405b-16f1-463a-9268-b1796b4587d0",
+      "credit": "Imagen de WikiImages en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "planeta júpiter",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128222281_1817885.jpg?alt=media&token=d1ea5c26-1fb3-4e17-b835-b2a16f19660c",
+      "credit": "Imagen de PIRO4D en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "el sol estrella",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128222995_485016.jpg?alt=media&token=0db745c7-233b-4232-8ec3-82a42a3c429c",
+      "credit": "Imagen de 95C en Pixabay"
+    },
+    {
+      "source": "pixabay",
+      "query": "la luna llena",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128223708_5307922.jpg?alt=media&token=621213a7-2af0-4f4f-9398-905657e31096",
+      "credit": "Imagen de susan-lu4esm en Pixabay"
+    }
+  ]
+}

@@ -15,19 +15,18 @@ beforeEach(() => {
 });
 
 describe("valoración del estudiante (SummaryActions)", () => {
-  it("pregunta gusto y aprendizaje con la escala completa de 1 a 5 y la envía", async () => {
+  it("una pregunta a la vez: la segunda carita envía sola, sin botón de enviar", async () => {
     render(<SummaryActions sesion={sesion(true)} participant={participant} previewMode={false} />);
 
     const gusto = screen.getByRole("group", { name: "¿Te gustó la actividad?" });
-    const aprendizaje = screen.getByRole("group", { name: "¿Sientes que aprendiste con ella?" });
-    expect(gusto.querySelectorAll("input[type=radio]")).toHaveLength(5);
-    expect(aprendizaje.querySelectorAll("input[type=radio]")).toHaveLength(5);
+    expect(gusto.querySelectorAll("button")).toHaveLength(5);
+    expect(screen.queryByRole("button", { name: "Enviar" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "5 de 5: ¡Me encantó!" }));
 
-    const enviar = screen.getByRole("button", { name: "Enviar" });
-    expect(enviar).toBeDisabled();
-    fireEvent.click(screen.getByRole("radio", { name: "5 de 5: ¡Me encantó!" }));
-    fireEvent.click(screen.getByRole("radio", { name: "3 de 5: Algo" }));
-    fireEvent.click(enviar);
+    const aprendizaje = screen.getByRole("group", { name: "¿Sientes que aprendiste con ella?" });
+    expect(aprendizaje.querySelectorAll("button")).toHaveLength(5);
+    expect(global.fetch).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "3 de 5: Algo" }));
 
     expect(await screen.findByText("¡Gracias por contarnos!")).toBeInTheDocument();
     const [url, init] = (global.fetch as jest.Mock).mock.calls[0];
@@ -35,9 +34,9 @@ describe("valoración del estudiante (SummaryActions)", () => {
     expect(JSON.parse(init.body)).toEqual({ enjoyment: 5, learning: 3, participanteId: "7" });
   });
 
-  it("es opcional: se puede omitir sin enviar nada", () => {
+  it("se puede cerrar sin responder y no envía nada", () => {
     render(<SummaryActions sesion={sesion(true)} participant={participant} previewMode={false} />);
-    fireEvent.click(screen.getByRole("button", { name: "Ahora no" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cerrar la encuesta" }));
     expect(screen.queryByRole("group", { name: "¿Te gustó la actividad?" })).not.toBeInTheDocument();
     expect(global.fetch).not.toHaveBeenCalled();
   });
@@ -55,12 +54,12 @@ describe("valoración del estudiante (SummaryActions)", () => {
   it("si no se pudo guardar avisa y deja seguir", async () => {
     global.fetch = jest.fn().mockResolvedValue({ ok: false });
     render(<SummaryActions sesion={sesion(true)} participant={participant} previewMode={false} />);
-    fireEvent.click(screen.getByRole("radio", { name: "4 de 5: Me gustó" }));
-    fireEvent.click(screen.getByRole("radio", { name: "4 de 5: Bastante" }));
-    fireEvent.click(screen.getByRole("button", { name: "Enviar" }));
+    fireEvent.click(screen.getByRole("button", { name: "4 de 5: Me gustó" }));
+    fireEvent.click(screen.getByRole("button", { name: "4 de 5: Bastante" }));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Volver al inicio" })).toBeInTheDocument();
   });
+
 });
 
 describe("evaluación del docente (TeacherEvaluationForm)", () => {

@@ -1,0 +1,111 @@
+{
+  "code": "g3-mat-medidas-form",
+  "grade": 3,
+  "subject": "matematica",
+  "collection": "g3-mat-fracciones",
+  "order": 3,
+  "type": "ludiform",
+  "title": "Mido y resuelvo",
+  "durationMin": 10,
+  "cover": {
+    "source": "pixabay",
+    "query": "balanza",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128248102_8442199.jpg?alt=media&token=0f536ac9-44ec-40c8-a2f2-e18301107c85",
+    "credit": "Imagen de Mohamed_hassan en Pixabay"
+  },
+  "questions": [
+    {
+      "type": "single",
+      "text": "¿Con qué medimos cuánto pesa un saco de arroz?",
+      "options": [
+        {
+          "text": "Con la balanza",
+          "correct": true
+        },
+        {
+          "text": "Con la regla",
+          "correct": false
+        },
+        {
+          "text": "Con el reloj",
+          "correct": false
+        },
+        {
+          "text": "Con el termómetro",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "single",
+      "text": "¿Qué unidad usamos para medir la leche de un pichel?",
+      "options": [
+        {
+          "text": "El metro",
+          "correct": false
+        },
+        {
+          "text": "El litro",
+          "correct": true
+        },
+        {
+          "text": "El kilogramo",
+          "correct": false
+        },
+        {
+          "text": "La hora",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "text": "¿Cuáles de estos sirven para medir longitud?",
+      "options": [
+        {
+          "text": "La regla",
+          "correct": true
+        },
+        {
+          "text": "La cinta métrica",
+          "correct": true
+        },
+        {
+          "text": "La balanza",
+          "correct": false
+        },
+        {
+          "text": "El termómetro",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "single",
+      "text": "Un metro tiene...",
+      "options": [
+        {
+          "text": "10 centímetros",
+          "correct": false
+        },
+        {
+          "text": "100 centímetros",
+          "correct": true
+        },
+        {
+          "text": "1000 centímetros",
+          "correct": false
+        },
+        {
+          "text": "50 centímetros",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "type": "long",
+      "text": "Escribe tres cosas de tu casa que medirías con una regla y explica por qué.",
+      "options": []
+    }
+  ]
+}

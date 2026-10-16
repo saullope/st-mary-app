@@ -116,7 +116,8 @@
     "watching": "Seguimiento de Actividades",
     "collapse": "Contraer menú",
     "expand": "Expandir menú",
-    "navigation": "Navegación principal"
+    "navigation": "Navegación principal",
+    "minigames": "Minijuegos"
   },
   "firstGradeItemDashboard": {
     "gradeName": "Primer Grado",
@@ -510,8 +511,8 @@
         "5": "¡Mucho!"
       },
       "optionLabel": "{value} de 5: {label}",
-      "send": "Enviar",
-      "skip": "Ahora no",
+      "close": "Cerrar la encuesta",
+      "step": "{current} de {total}",
       "thanks": "¡Gracias por contarnos!",
       "error": "No pudimos guardar tu respuesta. Puedes seguir sin problema."
     },
@@ -700,6 +701,10 @@
     "activityPrivate": {
       "title": "Actividad privada",
       "description": "Esta actividad es privada."
+    },
+    "minigames": {
+      "title": "Minijuegos",
+      "description": "Juegos listos para proyectar o compartir con tus estudiantes."
     }
   },
   "Validation": {
@@ -976,6 +981,15 @@
     "timeHint": "Ajusta el tiempo que tiene el estudiante para responder.",
     "pointsPerPair": "Puntos por pareja encontrada:",
     "pointsPerAnswer": "Puntos por respuesta correcta:",
+    "pointsPerAnswerMax": "Puntos máximos por respuesta correcta:",
+    "pointsScoringHint": "Es lo que vale un acierto. Abajo eliges si responder rápido suma más.",
+    "scoringTitle": "¿Cómo se ganan los puntos?",
+    "scoringSpeedName": "Premiar la rapidez",
+    "scoringSpeedDesc": "Un acierto vale más cuanto antes se responda, pero nunca menos de la mitad.",
+    "scoringSpeedExample": "Ejemplo: al instante {max} pts, a mitad del tiempo {mid} pts, al final {min} pts.",
+    "scoringFixedName": "Puntaje fijo",
+    "scoringFixedDesc": "Todos los aciertos valen lo mismo; el tiempo solo limita cuándo se puede responder.",
+    "scoringFixedExample": "Ejemplo: rápido o lento, cada acierto vale {points} pts.",
     "pointsPlaceholder": "Ingresa los puntos",
     "badgesTitle": "Insignias de recompensa",
     "badgeLabel": "Insignia {name}: {description}",
@@ -1075,6 +1089,10 @@
         "title": "Puntos, tiempo y voz",
         "description": "Define cuántos puntos vale cada pregunta, cuánto tiempo hay para responder y si una voz anuncia los logros."
       },
+      "panelScoring": {
+        "title": "¿Cómo se ganan los puntos?",
+        "description": "Elige si premiar la rapidez (un acierto vale entre la mitad y el total, según lo rápido que respondan) o dar un puntaje fijo (todos los aciertos valen lo mismo). Cada opción muestra un ejemplo con tus puntos y tu tiempo."
+      },
       "panelBadges": {
         "title": "Insignias",
         "description": "Elige las insignias que tus estudiantes pueden ganar, por ejemplo por responder rápido o acertar a la primera."
@@ -1165,6 +1183,10 @@
       "panelGeneral": {
         "title": "Tiempo y puntos",
         "description": "Define cuánto tiempo hay para responder y cuántos puntos vale cada acierto."
+      },
+      "panelScoring": {
+        "title": "¿Cómo se ganan los puntos?",
+        "description": "Elige si premiar la rapidez (un acierto vale entre la mitad y el total, según lo rápido que respondan) o dar un puntaje fijo (todos los aciertos valen lo mismo). Cada opción muestra un ejemplo con tus puntos y tu tiempo."
       },
       "panelBadges": {
         "title": "Elige las recompensas",
@@ -1536,11 +1558,11 @@
     "achievements": {
       "badgeUnlocked": "¡Insignia desbloqueada!",
       "missionDone": "¡Misión cumplida!",
-      "badgesEarned": "Insignias ganadas ({opened}/{total})",
-      "openBox": "Abrir la insignia sorpresa {number} de {total}",
-      "tapToOpen": "Toca para abrir",
-      "nextBadge": "Siguiente insignia",
-      "allRevealed": "¡Todas tus insignias reveladas!"
+      "badgesWon": "{count, plural, one {¡Ganaste una insignia!} other {¡Ganaste # insignias!}}",
+      "revealCounter": "Insignia {current} de {total}",
+      "surprise": "¿Qué habrá dentro?",
+      "tapToContinue": "Toca para ver la siguiente insignia",
+      "yourBadges": "Tus insignias"
     },
     "memory": {
       "saveFailed": "No se pudo guardar tu resultado",
@@ -1682,11 +1704,19 @@
     "finishedTitle": "Sesión finalizada",
     "finishedBody": "Revisa el detalle por estudiante y califica las respuestas escritas en el reporte.",
     "viewReport": "Ver reporte",
-    "backToActivities": "Volver a mis actividades"
+    "backToActivities": "Volver a mis actividades",
+    "leave": {
+      "title": "¿Salir del panel en vivo?",
+      "body": "La sesión seguirá abierta: {count, plural, =0 {tus estudiantes podrán seguir uniéndose con el PIN.} one {# estudiante ya está dentro y podrá seguir jugando.} other {# estudiantes ya están dentro y podrán seguir jugando.}}",
+      "howToReturn": "Puedes volver cuando quieras desde el aviso «Volver al panel en vivo» en Inicio o en cualquier pantalla del panel. Para cerrarla, pulsa «Terminar actividad».",
+      "close": "Cerrar",
+      "stay": "Quedarme",
+      "confirm": "Salir"
+    }
   },
   "Templates": {
     "title": "Plantillas",
-    "subtitle": "Actividades listas para tus clases, alineadas a los temas del MINED. Guarda una copia para editarla o lánzala al momento.",
+    "subtitle": "Actividades listas para tus clases. Guarda una copia para editarla o lánzala al momento.",
     "gradeLabel": "Grado",
     "subjectLabel": "Clase",
     "mySubjects": "Mis clases",
@@ -2104,5 +2134,55 @@
     "syncing": "Sincronizando...",
     "summary": "{created} nuevas, {updated} actualizadas, {unchanged} sin cambios, {retired} retiradas.",
     "failed": "{count, plural, one {# no se pudo cargar:} other {# no se pudieron cargar:}}"
+  },
+  "LiveReturn": {
+    "label": "Sesiones en vivo abiertas",
+    "titleActive": "Tienes una sesión en vivo en curso",
+    "titleWaiting": "Tienes una sesión en vivo esperando estudiantes",
+    "meta": "{activity} · PIN {pin} · {count, plural, =0 {sin estudiantes aún} one {# estudiante} other {# estudiantes}}",
+    "back": "Volver al panel en vivo"
+  },
+  "Minigames": {
+    "title": "Minijuegos",
+    "subtitle": "Juegos listos para proyectar en clase o compartir con tus estudiantes. No necesitan PIN ni configuración.",
+    "metaTitle": "Minijuego",
+    "metaDescription": "Un minijuego de LudiGame.",
+    "play": "Jugar",
+    "playOf": "Jugar {name} en una pestaña nueva",
+    "copyLink": "Copiar enlace",
+    "copyLinkOf": "Copiar el enlace de {name}",
+    "linkCopied": "Enlace copiado",
+    "linkCopiedHint": "Compártelo con tus estudiantes: lo abren sin cuenta ni PIN.",
+    "copyManually": "Copia este enlace",
+    "games": {
+      "sumando-con-frutas": {
+        "title": "Sumando con frutas",
+        "description": "Suma grupos de frutas hasta 10 con música, voz y estrellas por cada acierto."
+      }
+    },
+    "sumandoConFrutas": {
+      "introTitle": "1.er grado - Sumando con frutas",
+      "introHint": "¡Haz clic para empezar!",
+      "startPhrase": "¡Vamos a sumar frutas y divertirnos mientras aprendes!",
+      "play": "¡Jugar!",
+      "go": "¡GO!",
+      "badges": "Insignias",
+      "points": "Puntos: {score}",
+      "progress": "Pregunta {current} / {total}",
+      "time": "Tiempo: {time}",
+      "operationLabel": "¿Cuánto es {a} más {b}?",
+      "answersLabel": "Elige la respuesta",
+      "mute": "Silenciar la música",
+      "unmute": "Activar la música",
+      "volume": "Volumen de la música",
+      "finished": "¡Juego terminado!",
+      "starsLabel": "{stars} de {total} estrellas",
+      "playAgain": "Jugar de nuevo",
+      "voice": {
+        "correct": "¡Correcto! {a} más {b} son {sum}",
+        "tryAgain": "Intenta otra vez",
+        "answerWas": "Era {sum}"
+      }
+    }
   }
 }

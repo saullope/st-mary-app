@@ -1,0 +1,129 @@
+{
+  "code": "g3-cmm-nicaragua-quiz",
+  "grade": 3,
+  "subject": "conociendo-mi-mundo",
+  "collection": "g3-cmm-nicaragua",
+  "order": 1,
+  "type": "ludiquiz",
+  "title": "Conozco Nicaragua",
+  "durationMin": 6,
+  "cover": {
+    "source": "unsplash",
+    "query": "lago de nicaragua volcán",
+    "url": "https://images.unsplash.com/photo-1711609065017-749841408b17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxsYWdvJTIwZGUlMjBuaWNhcmFndWElMjB2b2xjJUMzJUExbnxlc3wxfDB8fHwxNzkyMTEwMjg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "credit": "Foto de Mario von Rotz en Unsplash"
+  },
+  "questions": [
+    {
+      "text": "¿Cuál es la capital de Nicaragua?",
+      "answers": [
+        {
+          "text": "León",
+          "correct": false
+        },
+        {
+          "text": "Granada",
+          "correct": false
+        },
+        {
+          "text": "Managua",
+          "correct": true
+        },
+        {
+          "text": "Masaya",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Cuál es el lago más grande de Nicaragua?",
+      "answers": [
+        {
+          "text": "El lago Cocibolca",
+          "correct": true
+        },
+        {
+          "text": "El lago de Managua",
+          "correct": false
+        },
+        {
+          "text": "La laguna de Apoyo",
+          "correct": false
+        },
+        {
+          "text": "La laguna de Masaya",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Qué volcán está en la isla de Ometepe?",
+      "answers": [
+        {
+          "text": "El Concepción",
+          "correct": true
+        },
+        {
+          "text": "El Momotombo",
+          "correct": false
+        },
+        {
+          "text": "El Masaya",
+          "correct": false
+        },
+        {
+          "text": "El San Cristóbal",
+          "correct": false
+        }
+      ],
+      "media": {
+        "source": "unsplash",
+        "query": "isla de ometepe volcán",
+        "url": "https://images.unsplash.com/photo-1675701142610-5d40c754a3b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxpc2xhJTIwZGUlMjBvbWV0ZXBlJTIwdm9sYyVDMyVBMW58ZXN8MXwwfHx8MTc5MjEyODA4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de Sophie en Unsplash"
+      }
+    },
+    {
+      "text": "¿Cuántos departamentos tiene Nicaragua?",
+      "answers": [
+        {
+          "text": "15 departamentos y 2 regiones autónomas",
+          "correct": true
+        },
+        {
+          "text": "5 departamentos",
+          "correct": false
+        },
+        {
+          "text": "30 departamentos",
+          "correct": false
+        },
+        {
+          "text": "10 provincias",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "text": "¿Con qué aguas tiene costas Nicaragua?",
+      "answers": [
+        {
+          "text": "El océano Pacífico y el mar Caribe",
+          "correct": true
+        },
+        {
+          "text": "Solo el océano Atlántico",
+          "correct": false
+        },
+        {
+          "text": "El mar Mediterráneo",
+          "correct": false
+        },
+        {
+          "text": "Ninguna",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

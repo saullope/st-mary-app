@@ -17,6 +17,8 @@ const tour = (id: string): string => `[data-tour="${id}"]`;
 // Cierre común: tema, recompensas y guardar.
 const theme: EditorTourStep = { key: "theme", element: tour("theme-button"), side: "bottom" };
 const panelGeneral: EditorTourStep = { key: "panelGeneral", element: tour("panel-general"), side: "left", scrollIntoView: true };
+// Solo en los editores con tiempo: cómo se ganan los puntos.
+const panelScoring: EditorTourStep = { key: "panelScoring", element: tour("panel-scoring"), side: "left", scrollIntoView: true };
 const panelBadges: EditorTourStep = { key: "panelBadges", element: tour("panel-badges"), side: "left", scrollIntoView: true };
 const panelMissions: EditorTourStep = { key: "panelMissions", element: tour("panel-missions"), side: "left", scrollIntoView: true };
 const save: EditorTourStep = { key: "save", element: tour("save-activity"), side: "bottom" };
@@ -34,6 +36,7 @@ export const EDITOR_TOURS: Record<EditorTourType, { id: string; steps: EditorTou
       theme,
       { key: "panel", element: tour("panel-ludico"), side: "left" },
       panelGeneral,
+      panelScoring,
       panelBadges,
       panelMissions,
       save,
@@ -48,6 +51,7 @@ export const EDITOR_TOURS: Record<EditorTourType, { id: string; steps: EditorTou
       { key: "list", element: tour("editor-sidebar"), side: "right" },
       theme,
       panelGeneral,
+      panelScoring,
       panelBadges,
       save,
     ],

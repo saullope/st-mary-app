@@ -1,17 +1,19 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { StudentFeedbackForm } from "@/features/followUp/components/StudentFeedbackForm";
 import followUpStyles from "@/features/followUp/components/followUp.module.css";
 import type { Rating } from "@/features/followUp/followUp";
 import { FaCircleCheck } from "react-icons/fa6";
-import { findMission, type MissionDef } from "@/features/gamification/catalog";
+import { findBadge, findMission, type BadgeDef, type MissionDef } from "@/features/gamification/catalog";
 import { useAchievementCatalog } from "@/features/gamification/AchievementCatalogContext";
 import { useAchievementText } from "@/features/gamification/useAchievementText";
+import { BadgeArt } from "@/features/gamification/components/BadgeArt";
 import { AchievementToast, type AchievementItem } from "./AchievementToast";
 import { BadgeRevealSequence } from "./BadgeRevealSequence";
+import revealStyles from "./BadgeRevealSequence.module.css";
 import styles from "./game.module.css";
 import { postPlay, type PlayParticipant } from "./playApi";
 
@@ -42,23 +44,39 @@ export const ReadyCard = ({ name, onStart }: { name?: string; onStart: () => voi
   );
 };
 
-interface AchievementsRecapProps {
+interface EarnedAchievementsProps {
   missionCodes: string[];
   badgeCodes: string[];
-  onReveal: (text: string) => void;
 }
 
-/** Misiones cumplidas y caja sorpresa de insignias del resumen final. */
-export const AchievementsRecap = ({ missionCodes, badgeCodes, onReveal }: AchievementsRecapProps) => {
+/** Todas las insignias y misiones de la partida juntas, al final. */
+const EarnedAchievements = ({ missionCodes, badgeCodes }: EarnedAchievementsProps) => {
   const catalog = useAchievementCatalog();
   const achievementText = useAchievementText();
   const t = useTranslations("Play.screens");
-  const missions = missionCodes
-    .map((code) => findMission(catalog, code))
-    .filter((m): m is MissionDef => Boolean(m));
+  const tAchievements = useTranslations("Play.achievements");
+  const missions = missionCodes.map((code) => findMission(catalog, code)).filter((m): m is MissionDef => Boolean(m));
+  const badges = badgeCodes.map((code) => findBadge(catalog, code)).filter((b): b is BadgeDef => Boolean(b));
 
   return (
     <>
+      {badges.length > 0 && (
+        <section className={revealStyles.earned} aria-labelledby="earned-badges-title">
+          <h2 id="earned-badges-title" className={revealStyles.earnedTitle}>{tAchievements("yourBadges")}</h2>
+          <ul className={revealStyles.earnedGrid}>
+            {badges.map((badge, index) => {
+              const text = achievementText.badge(badge);
+              return (
+                <li key={badge.code} className={revealStyles.earnedItem} style={{ borderColor: badge.color, animationDelay: `${index * 0.08}s` }}>
+                  <BadgeArt badge={badge} size={64} radius={14} />
+                  <strong className={revealStyles.earnedName} style={{ color: badge.color }}>{text.name}</strong>
+                  <span className={revealStyles.earnedPhrase}>{text.phrase}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
       {missions.length > 0 && (
         <div className={styles.missionsRecap}>
           <h5 className={styles.missionsRecapTitle}>{t("missionsDone")}</h5>
@@ -69,7 +87,46 @@ export const AchievementsRecap = ({ missionCodes, badgeCodes, onReveal }: Achiev
           </div>
         </div>
       )}
-      <BadgeRevealSequence codes={badgeCodes} onReveal={onReveal} />
+    </>
+  );
+};
+
+interface GameSummaryProps extends EarnedAchievementsProps {
+  /** Encabezado del resumen: trofeo, título y puntaje de cada tipo de juego. */
+  children: ReactNode;
+  onReveal: (text: string) => void;
+  sesion: any;
+  participant: PlayParticipant | null;
+  previewMode: boolean;
+  onExit?: () => void;
+}
+
+/**
+ * Final de cualquier juego. Si ganó insignias, primero salen de la caja sorpresa solas;
+ * después se ve todo junto: puntaje, insignias, misiones, la encuesta y la salida.
+ */
+export const GameSummary = ({ children, missionCodes, badgeCodes, onReveal, sesion, participant, previewMode, onExit }: GameSummaryProps) => {
+  const t = useTranslations("Play.achievements");
+  const [revealing, setRevealing] = useState(badgeCodes.length > 0);
+  // Estables entre renders: el motor arma las listas en cada render y eso reiniciaría la caja.
+  const badgeKey = badgeCodes.join(",");
+  const codes = useMemo(() => (badgeKey ? badgeKey.split(",") : []), [badgeKey]);
+  const finishReveal = useCallback(() => setRevealing(false), []);
+
+  if (revealing) {
+    return (
+      <>
+        <h1 className={styles.summaryTitle}>{t("badgesWon", { count: codes.length })}</h1>
+        <BadgeRevealSequence codes={codes} onReveal={onReveal} onComplete={finishReveal} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      {children}
+      <EarnedAchievements missionCodes={missionCodes} badgeCodes={codes} />
+      <SummaryActions sesion={sesion} participant={participant} previewMode={previewMode} onExit={onExit} />
     </>
   );
 };

@@ -1,71 +1,235 @@
-.wrapper {
-  margin-top: 1.5rem;
+/* Caja sorpresa de insignias: se sacude, la tapa sale volando y la insignia sube. */
+.stage {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1rem 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
 }
 
-.title {
-  font-size: 0.9rem;
+.stage:focus-visible {
+  outline: 3px solid #00a3c4;
+  outline-offset: 4px;
+  border-radius: 20px;
+}
+
+.counter {
+  font-size: 0.85rem;
   font-weight: 800;
   color: #4a4266;
-  margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+}
+
+.scene {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 220px;
+  height: 230px;
 }
 
 .box {
+  position: relative;
+  display: block;
+  width: 150px;
+  height: 130px;
+  animation: shake 1.3s ease-in-out;
+  transform-origin: 50% 100%;
+}
+
+.body {
+  position: absolute;
+  inset: 34px 8px 0;
+  border-radius: 10px 10px 18px 18px;
+  background:
+    linear-gradient(90deg, transparent 43%, #FACC15 43%, #FACC15 57%, transparent 57%),
+    linear-gradient(135deg, #6a4bff, #8b73ff);
+  box-shadow: 0 10px 24px rgba(106, 75, 255, 0.4), inset 0 -8px 0 rgba(0, 0, 0, 0.15);
+}
+
+.lid {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  right: 0;
+  height: 28px;
+  border-radius: 10px;
+  background:
+    linear-gradient(90deg, transparent 43%, #FDE047 43%, #FDE047 57%, transparent 57%),
+    linear-gradient(135deg, #7C5CFF, #A18BFF);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+/* Moño: dos lazos sobre la tapa. */
+.bow {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 46px;
+  height: 22px;
+  transform: translateX(-50%);
+}
+
+.bow::before,
+.bow::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 22px;
+  height: 20px;
+  border: 6px solid #FACC15;
+  border-radius: 50% 50% 0 50%;
+}
+
+.bow::before {
+  left: 0;
+  transform: rotate(-25deg);
+}
+
+.bow::after {
+  right: 0;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(25deg);
+}
+
+/* Abierta: la tapa sale volando y la caja se queda quieta. */
+.stage[data-opened] .box {
+  animation: none;
+}
+
+.stage[data-opened] .lid {
+  animation: lidOff 0.6s cubic-bezier(0.3, 1.4, 0.6, 1) forwards;
+}
+
+.badge {
+  position: absolute;
+  left: 50%;
+  bottom: 70px;
+  display: flex;
+  padding: 10px;
+  border: 4px solid;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(20, 10, 46, 0.3);
+  transform: translateX(-50%);
+  animation: rise 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+  z-index: 2;
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 3.5rem;
+  max-width: 320px;
+  text-align: center;
+}
+
+.name {
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.phrase {
+  color: #4a4266;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotate(0) translateY(0); }
+  10% { transform: rotate(-7deg) translateY(-4px); }
+  20% { transform: rotate(7deg) translateY(0); }
+  30% { transform: rotate(-9deg) translateY(-6px); }
+  40% { transform: rotate(9deg) translateY(0); }
+  50% { transform: rotate(-6deg) translateY(-8px); }
+  60% { transform: rotate(6deg) translateY(0); }
+  70% { transform: rotate(-11deg) translateY(-10px) scale(1.05); }
+  80% { transform: rotate(11deg) translateY(0) scale(1.05); }
+  90% { transform: rotate(-4deg) translateY(-4px); }
+}
+
+@keyframes lidOff {
+  to { transform: translate(70px, -120px) rotate(35deg); opacity: 0; }
+}
+
+@keyframes rise {
+  from { transform: translate(-50%, 70px) scale(0.3); opacity: 0; }
+  to { transform: translate(-50%, -40px) scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .stage[data-opened] .lid,
+  .badge {
+    animation: none;
+  }
+
+  .stage[data-opened] .lid {
+    opacity: 0;
+  }
+
+  .badge {
+    transform: translate(-50%, -40px);
+  }
+}
+
+/* ---------- Resumen: todas las insignias ganadas ---------- */
+.earned {
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+.earnedTitle {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #4a4266;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.earnedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.earnedItem {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 1.5rem 2rem;
-  border: none;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #6a4bff, #8b73ff);
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(106, 75, 255, 0.4);
-  animation: bounce 1.6s ease-in-out infinite;
-  transition: transform 0.15s ease;
-}
-
-.box:hover {
-  transform: scale(1.05);
-}
-
-.box:active {
-  transform: scale(0.96);
-}
-
-.boxEmoji {
-  font-size: 3rem;
-  line-height: 1;
-}
-
-.boxLabel {
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-.reveal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 1.25rem 1.5rem;
-  border-radius: 20px;
+  padding: 0.75rem 0.5rem;
   border: 3px solid;
-  background: white;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  max-width: 280px;
-  animation: popIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  border-radius: 18px;
+  background: #ffffff;
+  text-align: center;
+  animation: popIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
+.earnedName {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.earnedPhrase {
+  color: #4a4266;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 @keyframes popIn {
@@ -73,42 +237,8 @@
   to { transform: scale(1); opacity: 1; }
 }
 
-.revealImg {
-  width: 72px;
-  height: 72px;
-  object-fit: cover;
-  border-radius: 14px;
-}
-
-.revealName {
-  font-size: 1.1rem;
-}
-
-.revealPhrase {
-  font-size: 0.85rem;
-  color: #4a4266;
-  text-align: center;
-}
-
-.nextBtn {
-  margin-top: 8px;
-  padding: 8px 18px;
-  border: none;
-  border-radius: 12px;
-  background: #1D153A;
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.nextBtn:hover {
-  background: #322766;
-}
-
-.doneLabel {
-  margin-top: 8px;
-  font-weight: 700;
-  color: #198754;
-  font-size: 0.85rem;
+@media (prefers-reduced-motion: reduce) {
+  .earnedItem {
+    animation: none;
+  }
 }

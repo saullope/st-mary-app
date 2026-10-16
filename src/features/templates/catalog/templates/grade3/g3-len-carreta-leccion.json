@@ -1,0 +1,43 @@
+{
+  "code": "g3-len-carreta-leccion",
+  "grade": 3,
+  "subject": "lengua-literatura",
+  "collection": "g3-len-leyendas",
+  "order": 1,
+  "type": "ludileccion",
+  "title": "La leyenda de la Carreta Nagua",
+  "durationMin": 10,
+  "cover": {
+    "source": "pixabay",
+    "query": "carreta antigua de madera",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128230424_9661620.jpg?alt=media&token=885fbf1d-f583-4cce-8904-c42ca4124359",
+    "credit": "Imagen de PixelLabs en Pixabay"
+  },
+  "blocks": [
+    {
+      "kind": "reading",
+      "title": "Leamos la leyenda",
+      "body": "Cuentan los abuelos que, en las noches sin luna, por algunas calles de los pueblos de Nicaragua se escuchaba pasar una carreta vieja. Sus ruedas chirriaban: ¡cric, cric, cric! Nadie se asomaba a la ventana para verla, porque decían que era la Carreta Nagua, una carreta misteriosa que andaba sola en la oscuridad.\n\nHoy sabemos que es una leyenda: una historia que las familias se cuentan de generación en generación. Las leyendas nos ayudan a conocer cómo pensaban nuestros antepasados y forman parte de nuestra cultura."
+    },
+    {
+      "kind": "image",
+      "title": "Así eran las carretas de los pueblos antiguos",
+      "media": {
+        "source": "pixabay",
+        "query": "carreta antigua de madera",
+        "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128231379_3978927.jpg?alt=media&token=d9411ce7-a1f4-4f95-acbb-d6e73b7fdcfb",
+        "credit": "Imagen de Jazella en Pixabay"
+      }
+    },
+    {
+      "kind": "image",
+      "title": "En los pueblos, los abuelos contaban estas leyendas a sus nietos",
+      "media": {
+        "source": "unsplash",
+        "query": "granada nicaragua",
+        "url": "https://images.unsplash.com/photo-1630773899830-15ae96bbd777?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxncmFuYWRhJTIwbmljYXJhZ3VhfGVzfDF8MHx8fDE3OTIxMjgyMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+        "credit": "Foto de Azzedine Rouichi en Unsplash"
+      }
+    }
+  ]
+}

@@ -334,5 +334,173 @@
       "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792110347696_2687881.jpg?alt=media&token=2dffbd1b-1ef8-4ac2-a49d-cf9a6600f0f4",
       "credit": "Imagen de CCXpistiavos en Pixabay"
     }
+  },
+  {
+    "code": "g3-mat-numeros",
+    "grade": 3,
+    "subject": "matematica",
+    "order": 1,
+    "name": "Números hasta 1000",
+    "description": "Centenas, decenas y unidades; sumas y restas llevando.",
+    "cover": {
+      "source": "pixabay",
+      "query": "números grandes colores",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128191041_9118109.jpg?alt=media&token=b50596d7-3c01-478f-b12f-bbdc1dc9b7c4",
+      "credit": "Imagen de geralt en Pixabay"
+    }
+  },
+  {
+    "code": "g3-mat-multiplicar",
+    "grade": 3,
+    "subject": "matematica",
+    "order": 2,
+    "name": "Multiplicar y repartir",
+    "description": "Las tablas de multiplicar y repartir en partes iguales.",
+    "cover": {
+      "source": "pixabay",
+      "query": "tabla de multiplicar",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128193433_2680904.jpg?alt=media&token=d324efa5-1609-4c25-be55-56b25d15f878",
+      "credit": "Imagen de LadyBBcz en Pixabay"
+    }
+  },
+  {
+    "code": "g3-mat-fracciones",
+    "grade": 3,
+    "subject": "matematica",
+    "order": 3,
+    "name": "Fracciones y medidas",
+    "description": "Mitades, tercios y cuartos; medir longitud, peso y capacidad.",
+    "cover": {
+      "source": "pixabay",
+      "query": "pizza en porciones",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128194183_155771.jpg?alt=media&token=13d202de-aad7-4258-9797-3ea715e80d69",
+      "credit": "Imagen de OpenClipart-Vectors en Pixabay"
+    }
+  },
+  {
+    "code": "g3-len-gramatica",
+    "grade": 3,
+    "subject": "lengua-literatura",
+    "order": 1,
+    "name": "Palabras y oraciones",
+    "description": "Sustantivos, adjetivos, verbos, sinónimos y la oración.",
+    "cover": {
+      "source": "pixabay",
+      "query": "diccionario abierto",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128194954_4858795.jpg?alt=media&token=f7570961-9f0a-4102-bf19-4b75d3d966be",
+      "credit": "Imagen de Mohamed_hassan en Pixabay"
+    }
+  },
+  {
+    "code": "g3-len-leyendas",
+    "grade": 3,
+    "subject": "lengua-literatura",
+    "order": 2,
+    "name": "Leyendas y poesía de Nicaragua",
+    "description": "La Carreta Nagua, el Cadejo y un poema de Rubén Darío.",
+    "cover": {
+      "source": "pixabay",
+      "query": "libro antiguo",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128195969_863418.jpg?alt=media&token=068db8a5-1011-4ad0-9899-c4e4f80caccb",
+      "credit": "Imagen de Mysticsartdesign en Pixabay"
+    }
+  },
+  {
+    "code": "g3-len-escritura",
+    "grade": 3,
+    "subject": "lengua-literatura",
+    "order": 3,
+    "name": "Leo y escribo",
+    "description": "Planear, escribir y revisar mis propios textos.",
+    "cover": {
+      "source": "unsplash",
+      "query": "niño escribiendo cuaderno",
+      "url": "https://images.unsplash.com/photo-1599689868384-59cb2b01bb21?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxuaSVDMyVCMW8lMjBlc2NyaWJpZW5kbyUyMGN1YWRlcm5vfGVzfDF8MHx8fDE3OTIxMjgwODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "credit": "Foto de Michał Parzuchowski en Unsplash"
+    }
+  },
+  {
+    "code": "g3-cmm-nicaragua",
+    "grade": 3,
+    "subject": "conociendo-mi-mundo",
+    "order": 1,
+    "name": "Conozco Nicaragua",
+    "description": "Nuestra capital, lagos, volcanes, mares y departamentos.",
+    "cover": {
+      "source": "unsplash",
+      "query": "isla de ometepe volcán",
+      "url": "https://images.unsplash.com/photo-1675701142610-5d40c754a3b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTMwMjJ8MHwxfHNlYXJjaHwxfHxpc2xhJTIwZGUlMjBvbWV0ZXBlJTIwdm9sYyVDMyVBMW58ZXN8MXwwfHx8MTc5MjEyODA4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "credit": "Foto de Sophie en Unsplash"
+    }
+  },
+  {
+    "code": "g3-cmm-ciencia",
+    "grade": 3,
+    "subject": "conociendo-mi-mundo",
+    "order": 2,
+    "name": "Ciencia a mi alrededor",
+    "description": "El agua, la cadena alimenticia, el cuerpo y el sistema solar.",
+    "cover": {
+      "source": "pixabay",
+      "query": "sistema solar planetas",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128197540_8735271.jpg?alt=media&token=e5b19d8e-45d3-4274-a4d8-f36698265d44",
+      "credit": "Imagen de 1tamara2 en Pixabay"
+    }
+  },
+  {
+    "code": "g3-val-derechos",
+    "grade": 3,
+    "subject": "creciendo-en-valores",
+    "order": 1,
+    "name": "Derechos, deberes y solidaridad",
+    "description": "Lo que me corresponde, lo que me toca hacer y cómo ayudar.",
+    "cover": {
+      "source": "pixabay",
+      "query": "niños de la mano",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128198338_5709418.jpg?alt=media&token=e3eee47d-b549-43fb-9b0a-0f5d5d53c329",
+      "credit": "Imagen de Saydung en Pixabay"
+    }
+  },
+  {
+    "code": "g3-edf-deporte",
+    "grade": 3,
+    "subject": "educacion-fisica",
+    "order": 1,
+    "name": "Deporte y salud",
+    "description": "Deportes, reglas y hábitos para un cuerpo sano.",
+    "cover": {
+      "source": "pixabay",
+      "query": "niños jugando béisbol",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128199199_8712769.jpg?alt=media&token=9f270c1d-9c72-40cb-9fd9-9b21d151f489",
+      "credit": "Imagen de TAI-Design en Pixabay"
+    }
+  },
+  {
+    "code": "g3-art-tradiciones",
+    "grade": 3,
+    "subject": "expresion-cultural-artistica",
+    "order": 1,
+    "name": "Sabores y tradiciones",
+    "description": "Comidas típicas y frutas de nuestra tierra.",
+    "cover": {
+      "source": "pixabay",
+      "query": "arroz con frijoles",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128200160_8763929.jpg?alt=media&token=ddfc5ce5-e6a7-4cc2-9d81-99972a4b6166",
+      "credit": "Imagen de Claudio-Duart-Designer en Pixabay"
+    }
+  },
+  {
+    "code": "g3-efe-historia",
+    "grade": 3,
+    "subject": "efemerides",
+    "order": 1,
+    "name": "Historia y celebraciones",
+    "description": "Héroes, fechas patrias y celebraciones de Nicaragua.",
+    "cover": {
+      "source": "pixabay",
+      "query": "bandera de nicaragua",
+      "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128201045_4613142.jpg?alt=media&token=7d9cbf2f-8a35-4df8-90af-b1d654caae5c",
+      "credit": "Imagen de TheDigitalArtist en Pixabay"
+    }
   }
 ]

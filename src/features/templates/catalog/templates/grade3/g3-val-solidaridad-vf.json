@@ -1,0 +1,42 @@
+{
+  "code": "g3-val-solidaridad-vf",
+  "grade": 3,
+  "subject": "creciendo-en-valores",
+  "collection": "g3-val-derechos",
+  "order": 2,
+  "type": "trueorfalse",
+  "title": "¿Eso es solidaridad?",
+  "durationMin": 4,
+  "cover": {
+    "source": "pixabay",
+    "query": "manos unidas",
+    "url": "https://firebasestorage.googleapis.com/v0/b/st-mary-firebase-dev.firebasestorage.app/o/uploads%2Fpixabay_1792128263515_8731277.jpg?alt=media&token=5d57e129-4a03-445c-811c-189ea7933c87",
+    "credit": "Imagen de Mohamed_hassan en Pixabay"
+  },
+  "statements": [
+    {
+      "text": "Compartir mi merienda con un compañero que no trajo es un acto solidario.",
+      "answer": true
+    },
+    {
+      "text": "Reírme de alguien que se equivocó es ser solidario.",
+      "answer": false
+    },
+    {
+      "text": "Ayudar a recoger la basura del aula es pensar en los demás.",
+      "answer": true
+    },
+    {
+      "text": "Solo debo ayudar a quien me da algo a cambio.",
+      "answer": false
+    },
+    {
+      "text": "Visitar a un amigo enfermo para animarlo es solidaridad.",
+      "answer": true
+    },
+    {
+      "text": "Donar ropa que ya no uso puede ayudar a otra familia.",
+      "answer": true
+    }
+  ]
+}
